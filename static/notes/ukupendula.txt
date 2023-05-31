@@ -1,0 +1,139 @@
+Services we are building
+
+Blog Post Generator
+Paragraph Writer
+Title Rewriter
+Meta Description Gener
+Sentence Rewriter
+Landing Page Copy
+Content Summarizer
+
+
+## Addition
+Content Improver
+Grammar Fixer
+Article Writer
+Translate
+Blog Post Rewriter
+
+
+## Voice tones ## 
+Funny
+Casual
+Excited
+Professional
+Witty
+Friendly
+Sarcastic
+Expressive
+Direct
+Playful
+Feminine
+Masculine
+Bold
+Uplifting
+Dramatic
+Grumpy
+Motivating
+Secretive
+Sophisticated
+Positive
+Confident
+Educational
+
+
+
+## initial git commands using digital ocean ##
+Remote
+#!/bin/bash
+git --work-tree=/home/drycko/development/ukupendula/ukupendula/ --git-dir=/home/drycko/development/ukupendula/repo checkout -f'
+
+'/home/drycko/development/ukupendula/repo/'
+
+digital ocean server repo
+'/home/drycko/development/ukupendula/ukupendula/.git/'
+
+Local machine repo
+'C:/Users/tinod/PycharmProjects/ukupendula/.git/'
+
+git remote add upstream drycko@138.68.155.44:/home/drycko/development/ukupendula/ukupendula/.git/
+
+git remote add origin drycko@138.68.155.44:/home/drycko/development/ukupendula/repo
+
+Django cheatsheet
+https://skolo.online/documents/django/#getting-started-with-django-ubuntu-20-04
+
+Commands to remember:
+Everytime you make changes in a model.py file, remember to do below;
+python manage.py makemigrations
+python manage.py migrate
+
+close port ->$ sudo fuser -k 8000/tcp
+
+
+SitRep:
+- login: DONE
+- Register:
+    Phase 1&2 done
+    Phase 3 need to test the SMTP on a secure HTTPS call.IN PROGRESS )
+- account management: DONE
+- services and related screens: DONE
+- API call limiter:
+    Phase 1. Space API calls with time.sleep(10) seconds on the client side.DONE
+    Phase 2. Create a django backend function to queue all requests sitewide.IN PROGRESS )
+- Team management:
+    Phase 1. The ability for a user not belonging to any Team to create a team - DONE
+    Phase 2. The ability to invite new members - Function in place we just need to be able to send emails with SMTP
+    Phase 3. CRUD and role management permissions given to Team leader - Not Done
+- Device Management:
+    Phase 1. User Be able to see devices you have session on - DONE 
+    Phase 2. User able to delete devices - DONE
+- Forgot Password:
+    This entirely depends on the SMTP, so once the SMPT issue is address we will be able to do this
+
+
+upstream keepalive-upstream {
+    server http://unix:/run/ukupendula.sock;
+    keepalive 64;
+}
+
+server {
+    server_name app.writesome.ai;
+
+    location = /static/img/favicon/favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/drycko/development/ukupendula/ukupendula;
+    }
+
+    location /uploads/ {
+        root /home/drycko/development/ukupendula/ukupendula;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://keepalive-upstream;
+        proxy_set_header Connection "";
+    }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app.writesome.ai/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app.writesome.ai/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = app.writesome.ai) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    listen [::]:80;
+    server_name app.writesome.ai;
+    return 404; # managed by Certbot
+
+
+}

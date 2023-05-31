@@ -1,0 +1,223 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block body %}
+
+  <div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3 ">
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Blog Words</h3>
+          <div class="card-options"> <a class="btn btn-sm btn-danger" href="{% url 'blog-memory' %}">View</a> </div>
+        </div>
+        <div class="card-body ">
+          <h3 class="mt-0 font-weight-semibold">{{blog_word_cnt}}</h3>
+          
+          <div class="progress progress-sm mt-0 mb-2">
+            <div class="progress-bar bg-danger w-{{clm_blog_word_cnt}}" role="progressbar"></div>
+          </div>
+          {% if clm_blog_word_cnt > 0 %}
+          <div class="text-muted fs-12"><i class="fa {{blg_carret_set}} me-1"></i>{{clm_blog_word_cnt}}% than last month</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class=" col-sm-6 col-md-6 col-lg-6 col-xl-3">
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Summary Words</h3>
+          <div class="card-options"> <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a> </div>
+        </div>
+        <div class="card-body ">
+
+          <h3 class="text-dark mt-0 font-weight-semibold">{{summarizer_word_cnt}}</h3>
+          <div class="progress progress-sm mt-0 mb-2">
+            <div class="progress-bar bg-primary w-{{clm_summarizer_word_cnt}}" role="progressbar"></div>
+          </div>
+          {% if clm_summarizer_word_cnt > 0 %}
+          <div class="text-muted fs-12"><i class="fa {{sumry_carret_set}} me-1"></i>{{clm_summarizer_word_cnt}}% than last month</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class=" col-sm-6 col-md-6 col-lg-6 col-xl-3">
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Page Copy Words</h3>
+          <div class="card-options"> <a class="btn btn-sm btn-dark-black" href="{% url 'page-copy-memory' %}">View</a> </div>
+        </div>
+        <div class="card-body ">
+          <h3 class="text-dark mt-0 font-weight-semibold">{{landing_copy_word_cnt}}</h3>
+          <div class="progress progress-sm mt-0 mb-2">
+            <div class="progress-bar bg-dark w-{{clm_landing_copy_word_cnt}}" role="progressbar"></div>
+          </div>
+          {% if clm_landing_copy_word_cnt > 0 %}
+          <div class="text-muted fs-12"><i class="fa {{lpc_carret_set}} me-1"></i>{{clm_landing_copy_word_cnt}}% than last month</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3 ">
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Meta Words</h3>
+          <div class="card-options"> <a class="btn btn-sm btn-info" href="{% url 'meta-descr-memory' %}">View</a> </div>
+        </div>
+        <div class="card-body ">
+          <h3 class="text-dark mt-0 font-weight-semibold">{{meta_word_cnt}}</h3>
+          <div class="progress progress-sm mt-0 mb-2">
+            <div class="progress-bar bg-info w-{{clm_meta_word_cnt}}" role="progressbar"></div>
+          </div>
+          {% if clm_meta_word_cnt > 0 %}
+          <div class="text-muted fs-12"><i class="fa {{meta_carret_set}} me-1"></i>{{clm_meta_word_cnt}}% than last month</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row item-all-cat">
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-danger text-center">
+        <a href="{% url 'blog-topic' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/generate-blog-clear.png' %}" alt="generate blog" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-info text-center">
+        <a href="{% url 'meta-description-generator' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/meta-description-generator-clear.png' %}" alt="meta description generator" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-pink text-center">
+        <a href="{% url 'title-writer' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/title-rewriter-clear.png' %}" alt="title rewriter" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-dark-black text-center">
+        <a href="{% url 'landing-page-copy' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/landing-page-copy-clear.png' %}" alt="landing page copy" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-primary text-center">
+        <a href="{% url 'sentence-writer' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/sentence-rewrite-clear.png' %}" alt="sentence rewriter" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-2 col-sm-4 col-6">
+      <div class="item-all-card bg-warning text-center">
+        <a href="{% url 'paragraph-writer' %}"></a>
+        <div class="iteam-all-icon">
+          <img src="{% static 'dash/img/icons/wsai/paragraph-writer-clear.png' %}" alt="paragraph rewriter" class="w-30">
+        </div>
+        <div class="item-all-text mt-3">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Completed Blogs</h3>
+        </div>
+        <div class="card-body">
+          {% if complete_blogs|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table class="table" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width:50%">Blog Title</th>
+                  <th>Keywords</th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for blog in complete_blogs|slice:":5" %}
+                <tr>
+                  <td >
+                    <h6 class="mb-0"><a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a></h6>
+                    <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                  </td>
+                  <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      {% if empty_blogs|length > 0 %}
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Saved For Later</h3>
+        </div>
+        <div class="card-body">
+          <div class="dash5">
+            <div>
+          {% for blog in empty_blogs|slice:":5" %}
+          <div class="list d-flex align-items-center  mb-4">
+            <div class="w-4 h-4 bg-primary me-4 "></div>
+            <div class="wrapper w-90 ms-3">
+
+              
+              <p class="mb-0">{{blog.title}}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                </div>
+                <div class="ms-auto btn-group">
+                  <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-outline-primary btn-xs btn-generate">Use</a>
+                  <a href="{% url 'delete-blog-topic' blog.uniqueId %}" class="btn btn-outline-danger btn-xs">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+
+{% endblock %}

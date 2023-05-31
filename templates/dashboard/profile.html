@@ -1,0 +1,80 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block body %}
+            <!-- Content -->
+            <div class="row ">
+							<div class="col-lg-4">
+								<div class="card">
+									<div class="card-header">
+										<h3 class="card-title">Profile Avatar</h3>
+
+									</div>
+									<div class="card-body">
+											<div class="row mb-2">
+												<div class="col-auto">
+
+                          {% if user.profile.profile_image.name %}
+                        <img
+                          src="{{user.profile.profile_image.url}}"
+                          alt="{{user.first_name}} avatar"
+                          class="d-block rounded"
+                          height="100"
+
+                        />
+                        {% else %}
+                        <img
+                          src="{% static 'dash/img/avatars/1.png' %}"
+                          alt="{{user.first_name}} avatar"
+                          class="d-block rounded"
+                          height="100"
+
+                        />
+                        {% endif %}
+
+                        <div class="button-wrapper">
+                          <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{image_form|crispy}}
+
+                            <button type="submit" class="btn btn-primary mb-4 mt-3">
+                            <span class="d-none d-sm-block">Save Image</span>
+                          </button>
+
+                          </form>
+
+                          <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                        </div>
+
+													{% comment %} <img class="avatar brround avatar-xl" src="../assets/images/faces/male/25.jpg" alt="Avatar-img"> {% endcomment %}
+												</div>
+											</div>
+									</div>
+								</div>
+							</div>
+
+              <div class="col-lg-8">
+                <div class="card">
+									<div class="card-header">
+										<h3 class="card-title">Edit Profile</h3>
+
+									</div>
+									<div class="card-body">
+                    <form  method="post" action="#">
+                      {% csrf_token %}
+                      {% crispy form %}
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+            <!-- / Content -->
+{% endblock %}

@@ -1,0 +1,22 @@
+/* Custom style sheet */
+
+.ai-answer-card {
+  height: 50vh;
+  /* overflow: auto; */
+}
+
+.ai-answer-card .card-body .ideas {
+  max-height: 45vh;
+  overflow: auto;
+
+}
+
+.ai-answer-card .card-body .ideas-text {
+  max-height: 45vh;
+
+}
+
+.bg-light-gray {
+  background-color: #eeeeee;
+  
+}

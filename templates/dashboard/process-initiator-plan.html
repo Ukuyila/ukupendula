@@ -1,0 +1,87 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block body %}
+
+            <!-- Content -->
+
+
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                      <a class="nav-link " href="{% url 'profile' %}"><i class="bx bx-user me-1"></i> Account</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'billing' %}" ><i class="bx bx-credit-card me-1"></i> Billing</a>
+                    </li>
+                    <li class="nav-item" hidden>
+                      <a class="nav-link active" href="javascript:void(0);" ><i class="bx bx-purchase-tag me-1"></i> Checkout</a>
+                    </li>
+                  </ul>
+
+                  <div class="card">
+                    <h5 class="card-header">{{item_name}}</h5>
+                    <div class="card-body">
+                      <div class="mb-3 col-12 mb-0">
+
+                        <div class="row mb-5">
+                          <div class="col-md-6 col-lg-6 mb-3">
+                            <div class="card text-center alert alert-info">
+                              <div class="card-header">{{item_name}}</div>
+                              <div class="card-body">
+                                <h5 class="card-title">R{{amount}} per month</h5>
+                                <p class="card-text">Generate 40 000* Words</p>
+
+                                <form action="{{action_url}}" method="post">
+                                  
+                                  <input type="hidden" name="merchant_id" value="{{merchant_id}}">
+                                  <input type="hidden" name="merchant_key" value="{{merchant_key}}">
+
+                                  <input type="hidden" name="return_url" value="{{notify_url}}">
+                                  <input type="hidden" name="notify_url" value="{{notify_url}}">
+                                  
+                                  <!-- customer -->
+                                  <input type="hidden" name="name_first" value="{{user.first_name}}">
+                                  <input type="hidden" name="name_last" value="{{user.last_name}}">
+                                  <input type="hidden" name="email_address" value="{{user.email}}">
+
+                                  <input type="hidden" name="m_payment_id" value="{{order_id}}">
+                                  <input type="hidden" name="amount" value="{{amount}}">
+                                  <input type="hidden" name="item_name" value="{{item_name}}">
+                                  <input type="hidden" name="item_description" value="Initiator subscription">
+
+                                  <!-- subscription -->
+                                  <input type="hidden" name="subscription_type" value="1">
+                                  <input type="hidden" name="billing_date" value="">
+                                  <input type="hidden" name="recurring_amount" value="{{amount}}">
+                                  <input type="hidden" name="frequency" value="3">
+                                  <input type="hidden" name="cycles" value="0">
+                                  <input type="hidden" name="user_id" value="{{user.profile.uniqueId}}">
+ 
+                                  <input type="hidden" name="signature" value="{{signature}}">
+                                  
+                                  <input type="submit" class="btn btn-info" value="Pay Now">
+ 
+                               </form>
+                              </div>
+                              <div class="card-footer text-muted">Pay with PayFast</div>
+                            </div>
+                          </div>
+
+                      </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- / Content -->
+
+{% endblock %}
+
+

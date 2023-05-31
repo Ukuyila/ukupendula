@@ -1,0 +1,109 @@
+/* Custom style sheet */
+
+.ai-answer-card {
+  height: 40vh;
+  /* overflow: auto; */
+}
+
+.ai-answer-card .card-body .ideas {
+  max-height: 35vh;
+  overflow: auto;
+
+}
+
+.ai-answer-card .card-body .ideas-text {
+  max-height: 35vh;
+
+}
+
+.bg-light-gray {
+  background-color: #eeeeee;
+  
+}
+
+.bg-dark-black {
+  background-color: #000000 !important;
+}
+
+.btn-dark-black {
+  color: #fff;
+  background-color: #000000;
+  border-color: #000000;
+}
+.btn-dark-black:hover {
+  color: #fff;
+  background-color: #23272b;
+  border-color: #1d2124;
+}
+.btn-dark-black.focus, .btn-dark-black:focus {
+  background-color: #000000;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(52, 58, 64, 0.1);
+}
+.btn-dark-black.disabled, .btn-dark-black:disabled {
+  color: #fff;
+  background-color: #000000;
+  border-color: #000000;
+}
+.btn-dark-black:not(:disabled):not(.disabled).active, .btn-dark-black:not(:disabled):not(.disabled):active {
+  color: #fff;
+  background-color: #1d2124;
+  border-color: #171a1d;
+}
+
+.show > .btn-dark-black.dropdown-toggle {
+  color: #fff;
+  background-color: #1d2124;
+  border-color: #171a1d;
+}
+
+.btn-dark-black:not(:disabled):not(.disabled).active:focus, .btn-dark-black:not(:disabled):not(.disabled):active:focus {
+  box-shadow: 0 0 0 2px rgba(52, 58, 64, 0.1);
+}
+
+.show > .btn-dark-black.dropdown-toggle:focus {
+  box-shadow: 0 0 0 2px rgba(52, 58, 64, 0.1);
+}
+
+/*-----------------------------------
+# SPINNER
+-------------------------------------*/
+#bg-spinner {
+  top: 0;
+  z-index: 9999999999;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: none;
+  background-color: rgba(1, 1, 1, 0.6);
+}
+
+#position-spinner {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner-msg {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+#spinner {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 6px solid #d3d3d3;
+  border-top: 6px solid #bc508f;
+  animation: loading 1s infinite linear;
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);
+  }
+  
+}

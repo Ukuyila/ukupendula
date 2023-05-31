@@ -1,0 +1,510 @@
+{% load static %}
+
+{{ '<' }}{{ '!DOCTYPE html>' }}
+
+<html lang="en" dir="ltr">
+	<head>
+		<!-- Meta data -->
+		<meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="" name="description">
+    <meta content="drycko at ukuyila.com" name="author">
+  
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" />
+
+		<!-- Title -->
+		<title>{{current_page}} - writesome.ai</title>
+		<link rel="stylesheet" href="{% static 'dash/fonts/fonts/font-awesome.min.css' %}">
+
+		<!-- Bootstrap Css -->
+		<link id="style" href="{% static 'dash/plugins/bootstrap-5/css/bootstrap.min.css' %}" rel="stylesheet" />
+
+		<!-- Sidemenu Css -->
+		<link href="{% static 'dash/css/sidemenu.css' %}" rel="stylesheet" />
+
+		<!-- Dashboard Css -->
+		<link href="{% static 'dash/css/style.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/css/admin-custom.css' %}" rel="stylesheet" />
+
+		<link href="{% static 'dash/css/custom.css' %}" rel="stylesheet" />
+
+		<!-- c3.js Charts Plugin -->
+		<link href="{% static 'dash/plugins/charts-c3/c3-chart.css' %}" rel="stylesheet" />
+
+		{% block css %}
+		{% endblock %}
+
+		<!-- p-scroll bar css-->
+		<link href="{% static 'dash/plugins/pscrollbar/pscrollbar.css' %}" rel="stylesheet" />
+
+		<!---Font icons-->
+		<link href="{% static 'dash/css/icons.css' %}" rel="stylesheet"/>
+
+		<!-- SWITCHER-SKINS -->
+		<link href="{% static 'dash/switcher/css/switcher.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/switcher/demo.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/css/custom.css' %}" rel="stylesheet" />
+
+	</head>
+	<body class="app sidebar-mini">
+
+		<!-- Global Loader -->
+		{% comment %} <div id="global-loader">
+			<img src="{% static 'dash/images/loader.svg' %}" class="loader-img" alt="">
+		</div> {% endcomment %}
+
+		<div id="global-loader">
+			<div id="position-spinner">
+				<span id="spinner"></span>
+			</div>
+		</div>
+		<!-- End Global Loader -->
+
+		<div id="bg-spinner">
+			<div id="position-spinner">
+				<span id="spinner"></span>
+			</div>
+			<p class="text-primary"><strong>Please wait, this may take 5 minutes!</strong></p>
+		</div>
+
+		<!--- Page Start -->
+		<div class="page">
+			<div class="page-main h-100">
+
+				<!-- App-Header -->
+				<div class="app-header1 header d-flex">
+					<div class="container-fluid">
+						<div class="d-flex">
+							<a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="javascript:void(0);"></a>
+							<div class="responsive-logo d-flex">
+								<a class="header-brand" href="{% url 'dashboard' %}">
+									<img src="{% static 'dash/img/logo/writesome-ai-logo.png' %}" class="header-brand-img desktop-logo" alt="Writesome logo">
+									<img src="{% static 'dash/img/logo/writesome-ai-logo-dark.png' %}" class="header-brand-img desktop-dark" alt="Writesome logo">
+								</a>
+							</div>
+							<div class="app-sidebar__toggle" data-bs-toggle="sidebar"> <a class="open-toggle" href="javascript:void(0)"><i class="fe fe-align-left"></i></a> <a class="close-toggle" href="javascript:void(0)"><i class="fe fe-x"></i></a> </div>
+							<!-- <div class="header-navsearch">
+								<a href="javascript:void(0);" class=" "></a>
+								<form class="form-inline me-auto">
+									<div class="nav-search">
+										<input type="search" class="form-control header-search" placeholder="Search…" aria-label="Search" >
+										<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+									</div>
+								</form>
+							</div> -->
+							<div class="d-flex order-lg-2 ms-auto header-right">
+								<button class="navbar-toggler navresponsive-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation"> <i class="fe fe-more-vertical header-icons navbar-toggler-icon"></i> </button>
+								<div class="p-0 mb-0 navbar navbar-collapse  responsive-navbar">
+									<div class="navbar-collapse collapse" id="navbarSupportedContent-4">
+										<div class="d-flex">
+											<div class="dropdown d-sm-flex" >
+												<a class="nav-link icon fullscreen">
+													<svg id="fullscreen-button" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 5h5V3H3v7h2zm5 14H5v-5H3v7h7zm11-5h-2v5h-5v2h7zm-2-4h2V3h-7v2h5z"/></svg>
+												</a>
+											</div>
+											<div class="header-navicon">
+												<a href="javascript:void(0);" data-bs-toggle="search" class="nav-link icon d-lg-none navsearch-icon">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"/></svg>
+												</a>
+											</div>
+											<div class="dropdown d-sm-flex" >
+												<a class="nav-link icon theme-layout layout-setting">
+													<span class="dark-layout">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"/></svg>
+													</span>
+													<span class="light-layout">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"/></svg>
+													</span>
+												</a>
+											</div>
+											<div class="dropdown d-sm-flex country-selector">
+												<a href="javascript:void(0);" class="d-sm-flex nav-link leading-none" data-bs-toggle="dropdown">
+													<img src="{% static 'dash/images/gb_flag.jpg' %}" alt="img" class="avatar avatar-xs me-sm-1 align-self-center">
+													<div>
+														<p class="text-dark mb-0">English</p>
+													</div>
+												</a>
+												<div class="language-width dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
+														<img src="{% static 'dash/images/gb_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
+														<div>
+															<p class="mb-0">English</p>
+														</div>
+													</a>
+													
+												</div>
+											</div>
+											<div class="dropdown d-sm-flex">
+												<a class="nav-link icon" data-bs-toggle="dropdown">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
+													<span hidden class=" nav-unread badge badge-danger  rounded-pill">4</span>
+												</a>
+												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
+													<a href="emailservice.html" class="dropdown-item text-center border-bottom">You have 0 notification</a>
+													
+													<a href="emailservice.html" class="dropdown-item text-center border-top"></a>
+												</div>
+											</div>
+											<!-- <div class="dropdown d-sm-flex">
+												<a class="nav-link icon" data-bs-toggle="dropdown">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z"/></svg>
+													<span class=" nav-unread badge badge-warning  rounded-pill">3</span>
+												</a>
+												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
+													<a href="chats.html" class="dropdown-item text-center border-bottom py-3 font-weight-semibold">You have 4 new mesages</a>
+													<a href="chats.html" class="dropdown-item d-flex">
+														<img src="{% static 'dash/images/faces/male/41.jpg' %}" alt="avatar-img" class="avatar brround me-3">
+														<div class="header-msg">
+															<span class="font-weight-semibold">Blake</span> I've finished it! See you so.......
+															<div class="small text-muted">30 mins ago</div>
+														</div>
+													</a>
+													<a href="chats.html" class="dropdown-item d-flex">
+														<img src="{% static 'dash/images/faces/female/1.jpg' %}" alt="avatar-img" class="avatar brround me-3">
+														<div class="header-msg">
+															<span class="font-weight-semibold">Caroline</span> Just see the my Admin....
+															<div class="small text-muted">12 mins ago</div>
+														</div>
+													</a>
+													<a href="chats.html" class="dropdown-item d-flex">
+														<img src="{% static 'dash/images/faces/male/18.jpg' %}" alt="avatar-img" class="avatar brround me-3">
+														<div class="header-msg">
+															<span class="font-weight-semibold">Jonathan</span> Hi! I'am singer......
+															<div class="small text-muted">1 hour ago</div>
+														</div>
+													</a>
+													<a href="chats.html" class="dropdown-item d-flex">
+														<img src="{% static 'dash/images/faces/female/18.jpg' %}" alt="avatar-img" class="avatar brround me-3">
+														<div class="header-msg">
+															<span class="font-weight-semibold">Emily</span> Just a reminder that you have.....
+															<div class="small text-muted">45 mins ago</div>
+														</div>
+													</a>
+													<a href="chats.html" class="dropdown-item text-center border-top py-3">View all Messages</a>
+												</div>
+											</div>
+											<div class="dropdown d-sm-flex">
+												<a class="nav-link icon" data-bs-toggle="dropdown">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m21.706 5.291-2.999-2.998A.996.996 0 0 0 18 2H6a.996.996 0 0 0-.707.293L2.294 5.291A.994.994 0 0 0 2 5.999V19c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5.999a.994.994 0 0 0-.294-.708zM6.414 4h11.172l.999.999H5.415L6.414 4zM4 19V6.999h16L20.002 19H4z"/><path d="M15 12H9v-2H7v4h10v-4h-2z"/></svg>
+												</a>
+												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow  app-selector py-0">
+													<ul class="drop-icon-wrap p-2">
+														<li>
+															<a href="emailservice.html" class="drop-icon-item">
+																<i class="icon icon-speech text-dark"></i>
+																<span class="block"> E-mail</span>
+															</a>
+														</li>
+														<li>
+															<a href="maps.html" class="drop-icon-item">
+																<i class="icon icon-map text-dark"></i>
+																<span class="block">map</span>
+															</a>
+														</li>
+
+														<li>
+															<a href="chats.html" class="drop-icon-item">
+																<i class="icon icon-bubbles text-dark"></i>
+																<span class="block">Messages</span>
+															</a>
+														</li>
+														<li>
+															<a href="profile-1.html" class="drop-icon-item">
+																<i class="icon icon-user-follow text-dark"></i>
+																<span class="block">Followers</span>
+															</a>
+														</li>
+														<li>
+															<a href="gallery.html" class="drop-icon-item">
+																<i class="icon icon-picture text-dark"></i>
+																<span class="block">Photos</span>
+															</a>
+														</li>
+														<li>
+															<a href="settings.html" class="drop-icon-item">
+																<i class="icon icon-settings text-dark"></i>
+																<span class="block">Settings</span>
+															</a>
+														</li>
+													</ul>
+													<a href="settings.html" class="dropdown-item text-center border-top">View all</a>
+												</div>
+											</div> -->
+											<div class="dropdown show">
+												<a href="javascript:void(0);" class="leading-none user-img" data-bs-toggle="dropdown">
+                          {% if user.profile.profile_image.name %}
+                              <img src="{{user.profile.profile_image.url}}" alt="profile-img" class="avatar avatar-md brround" />
+                              {% else %}
+                              <img src="{% static 'dash/img/avatars/1.png' %}" alt="profile-img" class="avatar avatar-md brround"/>
+                              {% endif %}
+													
+												</a>
+												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
+													<a class="dropdown-item" href="{% url 'profile' %}">
+														<i class="dropdown-icon icon icon-user"></i> My Profile
+													</a>
+													<a class="dropdown-item" href="{% url 'device-manager' %}">
+														<i class="dropdown-icon  icon icon-screen-desktop"></i> Devices
+													</a>
+													{% if user.profile.subscription_type == 'teams' %}
+													<a class="dropdown-item" href="{% url 'team-manager' %}">
+														<i class="dropdown-icon  icon icon-people"></i> Team
+													</a>
+													{% endif %}
+													<a class="dropdown-item" href="{% url 'billing' %}">
+														<i class="dropdown-icon  icon icon-credit-card"></i> Billing
+													</a>
+													<a class="dropdown-item" href="{% url 'logout' %}">
+														<i class="dropdown-icon icon icon-power"></i> Log out
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- App-Header close-->
+
+
+				<!-- Sidebar Menu-->
+				<div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+				<aside class="app-sidebar doc-sidebar">
+					<div class="main-sidebar-header">
+						<a class="header-brand" href="{% url 'dashboard' %}">
+							<img src="{% static 'dash/img/logo/writesome-ai-logo.png' %}" class="header-brand-img desktop-logo" alt="Writesome logo">
+							<img src="{% static 'dash/img/logo/writesome-ai-logo-dark.png' %}" class="header-brand-img desktop-dark" alt="Writesome logo">
+							<img src="{% static 'dash/img/favicon/apple-touch-icon.png' %}" class="header-brand-img mobile-logo" alt="Writesome logo">
+							<img src="{% static 'dash/img/favicon/apple-touch-icon.png' %}" class="header-brand-img mobile-dark" alt="Writesome logo">
+						</a>
+					</div>
+					<ul class="side-menu">
+
+						<li
+            {% if current_page == 'Home' %}
+            class="is-expanded"
+            {% endif %}
+              >
+							<a class="side-menu__item 
+              {% if current_page == 'Home' %}
+              active
+              {% endif %}
+                " href="{% url 'dashboard' %}">
+								<svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"/></svg>
+								<span class="side-menu__label">Dashboard</span></a>
+						</li>
+						<li class="slide 
+            {% if current_page %}
+             is-expanded
+            {% endif %}
+          ">
+							<a class="side-menu__item
+              {% if not current_page or 'Writer' in current_page %}
+               active is-expanded
+              {% endif %}
+            " data-bs-toggle="slide" href="javascript:void(0);">
+								<svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11 4h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6h-4v-4h4v4zM17 3c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2zM7 13c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"/></svg>
+								<span class="side-menu__label">Use Cases</span><i class="angle fa fa-angle-right"></i></a>
+							<ul class="slide-menu
+              {% if 'Generator' in current_page or 'Writer' in current_page %}
+               open
+              {% endif %}
+            ">
+								<li
+                {% if 'Blog' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'blog-topic' %}" class="slide-item
+                  {% if 'Blog' in current_page %}
+                  active
+                  {% endif %}
+                ">Generate Blog</a>
+								</li>
+
+								<li 
+                {% if 'Paragraph Writer' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'paragraph-writer' %}" class="slide-item
+                  {% if 'Paragraph Writer' in current_page %}
+                  active
+                  {% endif %}
+                ">Paragraph Writer</a>
+								</li>
+
+								<li 
+                {% if 'Sentence Writer' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'sentence-writer' %}" class="slide-item
+                  {% if 'Sentence Writer' in current_page %}
+                  active
+                  {% endif %}
+                ">Sentence Rewriter</a>
+								</li>
+
+                <li 
+                {% if 'Title Writer' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'title-writer' %}" class="slide-item
+                  {% if 'Title Writer' in current_page %}
+                  active
+                  {% endif %}
+                ">Title Rewriter</a>
+								</li>
+
+                <li 
+                {% if 'Meta Description Generator' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'meta-description-generator' %}" class="slide-item
+                  {% if 'Meta Description' in current_page %}
+                  active
+                  {% endif %}
+                ">Meta Description Generator</a>
+								</li>
+
+                <li 
+                {% if 'Content Summary Generator' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'content-summarizer' %}" class="slide-item
+                  {% if 'Summarizer' in current_page %}
+                  active
+                  {% endif %}
+                ">Content Summarizer</a>
+								</li>
+
+                <li 
+                {% if 'Content Summary Generator' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'landing-page-copy' %}" class="slide-item
+                  {% if 'Page Copy' in current_page %}
+                  active
+                  {% endif %}
+                ">Landing Page Copy</a>
+								</li>
+
+							</ul>
+						</li>
+
+            <li
+            {% if current_page == 'My Profile' %}
+            class="is-expanded"
+            {% endif %}
+              >
+							<a class="side-menu__item 
+              {% if current_page == 'My Profile' %}
+              active
+              {% endif %}
+                " href="{% url 'profile' %}">
+								<svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z"/><path d="m2.845 16.136 1 1.73c.531.917 1.809 1.261 2.73.73l.529-.306A8.1 8.1 0 0 0 9 19.402V20c0 1.103.897 2 2 2h2c1.103 0 2-.897 2-2v-.598a8.132 8.132 0 0 0 1.896-1.111l.529.306c.923.53 2.198.188 2.731-.731l.999-1.729a2.001 2.001 0 0 0-.731-2.732l-.505-.292a7.718 7.718 0 0 0 0-2.224l.505-.292a2.002 2.002 0 0 0 .731-2.732l-.999-1.729c-.531-.92-1.808-1.265-2.731-.732l-.529.306A8.1 8.1 0 0 0 15 4.598V4c0-1.103-.897-2-2-2h-2c-1.103 0-2 .897-2 2v.598a8.132 8.132 0 0 0-1.896 1.111l-.529-.306c-.924-.531-2.2-.187-2.731.732l-.999 1.729a2.001 2.001 0 0 0 .731 2.732l.505.292a7.683 7.683 0 0 0 0 2.223l-.505.292a2.003 2.003 0 0 0-.731 2.733zm3.326-2.758A5.703 5.703 0 0 1 6 12c0-.462.058-.926.17-1.378a.999.999 0 0 0-.47-1.108l-1.123-.65.998-1.729 1.145.662a.997.997 0 0 0 1.188-.142 6.071 6.071 0 0 1 2.384-1.399A1 1 0 0 0 11 5.3V4h2v1.3a1 1 0 0 0 .708.956 6.083 6.083 0 0 1 2.384 1.399.999.999 0 0 0 1.188.142l1.144-.661 1 1.729-1.124.649a1 1 0 0 0-.47 1.108c.112.452.17.916.17 1.378 0 .461-.058.925-.171 1.378a1 1 0 0 0 .471 1.108l1.123.649-.998 1.729-1.145-.661a.996.996 0 0 0-1.188.142 6.071 6.071 0 0 1-2.384 1.399A1 1 0 0 0 13 18.7l.002 1.3H11v-1.3a1 1 0 0 0-.708-.956 6.083 6.083 0 0 1-2.384-1.399.992.992 0 0 0-1.188-.141l-1.144.662-1-1.729 1.124-.651a1 1 0 0 0 .471-1.108z"/></svg>
+								<span class="side-menu__label">Profile</span></a>
+						</li>
+
+            <li
+            {% if current_page == 'Billing' %}
+            class="is-expanded"
+            {% endif %}
+              >
+							<a class="side-menu__item 
+              {% if current_page == 'Billing' %}
+              active
+              {% endif %}
+                " href="{% url 'billing' %}">
+								<svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M20 3H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM4 9V5h16v4zm16 4H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zM4 19v-4h16v4z"/><path d="M17 6h2v2h-2zm-3 0h2v2h-2zm3 10h2v2h-2zm-3 0h2v2h-2z"/></svg>
+								<span class="side-menu__label">Billing</span></a>
+						</li>
+						
+					</ul>
+				</aside>
+				<!-- Sidebar Menu Close-->
+
+				<!-- App-Content-->
+				<div class="app-content  my-3 my-md-5">
+					<div class="side-app">
+            <div class="page-header">
+              <h4 class="page-title">{{current_page}}</h4>
+              <ol class="breadcrumb">
+                {% if not current_page == 'Dashboard' %}
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">{{current_page}}</li>
+              </ol>
+            </div>
+            
+            {% block body %}
+            {% endblock %}
+
+					</div>
+				</div>
+			</div>
+
+			<!--footer-->
+			<footer class="footer">
+				<div class="container">
+					<div class="row align-items-center flex-row-reverse">
+						<div class="col-lg-12 col-sm-12 mt-3 mt-lg-0 text-center">
+							Copyright © <script> document.write(new Date().getFullYear()); </script> | <a href="https://writesome.ai">writesome.ai</a>. All rights reserved.
+						</div>
+					</div>
+				</div>
+			</footer>
+			<!-- End Footer-->
+		</div>
+
+		<!-- Dashboard js -->
+		<script src="{% static 'dash/js/vendors/jquery-3.6.0.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/bootstrap-5/popper.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/bootstrap-5/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/jquery.sparkline.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/selectize.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/jquery.tablesorter.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/circle-progress.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/rating/jquery.rating-stars.js' %}"></script>
+
+		<!-- Fullside-menu Js-->
+		<script src="{% static 'dash/plugins/toggle-sidebar/sidemenu.js' %}"></script>
+
+		<!-- p-scroll bar Js-->
+		<script src="{% static 'dash/plugins/pscrollbar/pscrollbar.js' %}"></script>
+		<script src="{% static 'dash/plugins/pscrollbar/pscroll.js' %}"></script>
+
+		<!--Counters -->
+		<script src="{% static 'dash/plugins/counters/counterup.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/counters/waypoints.min.js' %}"></script>
+
+		<!-- Switcher js -->
+		<script src="{% static 'dash/switcher/js/switcher.js' %}"></script>
+
+		<!-- ThemeColors js-->
+		<script src="{% static 'dash/js/themeColors.js' %}"></script>
+
+		<!-- Custom Js-->
+		<script src="{% static 'dash/js/admin-custom.js' %}"></script>
+
+		<!-- Custom-switcher Js-->
+		<script src="{% static 'dash/js/custom-switcher1.js' %}"></script>
+
+		<!-- Custom-script Js-->
+		<script src="{% static 'dash/js/custom-script.js' %}"></script>
+
+    {% block js %}
+    {% endblock %}
+
+	</body>
+</html>

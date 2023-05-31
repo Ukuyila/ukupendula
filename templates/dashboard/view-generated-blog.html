@@ -1,0 +1,61 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+{% block css %}
+    <!--INTERNAL Summernote css -->
+    <link href="{% static 'dash/plugins/summer-note/summernote.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+            <!-- Content -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">AI Generated Response</h4>
+                            <div class="btn-group float-end">
+                                <button class="btn btn-outline-primary">Copy Text</button>
+                                <button class="btn btn-primary">Download</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form action="#" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-12 ">
+                                        <div class="form-group">
+                                            <h5 class="">Title: {{blog.title}}</h5>
+                                            <div class="demo-inline-spacing mb-10">
+                                                <h6>Keywords: <span class="badge bg-primary">{{blog.keywords}}</span></h6>
+                                                <br>
+                                            </div>
+                                            <div class="card shadow-none border border-secondary mb-3 ">
+                                                <div class="card-body ideas-text">
+                                                    <div id="summernote">
+                                                        {% for section in blog_sects %}
+                                                            <h5>{{section.title}}</h5>
+                                                            <p>{{section.body|safe}}</p>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <p class="mt-5 text-primary"><i>AI is the source of the content; your responses and generated text may be retained for assessment..</i></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- / Content -->
+{% endblock %}
+
+{% block js %}
+    <!-- INTERNAL SUMMERNOTE Editor JS -->
+    <script src="{% static 'dash/plugins/summer-note/summernote1.js' %}"></script>
+    <script src="{% static 'dash/js/summernote.js' %}"></script>
+{% endblock %}

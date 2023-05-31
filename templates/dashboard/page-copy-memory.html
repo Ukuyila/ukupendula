@@ -1,0 +1,71 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block css %}
+		<!-- Data table css -->
+		<link href="{% static 'dash/plugins/datatable/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/plugins/datatable/jquery.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Saved Page Copies</h3>
+          <div class="card-options">
+            <a href="{% url 'landing-page-copy' %}" class="btn btn-primary btn-sm">Generate New</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% if saved_page_copies|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width:50%">Title</th>
+                  <th>Purpose</th>
+                  <th>Datetime</th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for saved_page_copy in saved_page_copies %}
+                <tr>
+                  <td >
+                    <h6 class="mb-0"><a href="{% url 'landing-page-copy-response' saved_page_copy.uniqueId %}">{% if saved_page_copy.copy_title|length > 0 %}
+                      {{saved_page_copy.copy_title}}
+                      {% else %}
+                      {{saved_page_copy.company_name}}
+                      {% endif %}</a></h6>
+                    
+                  </td>
+                  <td><small class="text-primary me-1">{{saved_page_copy.company_purpose}}</small></td>
+                  <td>{{saved_page_copy.date_created|date:"Y-m-d"}}</td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no data to display here yet, <a href="{% url 'landing-page-copy' %}">start creating</a></h5></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
+{% endblock %} 

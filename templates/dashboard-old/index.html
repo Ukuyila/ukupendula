@@ -1,0 +1,169 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block body %}
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              {% if not allowance %}
+              <div class="row">
+                <div class="card-body">
+                  <div class="mb-3 col-12 mb-0">
+                    <div class="alert alert-danger">
+                      <h6 class="alert-heading fw-bold mb-1">Upgrade Your Account!</h6>
+                      <p class="mb-0">You have used up all your allocated character count as per your subscription. Click
+                          <a href="{% url 'billing' %}">here</a> to upgrade your tier.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              <div class="row">
+                <div class="col-lg-8 mb-4 order-0">
+                  <div class="card mb-4">
+                    <div class="d-flex align-items-end row">
+                      <div class="col-sm-7">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary">Hello, {{user.first_name}}! 👋</h5>
+                          <p class="mb-4">
+                            You have generated <span class="fw-bold">{{month_word_count}}</span> words on <span class="fw-bold">{{num_blogs}}</span> blogs this month. Your word count will reset on <span class="fw-bold">{{count_reset}}</span>.
+                          </p>
+
+                          <a href="{% url 'profile' %}" class="btn btn-sm btn-outline-primary">View Profile</a>
+                        </div>
+                      </div>
+                      <div class="col-sm-5 text-center text-sm-left">
+                        <div class="card-body pb-0 px-0 px-md-4">
+                          <img
+                            src="{% static 'dash/img/illustrations/man-with-laptop-light.png' %}" height="140" alt="View User"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" mb-4">
+                    <div class="d-flex flex-wrap" id="icons-container">
+                      
+                      <div class="card bg-uku-warning icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'blog-topic' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/generate-blog.png' %}" height="30" alt="Blog generator" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Blog generator</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'meta-description-generator' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/meta-description-generator.png' %}" height="60" alt="Meta description generator" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Meta generator</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'title-writer' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/title-rewriter.png' %}" height="60" alt="title writer" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Title writer</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'landing-page-copy' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/landing-page-copy.png' %}" height="60" alt="landing page copy" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Page copy</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'sentence-writer' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/sentence-rewriter.png' %}" height="60" alt="sentence rewriter" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Sentence rewriter</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'paragraph-writer' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/paragraph-rewrite.png' %}" height="60" alt="paragraph rewriter" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Paragraph rewriter</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                      <div class="card icon-card cursor-pointer text-center mb-4 mx-2">
+                        <div class="card-body" onclick="location.href='{% url 'content-summarizer' %}';">
+                          <img src="{% static 'dash/img/icons/wsai/content-sumarizer.png' %}" height="60" alt="content sumarizer" />
+                          {% comment %} <p class="icon-name text-capitalize text-truncate mb-0">Content summarizer</p> {% endcomment %}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  {% if complete_blogs|length > 0 %}
+                  <div class="card">
+                      <h5 class="card-header">Completed Blogs</h5>
+                      <div class="table-responsive text-wrap">
+                        <table class="table" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th style="width:40%">Blog Title</th>
+                                <th>Audience</th>
+                                <th>Keywords</th>
+                                <th>Word Count</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                            {% for blog in complete_blogs %}
+                              <tr>
+                                <td >
+                                  
+                                  <h6 class="mb-0"><a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a></h6>
+                                  <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                                </td>
+                                <td>{{blog.audience}}</td>
+                                <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
+                                <td>{{blog.word_count}}</td>
+                                <td><a class="btn btn-sm btn-outline-primary" href="{% url 'view-generated-blog' blog.slug %}">View</a></td>
+                              </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="col-lg-4">
+                {% if empty_blogs|length > 0 %}
+                  <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="card-title m-0 me-2">Saved For Later</h5>
+                      
+                    </div>
+                    <div class="card-body">
+                      <ul class="p-0 m-0">
+
+                      {% for blog in empty_blogs %}
+                        <li class="d-flex mb-4 pb-1">
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                              <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                              {% if not allowance %}
+                              <h6 class="mb-0"><a href="javascript:void(0);">{{blog.title}}</a></h6>
+                              {% else %}
+                              <h6 class="mb-0"><a href="{% url 'generate-blog-from-topic' blog.uniqueId %}">{{blog.title}}</a></h6>
+                              {% endif %}
+                            </div>
+                            <div class="user-progress d-flex align-items-center gap-1">
+                              <a href="{% url 'delete-blog-topic' blog.uniqueId %}" class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                          </div>
+                        </li>
+                      {% endfor %}
+
+                      </ul>
+                    </div>
+                  </div>
+                {% endif %}
+                </div>
+
+                </div>
+              </div>
+            </div>
+{% endblock %}

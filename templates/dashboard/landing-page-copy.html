@@ -1,0 +1,106 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block css %}
+    <!--INTERNAL Summernote css -->
+    <link href="{% static 'dash/plugins/summer-note/summernote.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+            <!-- Content -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                
+                                <div class="col-md-4 ">
+                                    {% if not allowance %}
+                                    <div class="row">
+                                        <div class="card-body">
+                                        <div class="mb-3 col-12 mb-0">
+                                            <div class="alert alert-danger">
+                                            <h6 class="alert-heading fw-bold mb-1">Upgrade Your Account!</h6>
+                                            <p class="mb-0">You have used up all your allocated character count as per your subscription. Click
+                                                <a href="{% url 'billing' %}">here</a> to upgrade your tier.</p>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-0">Landing Page Copy</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="mb-3" action="#" method="POST">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="copy_title" class=" ">Copy Title</label><span class="title_counter text-muted">0/200</span></div>
+                                                  <input type="text" class="form-control" id="copy_title" name="copy_title" placeholder="Enter saving title" value="{{copy_content.copy_title|safe}}" maxlength="200" />
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="company_name" class=" ">Company Name</label><span class="comp_counter text-muted">0/200</span></div>
+                                                  <input type="text" class="form-control prompt-command" id="company_name" name="company_name" placeholder="Enter company name" value="{{copy_content.company_name|safe}}" maxlength="200" required/>
+                                                </div>
+                                                
+
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="page_sections" class=" ">Page Sections</label><span class="sects_counter text-muted">0/200</span></div>
+                                                  <input type="text" class="form-control prompt-command" id="page_sections" name="page_sections" placeholder="Header, Subheader, About Us, Call to Action, FAQ, Testimonials" value="{{page_sections|safe}}" maxlength="200" required/>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="company_purpose" class=" ">Company Purpose</label><span class="purpose_counter text-muted">0/200</span></div>
+                                                    <textarea type="text" rows="5" class="form-control prompt-command" id="company_purpose" name="company_purpose" placeholder="Company purpose" maxlength="200" required>{{copy_content.company_purpose|safe}}</textarea>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <button class="btn btn-primary d-grid w-100 btn-generate" id="btn-generate" type="submit">Generate</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                                <div class="col-md-8 text-left">
+                                  <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-left">
+                                        <h5 class="mb-0">AI Generated Response</h5>
+                                        <div class="btn-group float-end">
+                                            <!-- <button class="btn btn-outline-primary">View</button> -->
+                                            <!-- <button class="btn btn-primary">Download</button> -->
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <label class=" ">Use the generated content as you please</label>
+                                        <div class="card shadow-none border border-secondary mb-3 ">
+                                            <div class="card-body ideas-text">
+                                                <div  id="summernote">
+                                                    {{copy_content.page_copy}}
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+
+                                      <hr>
+                                      <p class="mt-5 text-primary"><i>AI is the source of the content; your responses and generated text may be retained for assessment...</i></p>
+    
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            <!-- / Content -->
+{% endblock %}
+
+{% block js %}
+    <!-- INTERNAL SUMMERNOTE Editor JS -->
+    <script src="{% static 'dash/plugins/summer-note/summernote1.js' %}"></script>
+    <script src="{% static 'dash/js/summernote.js' %}"></script>
+    <script src="{% static 'dash/js/pages/page-copy.js' %}"></script>
+{% endblock %}

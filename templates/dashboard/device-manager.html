@@ -1,0 +1,78 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block css %}
+		<!-- Data table css -->
+		<link href="{% static 'dash/plugins/datatable/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/plugins/datatable/jquery.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">My Devices</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_devices}}/{{max_devices}} devices</span></h6>
+          {% comment %} <div class="card-options">
+            <a href="{% url 'content-summarizer' %}" class="btn btn-primary btn-sm">Generate New</a>
+          </div> {% endcomment %}
+        </div>
+        <div class="card-body">
+          {% if reg_devices|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table class="table table-hover table-striped " style="width:100%">
+              <thead>
+                <tr>
+                  <th >OS</th>
+                  <th>Browser</th>
+                  <th>Location</th>
+                  <th>Last Seen</th>
+                  <th></th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for reg_device in reg_devices %}
+                <tr>
+                  <td>{{reg_device.agent_os}}</td>
+                  <td>{{reg_device.agent_browser}}</td>
+                  <td>{{reg_device.ip_address}}</td>
+                  <td>
+                    {% if reg_device.uniqueId == user.profile.current_device %}
+                    This device
+                    {% else %}
+                    {{reg_device.last_updated|date:"Y-m-d"}} {{reg_device.last_updated|time}}
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if not reg_device.uniqueId == user.profile.current_device %}
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-device' reg_device.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    {% endif %}
+                  </td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no device to display here yet, <a href="{% url 'dashboard' %}">back to home</a></h5></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
+{% endblock %} 

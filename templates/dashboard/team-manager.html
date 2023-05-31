@@ -1,0 +1,287 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block css %}
+		<!-- Data table css -->
+		<link href="{% static 'dash/plugins/datatable/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/plugins/datatable/jquery.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+
+  <div class="row">
+    {% if team_uid is not None %}
+      {% if this_user_team.team_principal == user.profile.uniqueId %}
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Team Details</h3></h6>
+            
+          </div>
+          <div class="card-body">
+            <form class="mb-3" action="#" method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between"><label for="biz_name" class=" ">Team Name</label> <span class="title_counter text-muted">0/200</span></div>
+                <input type="text" class="form-control" id="biz_name" name="biz_name" placeholder="Your team name" value="{{this_user_team.business_name}}" maxlength="200" required/>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between"><label for="industry" class=" ">Industry</label> <span class="industry_counter text-muted">0/200</span></div>
+                <input type="text" class="form-control" id="industry" name="industry" placeholder="Your industry" value="{{this_user_team.industry}}" maxlength="200" required/>
+              </div>
+
+              <div class="mb-3">
+                <label for="business_size" class="form-label">Team Size</label>
+                <select type="text" class="form-control select2" id="business_size" name="business_size">
+                  <option
+                  {% if this_user_team.business_size == '1-5' %}
+                  selected 
+                  {% endif %}
+                  value="1-5">1-5</option>
+                  <option
+                  {% if this_user_team.business_size == '6-10' %}
+                  selected 
+                  {% endif %}
+                  value="6-10">6-10</option>
+                  <option 
+                  {% if this_user_team.business_size == '11-20' %}
+                  selected 
+                  {% endif %}
+                  value="11-20">11-20</option>
+                  <option 
+                  {% if this_user_team.business_size == 'Over 20' %}
+                  selected 
+                  {% endif %}
+                  value="Over 20">Over 20</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between"><label for="biz_email" class=" ">Billing Email</label> <span class="email_counter text-muted">0/100</span></div>
+                <input type="email" class="form-control" id="biz_email" name="biz_email" placeholder="accounts@mycooldomain.com"  value="{{this_user_team.business_email}}" maxlength="100" />
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between"><label for="biz_address" class=" ">Billing Address</label><span class="address_counter text-muted">0/300</span></div>
+                <textarea type="text" rows="4" class="form-control" id="biz_address" name="biz_address" placeholder="123 Main Str, Cape Town, South Africa" maxlength="300" required>{{this_user_team.business_address}}</textarea>
+              </div>
+
+              <div class="mb-3">
+                <div class="d-flex align-items-center justify-content-between"><label for="biz_description" class=" ">Describe your organization</label><span class="descr_counter text-muted">0/1000</span></div>
+                <textarea type="text" rows="4" class="form-control" id="biz_description" name="biz_description" placeholder="Input your team description here" maxlength="1000" >{{this_user_team.business_description}}</textarea>
+              </div>
+
+              <div class="mb-3">
+                  <button class="btn btn-primary d-grid w-100" type="submit">Save</button>
+              </div>
+          </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% else %}
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Team Details</h3></h6>
+          
+        </div>
+        <div class="card-body">
+          <form class="mb-3" action="#" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between"><label for="biz_name" class=" ">Team Name</label> <span class="title_counter text-muted">0/200</span></div>
+              <input type="text" class="form-control" id="biz_name" name="biz_name" placeholder="Your team name" maxlength="200" required/>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between"><label for="industry" class=" ">Industry</label> <span class="industry_counter text-muted">0/200</span></div>
+              <input type="text" class="form-control" id="industry" name="industry" placeholder="Your industry" maxlength="200" required/>
+            </div>
+
+            <div class="mb-3">
+              <label for="business_size" class="form-label">Team Size</label>
+              <select type="text" class="form-control select2" id="business_size" name="business_size">
+                <option
+                {% if this_user_team.business_size == '1-5' %}
+                selected 
+                {% endif %}
+                value="1-5">1-5</option>
+                <option
+                {% if this_user_team.business_size == '6-10' %}
+                selected 
+                {% endif %}
+                value="6-10">6-10</option>
+                <option 
+                {% if this_user_team.business_size == '11-20' %}
+                selected 
+                {% endif %}
+                value="11-20">11-20</option>
+                <option 
+                {% if this_user_team.business_size == 'Over 20' %}
+                selected 
+                {% endif %}
+                 value="Over 20">Over 20</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between"><label for="biz_email" class=" ">Billing Email</label> <span class="email_counter text-muted">0/100</span></div>
+              <input type="email" class="form-control" id="biz_email" name="biz_email" placeholder="accounts@mycooldomain.com" maxlength="100" />
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between"><label for="biz_address" class=" ">Billing Address</label><span class="address_counter text-muted">0/300</span></div>
+              <textarea type="text" rows="4" class="form-control" id="biz_address" name="biz_address" placeholder="123 Main Str, Cape Town, South Africa" maxlength="300" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex align-items-center justify-content-between"><label for="biz_description" class=" ">Describe your organization</label><span class="descr_counter text-muted">0/1000</span></div>
+              <textarea type="text" rows="4" class="form-control" id="biz_description" name="biz_description" placeholder="Input your team description here" maxlength="1000" ></textarea>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" type="submit">Create Team</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">My Team</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_members}}/{{max_members}} members</span></h6>
+          <div class="card-options">
+            {% if this_user_team.team_principal == user.profile.uniqueId %}
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">Invite New</button>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body">
+          {% if team_members|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table class="table table-hover table-striped " style="width:100%">
+              <thead>
+                <tr>
+                  <th >Name</th>
+                  <th>Count</th>
+                  <th>Location</th>
+                  <th>Last Seen</th>
+                  <th></th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for member in team_members %}
+                <tr>
+                  <td>
+                    <h6>{{member.user.first_name}} {{member.user.last_name}}<h6>
+                    {% if this_user_team.profile == member %}
+                    <span class="badge bg-info">Team Principal</span>
+                    {% endif %}
+                  </td>
+                  <td>{{member.monthly_count}}</td>
+                  <td>{{member.current_ip}}</td>
+                  <td>
+                    {% if member.uniqueId == user.profile.uniqueId %}
+                    This is you
+                    {% else %}
+                    {{member.last_updated|date:"Y-m-d"}} {{member.last_updated|time}}
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if not member.uniqueId == user.profile.uniqueId %}
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-member' team_uid member.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    {% endif %}
+                  </td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no team to display here yet, <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">start inviting</button></h5></div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">My Invites</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_invites}} invites</span></h6>
+          <div class="card-options">
+            {% if this_user_team.team_principal == user.profile.uniqueId %}
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">Invite New</button>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body">
+          {% if member_invites|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table class="table table-hover table-striped " style="width:100%">
+              <thead>
+                <tr>
+                  <th >Name</th>
+                  <th>Email</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for invite in member_invites %}
+                <tr>
+                  <td>{{invite.first_name}} {{invite.last_name}}</td>
+                  <td>{{invite.invite_email}}</td>
+                  <td>
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-invite' team_uid invite.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                  </td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no team to display here yet, <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">start inviting</button></h5></div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="invite_new_member" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="example-Modal3">New member</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token %}
+            {% crispy invite_form %}
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
+		<script src="{% static 'dash/js/pages/team-manager.js' %}"></script>
+{% endblock %} 
