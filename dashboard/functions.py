@@ -468,7 +468,10 @@ def get_land_copy_word_cnt(q_year, q_month, profile):
 
 
 def get_percent_of(num_a, num_b):
-    percent = (int(num_a) / int(num_b)) * 100
+    if int(num_a) > 0:
+        percent = (int(num_a) / int(num_b)) * 100
+    else:
+        percent = 0
     return round(percent)
 
 
