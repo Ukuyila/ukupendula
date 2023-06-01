@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django_user_agents',
 
     # Local APPS
-    'landing',
     'authorisation',
     'dashboard',
 ]
