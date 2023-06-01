@@ -34,6 +34,8 @@ urlpatterns = [
     # blog action routes
     path('save-blog-topic/<str:blog_topic>/', views.save_blog_topic, name='save-blog-topic'),
     path('use-blog-topic/<str:blog_topic>/', views.use_blog_topic, name='use-blog-topic'),
+    path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-blog'),
+    
     path('view-generated-blog/<slug:slug>/', views.view_generated_blog, name='view-generated-blog'),
 
     # Paragraph writer urls
