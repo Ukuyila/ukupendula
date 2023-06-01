@@ -21,7 +21,7 @@ $(document).ready(function(){
     reg_btn_container.prop('hidden', true)
     submit_btn.prop('disabled', true)
 
-    if (filter_val=='9' || filter_val.toUpperCase()=='NINE' ) {
+    if (filter_val==9 || filter_val.toUpperCase()=='NINE' ) {
       reg_btn_container.prop('hidden', false)
       submit_btn.prop('disabled', false)
     }
