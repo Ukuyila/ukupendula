@@ -24,7 +24,7 @@
                                                 <td>{{topic}}</td>
                                                 <td>
                                                     <a href="{% url 'save-blog-topic' topic %}" class="btn btn-xs btn-outline-primary">Save</a>
-                                                    <a href="{% url 'use-blog-topic' topic %}" class="btn btn-xs btn-primary btn-generate">Use</a>
+                                                    <a href="{% url 'use-blog-topic' topic|urlencode %}" class="btn btn-xs btn-primary btn-generate">Use</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
