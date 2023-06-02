@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_user_agents',
 
     # Local APPS
+    'landing',
     'authorisation',
     'dashboard',
 ]
@@ -151,7 +152,7 @@ BASE_CURRENCY = 'ZAR'
 BASE_CURR_SIGN = 'R'
 
 
-# LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 
 OPENAI_API_KEYS = os.getenv("OPENAI_API_KEY")

@@ -60,7 +60,7 @@ def home(request):
     if device_reg == 'error: max device':
         # log user out and give solution to remove device
         messages.error(request, "You have maximum devices logged in on your profile!")
-        return redirect('auth/login')
+        return redirect('login')
         # print(check_device_reg)
         # pass
     else:
@@ -257,7 +257,7 @@ def blog_topic(request):
 def blog_sections(request):
     context = {}
 
-    current_page = 'Blog Sections Generator'
+    current_page = 'Blog Topic Generator'
 
     if 'blog_topics' in request.session:
         pass
@@ -311,6 +311,9 @@ def save_blog_topic(request, blog_topic):
 # This generates blog from session topic
 @login_required
 def use_blog_topic(request, blog_topic):
+
+    blog_topic = requests.utils.unquote(blog_topic)
+    print('Blog topic: '.format(blog_topic))
     context = {}
 
     current_page = 'Use Blog Sections Generator'
