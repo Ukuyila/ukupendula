@@ -36,7 +36,7 @@ urlpatterns = [
     path('use-blog-topic/<str:blog_topic>/', views.use_blog_topic, name='use-blog-topic'),
     path('view-generated-blog/<slug:slug>/', views.view_generated_blog, name='view-generated-blog'),
 
-    # path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
+    path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
 
     # Paragraph writer urls
     path('paragraph-writer', views.paragraph_writer, name='paragraph-writer'),
