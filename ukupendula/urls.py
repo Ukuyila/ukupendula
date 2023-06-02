@@ -6,9 +6,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),
-    path('auth/', include('authorisation.urls')),
-    # path('dash/', include('dashboard.urls')),
+    path('', include('authorisation.urls')),
+    # path('auth/', include('authorisation.urls')),
+    path('dash/', include('dashboard.urls')),
 ]
 
 if settings.DEBUG:
