@@ -257,7 +257,7 @@ def blog_topic(request):
 def blog_sections(request):
     context = {}
 
-    current_page = 'Blog Sections Generator'
+    current_page = 'Blog Topic Generator'
 
     if 'blog_topics' in request.session:
         pass
@@ -311,6 +311,9 @@ def save_blog_topic(request, blog_topic):
 # This generates blog from session topic
 @login_required
 def use_blog_topic(request, blog_topic):
+
+    blog_topic = requests.utils.unquote(blog_topic)
+    print('Blog topic: '.format(blog_topic))
     context = {}
 
     current_page = 'Use Blog Sections Generator'
