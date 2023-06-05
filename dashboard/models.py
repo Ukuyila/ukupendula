@@ -166,6 +166,9 @@ class Blog(models.Model):
     audience = models.CharField(null=True, blank=True, max_length=100)
     word_count = models.CharField(null=True, blank=True, max_length=100)
 
+    tone_of_voice = models.CharField(max_length=255)
+    max_words = models.CharField(max_length=11)
+
     deleted = models.BooleanField(default=False)
 
     # django related field

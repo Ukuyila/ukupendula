@@ -200,11 +200,20 @@ def profile(request):
 def blog_topic(request):
     context = {}
 
+    tone_of_voices = []
+
     current_page = 'Blog Topic Generator'
 
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
 
     if request.method == 'POST':
         blog_idea = request.POST['blog_idea']
@@ -215,6 +224,12 @@ def blog_topic(request):
 
         audience = request.POST['audience']
         request.session['audience'] = audience
+
+        tone_of_voice = request.POST['tone_of_voice']
+        request.session['tone_of_voice'] = tone_of_voice
+
+        max_words = request.POST['max_words']
+        request.session['max_words'] = max_words
 
         if len(blog_idea) > 160 or len(keywords) > 100 or len(audience) > 160:
             messages.error(request, "The engine could not generate blog ideas, please try again!")
@@ -295,6 +310,8 @@ def save_blog_topic(request, blog_topic):
             blog_idea=request.session['blog_idea'],
             keywords=request.session['keywords'],
             audience=request.session['audience'],
+            tone_of_voice=request.session['tone_of_voice'],
+            max_words=request.session['max_words'],
             profile=request.user.profile,
         )
         blog.save()
@@ -508,6 +525,8 @@ def view_gen_blog(request, slug):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    min_words = 300
+
     try:
         blog = Blog.objects.get(slug=slug)
     except:
@@ -516,9 +535,22 @@ def view_gen_blog(request, slug):
 
     if 'selectd_sections' in request.session:
 
-        for val in request.session['selectd_sections']:
-            if not 'csrfmiddlewaretoken' in val:
-                prev_blog = ''
+        sect_cnt = 1
+        total_sect_heads = len(request.session['selectd_sections'])
+        section_heads = ""
+
+        if total_sect_heads > 0:
+            # section_heads = '\n'.join(map(str, request.session['selectd_sections']))
+
+            for val in request.session['selectd_sections']:
+                if not 'csrfmiddlewaretoken' in val:
+                    # prev_blog = ''
+                    
+                    # convert selectd_sections list to a prog string
+                    if section_heads:
+                        section_heads = section_heads + '\n'
+                    section_heads = section_heads + val
+
                 api_call_code = str(uuid4()).split('-')[4]
 
                 add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
@@ -530,8 +562,7 @@ def view_gen_blog(request, slug):
                     # api_requests = check_api_requests()
                     time.sleep(5)
                     if api_call_process(api_call_code, add_to_list):
-                        gen_section = generate_blog_section_details(
-                            blog.title, val, blog.audience, blog.keywords, request.user.profile)
+                        gen_section = generate_full_blog(blog_topic, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
 
                         # create database record
                         blog_sect = BlogSection.objects.create(
@@ -556,6 +587,10 @@ def view_gen_blog(request, slug):
                         # we might need to delete all abandoned calls
                         pass
                     n += 1
+                sect_cnt += 1
+        else:
+            messages.error(request, "Something went wrong with your request, please try again!")
+            return redirect('blog-topic')
 
     return render(request, 'dashboard/view-generated-blog.html', context)
 

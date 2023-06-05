@@ -80,13 +80,50 @@ def generate_blog_section_headings(topic, audience, keywords):
     return blog_sections
 
 
+def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_words, max_words, profile):
+
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Generate a blog write-up with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n\n*".format(
+            min_words, max_words, blog_topic, audience, tone, keywords, section_heads),
+        temperature=1,
+        max_tokens=1000,
+        top_p=1,
+        best_of=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+
+    if 'choices' in response:
+        if len(response['choices']) > 0:
+            res = response['choices'][0]['text']
+            if not res == '':
+                cleaned_res = res.replace('\n', '<br>')
+                if profile.monthly_count:
+                    prof_count = int(profile.monthly_count)
+                else:
+                    prof_count = 0
+
+                prof_count += len(cleaned_res.split(' '))
+
+                profile.monthly_count = str(prof_count)
+                profile.save()
+                return cleaned_res
+            else:
+                return ''
+        else:
+            return ''
+    else:
+        return ''
+
+
 def generate_blog_section_details(blog_topic, section_topic, audience, keywords, profile):
 
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt="Generate a detailed blog section write-up for the following blog section heading, using the blog title, target audience, and keywords:\nBlog Title: {}\nSection Heading: {}\nAudience: {}\nKeywords: {}\n*".format(
             blog_topic, section_topic, audience, keywords),
-        temperature=0.7,
+        temperature=1,
         max_tokens=1000,
         top_p=1,
         best_of=1,

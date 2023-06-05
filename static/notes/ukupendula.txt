@@ -72,6 +72,8 @@ close port ->$ sudo fuser -k 8000/tcp
 
  /home/drycko/development/writesome/.git/
 
+  /home/drycko/development/writesome/repo/
+
 SitRep:
 - login: DONE
 - Register:
