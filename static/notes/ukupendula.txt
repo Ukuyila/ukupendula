@@ -70,6 +70,7 @@ python manage.py migrate
 
 close port ->$ sudo fuser -k 8000/tcp
 
+ /home/drycko/development/writesome/.git/
 
 SitRep:
 - login: DONE
