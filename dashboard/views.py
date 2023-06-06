@@ -404,10 +404,10 @@ def use_blog_topic(request, blog_topic):
 
 
 @login_required
-def save_section_head(request, blog_unique_id, section_head):
+def save_section_head(request, uniqueId, section_head):
     context = {}
 
-    blog = Blog.objects.get(uniqueId=blog_unique_id)
+    blog = Blog.objects.get(uniqueId=uniqueId)
 
     if blog:
         saved_sect_head = SavedBlogSectionHead.objects.create(

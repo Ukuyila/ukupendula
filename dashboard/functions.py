@@ -621,6 +621,29 @@ def device_registration(request, max_devices_allow):
         return logged_device.uniqueId
     
 
+def save_section_head(blog_unique_id, section_head):
+    response = {}
+
+    blog = Blog.objects.get(uniqueId=blog_unique_id)
+
+    if blog:
+        saved_sect_head = SavedBlogSectionHead.objects.create(
+            section_head=section_head,
+            blog=blog,
+        )
+        saved_sect_head.save()
+
+        # blog_section_heads = request.session['blog-sections']
+        response['uniqueId'] = blog.uniqueId
+        # adding the sections to the context
+        response['saved_sect_head'] = saved_sect_head
+        # response['blog_sections'] = blog_section_heads
+        print("saved: ".format(section_head))
+        return response
+    else:
+        return response
+    
+
 # Django backend check every 5 seconds
 def check_api_requests():
     cnt_requests = 0
