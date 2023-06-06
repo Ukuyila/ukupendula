@@ -23,22 +23,33 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-12 ">
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between"><label for="title" class=" ">Title</label> <span class="title_counter text-muted">0/250</span></div>
+                                            <input type="text" class="form-control" id="title" name="title" value="{{blog.title}}"  maxlength="250" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between"><label for="keywords" class=" ">Keywords</label> <span class="keywords_counter text-muted">0/250</span></div>
+                                            <input type="text" class="form-control" id="keywords" name="keywords" value="{{blog.keywords}}" maxlength="250" />
+                                        </div>
                                         <div class="form-group">
-                                            <h5 class="">Title: {{blog.title}}</h5>
-                                            <div class="demo-inline-spacing mb-10">
+                                            <h5 class="">Generated Blog</h5>
+                                            {% comment %} <div class="demo-inline-spacing mb-10">
                                                 <h6>Keywords: <span class="badge bg-primary">{{blog.keywords}}</span></h6>
                                                 <br>
-                                            </div>
+                                            </div> {% endcomment %}
                                             <div class="card shadow-none border border-secondary mb-3 ">
                                                 <div class="card-body ideas-text">
-                                                    <div id="summernote">
+                                                    <textarea class="form-control" id="generated-blog" name="generated-blog">
                                                         {% for section in blog_sects %}
                                                             <h5>{{section.title}}</h5>
                                                             <p>{{section.body|safe}}</p>
                                                         {% endfor %}
-                                                    </div>
+                                                    </textarea>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary d-grid w-100 btn-generate" id="btn-generate" type="submit">Save Edit</button>
                                         </div>
                                     </div>
                                 </div>

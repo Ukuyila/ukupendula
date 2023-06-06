@@ -603,56 +603,60 @@ def view_gen_blog(request, slug):
                         section_heads = section_heads + '\n'
                     section_heads = section_heads + val
 
-                api_call_code = str(uuid4()).split('-')[4]
+                    api_call_code = str(uuid4()).split('-')[4]
 
-                add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
+                    add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
 
-                n = 1
-                # runs until n < 50,just to avoid the infinite loop.
-                # this will execute the check_api_requests() func in every 5 seconds.
-                while n < 50:
-                    # api_requests = check_api_requests()
-                    time.sleep(5)
-                    if api_call_process(api_call_code, add_to_list):
-                        gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
+                    n = 1
+                    # runs until n < 50,just to avoid the infinite loop.
+                    # this will execute the check_api_requests() func in every 5 seconds.
+                    while n < 50:
+                        # api_requests = check_api_requests()
+                        time.sleep(5)
+                        if api_call_process(api_call_code, add_to_list):
+                            gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
 
-                        # create database record
-                        blog_sect = BlogSection.objects.create(
-                            title=val,
-                            body=gen_section,
-                            blog=blog,
-                        )
-                        blog_sect.save()
+                            # create database record
+                            blog_sect = BlogSection.objects.create(
+                                title=val,
+                                body=gen_section,
+                                blog=blog,
+                            )
+                            blog_sect.save()
 
-                        add_to_list.is_done=True
-                        add_to_list.save()
+                            add_to_list.is_done=True
+                            add_to_list.save()
 
-                        # fetch created blog sections
-                        blog_sects = BlogSection.objects.filter(blog=blog)
+                            # fetch created blog sections
+                            blog_sects = BlogSection.objects.filter(blog=blog)
 
-                        del request.session['uniqueId']
-                        del request.session['blog-sections']
-                        del request.session['selectd_sections']
-                        del request.session['blog_idea']
-                        del request.session['keywords']
-                        del request.session['audience']
-                        del request.session['saved_sect_head']
+                            del request.session['uniqueId']
+                            del request.session['blog-sections']
+                            del request.session['selectd_sections']
+                            del request.session['blog_idea']
+                            del request.session['keywords']
+                            del request.session['audience']
+                            del request.session['saved_sect_head']
 
-                        request.session.modified = True
+                            request.session.modified = True
 
-                        context['blog'] = blog
-                        context['blog_sects'] = blog_sects
+                            context['blog'] = blog
+                            context['blog_sects'] = blog_sects
 
-                        return redirect('view-generated-blog', slug=blog.slug)
-                    
-                    else:
-                        # we might need to delete all abandoned calls
-                        pass
-                    n += 1
-                sect_cnt += 1
+                            return redirect('view-generated-blog', slug=blog.slug)
+                        
+                        else:
+                            # we might need to delete all abandoned calls
+                            pass
+                        n += 1
+                    sect_cnt += 1
         else:
             messages.error(request, "Something went wrong with your request, please try again!")
             return redirect('blog-topic')
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        print('new title: {}'.format(title))
 
     return render(request, 'dashboard/view-generated-blog.html', context)
 
