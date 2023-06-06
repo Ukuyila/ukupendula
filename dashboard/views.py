@@ -418,6 +418,7 @@ def save_section_head(request, blog_unique_id, section_head):
         # adding the sections to the context
         context['saved_sect_head'] = saved_sect_head
         context['blog_sections'] = blog_section_heads
+        print("saved: ".format(section_head))
         return redirect('select-blog-sections', slug=blog.slug)
     else:
         return redirect('blog-sections')
