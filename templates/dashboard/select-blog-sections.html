@@ -39,6 +39,7 @@
                                                                 <a href="javascript:void(0);" disabled class="btn btn-xs btn-primary">Saved</a>
                                                                 {% else %}
                                                                 <a href="{% url 'save-section-head' uniqueId section_head|urlencode %}" class="btn btn-xs btn-outline-primary">Save</a>
+                                                                {% endif %}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
