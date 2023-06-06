@@ -346,11 +346,15 @@ def use_blog_topic(request, blog_topic):
     context['allowance'] = check_count_allowance(request.user.profile)
 
     if 'blog-sections' in request.session and 'uniqueId' in request.session:
+
+        uniqueId = request.session['uniqueId']
         
-        context['uniqueId'] = request.session['uniqueId']
+        context['uniqueId'] = uniqueId
         blog_section_heads = request.session['blog-sections']
         saved_sect_head = request.session['saved_sect_head']
 
+        blog = Blog.objects.get(uniqueId=uniqueId)
+        
         context['saved_sect_head'] = saved_sect_head
 
     else:
