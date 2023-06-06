@@ -349,6 +349,7 @@ def use_blog_topic(request, blog_topic):
         
         context['uniqueId'] = request.session['uniqueId']
         blog_section_heads = request.session['blog-sections']
+        saved_sect_head = request.session['saved_sect_head']
 
     else:
 
@@ -396,6 +397,8 @@ def use_blog_topic(request, blog_topic):
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
 
+        saved_sect_head = request.session['saved_sect_head'] if request.session['saved_sect_head'] else ''
+
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
 
@@ -432,7 +435,7 @@ def save_section_head(request, uniqueId, section_head):
         context['uniqueId'] = blog.uniqueId
         request.session['uniqueId'] = blog.uniqueId
         # adding the sections to the context
-        context['saved_sect_head'] = saved_sect_head
+        request.session['saved_sect_head'] = saved_sect_head
         context['blog_sections'] = blog_section_heads
         print("saved: ".format(section_head))
         return redirect('use-blog-topic', blog_topic)
@@ -626,9 +629,10 @@ def view_gen_blog(request, slug):
                         del request.session['uniqueId']
                         del request.session['blog-sections']
                         del request.session['selectd_sections']
-                        del request.session['blog_idea'],
-                        del request.session['keywords'],
-                        del request.session['audience'],
+                        del request.session['blog_idea']
+                        del request.session['keywords']
+                        del request.session['audience']
+                        del request.session['saved_sect_head']
 
                         request.session.modified = True
 
