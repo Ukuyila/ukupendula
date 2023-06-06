@@ -194,31 +194,31 @@ class Blog(models.Model):
         super(Blog, self).save(*args, **kwargs)
 
 
-class SavedBlogSectionHead(models.Model):
-    section_head = models.CharField(max_length=300)
-    section_body = models.TextField(null=True, blank=True)
+# class SavedBlogSectionHead(models.Model):
+#     section_head = models.CharField(max_length=300)
+#     section_body = models.TextField(null=True, blank=True)
 
-    # Django related field
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+#     # Django related field
+#     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
 
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
+#     # Utility Variable
+#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
+#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+#     date_created = models.DateTimeField(blank=True, null=True)
+#     last_updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return '{} {}'.format(self.section_head, self.uniqueId)
+#     def __str__(self):
+#         return '{} {}'.format(self.section_head, self.uniqueId)
 
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
+#     def save(self, *args, **kwargs):
+#         if self.date_created is None:
+#             self.date_created = timezone.localtime(timezone.now())
+#         if self.uniqueId is None:
+#             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.section_head, self.uniqueId))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(SavedBlogSectionHead, self).save(*args, **kwargs)
+#         self.slug = slugify('{} {}'.format(self.section_head, self.uniqueId))
+#         self.last_updated = timezone.localtime(timezone.now())
+#         super(SavedBlogSectionHead, self).save(*args, **kwargs)
 
 
 class BlogSection(models.Model):
