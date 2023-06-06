@@ -416,6 +416,8 @@ def save_section_head(request, uniqueId, section_head):
     blog = Blog.objects.get(uniqueId=uniqueId)
 
     if blog:
+        blog_topic = urllib.parse.quote(blog.title)
+
         saved_sect_head = SavedBlogSectionHead.objects.create(
             section_head=section_head,
             blog=blog,
@@ -429,7 +431,7 @@ def save_section_head(request, uniqueId, section_head):
         context['saved_sect_head'] = saved_sect_head
         context['blog_sections'] = blog_section_heads
         print("saved: ".format(section_head))
-        return redirect('select-blog-sections', slug=blog.slug)
+        return redirect('use-blog-topic', blog_topic)
     else:
         return redirect('blog-sections')
 
@@ -601,7 +603,7 @@ def view_gen_blog(request, slug):
                     # api_requests = check_api_requests()
                     time.sleep(5)
                     if api_call_process(api_call_code, add_to_list):
-                        gen_section = generate_full_blog(blog_topic, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
+                        gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
 
                         # create database record
                         blog_sect = BlogSection.objects.create(
@@ -616,6 +618,15 @@ def view_gen_blog(request, slug):
 
                         # fetch created blog sections
                         blog_sects = BlogSection.objects.filter(blog=blog)
+
+                        del request.session['uniqueId']
+                        del request.session['blog-sections']
+                        del request.session['selectd_sections']
+                        del request.session['blog_idea'],
+                        del request.session['keywords'],
+                        del request.session['audience'],
+
+                        request.session.modified = True
 
                         context['blog'] = blog
                         context['blog_sects'] = blog_sects
