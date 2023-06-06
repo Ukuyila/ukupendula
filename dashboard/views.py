@@ -228,10 +228,16 @@ def blog_topic(request):
         tone_of_voice = request.POST['tone_of_voice']
         request.session['tone_of_voice'] = tone_of_voice
 
-        max_words = request.POST['max_words']
+        if int(request.POST['max_words']) < 300:
+            max_words = 300
+        elif int(request.POST['max_words']) > 1500:
+            max_words = 1500
+        else:
+            max_words = int(request.POST['max_words'])
+
         request.session['max_words'] = max_words
 
-        if len(blog_idea) > 160 or len(keywords) > 100 or len(audience) > 160:
+        if len(blog_idea) > 250 or len(keywords) > 250 or len(audience) > 250:
             messages.error(request, "The engine could not generate blog ideas, please try again!")
             return redirect('blog-topic')
         else:
@@ -311,7 +317,7 @@ def save_blog_topic(request, blog_topic):
             keywords=request.session['keywords'],
             audience=request.session['audience'],
             tone_of_voice=request.session['tone_of_voice'],
-            max_words=request.session['max_words'],
+            max_words= str(request.session['max_words']),
             profile=request.user.profile,
         )
         blog.save()
