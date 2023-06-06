@@ -417,6 +417,8 @@ def save_section_head(request, uniqueId, section_head):
 
     blog = Blog.objects.get(uniqueId=uniqueId)
 
+    section_head = requests.utils.unquote(section_head)
+
     if blog:
         blog_topic = urllib.parse.quote(blog.title)
 
