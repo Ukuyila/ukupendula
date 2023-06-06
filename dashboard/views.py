@@ -353,6 +353,8 @@ def use_blog_topic(request, blog_topic):
             )
             blog.save()
 
+            context['uniqueId'] = blog.uniqueId
+
             api_call_code = str(uuid4()).split('-')[4]
 
             # api_requests = check_api_requests()
@@ -379,12 +381,13 @@ def use_blog_topic(request, blog_topic):
             return redirect('blog-topic')
         
     else:
+        context['uniqueId'] = blog.uniqueId
         blog_section_heads = request.session['blog-sections']
 
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
-        context['uniqueId'] = blog.uniqueId
+        context['uniqueId'] = request.session['uniqueId']
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
 
@@ -415,6 +418,7 @@ def save_section_head(request, blog_unique_id, section_head):
 
         blog_section_heads = request.session['blog-sections']
         context['uniqueId'] = blog.uniqueId
+        request.session['uniqueId'] = blog.uniqueId
         # adding the sections to the context
         context['saved_sect_head'] = saved_sect_head
         context['blog_sections'] = blog_section_heads
