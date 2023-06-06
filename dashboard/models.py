@@ -163,7 +163,7 @@ class Blog(models.Model):
     title = models.CharField(max_length=255)
     blog_idea = models.CharField(null=True, blank=True, max_length=255)
     keywords = models.CharField(null=True, blank=True, max_length=255)
-    audience = models.CharField(null=True, blank=True, max_length=100)
+    audience = models.CharField(null=True, blank=True, max_length=255)
     word_count = models.CharField(null=True, blank=True, max_length=100)
 
     tone_of_voice = models.CharField(null=True, blank=True, max_length=255)

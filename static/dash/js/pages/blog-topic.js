@@ -1,6 +1,6 @@
 $(document).ready(function(){
   "use strict";
-  var maxLength = 160;
+  var maxLength = 250;
   $('#blog_idea').keyup(function() {
     var curr_textlen = $(this).val().length;
 
@@ -18,7 +18,7 @@ $(document).ready(function(){
   });
 
   $('#keywords').keyup(function() {
-    var maxLength = 100;
+    var maxLength = 250;
     var curr_textlen = $(this).val().length;
 
     var textlen = maxLength - curr_textlen;
