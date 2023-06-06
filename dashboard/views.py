@@ -345,7 +345,12 @@ def use_blog_topic(request, blog_topic):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    if not 'blog-sections' in request.session:
+    if 'blog-sections' in request.session and 'uniqueId' in request.session:
+        
+        context['uniqueId'] = request.session['uniqueId']
+        blog_section_heads = request.session['blog-sections']
+
+    else:
 
         if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
             # save blog topic idea first
@@ -385,10 +390,7 @@ def use_blog_topic(request, blog_topic):
                 n += 1
         else:
             return redirect('blog-topic')
-        
-    else:
-        context['uniqueId'] = request.session['uniqueId']
-        blog_section_heads = request.session['blog-sections']
+
 
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
