@@ -397,7 +397,7 @@ def use_blog_topic(request, blog_topic):
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
 
-        saved_sect_head = request.session['saved_sect_head'] if request.session['saved_sect_head'] else ''
+        context['saved_sect_head'] = saved_sect_head if request.session['saved_sect_head'] else ''
 
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
