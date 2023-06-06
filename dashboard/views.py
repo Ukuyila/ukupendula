@@ -351,6 +351,8 @@ def use_blog_topic(request, blog_topic):
         blog_section_heads = request.session['blog-sections']
         saved_sect_head = request.session['saved_sect_head']
 
+        context['saved_sect_head'] = saved_sect_head
+
     else:
 
         if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
@@ -396,8 +398,6 @@ def use_blog_topic(request, blog_topic):
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
-
-        context['saved_sect_head'] = saved_sect_head if request.session['saved_sect_head'] else ''
 
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
