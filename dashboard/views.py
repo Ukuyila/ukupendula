@@ -381,13 +381,13 @@ def use_blog_topic(request, blog_topic):
             return redirect('blog-topic')
         
     else:
-        context['uniqueId'] = blog.uniqueId
+        context['uniqueId'] = request.session['uniqueId']
         blog_section_heads = request.session['blog-sections']
 
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
-        context['uniqueId'] = request.session['uniqueId']
+
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
 
