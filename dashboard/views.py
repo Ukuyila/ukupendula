@@ -339,47 +339,52 @@ def use_blog_topic(request, blog_topic):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
-        # save blog topic idea first
-        # code to save
-        blog = Blog.objects.create(
-            title=blog_topic,
-            blog_idea=request.session['blog_idea'],
-            keywords=request.session['keywords'],
-            audience=request.session['audience'],
-            profile=request.user.profile,
-        )
-        blog.save()
+    if not 'blog-sections' in request.session:
 
-        api_call_code = str(uuid4()).split('-')[4]
+        if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
+            # save blog topic idea first
+            # code to save
+            blog = Blog.objects.create(
+                title=blog_topic,
+                blog_idea=request.session['blog_idea'],
+                keywords=request.session['keywords'],
+                audience=request.session['audience'],
+                profile=request.user.profile,
+            )
+            blog.save()
 
-        # api_requests = check_api_requests()
+            api_call_code = str(uuid4()).split('-')[4]
 
-        add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
-
-        n = 1
-        # runs until n < 50,just to avoid the infinite loop.
-        # this will execute the check_api_requests() func in every 5 seconds.
-        while n < 50:
             # api_requests = check_api_requests()
-            time.sleep(5)
-            if api_call_process(api_call_code, add_to_list):
-                blog_section_heads = generate_blog_section_headings(blog_topic, request.session['audience'], request.session['keywords'])
-                
-                add_to_list.is_done=True
-                add_to_list.save()
-                break
-            else:
-                # we might need to delete all abandoned calls
-                pass
-            n += 1
+
+            add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+                    blog_section_heads = generate_blog_section_headings(blog_topic, request.session['audience'], request.session['keywords'])
+                    
+                    add_to_list.is_done=True
+                    add_to_list.save()
+                    break
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+        else:
+            return redirect('blog-topic')
+        
     else:
-        return redirect('blog-topic')
+        blog_section_heads = request.session['blog-sections']
 
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
-        # request.session['blog-sections'] = blog_section_heads
-
+        request.session['blog-sections'] = blog_section_heads
+        context['uniqueId'] = blog.uniqueId
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
 
@@ -395,6 +400,29 @@ def use_blog_topic(request, blog_topic):
     return render(request, 'dashboard/select-blog-sections.html', context)
 
 
+@login_required
+def save_section_head(request, blog_unique_id, section_head):
+    context = {}
+
+    blog = Blog.objects.get(uniqueId=blog_unique_id)
+
+    if blog:
+        saved_sect_head = SavedBlogSectionHead.objects.create(
+            section_head=section_head,
+            blog=blog,
+        )
+        saved_sect_head.save()
+
+        blog_section_heads = request.session['blog-sections']
+        context['uniqueId'] = blog.uniqueId
+        # adding the sections to the context
+        context['saved_sect_head'] = saved_sect_head
+        context['blog_sections'] = blog_section_heads
+        return redirect('select-blog-sections', slug=blog.slug)
+    else:
+        return redirect('blog-sections')
+
+        
 # this generates blog from saved topic
 @login_required
 def create_blog_from_topic(request, uniqueId):

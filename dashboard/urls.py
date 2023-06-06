@@ -31,6 +31,8 @@ urlpatterns = [
     path('generate-blog-topic', views.blog_topic, name='blog-topic'),
     path('generate-blog-sections', views.blog_sections, name='blog-sections'),
 
+    path('save-section-head/<str:uniqueId>/<str:section_head>/', views.save_section_head, name='save-section-head'),
+
     # blog action routes
     path('save-blog-topic/<str:blog_topic>/', views.save_blog_topic, name='save-blog-topic'),
     path('use-blog-topic/<str:blog_topic>/', views.use_blog_topic, name='use-blog-topic'),

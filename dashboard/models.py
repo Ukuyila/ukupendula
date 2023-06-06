@@ -196,9 +196,10 @@ class Blog(models.Model):
 
 class SavedBlogSectionHead(models.Model):
     section_head = models.CharField(max_length=300)
+    section_body = models.TextField(null=True, blank=True)
 
-    # django related field
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # Django related field
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
