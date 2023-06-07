@@ -698,7 +698,7 @@ def edit_gen_blog(request, uniqueId):
     context['blog_body'] = blog_body
 
     if request.method == 'POST':
-        blog_title = request.POST['blog_title']
+        blog_title = request.POST['blog-title']
         generated_blog_edit = request.POST['generated-blog']
 
         saved_blog.title = blog_title
