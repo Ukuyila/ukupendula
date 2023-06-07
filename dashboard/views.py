@@ -618,7 +618,7 @@ def view_gen_blog(request, slug):
 
                             # create database record
                             blog_sect = BlogSection.objects.create(
-                                title=val,
+                                title=blog.title,
                                 body=gen_section,
                                 blog=blog,
                             )
