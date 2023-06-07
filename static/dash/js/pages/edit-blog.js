@@ -2,6 +2,9 @@ $(document).ready(function(){
   "use strict";
   var maxLength = 250;
 
+  $('.title_counter').text($('#blog-title').val().length+'/'+maxLength);
+  $('.keywords_counter').text($('#keywords').val().length+'/'+maxLength);
+
   $('#blog-title').keyup(function() {
     var curr_textlen = $(this).val().length;
 
