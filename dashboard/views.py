@@ -657,7 +657,7 @@ def view_gen_blog(request, slug):
     return render(request, 'dashboard/view-generated-blog.html', context)
 
 
-def edit_gen_blog(request, blogUniqueId):
+def edit_gen_blog(request, uniqueId):
     context = {}
 
     current_page = 'Edit Generated Blog'
@@ -665,7 +665,7 @@ def edit_gen_blog(request, blogUniqueId):
     context['current_page'] = current_page
 
     try:
-        blog = Blog.objects.get(uniqueId=blogUniqueId)
+        blog = Blog.objects.get(uniqueId=uniqueId)
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')

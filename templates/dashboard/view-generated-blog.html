@@ -28,7 +28,10 @@
                                             <h6 class="">Generated Blog Body</h6>
                                             <div class="card shadow-none border border-secondary mb-3 ">
                                                 <div class="card-body ideas-text">
-                                                    <textarea rows="30" class="form-control" id="generated-blog" name="generated-blog">{% for section in blog_sects %}<h5>{{section.title}}</h5><p>{{section.body|safe}}</p>{% endfor %}</textarea>
+                                                    <textarea rows="30" class="form-control" id="generated-blog" name="generated-blog">{% for section in blog_sects %}<h5>{{section.title}}</h5>
+                                                        <p>{{section.body|safe}}</p>
+                                                        {% endfor %}
+                                                    </textarea>
                                                 </div>
                                             </div>
                                         </div>
