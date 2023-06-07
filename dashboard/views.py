@@ -654,11 +654,53 @@ def view_gen_blog(request, slug):
             messages.error(request, "Something went wrong with your request, please try again!")
             return redirect('blog-topic')
 
-    if request.method == 'POST':
-        title = request.POST['title']
-        print('new title: {}'.format(title))
-
     return render(request, 'dashboard/view-generated-blog.html', context)
+
+
+def edit_gen_blog(request, blogUniqueId):
+    context = {}
+
+    current_page = 'Edit Generated Blog'
+
+    context['current_page'] = current_page
+
+    try:
+        blog = Blog.objects.get(uniqueId=blogUniqueId)
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('blog-topic')
+    
+    blog_body = ''
+    
+    blog_sects = BlogSection.objects.filter(blog=blog)
+
+    for blog_sect in blog_sects:
+        blog_body.append(blog_sect.body)
+
+    saved_blog = SavedBlogEdit.objects.create(
+        title=blog.title,
+        body=blog_body,
+        blog=blog,
+    )
+    saved_blog.save()
+
+    context['blog'] = blog
+    context['blog_title'] = blog.title
+    context['blog_audience'] = blog.audience
+    context['blog_body'] = blog_body
+
+    if request.method == 'POST':
+        blog_title = request.POST['blog_title']
+        generated_blog_edit = request.POST['generated-blog']
+
+        saved_blog.title = blog_title
+        saved_blog.body = generated_blog_edit
+        saved_blog.save()
+
+        print('new title: {}'.format(blog_title))
+
+    return render(request, 'dashboard/edit-generated-blog.html', context)
+
 
 @login_required
 def view_generated_blog(request, slug):

@@ -15,7 +15,7 @@
                             <h4 class="mb-0">AI Generated Response</h4>
                             <div class="btn-group float-end">
                                 <button class="btn btn-outline-primary">Copy Text</button>
-                                <button  onclick="return window.location.href='edit-blog blog.uniqueId'" class="btn btn-primary">Edit Blog</button>
+                                {% comment %} <button class="btn btn-primary">Download</button> {% endcomment %}
                             </div>
                         </div>
                         <div class="card-body">
@@ -23,20 +23,24 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-12 ">
-                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between"><label for="blog-title" class=" ">Blog Title</label> <span class="title_counter text-muted">0/250</span></div>
+                                            <input type="text" class="form-control" id="blog-title" name="blog-title" value="{{blog.title}}"  maxlength="250" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between"><label for="keywords" class=" ">Blog Keywords</label> <span class="keywords_counter text-muted">0/250</span></div>
+                                            <input type="text" class="form-control" id="keywords" name="keywords" value="{{blog.keywords}}" maxlength="250" readonly />
+                                        </div>
                                         <div class="form-group">
                                             <h6 class="">Generated Blog Body</h6>
-                                            <div class="demo-inline-spacing mb-10">
-                                                <h6>Keywords: <span class="badge bg-primary">{{blog.keywords}}</span></h6>
-                                                <br>
-                                            </div>
                                             <div class="card shadow-none border border-secondary mb-3 ">
                                                 <div class="card-body ideas-text">
-                                                    <textarea rows="30" class="form-control" id="generated-blog" name="generated-blog">{% for section in blog_sects %}
-                                                            <h5>{{section.title}}</h5><p>{{section.body|safe}}</p>
-                                                        {% endfor %}</textarea>
+                                                    <textarea rows="30" class="form-control" id="generated-blog" name="generated-blog">{{blog_body}}</textarea>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary d-grid w-100 btn-save" id="btn-save" type="submit">Save Edit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -50,4 +54,11 @@
             </div>
 
             <!-- / Content -->
+{% endblock %}
+
+{% block js %}
+    <!-- INTERNAL SUMMERNOTE Editor JS -->
+    <script src="{% static 'dash/plugins/summer-note/summernote1.js' %}"></script>
+    <script src="{% static 'dash/js/summernote.js' %}"></script>
+    <script src="{% static 'dash/js/pages/edit-blog.js' %}"></script>
 {% endblock %}
