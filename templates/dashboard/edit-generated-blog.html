@@ -3,7 +3,8 @@
 
 {% block css %}
     <!--INTERNAL Summernote css -->
-    <link href="{% static 'dash/plugins/summer-note/summernote.css' %}" rel="stylesheet" />
+    <!-- WYSIWYG Editor css -->
+    <link href="{% static 'dash/plugins/wysiwyag/richtext.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block body %}
@@ -36,7 +37,7 @@
                                             <div class="mb-10"><small class="text-primary">Discaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small></div>
                                             <div class="card shadow-none border border-secondary mb-3 ">
                                                 <div class="card-body ideas-text">
-                                                    <textarea class="mt-10 tinymce form-control" rows="35" name="generated-blog" >{{blog_body}}</textarea>
+                                                    <textarea class="mt-3 tinymce form-control" rows="35" name="generated-blog" >{{blog_body}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -59,7 +60,8 @@
 
 {% block js %}
     <!-- INTERNAL SUMMERNOTE Editor JS -->
-    <script src="{% static 'dash/plugins/summer-note/summernote1.js' %}"></script>
-    <script src="{% static 'dash/js/summernote.js' %}"></script>
+    <!-- WYSIWYG Editor js -->
+    <script src="{% static 'dash/plugins/wysiwyag/jquery.richtext.js' %}"></script>
+    <script src="{% static 'dash/js/formeditor.js' %}"></script>
     <script src="{% static 'dash/js/pages/edit-blog.js' %}"></script>
 {% endblock %}
