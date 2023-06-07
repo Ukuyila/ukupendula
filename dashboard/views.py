@@ -670,14 +670,14 @@ def edit_gen_blog(request, uniqueId):
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
     
-    blog_bodies = []
+    blog_sections = []
     
     blog_sects = BlogSection.objects.filter(blog=blog)
 
     for blog_sect in blog_sects:
-        blog_body.append(blog_sect.body)
+        blog_sections.append(blog_sect.body)
 
-    blog_body = "\n".join(blog_bodies)
+    blog_body = "\n".join(blog_sections)
 
     saved_blog = SavedBlogEdit.objects.create(
         title=blog.title,
