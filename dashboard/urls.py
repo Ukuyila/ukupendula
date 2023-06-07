@@ -39,6 +39,7 @@ urlpatterns = [
     path('view-generated-blog/<slug:slug>/', views.view_generated_blog, name='view-generated-blog'),
 
     path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
+    path('edit-blog/<str:uniqueId>/', views.edit_gen_blog, name='edit-gen-blog'),
 
     # Paragraph writer urls
     path('paragraph-writer', views.paragraph_writer, name='paragraph-writer'),
