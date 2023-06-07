@@ -670,7 +670,7 @@ def edit_gen_blog(request, uniqueId):
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
     
-    blog_body = ''
+    blog_body = []
     
     blog_sects = BlogSection.objects.filter(blog=blog)
 
