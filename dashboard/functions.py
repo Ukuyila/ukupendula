@@ -84,7 +84,7 @@ def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate a blog write-up with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n\n*".format(
+        prompt="Generate a blog write-up with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n*".format(
             min_words, max_words, blog_topic, audience, tone, keywords, section_heads),
         temperature=1,
         max_tokens=1000,
