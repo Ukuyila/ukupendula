@@ -705,7 +705,9 @@ def edit_gen_blog(request, uniqueId):
         saved_blog.body = generated_blog_edit
         saved_blog.save()
 
-        print('new title: {}'.format(blog_title))
+        return redirect('edit-gen-blog', uniqueId)
+
+        # print('new title: {}'.format(blog_title))
 
     return render(request, 'dashboard/edit-generated-blog.html', context)
 
