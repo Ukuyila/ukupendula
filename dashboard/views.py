@@ -671,20 +671,26 @@ def edit_gen_blog(request, uniqueId):
         return redirect('blog-topic')
     
     blog_sections = []
-    
-    blog_sects = BlogSection.objects.filter(blog=blog)
 
-    for blog_sect in blog_sects:
-        blog_sections.append(blog_sect.body)
+    saved_blog = SavedBlogEdit.objects.get(blog=blog)
 
-    blog_body = "\n".join(blog_sections)
+    if saved_blog:
+        blog_body = saved_blog.body
 
-    saved_blog = SavedBlogEdit.objects.create(
-        title=blog.title,
-        body=blog_body,
-        blog=blog,
-    )
-    saved_blog.save()
+    else:
+        blog_sects = BlogSection.objects.filter(blog=blog)
+
+        for blog_sect in blog_sects:
+            blog_sections.append(blog_sect.body)
+
+        blog_body = "\n".join(blog_sections)
+
+        saved_blog = SavedBlogEdit.objects.create(
+            title=blog.title,
+            body=blog_body,
+            blog=blog,
+        )
+        saved_blog.save()
 
     context['blog'] = blog
     context['blog_title'] = blog.title
