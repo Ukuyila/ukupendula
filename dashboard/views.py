@@ -747,6 +747,7 @@ def gen_social_post(request, postType, uniqueId):
         max_char = 280
     elif postType == "twitter_blue":
         max_char = 10000
+        postType = postType.replace('_', ' ')
     elif postType == "linkedin":
         max_char = 3000
     elif postType == "facebook":
