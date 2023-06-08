@@ -47,11 +47,11 @@
 
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="audience" class=" ">Target Audience</label> <span class="audience_counter text-muted">0/250</span></div>
-                                                  <input type="text" class="form-control" id="audience" name="audience" placeholder="anyone" value="{{audience}}" maxlength="250" required/>
+                                                  <input type="text" class="form-control" id="audience" name="audience" placeholder="anyone" value="{{blog_audience}}" maxlength="250" required/>
                                                 </div>
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="keywords" class=" ">Keywords</label> <span class="keywords_counter text-muted">0/250</span></div>
-                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" value="{{keywords}}" maxlength="250" />
+                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" value="{{blog_keywords}}" maxlength="250" />
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="tone_of_voice" class=" ">Tone of voice</label>
@@ -59,7 +59,7 @@
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if tone_of_voice == tone.tone_of_voice %}
+                                                      {% if blog_tone == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -82,7 +82,7 @@
                                       </div>
                                       <div class="card-body">
                                           <div class="row">
-                                            <div class="col-lg-12 mb-5">
+                                            <div class="col-lg-12">
                                               <p class="text-primary"><b>Discaimer:</b> The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</p>
                                             </div>
                                               <div class="col-lg-12 ">

@@ -756,6 +756,14 @@ def gen_social_post(request, postType, uniqueId):
         max_char = 10000
 
     complete_blogs = []
+    tone_of_voices = []
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
     
     blogs = Blog.objects.filter(profile=request.user.profile)
 
@@ -798,8 +806,9 @@ def gen_social_post(request, postType, uniqueId):
         saved_blog.save()
 
     context['blog'] = this_blog
-    context['blog_title'] = saved_blog.title
+    context['blog_keywords'] = this_blog.keywords
     context['blog_audience'] = this_blog.audience
+    context['blog_tone'] = this_blog.tone_of_voice
     context['uniqueId'] = uniqueId
     context['saved_blog'] = saved_blog
     context['blog_posts'] = complete_blogs

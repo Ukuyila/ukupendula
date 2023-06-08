@@ -23,6 +23,10 @@ $(document).ready(function(){
     $('.keywords_counter').text(curr_textlen+'/'+maxLength);
   });
 
+  if ( $('#audience').val().length > 5 && $('#keywords').val().length > 2 ) {
+    $('#btn-generate').prop('disabled', false)
+  }
+
   $('input').keyup( function () {
 
     $('#btn-generate').prop('disabled', true)
