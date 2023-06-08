@@ -98,7 +98,7 @@ def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_
         if len(response['choices']) > 0:
             res = response['choices'][0]['text']
             if not res == '':
-                cleaned_res = res.replace('\n', '<br>')
+                cleaned_res = res.replace('*', '').replace('\n', '<br>')
                 if profile.monthly_count:
                     prof_count = int(profile.monthly_count)
                 else:
@@ -188,7 +188,40 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
             return ''
     else:
         return ''
+
+
+def generate_social_post(post_type, audience, keywords, blog_body, max_char, profile):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Write a {} post with a maximum of {} characters from this article using these keywords and target audience:\nKeywords: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, max_char, keywords, audience, blog_body),
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        best_of=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
     
+    if 'choices' in response:
+        if len(response['choices']) > 0:
+            res = response['choices'][0]['text']
+
+            cleaned_res = res.replace('*', '').replace('\n', '<br>')
+            if profile.monthly_count:
+                prof_count = int(profile.monthly_count)
+            else:
+                prof_count = 0
+
+            prof_count += len(cleaned_res.split(' '))
+
+            profile.monthly_count = str(prof_count)
+            profile.save()
+            return res
+        else:
+            return []
+    else:
+        return []
+
 
 def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
@@ -664,8 +697,33 @@ def check_api_requests():
     return result
 
 
+def remove_api_requests(profile):
+    cnt_req = 0
+    user_requests = RequestsQueue.objects.filter(profile=profile)
+    if user_requests:
+        for u_req in user_requests:
+            if not u_req.is_done:
+                u_req.is_done=True
+                u_req.save()
+                u_req.delete()
+
+                cnt_req+=1
+            
+    return cnt_req
+
+
 # add new call to the list
 def add_to_api_requests(request_type, call_code, profile):
+    # first delete all user requests
+    user_requests = RequestsQueue.objects.filter(profile=profile)
+    if user_requests:
+        for u_req in user_requests:
+            if not u_req.is_done:
+                u_req.is_done=True
+                u_req.save()
+                u_req.delete()
+
+    # add new request
     add_to_queue = RequestsQueue.objects.create(
         request_type=request_type,
         call_code=call_code,

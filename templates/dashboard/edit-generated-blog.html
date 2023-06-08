@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block css %}
-    <!--INTERNAL Summernote css -->
     <!-- WYSIWYG Editor css -->
     <link href="{% static 'dash/plugins/wysiwyag/richtext.css' %}" rel="stylesheet" />
 {% endblock %}
@@ -16,9 +15,22 @@
                             <div class="mb-0">
                                 <h4>AI Generated Response</h4>
                             </div>
-                            <div class="btn-group float-end">
-                                <button class="btn btn-outline-primary">Copy Text</button>
-                                {% comment %} <button class="btn btn-primary">Download</button> {% endcomment %}
+                            <div class="float-end">
+                                <div class="btn-group ">
+                                    <button class="btn btn-outline-primary">Copy Text</button>
+                                </div>
+                                <div class="btn-group">
+                                    <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn mini all" aria-expanded="false">
+                                        Social Media
+                                        <i class="fa fa-angle-down "></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'social-media' 'linkedin' uniqueId %}">LinkedIn</a></li>
+                                        <li><a href="{% url 'social-media' 'twitter' uniqueId %}">Twitter</a></li>
+                                        <li><a href="{% url 'social-media' 'twitter_blue' uniqueId %}">Twitter Blue</a></li>
+                                        <li><a href="{% url 'social-media' 'facebook' uniqueId %}">Facebook</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">

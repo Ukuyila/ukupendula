@@ -44,6 +44,8 @@ def home(request):
 
     today_date = datetime.datetime.now()
 
+    remove_api_requests(user_profile)
+
     remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
 
     q_year = today_date.year
@@ -170,6 +172,8 @@ def profile(request):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    remove_api_requests(request.user.profile)
+
     if request.method == 'GET':
         form = ProfileForm(instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(instance=request.user.profile)
@@ -207,6 +211,8 @@ def blog_topic(request):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    remove_api_requests(request.user.profile)
 
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -280,6 +286,8 @@ def blog_sections(request):
 
     current_page = 'Blog Topic Generator'
 
+    remove_api_requests(request.user.profile)
+
     if 'blog_topics' in request.session:
         pass
     else:
@@ -309,6 +317,8 @@ def delete_blog_topic(request, uniqueId):
 
 @login_required
 def save_blog_topic(request, blog_topic):
+
+    remove_api_requests(request.user.profile)
 
     if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session and 'blog_topics' in request.session:
         blog = Blog.objects.create(
@@ -344,6 +354,8 @@ def use_blog_topic(request, blog_topic):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    remove_api_requests(request.user.profile)
 
     if 'blog-sections' in request.session and 'uniqueId' in request.session:
 
@@ -605,7 +617,7 @@ def view_gen_blog(request, slug):
 
                     api_call_code = str(uuid4()).split('-')[4]
 
-                    add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
+                    add_to_list = add_to_api_requests('generate_full_blog', api_call_code, request.user.profile)
 
                     n = 1
                     # runs until n < 50,just to avoid the infinite loop.
@@ -664,6 +676,8 @@ def edit_gen_blog(request, uniqueId):
 
     context['current_page'] = current_page
 
+    context['allowance'] = check_count_allowance(request.user.profile)
+
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
     except:
@@ -695,6 +709,8 @@ def edit_gen_blog(request, uniqueId):
     context['blog'] = blog
     context['blog_title'] = blog.title
     context['blog_audience'] = blog.audience
+    context['uniqueId'] = uniqueId
+    context['saved_blog'] = saved_blog
     context['blog_body'] = blog_body
 
     if request.method == 'POST':
@@ -710,6 +726,96 @@ def edit_gen_blog(request, uniqueId):
         # print('new title: {}'.format(blog_title))
 
     return render(request, 'dashboard/edit-generated-blog.html', context)
+
+
+@login_required
+def gen_social_post(request, postType, uniqueId):
+    context = {}
+
+    current_page = 'Generated Social Post From Blog'
+    context['current_page'] = current_page
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('blog-topic')
+    
+    if postType == "twitter":
+        max_char = 280
+    elif postType == "twitter_blue":
+        max_char = 10000
+    elif postType == "linkedin":
+        max_char = 3000
+    elif postType == "facebook":
+        max_char = 10000
+    
+    blog_posts = Blog.objects.filter(profile=request.user.profile)
+    
+    blog_sections = []
+
+    saved_blog = SavedBlogEdit.objects.get(blog=blog)
+
+    if saved_blog:
+        blog_body = saved_blog.body
+
+    else:
+        blog_sects = BlogSection.objects.filter(blog=blog)
+
+        for blog_sect in blog_sects:
+            blog_sections.append(blog_sect.body)
+
+        blog_body = "\n".join(blog_sections)
+
+        saved_blog = SavedBlogEdit.objects.create(
+            title=blog.title,
+            body=blog_body,
+            blog=blog,
+        )
+        saved_blog.save()
+
+    api_call_code = str(uuid4()).split('-')[4]
+
+    add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+
+    n = 1
+    # runs until n < 50,just to avoid the infinite loop.
+    # this will execute the check_api_requests() func in every 5 seconds.
+    while n < 50:
+        # api_requests = check_api_requests()
+        time.sleep(5)
+        if api_call_process(api_call_code, add_to_list):
+            # generate social post options
+            social_post = generate_social_post(postType, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
+
+            # create database record
+            new_post = BlogSocialPost.objects.create(
+                title=blog.title,
+                post_type=postType,
+                post=social_post,
+                blog=blog,
+            )
+            new_post.save()
+
+            add_to_list.is_done=True
+            add_to_list.save()
+        else:
+            # we might need to delete all abandoned calls
+            pass
+        n += 1
+
+    context['blog'] = blog
+    context['blog_title'] = saved_blog.title
+    context['blog_audience'] = blog.audience
+    context['uniqueId'] = uniqueId
+    context['saved_blog'] = saved_blog
+    context['blog_posts'] = blog_posts
+    context['post_type'] = postType
+    context['new_post'] = new_post
+
+    return render(request, 'dashboard/social-media-post.html', context)
 
 
 @login_required
