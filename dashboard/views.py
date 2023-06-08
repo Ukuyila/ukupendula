@@ -778,47 +778,50 @@ def gen_social_post(request, postType, uniqueId):
         )
         saved_blog.save()
 
-    api_call_code = str(uuid4()).split('-')[4]
+        context['blog'] = blog
+        context['blog_title'] = saved_blog.title
+        context['blog_audience'] = blog.audience
+        context['uniqueId'] = uniqueId
+        context['saved_blog'] = saved_blog
+        context['blog_posts'] = blog_posts
+        context['post_type'] = postType
 
-    add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+    if request.method == "POST":
+        
+        api_call_code = str(uuid4()).split('-')[4]
 
-    n = 1
-    # runs until n < 50,just to avoid the infinite loop.
-    # this will execute the check_api_requests() func in every 5 seconds.
-    while n < 50:
-        # api_requests = check_api_requests()
-        time.sleep(5)
-        if api_call_process(api_call_code, add_to_list):
-            # generate social post options
-            social_post = generate_social_post(post_type, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
+        add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
 
-            # create database record
-            new_post = BlogSocialPost.objects.create(
-                title=blog.title,
-                post_type=postType,
-                post=social_post,
-                blog=blog,
-            )
-            new_post.save()
+        n = 1
+        # runs until n < 50,just to avoid the infinite loop.
+        # this will execute the check_api_requests() func in every 5 seconds.
+        while n < 50:
+            # api_requests = check_api_requests()
+            time.sleep(5)
+            if api_call_process(api_call_code, add_to_list):
+                # generate social post options
+                social_post = generate_social_post(post_type, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
 
-            add_to_list.is_done=True
-            add_to_list.save()
+                # create database record
+                new_post = BlogSocialPost.objects.create(
+                    title=blog.title,
+                    post_type=postType,
+                    post=social_post,
+                    blog=blog,
+                )
+                new_post.save()
 
-            return redirect('social-media', postType, uniqueId)
+                add_to_list.is_done=True
+                add_to_list.save()
+                
+                context['new_post'] = new_post
 
-        else:
-            # we might need to delete all abandoned calls
-            pass
-        n += 1
+                return redirect('social-media', postType, uniqueId)
 
-    context['blog'] = blog
-    context['blog_title'] = saved_blog.title
-    context['blog_audience'] = blog.audience
-    context['uniqueId'] = uniqueId
-    context['saved_blog'] = saved_blog
-    context['blog_posts'] = blog_posts
-    context['post_type'] = postType
-    context['new_post'] = new_post
+            else:
+                # we might need to delete all abandoned calls
+                pass
+            n += 1
 
     return render(request, 'dashboard/social-media-post.html', context)
 
