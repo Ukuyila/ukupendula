@@ -743,11 +743,12 @@ def gen_social_post(request, postType, uniqueId):
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
     
+    post_type = postType.replace('_', ' ').title()
+
     if postType == "twitter":
         max_char = 280
     elif postType == "twitter_blue":
         max_char = 10000
-        postType = postType.replace('_', ' ')
     elif postType == "linkedin":
         max_char = 3000
     elif postType == "facebook":
@@ -789,7 +790,7 @@ def gen_social_post(request, postType, uniqueId):
         time.sleep(5)
         if api_call_process(api_call_code, add_to_list):
             # generate social post options
-            social_post = generate_social_post(postType, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
+            social_post = generate_social_post(post_type, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
 
             # create database record
             new_post = BlogSocialPost.objects.create(
@@ -802,6 +803,9 @@ def gen_social_post(request, postType, uniqueId):
 
             add_to_list.is_done=True
             add_to_list.save()
+
+            return redirect('social-media', postType, uniqueId)
+
         else:
             # we might need to delete all abandoned calls
             pass
