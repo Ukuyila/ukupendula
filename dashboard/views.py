@@ -737,8 +737,9 @@ def gen_social_post(request, postType, uniqueId):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+
     try:
-        blog = Blog.objects.get(uniqueId=uniqueId)
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
@@ -753,18 +754,36 @@ def gen_social_post(request, postType, uniqueId):
         max_char = 3000
     elif postType == "facebook":
         max_char = 10000
+
+    complete_blogs = []
     
-    blog_posts = Blog.objects.filter(profile=request.user.profile)
+    blogs = Blog.objects.filter(profile=request.user.profile)
+
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            # calculate blog words
+            # blog_words = 0
+            # for section in sections:
+
+            #     blog_words += int(section.word_count)
+
+                # month_word_count += int(section.word_count)
+            # blog.word_count = str(blog_words)
+            # blog.save()
+            complete_blogs.append(blog)
+        # else:
+        #     empty_blogs.append(blog)
     
     blog_sections = []
 
-    saved_blog = SavedBlogEdit.objects.get(blog=blog)
+    saved_blog = SavedBlogEdit.objects.get(blog=this_blog)
 
     if saved_blog:
         blog_body = saved_blog.body
 
     else:
-        blog_sects = BlogSection.objects.filter(blog=blog)
+        blog_sects = BlogSection.objects.filter(blog=this_blog)
 
         for blog_sect in blog_sects:
             blog_sections.append(blog_sect.body)
@@ -772,21 +791,27 @@ def gen_social_post(request, postType, uniqueId):
         blog_body = "\n".join(blog_sections)
 
         saved_blog = SavedBlogEdit.objects.create(
-            title=blog.title,
+            title=this_blog.title,
             body=blog_body,
-            blog=blog,
+            blog=this_blog,
         )
         saved_blog.save()
 
-        context['blog'] = blog
-        context['blog_title'] = saved_blog.title
-        context['blog_audience'] = blog.audience
-        context['uniqueId'] = uniqueId
-        context['saved_blog'] = saved_blog
-        context['blog_posts'] = blog_posts
-        context['post_type'] = postType
+    context['blog'] = this_blog
+    context['blog_title'] = saved_blog.title
+    context['blog_audience'] = this_blog.audience
+    context['uniqueId'] = uniqueId
+    context['saved_blog'] = saved_blog
+    context['blog_posts'] = complete_blogs
+    context['post_type'] = postType
 
     if request.method == "POST":
+
+        blog_title = request.POST['blog_title']
+        post_keywords = request.POST['keywords']
+        post_audience = request.POST['audience']
+
+        tone_of_voice = request.POST['tone_of_voice']
         
         api_call_code = str(uuid4()).split('-')[4]
 
@@ -800,11 +825,11 @@ def gen_social_post(request, postType, uniqueId):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(post_type, blog.keywords, blog.audience, blog_body, max_char, request.user.profile)
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, blog_body, max_char, request.user.profile)
 
                 # create database record
                 new_post = BlogSocialPost.objects.create(
-                    title=blog.title,
+                    title=this_blog.title,
                     post_type=postType,
                     post=social_post,
                     blog=blog,

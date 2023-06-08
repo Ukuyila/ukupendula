@@ -190,10 +190,10 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
         return ''
 
 
-def generate_social_post(post_type, audience, keywords, blog_body, max_char, profile):
+def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body, max_char, profile):
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write a {} post with a maximum of {} characters from this article using these keywords and target audience:\nKeywords: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, max_char, keywords, audience, blog_body),
+        prompt="Write a {} post with a maximum of {} characters from this article using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, max_char, keywords,tone_of_voice, audience, blog_body),
         temperature=1,
         max_tokens=256,
         top_p=1,
