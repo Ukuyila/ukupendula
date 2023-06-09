@@ -46,7 +46,7 @@
                   </td>
                   <td class="text-primary me-1">{{client.client_name}}</td>
                   <td>
-                    {% if client.is_active %}
+                    {% if client.is_active == True %}
                     <a href="javascript:void(0);" class="badge badge-success">Active</a>
                     {% else %}
                     <a href="javascript:void(0);" class="badge badge-danger">Not Active</a>
