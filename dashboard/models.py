@@ -169,6 +169,8 @@ class Blog(models.Model):
     tone_of_voice = models.CharField(null=True, blank=True, max_length=255)
     max_words = models.CharField(default="1500", max_length=11)
 
+    category = models.CharField(null=True, blank=True, max_length=255)
+
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -229,6 +231,8 @@ class SavedBlogEdit(models.Model):
 
     # Django related field
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+
+    category = models.CharField(null=True, blank=True, max_length=255)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -331,6 +335,8 @@ class Paragraph(models.Model):
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
+    category = models.CharField(null=True, blank=True, max_length=255)
+
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
@@ -360,6 +366,8 @@ class Sentence(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    category = models.CharField(null=True, blank=True, max_length=255)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -391,6 +399,8 @@ class ArticleTitle(models.Model):
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
+    category = models.CharField(null=True, blank=True, max_length=255)
+
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
@@ -420,6 +430,8 @@ class MetaDescription(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    category = models.CharField(null=True, blank=True, max_length=255)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -451,6 +463,8 @@ class ContentSummary(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    category = models.CharField(null=True, blank=True, max_length=255)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -487,6 +501,7 @@ class LandingPageCopy(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    category = models.CharField(null=True, blank=True, max_length=255)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -588,3 +603,68 @@ class ToneOfVoice(models.Model):
         self.slug = slugify('{} {}'.format(self.tone_of_voice, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
         super(ToneOfVoice, self).save(*args, **kwargs)
+
+
+class TeamClient(models.Model):
+    client_name = models.CharField(max_length=255)
+
+    contact_person = models.CharField(null=True, blank=True, max_length=255)
+    industry = models.CharField(null=True, blank=True, max_length=255)
+    client_email = models.CharField(null=True, blank=True, max_length=255)
+    business_address = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    created_by = models.CharField(null=True, blank=True, max_length=100)
+    team = models.CharField(null=True, blank=True, max_length=100)
+    
+    is_activate = models.BooleanField(default=False)
+
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.client_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.client_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(TeamClient, self).save(*args, **kwargs)
+
+
+class ClientCategory(models.Model):
+    category_name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+
+    created_by = models.CharField(null=True, blank=True, max_length=100)
+    is_activate = models.BooleanField(default=False)
+
+    # django related field
+    client = models.ForeignKey(TeamClient, on_delete=models.CASCADE)
+
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.category_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.category_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(ClientCategory, self).save(*args, **kwargs)
+#

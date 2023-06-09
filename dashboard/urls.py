@@ -58,7 +58,12 @@ urlpatterns = [
     # meta description generator urls
     path('meta-description-generator', views.meta_description_writer, name='meta-description-generator'),
     path('meta-description-generator/<str:uniqueId>/', views.meta_description_writer, name='meta-description-generator-response'),
-
+    
+    # categories urls
+    path('categories', views.categories, name='categories'),
+    path('clients', views.clients, name='clients'),
+    path('edit-client/<str:uniqueId>/', views.edit_client, name='edit-client'),
+    path('edit-category/<str:uniqueId>/', views.edit_category, name='edit-category'),
     
     # content summarizer urls
     path('content-summarizer', views.summarize_content, name='content-summarizer'),

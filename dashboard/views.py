@@ -195,7 +195,6 @@ def profile(request):
             return redirect('profile')
         else:
             messages.error(request, "Something is a foot")
-            
 
     return render(request, 'dashboard/profile.html', context)
 
@@ -736,7 +735,6 @@ def gen_social_post(request, postType, uniqueId):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
-
 
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
@@ -1992,4 +1990,83 @@ def memory_meta_descr(request):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/meta-description-memory.html', context)
+
+
+def categories(request):
+    context = {}
+
+    current_page = 'Categories'
+    context['current_page'] = current_page
+
+    cate_list = []
+    user_profile = request.user.profile
+
+    team_categories = ClientCategory.objects.filter(is_activate=False)
+
+    for category in team_categories:
+        if category.client.team == user_profile.user_team:
+            cate_list.append(category)
+
+    context['cate_list'] = cate_list
+
+    return render(request, 'dashboard/categories.html', context)
+
+
+def clients(request):
+    context = {}
+
+    current_page = 'Clients'
+    context['current_page'] = current_page
+
+    client_list = []
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=False)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    context['client_list'] = client_list
+
+    if request.method == "POST":
+        client_name = request.POST['new-client-name']
+        contact_name = request.POST['nc-contact-name']
+        client_email = request.POST['nc-contact-email']
+        client_industry = request.POST['nc-industry']
+        client_address = request.POST['nc-address']
+
+        if len(client_name) > 3:
+            new_client = TeamClient.objects.create(
+                client_name=client_name,
+                contact_person=contact_name,
+                industry=client_industry,
+                client_email=client_email,
+                business_address=client_address,
+                created_by=user_profile.uniqueId,
+                team=user_profile.user_team,
+            )
+            new_client.save()
+
+            return redirect('clients')
+
+    return render(request, 'dashboard/clients.html', context)
+
+
+def edit_client(request, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/clients.html', context)
+
+
+def edit_category(request, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/categories.html', context)
 #

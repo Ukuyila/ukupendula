@@ -1,0 +1,124 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block css %}
+		<!-- Data table css -->
+		<link href="{% static 'dash/plugins/datatable/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/plugins/datatable/jquery.dataTables.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Categories</h3>
+          <div class="card-options">
+            <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewClient" class="btn btn-outline-primary btn-sm">Add Client</a>
+            <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewCategory" class="btn btn-primary btn-sm">Add Category</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% if cate_list|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width:50%">Category</th>
+                  <th>Client</th>
+                  <th>Status</th>
+                  <th>Datetime</th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for category in cate_list %}
+                <tr>
+                  <td >
+                    <h6 class="mb-0"><a href="{% url 'edit-category' category.uniqueId %}">{% if category.category_name|length > 0 %}
+                      {{category.category_name}}
+                      {% else %}
+                      {{category.slug}}
+                      {% endif %}</a></h6>
+                    
+                  </td>
+                  <td class="text-primary me-1">{{category.client.client_name}}</td>
+                  <td>
+                    {% if category.is_active %}
+                    <a href="javascript:void(0);" class="badge badge-success">Active</a>
+                    {% else %}
+                    <a href="javascript:void(0);" class="badge badge-danger">Not Active</a>
+                    {% endif %}
+                  </td>
+                  <td>{{category.date_created|date:"Y-m-d"}}</td>
+                  
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no data to display here yet, <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewClient">Add New </a></h5></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- New Category Modal -->
+  <div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="client-modal-title">New Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="client" class="control-label mb-10">Client:</label>
+              <input type="text" class="form-control" name="client" id="client" maxlength="255" >
+
+            </div>
+            <div class="form-group">
+              <label for="new-cate-name" class="control-label mb-10">Category Name:</label>
+              <input type="text" class="form-control" name="new-cate-name" id="new-cate-name" maxlength="255" required>
+            </div>
+
+            <div class="form-group">
+              <label for="cate-description" class="control-label mb-10">Description:</label>
+              <input type="text" class="form-control" name="cate-description" id="cate-description" maxlength="255" >
+            </div>
+
+            <div class="form-group">
+              <label for="nc-contact-email" class="control-label mb-10">Email:</label>
+              <input type="text" class="form-control" name="nc-contact-email" id="nc-contact-email" maxlength="255" >
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
+{% endblock %} 
