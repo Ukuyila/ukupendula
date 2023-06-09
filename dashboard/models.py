@@ -617,7 +617,7 @@ class TeamClient(models.Model):
     created_by = models.CharField(null=True, blank=True, max_length=100)
     team = models.CharField(null=True, blank=True, max_length=100)
     
-    is_activate = models.BooleanField(default=False)
+    is_activate = models.BooleanField(default=True)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -644,7 +644,7 @@ class ClientCategory(models.Model):
     description = models.TextField(null=True, blank=True)
 
     created_by = models.CharField(null=True, blank=True, max_length=100)
-    is_activate = models.BooleanField(default=False)
+    is_activate = models.BooleanField(default=True)
 
     # django related field
     client = models.ForeignKey(TeamClient, on_delete=models.CASCADE)
