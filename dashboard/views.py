@@ -2021,13 +2021,13 @@ def clients(request):
     client_list = []
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=False)
+    team_clients = TeamClient.objects.filter(is_activate=True)
     print("Team:".format(request.user.profile.user_team))
 
     for client in team_clients:
-        # if client.team == user_profile.user_team:
-        client_list.append(client)
-        print("Client Team:".format(client.team))
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+            print("Client Team:".format(client.team))
 
     context['client_list'] = client_list
 
