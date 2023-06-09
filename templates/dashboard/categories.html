@@ -86,7 +86,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="client" class="control-label mb-10">Client:</label>
-              <select type="text" class="form-control select2-show-search" id="client" name="client">
+              <select type="text" class="form-control select2" id="client" name="client">
                 {% for client in client_list %}
                 <option value="{{client.uniqueId}}" id="{{client.uniqueId}}" >{{client.client_name}}</option>
                 {% endfor %}
