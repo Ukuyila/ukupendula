@@ -31,7 +31,7 @@
                   <th>Client</th>
                   <th>Status</th>
                   <th>Datetime</th>
-                  
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
@@ -41,7 +41,6 @@
                     <h6 class="mb-0">
                       <a href="{% url 'edit-category' category.uniqueId %}">{{category.category_name}}</a>
                     </h6>
-                    
                   </td>
                   <td class="text-primary me-1">{{category.client.client_name}}</td>
                   <td>
@@ -52,7 +51,10 @@
                     {% endif %}
                   </td>
                   <td>{{category.date_created|date:"Y-m-d"}}</td>
-                  
+                  <td>
+                    <button href="{% url 'edit-category' category.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</button>
+                    <button href="{% url 'delete-category' category.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</button>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -82,9 +84,15 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="client" class="control-label mb-10">Client:</label>
-              <input type="text" class="form-control" name="client" id="client" maxlength="255" >
+
+              <select type="text" class="form-control select2-show-search" id="client" name="client">
+                {% for client in client_list %}
+                <option value="{{client.uniqueId}}" id="{{client.uniqueId}}" >{{client.client_name}}</option>
+                {% endfor %}
+              </select>
 
             </div>
+
             <div class="form-group">
               <label for="new-cate-name" class="control-label mb-10">Category Name:</label>
               <input type="text" class="form-control" name="new-cate-name" id="new-cate-name" maxlength="255" required>
@@ -93,12 +101,6 @@
             <div class="form-group">
               <label for="cate-description" class="control-label mb-10">Description:</label>
               <input type="text" class="form-control" name="cate-description" id="cate-description" maxlength="255" >
-            </div>
-
-            <div class="form-group">
-              <label for="nc-contact-email" class="control-label mb-10">Email:</label>
-              <input type="text" class="form-control" name="nc-contact-email" id="nc-contact-email" maxlength="255" >
-
             </div>
 
           </div>

@@ -10,7 +10,6 @@
 
 {% block body %}
 
-
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -30,6 +29,7 @@
                   <th style="width:50%">Client</th>
                   <th>Status</th>
                   <th>Datetime</th>
+                  <th></th>
                   
                 </tr>
               </thead>
@@ -48,7 +48,8 @@
                   </td>
                   <td>{{client.date_created|date:"Y-m-d"}}</td>
                   <td>
-                    <a href="{% url 'edit-client' client.uniqueId %}" class="badge badge-primary">Edit</a>
+                    <button href="{% url 'edit-client' client.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</button>
+                    <button href="{% url 'delete-client' client.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</button>
                   </td>
                 </tr>
               {% endfor %}

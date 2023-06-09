@@ -61,9 +61,13 @@ urlpatterns = [
     
     # categories urls
     path('categories', views.categories, name='categories'),
+    path('edit-category/<str:uniqueId>/', views.edit_category, name='edit-category'),
+    path('delete-category/<str:uniqueId>/', views.delete_category, name='delete-category'),
+
+    # clients url
     path('clients', views.clients, name='clients'),
     path('edit-client/<str:uniqueId>/', views.edit_client, name='edit-client'),
-    path('edit-category/<str:uniqueId>/', views.edit_category, name='edit-category'),
+    path('delete-client/<str:uniqueId>/', views.delete_client, name='delete-client'),
     
     # content summarizer urls
     path('content-summarizer', views.summarize_content, name='content-summarizer'),

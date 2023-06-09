@@ -1999,7 +1999,15 @@ def categories(request):
     context['current_page'] = current_page
 
     cate_list = []
+    client_list = []
+
     user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
 
     team_categories = ClientCategory.objects.filter(is_activate=False)
 
@@ -2008,6 +2016,24 @@ def categories(request):
             cate_list.append(category)
 
     context['cate_list'] = cate_list
+
+    if request.method == "POST":
+        client_id = request.POST['client']
+
+        team_client = TeamClient.objects.get(uniqueId=client_id)
+
+        category_name = request.POST['new-cate-name']
+        cate_descr = request.POST['cate-description']
+
+        if len(category_name) > 3:
+            new_cate = ClientCategory.objects.create(
+                category_name=category_name,
+                description=cate_descr,
+                created_by=user_profile.uniqueId,
+                client=team_client,
+            )
+            new_cate.save()
+            return redirect('categories')
 
     return render(request, 'dashboard/categories.html', context)
 
@@ -2022,12 +2048,10 @@ def clients(request):
     user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_activate=True)
-    print("Team:".format(request.user.profile.user_team))
 
     for client in team_clients:
         if client.team == user_profile.user_team:
             client_list.append(client)
-            print("Client Team:".format(client.team))
 
     context['client_list'] = client_list
 
@@ -2058,10 +2082,29 @@ def clients(request):
 def edit_client(request, uniqueId):
     context = {}
 
-    current_page = 'Edit Category'
+    current_page = 'Edit Client'
     context['current_page'] = current_page
 
     return render(request, 'dashboard/clients.html', context)
+
+
+def delete_client(request, uniqueId):
+    context = {}
+
+    current_page = 'Delete Client'
+    context['current_page'] = current_page
+
+    user_profile = request.user.profile
+
+    client = TeamClient.objects.get(uniqueId=uniqueId)
+
+    if client.team == user_profile.user_team:
+        client.delete()
+    else:
+        messages.error(request, "Action denied on this client!")
+        return redirect('clients')
+
+    return redirect('clients')
 
 
 def edit_category(request, uniqueId):
@@ -2071,4 +2114,24 @@ def edit_category(request, uniqueId):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/categories.html', context)
+
+
+def delete_category(request, uniqueId):
+    context = {}
+
+    current_page = 'Delete Category'
+    context['current_page'] = current_page
+
+    user_profile = request.user.profile
+
+    category = ClientCategory.objects.get(uniqueId=uniqueId)
+
+    if category.client.team == user_profile.user_team:
+        category.delete()
+    else:
+        messages.error(request, "Action denied on this category!")
+        
+        return redirect('categories')
+
+    return redirect('clients')
 #
