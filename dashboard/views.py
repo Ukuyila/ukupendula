@@ -2022,7 +2022,7 @@ def clients(request):
     user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_activate=False)
-    print("Team:".format(user_profile.user_team))
+    print("Team:".format(request.user.profile.user_team))
 
     for client in team_clients:
         # if client.team == user_profile.user_team:
