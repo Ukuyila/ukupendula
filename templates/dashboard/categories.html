@@ -38,11 +38,9 @@
               {% for category in cate_list %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'edit-category' category.uniqueId %}">{% if category.category_name|length > 0 %}
-                      {{category.category_name}}
-                      {% else %}
-                      {{category.slug}}
-                      {% endif %}</a></h6>
+                    <h6 class="mb-0">
+                      <a href="{% url 'edit-category' category.uniqueId %}">{{category.category_name}}</a>
+                    </h6>
                     
                   </td>
                   <td class="text-primary me-1">{{category.client.client_name}}</td>

@@ -36,15 +36,9 @@
               <tbody class="table-border-bottom-0">
               {% for client in client_list %}
                 <tr>
-                  <td >
-                    <h6 class="mb-0"><a href="{% url 'edit-client' client.uniqueId %}">{% if client.client_name|length > 0 %}
-                      {{client.client_name}}
-                      {% else %}
-                      {{client.slug}}
-                      {% endif %}</a></h6>
-                    
+                  <td class="text-primary me-1">
+                    <a href="{% url 'edit-client' client.uniqueId %}">{{client.client_name}}</a>
                   </td>
-                  <td class="text-primary me-1">{{client.client_name}}</td>
                   <td>
                     {% if client.is_activate %}
                     <a href="javascript:void(0);" class="badge badge-success">Active</a>
@@ -53,7 +47,9 @@
                     {% endif %}
                   </td>
                   <td>{{client.date_created|date:"Y-m-d"}}</td>
-                  
+                  <td>
+                    <a href="{% url 'edit-client' client.uniqueId %}" class="badge badge-primary">Edit</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -116,4 +112,11 @@
       </form>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
 {% endblock %}
