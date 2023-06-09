@@ -2016,6 +2016,7 @@ def categories(request):
             cate_list.append(category)
 
     context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     if request.method == "POST":
         client_id = request.POST['client']

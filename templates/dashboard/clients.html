@@ -48,8 +48,8 @@
                   </td>
                   <td>{{client.date_created|date:"Y-m-d"}}</td>
                   <td>
-                    <button href="{% url 'edit-client' client.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</button>
-                    <button href="{% url 'delete-client' client.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</button>
+                    <a href="{% url 'edit-client' client.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</a>
+                    <a href="{% url 'delete-client' client.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</a>
                   </td>
                 </tr>
               {% endfor %}

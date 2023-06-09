@@ -52,8 +52,8 @@
                   </td>
                   <td>{{category.date_created|date:"Y-m-d"}}</td>
                   <td>
-                    <button href="{% url 'edit-category' category.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</button>
-                    <button href="{% url 'delete-category' category.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</button>
+                    <a href="{% url 'edit-category' category.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</a>
+                    <a href="{% url 'delete-category' category.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</a>
                   </td>
                 </tr>
               {% endfor %}
@@ -100,7 +100,7 @@
 
             <div class="form-group">
               <label for="cate-description" class="control-label mb-10">Description:</label>
-              <input type="text" class="form-control" name="cate-description" id="cate-description" maxlength="255" >
+              <textarea class="form-control" name="cate-description" id="cate-description" maxlength="255" ></textarea>
             </div>
 
           </div>
