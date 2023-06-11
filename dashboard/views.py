@@ -2012,6 +2012,7 @@ def categories(request):
     team_categories = ClientCategory.objects.filter(is_activate=False)
 
     for category in team_categories:
+        print("cate team:".format(category.client.team))
         if category.client.team == user_profile.user_team:
             cate_list.append(category)
 
