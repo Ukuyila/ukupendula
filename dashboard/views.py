@@ -2030,6 +2030,7 @@ def categories(request):
                 category_name=category_name,
                 description=cate_descr,
                 created_by=user_profile.uniqueId,
+                team=user_profile.user_team,
                 client=team_client,
             )
             new_cate.save()
