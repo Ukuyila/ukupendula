@@ -20,7 +20,9 @@
           <h3 class="card-title">Categories</h3>
           <div class="card-options">
             <a href="{% url 'clients' %}" type="button" class="btn btn-outline-primary btn-sm">Client</a>
+            {% if client_list|length > 0 %}
             <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewCategory" class="btn btn-primary btn-sm">Add Category</a>
+            {% endif %}
           </div>
         </div>
         <div class="card-body">
@@ -74,7 +76,7 @@
   <!-- New Category Modal -->
   <div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
-
+      {% if client_list|length > 0 %}
       <form method="POST">
         {% csrf_token %}
         <div class="modal-content">
@@ -109,6 +111,11 @@
           </div>
         </div>
       </form>
+      {% else %}
+      <div class="modal-body">
+        <h5>You have not added a client yet, click this button to <a href="{% url 'client' %}" type="button" class="btn btn-primary">Add New </a></h5>
+      </div>
+      {% endif %}
     </div>
   </div>
 
