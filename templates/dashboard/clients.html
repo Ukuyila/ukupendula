@@ -43,9 +43,9 @@
                   </td>
                   <td>
                     {% if client.is_activate %}
-                    <a href="javascript:void(0);" class="badge badge-success">Active</a>
+                    <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' deactivate client.uniqueId %}'"  class="badge badge-success">Active</a>
                     {% else %}
-                    <a href="javascript:void(0);" class="badge badge-danger">Not Active</a>
+                    <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' activate client.uniqueId %}'" class="badge badge-danger">Not Active</a>
                     {% endif %}
                   </td>
                   <td>{{client.date_created|date:"Y-m-d"}}</td>
@@ -108,7 +108,6 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
         </div>

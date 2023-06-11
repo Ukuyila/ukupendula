@@ -2109,6 +2109,31 @@ def delete_client(request, uniqueId):
     return redirect('clients')
 
 
+def change_client_status(request, status, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    client_status = False
+
+    if status == 'activate':
+        client_status = True
+
+    user_profile = request.user.profile
+
+    client = TeamClient.objects.get(uniqueId=uniqueId)
+
+    if client.team == user_profile.user_team:
+        client.is_activate=client_status
+        client.save()
+    else:
+        messages.error(request, "Action denied on this client!")
+        return redirect('clients')
+
+    return redirect('clients')
+
+
 def edit_category(request, uniqueId):
     context = {}
 
@@ -2116,6 +2141,32 @@ def edit_category(request, uniqueId):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/categories.html', context)
+
+
+def change_category_status(request, status, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    cate_status = False
+
+    if status == 'activate':
+        cate_status = True
+
+    user_profile = request.user.profile
+
+    category = ClientCategory.objects.get(uniqueId=uniqueId)
+
+    if category.client.team == user_profile.user_team:
+        category.is_activate=cate_status
+        category.save()
+    else:
+        messages.error(request, "Action denied on this category!")
+        
+        return redirect('categories')
+
+    return redirect('categories')
 
 
 def delete_category(request, uniqueId):
@@ -2135,5 +2186,5 @@ def delete_category(request, uniqueId):
         
         return redirect('categories')
 
-    return redirect('clients')
+    return redirect('categories')
 #
