@@ -2009,12 +2009,10 @@ def categories(request):
         if client.team == user_profile.user_team:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(is_activate=True)
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
 
     for category in team_categories:
-        print("cate team:".format(category.client.team))
-        if category.client.team == user_profile.user_team:
-            cate_list.append(category)
+        cate_list.append(category)
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
@@ -2049,11 +2047,10 @@ def clients(request):
     client_list = []
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(team=user_profile.user_team)
 
     for client in team_clients:
-        if client.team == user_profile.user_team:
-            client_list.append(client)
+        client_list.append(client)
 
     context['client_list'] = client_list
 

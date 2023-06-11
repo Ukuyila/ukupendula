@@ -645,7 +645,8 @@ class ClientCategory(models.Model):
 
     created_by = models.CharField(null=True, blank=True, max_length=100)
     is_activate = models.BooleanField(default=True)
-
+    
+    team = models.CharField(null=True, blank=True, max_length=100)
     # django related field
     client = models.ForeignKey(TeamClient, on_delete=models.CASCADE)
 
