@@ -2009,7 +2009,7 @@ def categories(request):
         if client.team == user_profile.user_team:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(is_activate=False)
+    team_categories = ClientCategory.objects.filter(is_activate=True)
 
     for category in team_categories:
         print("cate team:".format(category.client.team))
