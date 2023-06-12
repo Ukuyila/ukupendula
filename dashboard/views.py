@@ -649,6 +649,25 @@ def edit_gen_blog(request, uniqueId):
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
     except:
@@ -690,6 +709,7 @@ def edit_gen_blog(request, uniqueId):
     context['uniqueId'] = uniqueId
     context['saved_blog'] = saved_blog
     context['blog_body'] = blog_body
+    context['blog_cate'] = blog.category
 
     if request.method == 'POST':
         blog_title = request.POST['blog-title']
