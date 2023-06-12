@@ -386,11 +386,12 @@ def use_blog_topic(request, blog_topic):
         
         context['uniqueId'] = uniqueId
         blog_section_heads = request.session['blog-sections']
-        saved_sect_head = request.session['saved-sect-head']
 
         blog = Blog.objects.get(uniqueId=uniqueId)
-        
-        context['saved-sect-head'] = saved_sect_head
+
+        if 'saved-sect-head' == request.session:
+            saved_sect_head = request.session['saved-sect-head']
+            context['saved-sect-head'] = saved_sect_head
 
     else:
 
