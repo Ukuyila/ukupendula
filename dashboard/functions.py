@@ -181,7 +181,7 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -216,7 +216,7 @@ def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body
 
             profile.monthly_count = str(prof_count)
             profile.save()
-            return res
+            return cleaned_res
         else:
             return []
     else:
@@ -250,7 +250,7 @@ def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
             profile.monthly_count = str(prof_count)
             profile.save()
-            return res
+            return cleaned_res
         else:
             return []
     else:
@@ -284,7 +284,7 @@ def rewriter_article_title(old_title, tone_of_voice, profile):
 
             profile.monthly_count = str(prof_count)
             profile.save()
-            return res
+            return cleaned_res
         else:
             return []
     else:
@@ -318,7 +318,7 @@ def generate_meta_description(article_title, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -353,7 +353,7 @@ def write_content_summary(article_title, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -389,7 +389,7 @@ def generate_landing_page_copy(company_name, company_purpose, page_sections, pro
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
