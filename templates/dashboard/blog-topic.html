@@ -36,7 +36,7 @@
                                                         <optgroup label="{{client.client_name}}">
                                                         {% for category in cate_list %}
                                                         {% if category.client == client %}
-                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}" >{{client.client_name}}{{'=>'}}{{category.client.client_name}}</option>
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}" >{{client.client_name}}{{'=>'}}{{category.category_name}}</option>
                                                         {% endif %}
                                                         {% endfor %}
                                                         </optgroup>
