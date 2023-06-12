@@ -2079,15 +2079,6 @@ def clients(request):
     return render(request, 'dashboard/clients.html', context)
 
 
-def edit_client(request, uniqueId):
-    context = {}
-
-    current_page = 'Edit Client'
-    context['current_page'] = current_page
-
-    return render(request, 'dashboard/clients.html', context)
-
-
 def delete_client(request, uniqueId):
     context = {}
 
@@ -2132,13 +2123,88 @@ def change_client_status(request, status, uniqueId):
     return redirect('clients')
 
 
+def edit_client(request, uniqueId):
+    context = {}
+
+    current_page = 'Edit Client'
+    context['current_page'] = current_page
+
+    user_profile = request.user.profile
+
+    this_client = TeamClient.objects.get(uniqueId=uniqueId)
+    context['client_name'] = this_client.client_name
+    context['cont_person'] = this_client.contact_person
+    context['client_ind'] = this_client.industry
+    context['client_email'] = this_client.client_email
+    context['client_addr'] = this_client.business_address
+    context['client_descr'] = this_client.description
+
+    if request.method == 'POST':
+        client_name = request.POST['new-client-name']
+        contact_name = request.POST['nc-contact-name']
+        client_email = request.POST['nc-contact-email']
+        client_industry = request.POST['nc-industry']
+        client_address = request.POST['nc-address']
+        client_descr = request.POST['client-descr']
+
+        if len(client_name) > 3:
+            this_client.client_name=client_name
+            this_client.contact_person=contact_name
+            this_client.industry=client_industry
+            this_client.client_email=client_email
+            this_client.business_address=client_address
+            this_client.description=client_descr
+            this_client.save()
+
+            return redirect('clients')
+
+    return render(request, 'dashboard/clients.html', context)
+
+
 def edit_category(request, uniqueId):
     context = {}
 
     current_page = 'Edit Category'
     context['current_page'] = current_page
 
-    return render(request, 'dashboard/categories.html', context)
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    context['client_list'] = client_list
+
+    this_cate = ClientCategory.objects.get(uniqueId=uniqueId)
+    this_cate_name = this_cate.category_name
+    this_cate_descr = this_cate.description
+
+    context['cate_name'] = this_cate_name
+    context['cate_descr'] = this_cate_descr
+    context['cate_client'] = this_cate.client.uniqueId
+
+    if request.method == 'POST':
+        category_name = request.POST['new-cate-name']
+        cate_descr = request.POST['cate-description']
+        cate_descr = request.POST['cate-description']
+
+        client_id = request.POST['client']
+
+        team_client = TeamClient.objects.get(uniqueId=client_id)
+
+        if len(category_name) > 3:
+            this_cate.category_name=category_name
+            this_cate.description=cate_descr
+            this_cate.client=team_client
+            this_cate.save()
+
+            return redirect('categories')
+
+    return render(request, 'dashboard/edit-category.html', context)
 
 
 def change_category_status(request, status, uniqueId):
