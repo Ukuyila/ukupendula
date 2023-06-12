@@ -35,11 +35,28 @@
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
-                                                
                                                 <div class="mb-3">   
                                                     <div class="d-flex align-items-center justify-content-between"><label for="article_title" class=" ">Title</label> <span class="counter text-muted">0/160</span></div>
                                                     {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{meta_descr.article_title|safe}}" maxlength="160" required/> {% endcomment %}
                                                     <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="160" required>{{meta_descr.article_title|safe}}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                            {% if category.uniqueId == meta_descr.category %}
+                                                            selected
+                                                            {% endif %}
+                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-3">

@@ -34,9 +34,28 @@
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
+                                                
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="summary_title" class=" ">Title</label><span class="title_counter text-muted">0/160</span></div>
                                                     <input type="text" class="form-control" id="summary_title" name="summary_title" placeholder="Enter summary title" value="{{content_summary.summary_title|safe}}" maxlength="160" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                            {% if category.uniqueId == content_summary.category %}
+                                                            selected
+                                                            {% endif %}
+                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="long_content" class=" ">Content to summarize</label><span class="prompt_counter text-muted">0/14000</span></div>

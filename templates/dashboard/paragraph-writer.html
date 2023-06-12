@@ -35,6 +35,24 @@
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
                                                 <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                            {% if category.uniqueId == paragraph.category %}
+                                                            selected
+                                                            {% endif %}
+                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="paragraph_topic" class=" ">Topic</label><span class="title_counter text-muted">0/300</span></div>
                                                     <textarea type="text" rows="10" class="form-control" id="paragraph_topic" name="paragraph_topic" placeholder="Input your topic here" maxlength="300" required>{{paragraph.paragraph_topic|safe}}</textarea>
                                                 </div>

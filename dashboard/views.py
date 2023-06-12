@@ -715,9 +715,11 @@ def edit_gen_blog(request, uniqueId):
     if request.method == 'POST':
         blog_title = request.POST['blog-title']
         generated_blog_edit = request.POST['generated-blog']
+        gen_blog_category = request.POST['category']
 
         saved_blog.title = blog_title
         saved_blog.body = generated_blog_edit
+        saved_blog.category = gen_blog_category
         saved_blog.save()
 
         return redirect('edit-gen-blog', uniqueId)
@@ -895,6 +897,25 @@ def paragraph_writer(request, uniqueId=''):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -913,6 +934,8 @@ def paragraph_writer(request, uniqueId=''):
     if request.method == 'POST':
         paragraph_topic = request.POST['paragraph_topic']
         request.session['paragraph_topic'] = paragraph_topic
+
+        paragraph_cate = request.POST['category']
 
         if len(paragraph_topic) > 300:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
@@ -946,6 +969,7 @@ def paragraph_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             paragraph=gen_paragraph,
                             profile=request.user.profile,
+                            category=paragraph_cate
                         )
                         s_paragraph.save()
 
@@ -980,6 +1004,25 @@ def sentence_writer(request, uniqueId=''):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -1007,6 +1050,7 @@ def sentence_writer(request, uniqueId=''):
             context['old_sentence'] = sentence_obj.old_sentence
             context['tone_of_voice'] = sentence_obj.tone_of_voice
             context['sentence_uniqueId'] = sentence_obj.uniqueId
+            context['sentence_cate'] = sentence_obj.category
 
         # context['paragraph'] = sentence
     else:
@@ -1015,7 +1059,7 @@ def sentence_writer(request, uniqueId=''):
     if request.method == 'POST':
         old_sentence = request.POST['old_sentence']
         tone_of_voice = request.POST['tone_of_voice']
-        # request.session['old_sentence'] = old_sentence
+        sentnc_cate = request.POST['category']
 
         if len(old_sentence) > 160:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
@@ -1044,6 +1088,7 @@ def sentence_writer(request, uniqueId=''):
                             new_sentence=new_sentence,
                             tone_of_voice=tone_of_voice,
                             profile=request.user.profile,
+                            category=sentnc_cate
                         )
                         s_sentence.save()
 
@@ -1077,6 +1122,25 @@ def article_title_writer(request, uniqueId=''):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
     
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -1105,6 +1169,7 @@ def article_title_writer(request, uniqueId=''):
             context['old_title'] = title_obj.old_title
             context['tone_of_voice'] = title_obj.tone_of_voice
             context['title_uniqueId'] = title_obj.uniqueId
+            context['title_cate'] = title_obj.category
 
         # context['paragraph'] = title
     else:
@@ -1113,6 +1178,7 @@ def article_title_writer(request, uniqueId=''):
     if request.method == 'POST':
         old_title = request.POST['old_title']
         tone_of_voice = request.POST['tone_of_voice']
+        title_cate = request.POST['category']
         # request.session['old_title'] = old_title
 
         if len(old_title) > 160:
@@ -1142,6 +1208,7 @@ def article_title_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             new_title_options=new_titles,
                             profile=request.user.profile,
+                            category=title_cate,
                         )
                         s_title.save()
 
@@ -1175,6 +1242,25 @@ def meta_description_writer(request, uniqueId=''):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
         
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -1194,6 +1280,7 @@ def meta_description_writer(request, uniqueId=''):
     if request.method == 'POST':
         article_title = request.POST['article_title']
         tone_of_voice = request.POST['tone_of_voice']
+        meta_category = request.POST['category']
         request.session['article_title'] = article_title
 
         if len(article_title) > 160:
@@ -1223,6 +1310,7 @@ def meta_description_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             meta_description=gen_meta_descr,
                             profile=request.user.profile,
+                            category=meta_category,
                         )
                         s_meta_descr.save()
 
@@ -1257,6 +1345,25 @@ def summarize_content(request, uniqueId=""):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -1276,6 +1383,7 @@ def summarize_content(request, uniqueId=""):
         long_content = request.POST['long_content']
         summary_title = request.POST['summary_title']
         tone_of_voice = request.POST['tone_of_voice']
+        summary_cate = request.POST['category']
         request.session['long_content'] = long_content
 
         if len(long_content) > 14000:
@@ -1306,6 +1414,7 @@ def summarize_content(request, uniqueId=""):
                             tone_of_voice=tone_of_voice,
                             summarized=content_summary,
                             profile=request.user.profile,
+                            category=summary_cate,
                         )
                         s_content_data.save()
 
