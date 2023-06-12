@@ -1,7 +1,7 @@
 $(function(e) {
 	
 	$('.content').richText({
-		height: 50,
+		height: 150,
 	});
 	$('.content2').richText({
 		minimumResultsForSearch: Infinity
