@@ -20,7 +20,7 @@ def generate_blog_topic_ideas(topic, audience, keywords):
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate 5 blog topic ideas about: {}\nAudience: {}\nKeywords: {}\n\n*".format(topic, audience, keywords),
+        prompt="Generate 5 blog topic ideas without numbering prefix about: {}\nAudience: {}\nKeywords: {}\n\n*".format(topic, audience, keywords),
         temperature=0.7,
         max_tokens=250,
         top_p=1,
