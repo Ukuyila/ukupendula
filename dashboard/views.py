@@ -683,6 +683,7 @@ def edit_gen_blog(request, uniqueId):
         if s_blog.blog == blog:
             got_b_body = True
             s_blog_body = s_blog.body
+            saved_blog = s_blog
             break
 
     if got_b_body == True:
