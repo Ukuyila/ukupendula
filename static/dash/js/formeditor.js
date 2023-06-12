@@ -4,7 +4,8 @@ $(function(e) {
 		height: 150,
 	});
 	$('.content2').richText({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		height: 150,
 	});
 
 });
