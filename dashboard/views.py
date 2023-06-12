@@ -87,7 +87,7 @@ def home(request):
             blog.word_count = str(blog_words)
             blog.save()
             complete_blogs.append(blog)
-        else:
+        elif not sections.exists():
             empty_blogs.append(blog)
 
     blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month), user_profile)
