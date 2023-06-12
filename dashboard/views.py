@@ -1472,6 +1472,8 @@ def landing_page_copy(request, uniqueId=""):
     if len(uniqueId) > 0:
         # search database for meta descriptions with this slug
         copy_content = LandingPageCopy.objects.get(uniqueId=uniqueId)
+        copy_content.page_copy=copy_content.page_copy.replace('\n', '<br>')
+        copy_content.save()
 
         context['copy_content'] = copy_content
         context['page_sections'] = copy_content.page_sections
