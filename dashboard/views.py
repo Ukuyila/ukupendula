@@ -645,11 +645,8 @@ def view_gen_blog(request, slug):
 
 def edit_gen_blog(request, uniqueId):
     context = {}
-
     current_page = 'Edit Generated Blog'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     try:
@@ -659,11 +656,18 @@ def edit_gen_blog(request, uniqueId):
         return redirect('blog-topic')
     
     blog_sections = []
+    got_b_body = False
+    s_blog_body = ''
 
-    saved_blog = SavedBlogEdit.objects.get(blog=blog)
+    saved_blogs = SavedBlogEdit.objects.all()
+    for s_blog in saved_blogs:
+        if s_blog.blog == blog:
+            got_b_body = True
+            s_blog_body = s_blog.body
+            break
 
-    if saved_blog:
-        blog_body = saved_blog.body
+    if got_b_body == True:
+        blog_body = s_blog_body
 
     else:
         blog_sects = BlogSection.objects.filter(blog=blog)
