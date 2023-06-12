@@ -28,7 +28,9 @@
                 <tr>
                   <th style="width:50%">Title</th>
                   <th>Tone Of Voice</th>
+                  <th>Category</th>
                   <th>Datetime</th>
+                  <th></th>
                   
                 </tr>
               </thead>
@@ -36,12 +38,17 @@
               {% for saved_meta_descr in saved_meta_descriptions %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'meta-description-generator-response' saved_meta_descr.uniqueId %}">{{saved_meta_descr.article_title}}</a></h6>
-                    
+                    <h6 class="mb-0"><a>{{saved_meta_descr.article_title}}</a></h6>
                   </td>
                   <td><small class="text-primary me-1">{{saved_meta_descr.tone_of_voice}}</small></td>
+                  <td>
+                    
+                  </td>
                   <td>{{saved_meta_descr.date_created|date:"Y-m-d"}}</td>
-                  
+                  <td>
+                    <a href="{% url 'meta-description-generator-response' saved_meta_descr.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</a>
+                    <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

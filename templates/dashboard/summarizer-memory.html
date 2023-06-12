@@ -27,8 +27,10 @@
               <thead>
                 <tr>
                   <th style="width:50%">Summary Title</th>
+                  <th>Category</th>
                   <th>Tone</th>
                   <th>Datetime</th>
+                  <th></th>
                   
                 </tr>
               </thead>
@@ -36,16 +38,33 @@
               {% for summary in saved_summaries %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'content-summarizer-response' summary.uniqueId %}">{% if summary.summary_title|length > 0 %}
+                    <h6 class="mb-0"><a >{% if summary.summary_title|length > 0 %}
                       {{summary.summary_title}}
                       {% else %}
                       {{summary.slug}}
                       {% endif %}</a></h6>
                     
                   </td>
+                  <td>
+                    {% for client in client_list %}
+                      
+                      {% for category in cate_list %}
+                        {% if category.client == client %}
+                          
+                          {% if category.uniqueId == summary.category %}
+                          {{client.client_name}}{{' - '}}{{category.category_name}}
+                          {% endif %}
+                          
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                  </td>
                   <td><small class="text-primary me-1">{{summary.tone_of_voice}}</small></td>
                   <td>{{summary.date_created|date:"Y-m-d"}}</td>
-                  
+                  <td>
+                    <a href="{% url 'content-summarizer-response' summary.uniqueId %}" type="button" class="btn btn-xs btn-primary">View</a>
+                    <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

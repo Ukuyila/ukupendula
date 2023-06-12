@@ -28,7 +28,9 @@
                 <tr>
                   <th style="width:50%">Title</th>
                   <th>Purpose</th>
+                  <th>Category</th>
                   <th>Datetime</th>
+                  <th></th>
                   
                 </tr>
               </thead>
@@ -36,16 +38,34 @@
               {% for saved_page_copy in saved_page_copies %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'landing-page-copy-response' saved_page_copy.uniqueId %}">{% if saved_page_copy.copy_title|length > 0 %}
+                    <h6 class="mb-0">
+                      <a >{% if saved_page_copy.copy_title|length > 0 %}
                       {{saved_page_copy.copy_title}}
                       {% else %}
                       {{saved_page_copy.company_name}}
-                      {% endif %}</a></h6>
-                    
+                      {% endif %}</a>
+                    </h6>
                   </td>
                   <td><small class="text-primary me-1">{{saved_page_copy.company_purpose}}</small></td>
+                  <td>
+                    {% for client in client_list %}
+                      
+                      {% for category in cate_list %}
+                        {% if category.client == client %}
+                          
+                          {% if category.uniqueId == saved_page_copy.category %}
+                          {{client.client_name}}{{' - '}}{{category.category_name}}
+                          {% endif %}
+                          
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                  </td>
                   <td>{{saved_page_copy.date_created|date:"Y-m-d"}}</td>
-                  
+                  <td>
+                    <a href="{% url 'landing-page-copy-response' saved_page_copy.uniqueId %}" type="button" class="btn btn-xs btn-primary">View</a>
+                    <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

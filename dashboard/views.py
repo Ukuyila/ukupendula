@@ -2013,6 +2013,25 @@ def memory_blogs(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     # Get total blogs
     blogs = Blog.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month).order_by('last_updated')
 
@@ -2054,6 +2073,25 @@ def memory_summarizer(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     # Get total summaries
     summaries = ContentSummary.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
 
@@ -2080,6 +2118,25 @@ def memory_page_copy(request):
 
     q_year = today_date.year
     q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     # Get total summaries
     page_copies = LandingPageCopy.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)

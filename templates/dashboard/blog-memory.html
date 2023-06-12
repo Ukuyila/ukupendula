@@ -27,8 +27,10 @@
               <thead>
                 <tr>
                   <th style="width:50%">Blog Title</th>
+                  <th>Category</th>
                   <th>Keywords</th>
                   <th>Datetime</th>
+                  <th></th>
                   
                 </tr>
               </thead>
@@ -36,12 +38,29 @@
               {% for blog in complete_blogs %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a></h6>
+                    <h6 class="mb-0"><a>{{blog.title}}</a></h6>
                     <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                  </td>
+                  <td>
+                    {% for client in client_list %}
+                      
+                      {% for category in cate_list %}
+                        {% if category.client == client %}
+                          
+                          {% if category.uniqueId == copy_content.category %}
+                          {{client.client_name}}{{' - '}}{{category.category_name}}
+                          {% endif %}
+                          
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
                   </td>
                   <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
                   <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
-                  
+                  <td>
+                    <a  href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-xs btn-primary">View</a>
+                    <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>
