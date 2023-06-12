@@ -411,6 +411,7 @@ def use_blog_topic(request, blog_topic):
             blog.save()
 
             context['uniqueId'] = blog.uniqueId
+            request.session['uniqueId'] = blog.uniqueId
 
             api_call_code = str(uuid4()).split('-')[4]
 
@@ -455,36 +456,7 @@ def use_blog_topic(request, blog_topic):
 
     return render(request, 'dashboard/select-blog-sections.html', context)
 
-
-@login_required
-def save_section_head(request, uniqueId, section_head):
-    context = {}
-
-    blog = Blog.objects.get(uniqueId=uniqueId)
-
-    section_head = requests.utils.unquote(section_head)
-
-    if blog:
-        blog_topic = urllib.parse.quote(blog.title)
-
-        saved_sect_head = SavedBlogSectionHead.objects.create(
-            section_head=section_head,
-            blog=blog,
-        )
-        saved_sect_head.save()
-
-        blog_section_heads = request.session['blog-sections']
-        context['uniqueId'] = blog.uniqueId
-        request.session['uniqueId'] = blog.uniqueId
-        # adding the sections to the context
-        request.session['saved_sect_head'] = section_head
-        context['blog_sections'] = blog_section_heads
-        print("saved: ".format(section_head))
-        return redirect('use-blog-topic', blog_topic)
-    else:
-        return redirect('blog-sections')
-
-        
+    
 # this generates blog from saved topic
 @login_required
 def create_blog_from_topic(request, uniqueId):
@@ -495,6 +467,8 @@ def create_blog_from_topic(request, uniqueId):
     context['current_page'] = current_page
 
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    request.session['uniqueId'] = uniqueId
 
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
@@ -546,6 +520,35 @@ def create_blog_from_topic(request, uniqueId):
         redirect('dashboard')
 
     return render(request, 'dashboard/select-blog-sections.html', context)
+
+
+@login_required
+def save_section_head(request, uniqueId, section_head):
+    context = {}
+
+    blog = Blog.objects.get(uniqueId=uniqueId)
+
+    section_head = requests.utils.unquote(section_head)
+
+    if blog:
+        blog_topic = urllib.parse.quote(blog.title)
+
+        saved_sect_head = SavedBlogSectionHead.objects.create(
+            section_head=section_head,
+            blog=blog,
+        )
+        saved_sect_head.save()
+
+        blog_section_heads = request.session['blog-sections']
+        context['uniqueId'] = blog.uniqueId
+        request.session['uniqueId'] = blog.uniqueId
+        # adding the sections to the context
+        request.session['saved_sect_head'] = section_head
+        context['blog_sections'] = blog_section_heads
+        print("saved: ".format(section_head))
+        return redirect('use-blog-topic', blog_topic)
+    else:
+        return redirect('blog-sections')
 
 
 @login_required
