@@ -2127,7 +2127,10 @@ def edit_client(request, uniqueId):
     context = {}
 
     current_page = 'Edit Client'
+    parent_page = 'Clients'
     context['current_page'] = current_page
+    context['parent_page'] = parent_page
+    context['parent_page_url'] = 'client'
 
     user_profile = request.user.profile
 
@@ -2165,7 +2168,10 @@ def edit_category(request, uniqueId):
     context = {}
 
     current_page = 'Edit Category'
+    parent_page = 'Categories'
     context['current_page'] = current_page
+    context['parent_page'] = parent_page
+    context['parent_page_url'] = 'categories'
 
     client_list = []
 
