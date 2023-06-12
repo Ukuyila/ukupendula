@@ -3,7 +3,7 @@ $(function(e) {
 	$('.content').richText({
 		height: 150,
 	});
-	$('.content2').richText({
+	$('.content22').richText({
 		minimumResultsForSearch: Infinity,
 		height: 150,
 	});
