@@ -357,6 +357,8 @@ def save_blog_topic(request, blog_topic):
         blog_topics.remove(blog_topic)
         request.session['blog_topics'] = blog_topics
 
+        request.session['uniqueId'] = blog.uniqueId
+
         return redirect('blog-sections')
     else:
         return redirect('blog-topic')
