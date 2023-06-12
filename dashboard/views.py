@@ -213,6 +213,25 @@ def blog_topic(request):
 
     remove_api_requests(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -221,6 +240,9 @@ def blog_topic(request):
     context['tone_of_voices'] = tone_of_voices
 
     if request.method == 'POST':
+        cate_id = request.POST['category']
+        request.session['category'] = cate_id
+
         blog_idea = request.POST['blog_idea']
         request.session['blog_idea'] = blog_idea
 
@@ -371,6 +393,8 @@ def use_blog_topic(request, blog_topic):
     else:
 
         if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
+            cate_id = request.session['category'] if request.session['category'] else ''
+            # category = ClientCategory.objects.get(uniqueId=cate_id)
             # save blog topic idea first
             # code to save
             blog = Blog.objects.create(
@@ -378,7 +402,9 @@ def use_blog_topic(request, blog_topic):
                 blog_idea=request.session['blog_idea'],
                 keywords=request.session['keywords'],
                 audience=request.session['audience'],
+                tone_of_voice=request.session['tone_of_voice'],
                 profile=request.user.profile,
+                category=cate_id,
             )
             blog.save()
 

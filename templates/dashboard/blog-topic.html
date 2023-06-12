@@ -30,6 +30,19 @@
                                             <form class="mb-3" action="#" method="post">
                                                 {% csrf_token %}
                                                 <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}" >{{client.client_name}}{{'=>'}}{{category.client.client_name}}</option>
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="blog_idea" class=" ">Blog Idea</label> <span class="title_counter text-muted">0/250</span></div>
                                                     <input type="text" class="form-control" id="blog_idea" name="blog_idea" placeholder="best books on personal finance management" maxlength="250" required/>
                                                 </div>
