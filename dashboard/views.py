@@ -409,7 +409,6 @@ def use_blog_topic(request, blog_topic):
         else:
             return redirect('blog-topic')
 
-
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
         request.session['blog-sections'] = blog_section_heads
@@ -510,65 +509,9 @@ def create_blog_from_topic(request, uniqueId):
             return redirect('blog-topic')
 
         if request.method == 'POST':
-            for val in request.POST:
-                if not 'csrfmiddlewaretoken' in val:
+            request.session['selectd_sections'] = request.POST
 
-                    api_call_code = str(uuid4()).split('-')[4]
-
-                    # api_requests = check_api_requests()
-
-                    add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
-
-                    n = 1
-                    # runs until n < 50,just to avoid the infinite loop.
-                    # this will execute the check_api_requests() func in every 5 seconds.
-                    while n < 50:
-                        # api_requests = check_api_requests()
-                        time.sleep(5)
-                        if api_call_process(api_call_code, add_to_list):
-                            gen_section = generate_blog_section_details(blog.title, val, blog.audience, blog.keywords, request.user.profile)
-
-                            # create database record
-                            blog_sect = BlogSection.objects.create(
-                                title=val,
-                                body=gen_section,
-                                blog=blog,
-                            )
-                            blog_sect.save()
-
-                            add_to_list.is_done=True
-                            add_to_list.save()
-
-                            time.sleep(5)
-                            break
-                        else:
-                            # we might need to delete all abandoned calls
-                            pass
-                        n += 1
-
-                    # Analyze how this makes the AI not to repeat what was already done
-                    # collect previous blog sections
-                    # prev_blog = ''
-                    # b_sections = BlogSection.objects.filter(blog=blog).order_by('date_created')
-                    # for sec in b_sections:
-                    #     prev_blog += sec.title + '\n'
-                    #     prev_blog += sec.body.replace('<br>', '\n')
-                    # # generating blog section details
-                    # prev_blog = ''
-                    # gen_section = generate_blog_section_details(
-                    #     blog_topic, val, request.session['audience'], request.session['keywords'], prev_blog,
-                    #     request.user.profile)
-                    #
-                    # # create database record
-                    # blog_sect = BlogSection.objects.create(
-                    #     title=val,
-                    #     body=gen_section,
-                    #     blog=blog,
-                    # )
-                    # blog_sect.save()
-                    # time.sleep(2)
-
-            return redirect('view-generated-blog', slug=blog.slug)
+            return redirect('view-gen-blog', slug=blog.slug)
 
     except:
         messages.error(request, "Blog not found!")
