@@ -31,9 +31,11 @@
                 <label for="client" class="control-label mb-10">Client:</label>
                 <select type="text" class="form-control select2" id="client" name="client">
                   {% for client in client_list %}
+                  <option value="{{client.uniqueId}}" id="{{client.uniqueId}}" 
                   {% if client.uniqueId == cate_client %}
-                  <option value="{{client.uniqueId}}" id="{{client.uniqueId}}" >{{client.client_name}}</option>
+                  selected
                   {% endif %}
+                  >{{client.client_name}}</option>
                   {% endfor %}
                 </select>
               </div>
