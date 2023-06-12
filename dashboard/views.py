@@ -1448,6 +1448,25 @@ def landing_page_copy(request, uniqueId=""):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     context['page_sections'] = page_sections
 
     if len(uniqueId) > 0:
@@ -1462,6 +1481,7 @@ def landing_page_copy(request, uniqueId=""):
     if request.method == 'POST':
         company_name = request.POST['company_name']
         copy_title = request.POST['copy_title']
+        copy_category = request.POST['category']
         # request.session['company_name'] = company_name
 
         company_purpose = request.POST['company_purpose']
@@ -1497,6 +1517,7 @@ def landing_page_copy(request, uniqueId=""):
                             page_sections=page_sections,
                             page_copy=gen_page_copy,
                             profile=request.user.profile,
+                            category=copy_category,
                         )
                         s_content_data.save()
 

@@ -40,6 +40,25 @@
                                                 </div>
 
                                                 <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                            {% if category.uniqueId == copy_content.category %}
+                                                            selected
+                                                            {% endif %}
+                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="company_name" class=" ">Company Name</label><span class="comp_counter text-muted">0/200</span></div>
                                                   <input type="text" class="form-control prompt-command" id="company_name" name="company_name" placeholder="Enter company name" value="{{copy_content.company_name|safe}}" maxlength="200" required/>
                                                 </div>
