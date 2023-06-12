@@ -6,13 +6,13 @@
 }
 
 .ai-answer-card .card-body .ideas {
-  max-height: 35vh;
+  max-height: 55vh;
   overflow: auto;
 
 }
 
 .ai-answer-card .card-body .ideas-text {
-  max-height: 35vh;
+  max-height: 55vh;
 
 }
 
