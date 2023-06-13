@@ -96,7 +96,7 @@
                         <thead>
                           <tr>
                             <th style="width:40%">Topic</th>
-                            <th>Category</th>
+                            <th hidden>Category</th>
                             <th>Tone</th>
                             <th>Datetime</th>
                             <th></th>
@@ -107,9 +107,9 @@
                         {% for sentence in saved_sentence %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{sentence.paragraph_topic}}</a></h6>
+                              <h6 class="mb-0"><a>{{sentence.new_sentence}}</a></h6>
                             </td>
-                            <td>
+                            <td hidden>
                               {% for client in client_list %}
                                 
                                 {% for category in cate_list %}
@@ -128,7 +128,7 @@
                             </td>
                             <td>{{sentence.last_updated|date:"Y-m-d"}} {{sentence.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'paragraph-writer-response' sentence.uniqueId %}" type="button" class="btn btn-sm btn-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'sentence-writer-response' sentence.uniqueId %}" type="button" class="btn btn-sm btn-primary"><i class="icon icon-eye"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
