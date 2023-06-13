@@ -12,99 +12,160 @@
 
 
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Completed Blogs</h3>
-          <div class="card-options">
-            <a href="{% url 'blog-topic' %}" class="btn btn-primary btn-sm">Generate New</a>
-          </div>
-        </div>
         <div class="card-body">
-          {% if complete_blogs|length > 0 %}
-          <div class="table-responsive mb-0 ">
-            <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
-              <thead>
-                <tr>
-                  <th style="width:50%">Blog Title</th>
-                  <th>Category</th>
-                  <th>Keywords</th>
-                  <th>Datetime</th>
-                  <th></th>
-                  
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-              {% for blog in complete_blogs %}
-                <tr>
-                  <td >
-                    <h6 class="mb-0"><a>{{blog.title}}</a></h6>
-                    <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
-                  </td>
-                  <td>
-                    {% for client in client_list %}
-                      
-                      {% for category in cate_list %}
-                        {% if category.client == client %}
-                          
-                          {% if category.uniqueId == copy_content.category %}
-                          {{client.client_name}}{{' - '}}{{category.category_name}}
-                          {% endif %}
-                          
-                        {% endif %}
-                      {% endfor %}
-                    {% endfor %}
-                  </td>
-                  <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
-                  <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
-                  <td>
-                    <a  href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-xs btn-primary">View</a>
-                    <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <div><h5>You have no blogs to display here yet, <a href="{% url 'blog-topic' %}">start creating</a></h5></div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      {% if empty_blogs|length > 0 %}
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Saved For Later</h3>
-        </div>
-        <div class="card-body">
-          <div class="dash5">
-            <div>
-          {% for blog in empty_blogs %}
-          <div class="list d-flex align-items-center  mb-4">
-            <div class="w-4 h-4 bg-primary me-4 "></div>
-            <div class="wrapper w-90 ms-3">
-
-              <p class="mb-0">{{blog.title}}
-              </p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                  <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+          <div class="row">
+            <div class="col-md-5 col-xl-3">
+              <div class="card-body p-0 border">
+                <div class="list-group list-group-transparent mb-0 mail-inbox">
+                  <div class="mt-4 mb-4 ms-4 me-4 text-center">
+                    <a href="{% url 'blog-topic' %}" class="btn btn-primary btn-lg btn-block">Generate New</a>
+                  </div>
+                  <a href="{% url 'blog-memory' 'complete' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if blogs_status == 'complete' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Complete Blogs
+                  </a>
+                  <a href="{% url 'blog-memory' 'incomplete' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if blogs_status == 'incomplete' %}
+                  active text-white
+                  {% endif %}">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Incomplete Blogs
+                  </a>
+                  <a href="{% url 'blog-memory' 'edited' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if blogs_status == 'edited' %}
+                  active text-white
+                  {% endif %}">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Edited Blogs
+                  </a>
+                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Paragraphs
+                  </a>
+                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Summaries
+                  </a>
+                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Page Copies
+                  </a>
+                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Meta Descriptions
+                  </a>
                 </div>
-                <div class="ms-auto btn-group">
-                  <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-outline-primary btn-xs btn-generate">Use</a>
-                  <a href="{% url 'delete-blog-topic' blog.uniqueId %}" class="btn btn-outline-danger btn-xs">Delete</a>
+              </div>
+
+            </div>
+            <div class="col-md-7 col-xl-9">
+              <div class="">
+                <div class="card-body p-6 border">
+                  <div class="inbox-body">
+                  {% if blogs_status == 'complete' %}
+                    {% if complete_blogs|length > 0 %}
+                    <div class="table-responsive mb-0 ">
+                      <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th style="width:50%">Blog Title</th>
+                            <th>Category</th>
+                            <th>Keywords</th>
+                            <th>Datetime</th>
+                            <th></th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        {% for blog in complete_blogs %}
+                          <tr>
+                            <td >
+                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                            </td>
+                            <td>
+                              {% for client in client_list %}
+                                
+                                {% for category in cate_list %}
+                                  {% if category.client == client %}
+                                    
+                                    {% if category.uniqueId == copy_content.category %}
+                                    {{client.client_name}}{{' - '}}{{category.category_name}}
+                                    {% endif %}
+                                    
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                            </td>
+                            <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
+                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>
+                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-xs btn-primary">View</a>
+                              <a href="" type="button" class="btn btn-xs btn-danger">Delete</a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    {% else %}
+                    <div><h5>You have no blogs to display here yet, <a href="{% url 'blog-topic' %}">start creating</a></h5></div>
+                    {% endif %}
+                  {% elif blogs_status == 'incomplete' %}
+                    {% if empty_blogs|length > 0 %}
+                    <div class="table-responsive mb-0 ">
+                      <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th style="width:50%">Blog Title</th>
+                            <th>Category</th>
+                            <th>Keywords</th>
+                            <th>Datetime</th>
+                            <th></th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        {% for blog in empty_blogs %}
+                          <tr>
+                            <td >
+                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                            </td>
+                            <td>
+                              {% for client in client_list %}
+                                
+                                {% for category in cate_list %}
+                                  {% if category.client == client %}
+                                    
+                                    {% if category.uniqueId == copy_content.category %}
+                                    {{client.client_name}}{{' - '}}{{category.category_name}}
+                                    {% endif %}
+                                    
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                            </td>
+                            <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
+                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>
+                              <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-primary btn-xs btn-generate">Use</a>
+                              <a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    {% else %}
+                    <div><h5>You have no blogs to display here yet, <a href="{% url 'blog-topic' %}">start creating</a></h5></div>
+                    {% endif %}
+                  {% endif %}
                 </div>
               </div>
             </div>
           </div>
-          {% endfor %}
-            </div>
-          </div>
         </div>
       </div>
-      {% endif %}
     </div>
   </div>
 

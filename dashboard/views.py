@@ -2002,7 +2002,7 @@ def delete_device(request, uniqueId):
 
 
 @login_required
-def memory_blogs(request):
+def memory_blogs(request, status):
     context = {}
 
     empty_blogs = []
@@ -2031,6 +2031,8 @@ def memory_blogs(request):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
+
+    context['blogs_status'] = status
 
     # Get total blogs
     blogs = Blog.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month).order_by('last_updated')

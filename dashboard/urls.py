@@ -84,7 +84,9 @@ urlpatterns = [
     path('payment-success', views.payment_success, name='payment-success'),
 
     #memory pages 
-    path('blog-memory', views.memory_blogs, name='blog-memory'),
+    path('blog-memory/<str:status>/', views.memory_blogs, name='blog-memory'),
+    path('blog-memory/<str:status>/', views.memory_blogs, name='incomplete-blog-memory'),
+    path('blog-memory/<str:status>/', views.memory_blogs, name='saved-blog-memory'),
     path('summarizer-memory', views.memory_summarizer, name='summarizer-memory'),
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),
