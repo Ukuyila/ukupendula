@@ -196,20 +196,6 @@
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow  app-selector py-0">
 													<ul class="drop-icon-wrap p-2">
 														<li>
-															<a href="{% url 'device-manager' %}" class="drop-icon-item">
-																<i class=" icon icon-screen-desktop text-dark"></i>
-																<span class="block"> Devices</span>
-															</a>
-														</li>
-														{% if user.profile.subscription_type == 'teams' %}
-														<li>
-															<a href="{% url 'team-manager' %}" class="drop-icon-item">
-																<i class="icon icon-people text-dark"></i>
-																<span class="block">Team</span>
-															</a>
-														</li>
-														{% endif %}
-														<li>
 															<a href="{% url 'categories' %}" class="drop-icon-item">
 																<i class="icon icon-folder-alt text-dark"></i>
 																<span class="block">Categories</span>
@@ -227,8 +213,6 @@
 																<span class="block">Settings</span>
 															</a>
 														</li>
-														<li>
-														</li>
 													</ul>
 													<a hidden href="#" class="dropdown-item text-center border-top">View all</a>
 												</div>
@@ -245,6 +229,15 @@
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
 													<a class="dropdown-item" href="{% url 'profile' %}">
 														<i class="dropdown-icon icon icon-user"></i> My Profile
+													</a>
+													{% if user.profile.subscription_type == 'teams' %}
+													<a class="dropdown-item" href="{% url 'team-manager' %}">
+														<i class="dropdown-icon  icon icon-people"></i> Team
+													</a>
+													{% endif %}
+													
+													<a class="dropdown-item" href="{% url 'device-manager' %}">
+														<i class="dropdown-icon  icon icon-screen-desktop"></i> Devices
 													</a>
 													<a class="dropdown-item" href="{% url 'billing' %}">
 														<i class="dropdown-icon  icon icon-credit-card"></i> Billing
