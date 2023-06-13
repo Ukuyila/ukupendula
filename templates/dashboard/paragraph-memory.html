@@ -83,6 +83,7 @@
                           <tr>
                             <th style="width:40%">Topic</th>
                             <th>Category</th>
+                            <th>Tone</th>
                             <th>Datetime</th>
                             <th></th>
                             
@@ -107,6 +108,9 @@
                                   {% endif %}
                                 {% endfor %}
                               {% endfor %}
+                            </td>
+                            <td>
+                              <small class="text-primary me-1">{{paragraph.tone_of_voice}}</small>
                             </td>
                             <td>{{paragraph.last_updated|date:"Y-m-d"}} {{paragraph.last_updated|time:"H:i"}}</td>
                             <td>

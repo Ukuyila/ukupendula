@@ -47,6 +47,13 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Paragraphs
                   </a>
+                  <a href="{% url 'sentence-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Sentence Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Sentence
+                  </a>
                   <a href="{% url 'summarizer-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
                   {% if current_page == 'Summarizer Memory' %}
                   active text-white
@@ -84,6 +91,7 @@
                           <tr>
                             <th style="width:40%">Blog Title</th>
                             <th>Category</th>
+                            <th>Tone</th>
                             <th>Datetime</th>
                             <th></th>
                             
@@ -109,6 +117,9 @@
                                   {% endif %}
                                 {% endfor %}
                               {% endfor %}
+                            </td>
+                            <td>
+                              <small class="text-primary me-1">{{blog.tone_of_voice}}</small>
                             </td>
                             <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
                             <td>

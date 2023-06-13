@@ -2023,7 +2023,7 @@ def memory_blogs(request, status):
     context['blogs_status'] = status
 
     # Get total blogs
-    blogs = Blog.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month).order_by('last_updated')
+    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
@@ -2084,7 +2084,7 @@ def memory_paragraph(request):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    paragraphs = Paragraph.objects.filter(profile=request.user.profile)
+    paragraphs = Paragraph.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for summary in paragraphs:
         saved_paragraphs.append(summary)
@@ -2097,6 +2097,49 @@ def memory_paragraph(request):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/paragraph-memory.html', context)
+
+
+@login_required
+def memory_sentence(request):
+    context ={}
+    saved_sentence = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    sentences = Sentence.objects.filter(profile=request.user.profile).order_by('last_updated')
+
+    for sentence in sentences:
+        saved_sentence.append(sentence)
+
+    context['saved_sentence'] = saved_sentence
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Sentence Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/sentence-memory.html', context)
 
 
 @login_required
@@ -2130,7 +2173,7 @@ def memory_summarizer(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    summaries = ContentSummary.objects.filter(profile=request.user.profile)
+    summaries = ContentSummary.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for summary in summaries:
         saved_summaries.append(summary)
@@ -2176,7 +2219,7 @@ def memory_page_copy(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile)
+    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for page_copy in page_copies:
         saved_page_copies.append(page_copy)
@@ -2197,13 +2240,27 @@ def memory_meta_descr(request):
     
     saved_meta_descriptions = []
 
-    today_date = datetime.datetime.now()
+    cate_list = []
+    client_list = []
 
-    q_year = today_date.year
-    q_month = today_date.month
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     # Get total summaries
-    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile)
+    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for meta_description in meta_descriptions:
         saved_meta_descriptions.append(meta_description)
