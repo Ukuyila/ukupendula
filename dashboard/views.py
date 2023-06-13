@@ -2029,6 +2029,9 @@ def memory_blogs(request, status):
         sections = BlogSection.objects.filter(blog=blog)
         saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
+        if saved_sections.exists():
+                edited_blogs.append(blog)
+
         if sections.exists():
             # calculate blog words
             blog_words = 0
@@ -2038,9 +2041,6 @@ def memory_blogs(request, status):
             blog.word_count = str(blog_words)
             blog.save()
             complete_blogs.append(blog)
-
-            if saved_sections.exists():
-                edited_blogs.append(blog)
         else:
             empty_blogs.append(blog)
 
