@@ -2039,8 +2039,8 @@ def memory_blogs(request, status):
             blog.save()
             complete_blogs.append(blog)
 
-        elif saved_sections.exists():
-            edited_blogs.append(blog)
+            if saved_sections.exists():
+                edited_blogs.append(blog)
         else:
             empty_blogs.append(blog)
 
