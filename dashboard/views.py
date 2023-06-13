@@ -2057,6 +2057,49 @@ def memory_blogs(request, status):
 
 
 @login_required
+def memory_paragraph(request):
+    context ={}
+    saved_paragraphs = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    paragraphs = Paragraph.objects.filter(profile=request.user.profile)
+
+    for summary in paragraphs:
+        saved_paragraphs.append(summary)
+
+    context['saved_paragraphs'] = saved_paragraphs
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Paragraph Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/paragraph-memory.html', context)
+
+
+@login_required
 def memory_summarizer(request):
     context = {}
     
@@ -2087,7 +2130,7 @@ def memory_summarizer(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    summaries = ContentSummary.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    summaries = ContentSummary.objects.filter(profile=request.user.profile)
 
     for summary in summaries:
         saved_summaries.append(summary)
@@ -2133,7 +2176,7 @@ def memory_page_copy(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile)
 
     for page_copy in page_copies:
         saved_page_copies.append(page_copy)
@@ -2160,7 +2203,7 @@ def memory_meta_descr(request):
     q_month = today_date.month
 
     # Get total summaries
-    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile)
 
     for meta_description in meta_descriptions:
         saved_meta_descriptions.append(meta_description)

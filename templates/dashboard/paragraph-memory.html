@@ -68,29 +68,22 @@
               <div class="">
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
-
                     <div class="table-responsive mb-0 ">
                       <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:50%">Summary Title</th>
+                            <th style="width:40%">Topic</th>
                             <th>Category</th>
-                            <th>Tone</th>
                             <th>Datetime</th>
                             <th></th>
                             
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                        {% for summary in saved_summaries %}
+                        {% for paragraph in saved_paragraphs %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a >{% if summary.summary_title|length > 0 %}
-                                {{summary.summary_title}}
-                                {% else %}
-                                {{summary.slug}}
-                                {% endif %}</a></h6>
-                              
+                              <h6 class="mb-0"><a>{{paragraph.paragraph_topic}}</a></h6>
                             </td>
                             <td>
                               {% for client in client_list %}
@@ -98,7 +91,7 @@
                                 {% for category in cate_list %}
                                   {% if category.client == client %}
                                     
-                                    {% if category.uniqueId == summary.category %}
+                                    {% if category.uniqueId == paragraph.category %}
                                     {{client.client_name}}{{' - '}}{{category.category_name}}
                                     {% endif %}
                                     
@@ -106,18 +99,15 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td><small class="text-primary me-1">{{summary.tone_of_voice}}</small></td>
-                            <td>{{summary.date_created|date:"Y-m-d"}}</td>
+                            <td>{{paragraph.last_updated|date:"Y-m-d"}} {{paragraph.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'content-summarizer-response' summary.uniqueId %}" type="button" class="btn btn-xs btn-primary"><i class="icon icon-eye"></i></a>
-                              <a href="" type="button" class="btn btn-xs btn-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'paragraph-writer-response' paragraph.uniqueId %}" type="button" class="btn btn-sm btn-primary"><i class="icon icon-eye"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
                         </tbody>
                       </table>
                     </div>
-
                   </div>
                 </div>
               </div>
