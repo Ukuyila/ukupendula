@@ -373,9 +373,7 @@ def use_blog_topic(request, blog_topic):
     context = {}
 
     current_page = 'Use Blog Sections Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     remove_api_requests(request.user.profile)
@@ -383,7 +381,6 @@ def use_blog_topic(request, blog_topic):
     if 'blog-sections' in request.session and 'uniqueId' in request.session:
 
         uniqueId = request.session['uniqueId']
-        
         context['uniqueId'] = uniqueId
         blog_section_heads = request.session['blog-sections']
 
@@ -392,9 +389,7 @@ def use_blog_topic(request, blog_topic):
         if 'saved-sect-head' == request.session:
             saved_sect_head = request.session['saved-sect-head']
             context['saved-sect-head'] = saved_sect_head
-
     else:
-
         if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
             cate_id = request.session['category'] if request.session['category'] else ''
             # category = ClientCategory.objects.get(uniqueId=cate_id)
@@ -464,21 +459,13 @@ def create_blog_from_topic(request, uniqueId):
     context = {}
 
     current_page = 'Use Blog Sections Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
-
     request.session['uniqueId'] = uniqueId
 
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
-
-        # blog_section_heads = generate_blog_section_headings(blog.title, blog.audience, blog.keywords)
-
         api_call_code = str(uuid4()).split('-')[4]
-
-        # api_requests = check_api_requests()
 
         add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
 
@@ -2007,6 +1994,7 @@ def memory_blogs(request, status):
 
     empty_blogs = []
     complete_blogs = []
+    edited_blogs = []
 
     today_date = datetime.datetime.now()
 
@@ -2039,22 +2027,26 @@ def memory_blogs(request, status):
 
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
+        saved_sections = SavedBlogEdit.objects.filter(blog=blog)
+
         if sections.exists():
             # calculate blog words
             blog_words = 0
             for section in sections:
-
                 blog_words += int(section.word_count)
-
                 # month_word_count += int(section.word_count)
             blog.word_count = str(blog_words)
             blog.save()
             complete_blogs.append(blog)
+
+        elif saved_sections.exists():
+            edited_blogs.append(blog)
         else:
             empty_blogs.append(blog)
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
+    context['edited_blogs'] = edited_blogs
 
     context['allowance'] = check_count_allowance(request.user.profile)
 

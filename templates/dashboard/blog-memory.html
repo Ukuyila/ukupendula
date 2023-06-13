@@ -67,7 +67,7 @@
                       <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:50%">Blog Title</th>
+                            <th style="width:40%">Blog Title</th>
                             <th>Category</th>
                             <th>Datetime</th>
                             <th></th>
@@ -97,7 +97,7 @@
                             </td>
                             <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-xs btn-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="" type="button" class="btn btn-xs btn-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-sm btn-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="" type="button" class="btn btn-sm btn-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
@@ -143,7 +143,53 @@
                             </td>
                             <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-primary btn-xs btn-generate"><i class="icon icon-note"></i></a>&nbsp;<a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-xs btn-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-primary btn-sm btn-generate"><i class="icon icon-note"></i></a>&nbsp;<a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-sm btn-danger"><i class="icon icon-trash"></i></a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    {% else %}
+                    <div><h5>You have no blogs to display here yet, <a href="{% url 'blog-topic' %}">start creating</a></h5></div>
+                    {% endif %}
+                  {% elif blogs_status == 'edited' %}
+                    {% if empty_blogs|length > 0 %}
+                    <div class="table-responsive mb-0 ">
+                      <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th style="width:50%">Blog Title</th>
+                            <th>Category</th>
+                            <th>Datetime</th>
+                            <th></th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        {% for blog in edited_blogs %}
+                          <tr>
+                            <td >
+                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
+                            </td>
+                            <td>
+                              {% for client in client_list %}
+                                
+                                {% for category in cate_list %}
+                                  {% if category.client == client %}
+                                    
+                                    {% if category.uniqueId == blog.category %}
+                                    {{client.client_name}}{{' - '}}{{category.category_name}}
+                                    {% endif %}
+                                    
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                            </td>
+                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>
+                              <a href="{% url 'edit-gen-blog' blog.uniqueId %}" class="btn btn-primary btn-sm"><i class="icon icon-note"></i></a>&nbsp;<a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-sm btn-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
