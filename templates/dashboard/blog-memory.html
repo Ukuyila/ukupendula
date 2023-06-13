@@ -153,8 +153,8 @@
                     {% else %}
                     <div><h5>You have no blogs to display here yet, <a href="{% url 'blog-topic' %}">start creating</a></h5></div>
                     {% endif %}
-                  {% elif blogs_status == 'edited' %}
-                    {% if empty_blogs|length > 0 %}
+                  {% elif edited_blogs == 'edited' %}
+                    {% if edited_blogs|length > 0 %}
                     <div class="table-responsive mb-0 ">
                       <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
