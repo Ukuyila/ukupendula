@@ -2031,7 +2031,6 @@ def memory_blogs(request, status):
 
         if saved_sections.exists():
             edited_blogs.append(blog)
-            print("Edited blogs".format(blog.title))
 
         if sections.exists():
             # calculate blog words
