@@ -40,16 +40,32 @@
                   {% endif %}">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Edited Blogs
                   </a>
-                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                  <a href="{% url 'paragraph-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Paragraph Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Paragraphs
                   </a>
-                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                  <a href="{% url 'summarizer-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Summarizer Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Summaries
                   </a>
-                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                  <a href="{% url 'page-copy-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Page Copy Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Page Copies
                   </a>
-                  <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex align-items-center">
+                  <a href="{% url 'meta-descr-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Meta Description Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Meta Descriptions
                   </a>
                 </div>
