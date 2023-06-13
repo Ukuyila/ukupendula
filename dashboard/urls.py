@@ -89,6 +89,7 @@ urlpatterns = [
     path('blog-memory/<str:status>/', views.memory_blogs, name='saved-blog-memory'),
     path('paragraph-memory', views.memory_summarizer, name='paragraph-memory'),
     path('sentence-memory', views.memory_sentence, name='sentence-memory'),
+    path('title-memory', views.memory_title, name='title-memory'),
     path('summarizer-memory', views.memory_paragraph, name='summarizer-memory'),
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),

@@ -2143,6 +2143,49 @@ def memory_sentence(request):
 
 
 @login_required
+def memory_title(request):
+    context ={}
+    saved_title = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_activate=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    article_titles = ArticleTitle.objects.filter(profile=request.user.profile).order_by('last_updated')
+
+    for title in article_titles:
+        saved_title.append(title)
+
+    context['saved_title'] = saved_title
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Title Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/title-memory.html', context)
+
+
+@login_required
 def memory_summarizer(request):
     context = {}
     
