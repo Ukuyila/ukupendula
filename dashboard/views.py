@@ -2030,7 +2030,8 @@ def memory_blogs(request, status):
         saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
         if saved_sections.exists():
-                edited_blogs.append(blog)
+            edited_blogs.append(blog)
+            print("Edited blogs".format(blog.title))
 
         if sections.exists():
             # calculate blog words
