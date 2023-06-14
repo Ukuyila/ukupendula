@@ -42,7 +42,7 @@
                     <a href="{% url 'edit-client' client.uniqueId %}">{{client.client_name}}</a>
                   </td>
                   <td>
-                    {% if client.is_activate %}
+                    {% if client.is_active %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' 'deactivate' client.uniqueId %}'"  class="badge badge-success">Active</a>
                     {% else %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' 'activate' client.uniqueId %}'" class="badge badge-danger">Not Active</a>

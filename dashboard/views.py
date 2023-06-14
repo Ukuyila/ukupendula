@@ -219,7 +219,7 @@ def blog_topic(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -328,13 +328,47 @@ def delete_blog_topic(request, uniqueId):
         if blog.profile == request.user.profile:
             blog.delete()
             messages.info(request, "Blog deleted successfully!")
-            return redirect('dashboard')
+            return redirect('incomplete-blog-memory')
         else:
             messages.error(request, "Access denied!")
-            return redirect('dashboard')
+            return redirect('incomplete-blog-memory')
     except:
         messages.error(request, "Blog not found!")
-        return redirect('dashboard')
+        return redirect('incomplete-blog-memory')
+    
+
+@login_required
+def delete_blog(request, uniqueId):
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+        if blog.profile == request.user.profile:
+            blog.deleted=True
+            blog.save()
+            messages.info(request, "Blog deleted successfully!")
+            return redirect('blog-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('blog-memory')
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory')
+    
+
+@login_required
+def delete_saved_blog(request, uniqueId):
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+        if blog.profile == request.user.profile:
+            blog.deleted=True
+            blog.save()
+            messages.info(request, "Blog deleted successfully!")
+            return redirect('saved-blog-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('saved-blog-memory')
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('saved-blog-memory')
 
 
 @login_required
@@ -349,7 +383,7 @@ def save_blog_topic(request, blog_topic):
             keywords=request.session['keywords'],
             audience=request.session['audience'],
             tone_of_voice=request.session['tone_of_voice'],
-            max_words= str(request.session['max_words']),
+            max_words=str(request.session['max_words']),
             profile=request.user.profile,
         )
         blog.save()
@@ -642,7 +676,7 @@ def edit_gen_blog(request, uniqueId):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -890,7 +924,7 @@ def paragraph_writer(request, uniqueId=''):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -997,7 +1031,7 @@ def sentence_writer(request, uniqueId=''):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1116,7 +1150,7 @@ def article_title_writer(request, uniqueId=''):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1236,7 +1270,7 @@ def meta_description_writer(request, uniqueId=''):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1338,7 +1372,7 @@ def summarize_content(request, uniqueId=""):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1441,7 +1475,7 @@ def landing_page_copy(request, uniqueId=""):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2007,7 +2041,7 @@ def memory_blogs(request, status):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2027,24 +2061,25 @@ def memory_blogs(request, status):
     blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for blog in blogs:
-        sections = BlogSection.objects.filter(blog=blog)
-        saved_sections = SavedBlogEdit.objects.filter(blog=blog)
+        if not blog.deleted:
+            sections = BlogSection.objects.filter(blog=blog)
+            saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
-        if saved_sections.exists():
-            edited_blogs.append(blog)
+            if saved_sections.exists():
+                edited_blogs.append(blog)
 
-        if sections.exists():
-            # calculate blog words
-            blog_words = 0
-            for section in sections:
-                blog_words += int(section.word_count)
-                # month_word_count += int(section.word_count)
-            if int(blog.word_count) < 1:
-                blog.word_count = str(blog_words)
-                blog.save()
-            complete_blogs.append(blog)
-        else:
-            empty_blogs.append(blog)
+            if sections.exists():
+                # calculate blog words
+                blog_words = 0
+                for section in sections:
+                    blog_words += int(section.word_count)
+                    # month_word_count += int(section.word_count)
+                if int(blog.word_count) < 1:
+                    blog.word_count = str(blog_words)
+                    blog.save()
+                complete_blogs.append(blog)
+            else:
+                empty_blogs.append(blog)
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
@@ -2072,7 +2107,7 @@ def memory_paragraph(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2089,7 +2124,8 @@ def memory_paragraph(request):
     paragraphs = Paragraph.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for summary in paragraphs:
-        saved_paragraphs.append(summary)
+        if not summary.deleted:
+            saved_paragraphs.append(summary)
 
     context['saved_paragraphs'] = saved_paragraphs
 
@@ -2115,7 +2151,7 @@ def memory_sentence(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2132,7 +2168,8 @@ def memory_sentence(request):
     sentences = Sentence.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for sentence in sentences:
-        saved_sentence.append(sentence)
+        if not sentence.deleted:
+            saved_sentence.append(sentence)
 
     context['saved_sentence'] = saved_sentence
 
@@ -2158,7 +2195,7 @@ def memory_title(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2175,7 +2212,8 @@ def memory_title(request):
     article_titles = ArticleTitle.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for title in article_titles:
-        saved_title.append(title)
+        if not title.deleted:
+            saved_title.append(title)
 
     context['saved_title'] = saved_title
 
@@ -2203,7 +2241,7 @@ def memory_summarizer(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2221,7 +2259,8 @@ def memory_summarizer(request):
     summaries = ContentSummary.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for summary in summaries:
-        saved_summaries.append(summary)
+        if not summary.deleted:
+            saved_summaries.append(summary)
 
     context['saved_summaries'] = saved_summaries
 
@@ -2249,7 +2288,7 @@ def memory_page_copy(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2267,7 +2306,8 @@ def memory_page_copy(request):
     page_copies = LandingPageCopy.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for page_copy in page_copies:
-        saved_page_copies.append(page_copy)
+        if not page_copy.deleted:
+            saved_page_copies.append(page_copy)
 
     context['saved_page_copies'] = saved_page_copies
 
@@ -2290,7 +2330,7 @@ def memory_meta_descr(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2308,7 +2348,8 @@ def memory_meta_descr(request):
     meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for meta_description in meta_descriptions:
-        saved_meta_descriptions.append(meta_description)
+        if not meta_description.deleted:
+            saved_meta_descriptions.append(meta_description)
 
     context['saved_meta_descriptions'] = saved_meta_descriptions
 
@@ -2331,7 +2372,7 @@ def categories(request):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2442,7 +2483,7 @@ def change_client_status(request, status, uniqueId):
     client = TeamClient.objects.get(uniqueId=uniqueId)
 
     if client.team == user_profile.user_team:
-        client.is_activate=client_status
+        client.is_active=client_status
         client.save()
     else:
         messages.error(request, "Action denied on this client!")
@@ -2505,7 +2546,7 @@ def edit_category(request, uniqueId):
 
     user_profile = request.user.profile
 
-    team_clients = TeamClient.objects.filter(is_activate=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -2557,7 +2598,7 @@ def change_category_status(request, status, uniqueId):
     category = ClientCategory.objects.get(uniqueId=uniqueId)
 
     if category.client.team == user_profile.user_team:
-        category.is_activate=cate_status
+        category.is_active=cate_status
         category.save()
     else:
         messages.error(request, "Action denied on this category!")

@@ -48,7 +48,7 @@
                   </td>
                   <td class="text-primary me-1">{{category.client.client_name}}</td>
                   <td>
-                    {% if category.is_activate %}
+                    {% if category.is_active %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'cate-status' 'deactivate' category.uniqueId %}'" class="badge badge-success">Active</a>
                     {% else %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'cate-status' 'activate' category.uniqueId %}'" class="badge badge-danger">Not Active</a>

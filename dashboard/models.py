@@ -103,7 +103,7 @@ class Team(models.Model):
     business_address = models.TextField(null=True, blank=True)
     business_status = models.BooleanField(default=True)
 
-    is_activate = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     team_principal = models.CharField(null=True, blank=True, max_length=100)
 
@@ -231,8 +231,8 @@ class SavedBlogEdit(models.Model):
 
     # Django related field
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
-
     category = models.CharField(null=True, blank=True, max_length=255)
+    deleted = models.BooleanField(default=False)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -295,7 +295,7 @@ class BlogSocialPost(models.Model):
     title = models.CharField(max_length=255)
     post_type = models.CharField(null=True, blank=True, max_length=255)
     post = models.TextField(null=True, blank=True)
-
+    deleted = models.BooleanField(default=False)
     word_count = models.CharField(null=True, blank=True, max_length=100)
 
     # Django related field
@@ -361,7 +361,6 @@ class Sentence(models.Model):
     old_sentence = models.CharField(max_length=200)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     new_sentence = models.TextField(null=True, blank=True)
-
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -393,7 +392,6 @@ class ArticleTitle(models.Model):
     old_title = models.CharField(max_length=255)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     new_title_options = models.TextField(null=True, blank=True)
-
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -425,7 +423,6 @@ class MetaDescription(models.Model):
     article_title = models.CharField(max_length=200)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     meta_description = models.TextField(null=True, blank=True)
-
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -458,7 +455,6 @@ class ContentSummary(models.Model):
     summary_title = models.CharField(null=True, blank=True, max_length=200)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     summarized = models.TextField(null=True, blank=True)
-
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -496,7 +492,6 @@ class LandingPageCopy(models.Model):
     copy_title = models.CharField(null=True, blank=True, max_length=200)
     page_sections = models.CharField(null=True, blank=True, max_length=200)
     page_copy = models.TextField(null=True, blank=True)
-
     deleted = models.BooleanField(default=False)
 
     # django related field
@@ -556,7 +551,7 @@ class SubscriptionPackage(models.Model):
     package_status = models.BooleanField(default=True)
     package_description = models.TextField(null=True, blank=True)
 
-    is_activate = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -583,7 +578,7 @@ class ToneOfVoice(models.Model):
     tone_status = models.BooleanField(default=True)
     tone_description = models.TextField(null=True, blank=True)
 
-    is_activate = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -617,7 +612,7 @@ class TeamClient(models.Model):
     created_by = models.CharField(null=True, blank=True, max_length=100)
     team = models.CharField(null=True, blank=True, max_length=100)
     
-    is_activate = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -644,7 +639,7 @@ class ClientCategory(models.Model):
     description = models.TextField(null=True, blank=True)
 
     created_by = models.CharField(null=True, blank=True, max_length=100)
-    is_activate = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     
     team = models.CharField(null=True, blank=True, max_length=100)
     # django related field

@@ -24,6 +24,8 @@ urlpatterns = [
 
 
     # home page url paths
+    path('delete-blog/<str:uniqueId>/', views.delete_blog, name='delete-blog'),
+    path('delete-saved-blog/<str:uniqueId>/', views.delete_saved_blog, name='delete-saved-blog'),
     path('delete-blog-topic/<str:uniqueId>/', views.delete_blog_topic, name='delete-blog-topic'),
     path('generate-blog-from-topic/<str:uniqueId>/', views.create_blog_from_topic, name='generate-blog-from-topic'),
 
