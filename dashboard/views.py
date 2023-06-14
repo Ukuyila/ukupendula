@@ -1082,6 +1082,27 @@ def paragraph_writer(request, uniqueId=''):
     return render(request, 'dashboard/paragraph-writer.html', context)
 
 
+
+@login_required
+def delete_paragraph(request, uniqueId):
+
+    try:
+        content = Paragraph.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('paragraph-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('paragraph-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('paragraph-memory')
+
+
 @login_required
 def sentence_writer(request, uniqueId=''):
     context = {}
@@ -1199,6 +1220,26 @@ def sentence_writer(request, uniqueId=''):
                 n += 1
 
     return render(request, 'dashboard/sentence-writer.html', context)
+
+
+@login_required
+def delete_sentence(request, uniqueId):
+
+    try:
+        sentence = Sentence.objects.get(uniqueId=uniqueId)
+
+        if sentence.profile == request.profile:
+            sentence.deleted=True
+            sentence.save()
+
+            messages.info(request, "Sentence deleted successfully!")
+            return redirect('sentence-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('sentence-memory')
+    except:
+        messages.error(request, "Sentence not found!")
+        return redirect('sentence-memory')
 
 
 @login_required
@@ -1322,6 +1363,26 @@ def article_title_writer(request, uniqueId=''):
 
 
 @login_required
+def delete_title(request, uniqueId):
+
+    try:
+        title = ArticleTitle.objects.get(uniqueId=uniqueId)
+
+        if title.profile == request.profile:
+            title.deleted=True
+            title.save()
+
+            messages.info(request, "Title deleted successfully!")
+            return redirect('title-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('title-memory')
+    except:
+        messages.error(request, "Title not found!")
+        return redirect('title-memory')
+
+
+@login_required
 def meta_description_writer(request, uniqueId=''):
     context = {}
 
@@ -1419,8 +1480,27 @@ def meta_description_writer(request, uniqueId=''):
                     pass
                 n += 1
 
-
     return render(request, 'dashboard/meta-description-generator.html', context)
+
+
+@login_required
+def delete_meta_descr(request, uniqueId):
+
+    try:
+        meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
+
+        if meta_descr.profile == request.profile:
+            meta_descr.deleted=True
+            meta_descr.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('meta-descr-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('meta-descr-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('meta-descr-memory')
 
 
 @login_required
@@ -1527,6 +1607,26 @@ def summarize_content(request, uniqueId=""):
 
 
 @login_required
+def delete_summary(request, uniqueId):
+
+    try:
+        content = ContentSummary.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('summarizer-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('summarizer-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('summarizer-memory')
+
+
+@login_required
 def landing_page_copy(request, uniqueId=""):
     context = {}
 
@@ -1629,6 +1729,26 @@ def landing_page_copy(request, uniqueId=""):
                 n += 1
 
     return render(request, 'dashboard/landing-page-copy.html', context)
+
+
+@login_required
+def delete_page_copy(request, uniqueId):
+
+    try:
+        content = LandingPageCopy.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('page-copy-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('page-copy-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('page-copy-memory')
 
 
 @login_required

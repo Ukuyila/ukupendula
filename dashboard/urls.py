@@ -51,18 +51,22 @@ urlpatterns = [
     # Paragraph writer urls
     path('paragraph-writer', views.paragraph_writer, name='paragraph-writer'),
     path('paragraph-writer/<str:uniqueId>/', views.paragraph_writer, name='paragraph-writer-response'),
+    path('delete-paragraph/<str:uniqueId>/', views.delete_paragraph, name='delete-paragraph'),
 
     # sentence rewriter urls
     path('sentence-writer', views.sentence_writer, name='sentence-writer'),
     path('sentence-writer/<str:uniqueId>/', views.sentence_writer, name='sentence-writer-response'),
+    path('delete-sentence/<str:uniqueId>/', views.delete_sentence, name='delete-sentence'),
 
     # title rewriter urls
     path('title-writer', views.article_title_writer, name='title-writer'),
     path('title-writer/<str:uniqueId>/', views.article_title_writer, name='title-writer-response'),
+    path('delete-title/<str:uniqueId>/', views.delete_title, name='delete-title'),
 
     # meta description generator urls
     path('meta-description-generator', views.meta_description_writer, name='meta-description-generator'),
     path('meta-description-generator/<str:uniqueId>/', views.meta_description_writer, name='meta-description-generator-response'),
+    path('delete-meta-description/<str:uniqueId>/', views.delete_meta_descr, name='delete-meta-descr'),
     
     # categories urls
     path('categories', views.categories, name='categories'),
@@ -79,10 +83,12 @@ urlpatterns = [
     # content summarizer urls
     path('content-summarizer', views.summarize_content, name='content-summarizer'),
     path('content-summarizer/<str:uniqueId>/', views.summarize_content, name='content-summarizer-response'),
+    path('delete-summary/<str:uniqueId>/', views.delete_summary, name='delete-summary'),
 
     # content landing page copy urls
     path('landing-page-copy', views.landing_page_copy, name='landing-page-copy'),
     path('landing-page-copy/<str:uniqueId>/', views.landing_page_copy, name='landing-page-copy-response'),
+    path('delete-page-copy/<str:uniqueId>/', views.delete_page_copy, name='delete-copy'),
 
     # ajax URLs
     path('paypal-payment-success', views.paypal_payment_success, name='paypal-payment-success'),

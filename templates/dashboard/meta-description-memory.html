@@ -134,8 +134,7 @@
                             </td>
                             <td>{{saved_meta_descr.date_created|date:"Y-m-d"}}</td>
                             <td>
-                              <a href="{% url 'meta-description-generator-response' saved_meta_descr.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'meta-description-generator-response' saved_meta_descr.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-meta-descr' saved_meta_descr.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

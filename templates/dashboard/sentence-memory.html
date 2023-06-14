@@ -135,7 +135,7 @@
                             </td>
                             <td>{{ sentence.last_updated|date:"Y-m-d" }} {{ sentence.last_updated|time:"H:i" }}</td>
                             <td>
-                              <a href="{% url 'sentence-writer-response' sentence.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'sentence-writer-response' sentence.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-sentence' sentence.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

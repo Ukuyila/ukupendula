@@ -139,8 +139,7 @@
                             <td><small class="text-primary me-1">{{ summary.tone_of_voice }}</small></td>
                             <td>{{ summary.date_created|date:"Y-m-d" }}</td>
                             <td>
-                              <a href="{% url 'content-summarizer-response' summary.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'content-summarizer-response' summary.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a> <a href="{% url 'delete-summary' summary.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
