@@ -128,7 +128,7 @@
                             </td>
                             <td>{{paragraph.last_updated|date:"Y-m-d"}} {{paragraph.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'paragraph-writer-response' paragraph.uniqueId %}" type="button" class="btn btn-sm btn-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'paragraph-writer-response' paragraph.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
