@@ -834,7 +834,7 @@ def gen_social_from_blog(request, postType, uniqueId):
     else:
         max_char = 280
 
-    complete_blogs = []
+    blog_posts = []
     tone_of_voices = []
 
     tones = ToneOfVoice.objects.filter(tone_status=True)
@@ -849,9 +849,11 @@ def gen_social_from_blog(request, postType, uniqueId):
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
-            complete_blogs.append(blog)
+            blog_posts.append(blog)
     
     blog_sections = []
+
+    context['blog_posts'] = blog_posts
 
     saved_blog = SavedBlogEdit.objects.get(blog=this_blog)
 
