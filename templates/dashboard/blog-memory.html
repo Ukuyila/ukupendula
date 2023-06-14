@@ -96,7 +96,7 @@
                       <table id="memoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:40%">Blog Title</th>
+                            <th style="width:35%">Blog Title</th>
                             <th>Category</th>
                             <th>Tone</th>
                             <th>Datetime</th>
@@ -130,7 +130,7 @@
                             </td>
                             <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="text-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="" type="button" class="text-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="" type="button" class="btn btn-sm btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
