@@ -797,7 +797,7 @@ def view_social_post(request, postType, uniqueId):
     context['post_type'] = postType
     context['social_post'] = post
     context['post_blog'] = post.blog
-    context['post_tite'] = post.title
+    context['post_title'] = post.title
     context['post_body'] = post.post
     context['post_audience'] = post.audience
     context['post_keywords'] = post.keywords
@@ -817,6 +817,7 @@ def gen_social_from_blog(request, postType, uniqueId):
 
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
+        created_post = True
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
@@ -878,7 +879,7 @@ def gen_social_from_blog(request, postType, uniqueId):
     context['post_type_title'] = post_type
     context['post_type'] = postType
     context['post_blog'] = this_blog
-    context['post_tite'] = this_blog.title
+    context['post_title'] = this_blog.title
     context['post_audience'] = this_blog.audience
     context['post_keywords'] = this_blog.keywords
     context['post_tone'] = this_blog.tone_of_voice
