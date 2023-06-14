@@ -1089,7 +1089,7 @@ def delete_paragraph(request, uniqueId):
     try:
         content = Paragraph.objects.get(uniqueId=uniqueId)
 
-        if content.profile == request.profile:
+        if content.profile == request.user.profile:
             content.deleted=True
             content.save()
 
@@ -1226,27 +1226,25 @@ def sentence_writer(request, uniqueId=''):
 def delete_sentence(request, uniqueId):
     context = {}
 
-    sentence = Sentence.objects.get(uniqueId=uniqueId)
+    try:
+        sentence = Sentence.objects.get(uniqueId=uniqueId)
 
-    # try:
+        if sentence.profile == request.user.profile:
+            sentence.deleted=True
+            sentence.save()
 
-    if sentence.profile == request.profile:
-        sentence.deleted=True
-        sentence.save()
-
-        messages.info(request, "Sentence deleted successfully!")
-        print('Sentence deleted successfully')
+            messages.info(request, "Sentence deleted successfully!")
+            print('Sentence deleted successfully')
+            return redirect('sentence-memory')
+        else:
+            messages.error(request, "Access denied!")
+            print('Access denied')
+            return redirect('sentence-memory')
+    except:
+        messages.error(request, "Sentence not found!")
+        print('Sentence not found!')
         return redirect('sentence-memory')
-    else:
-        messages.error(request, "Access denied!")
-        print('Access denied')
-        return redirect('sentence-memory')
-    # except:
-    #     messages.error(request, "Sentence not found!")
-    #     print('Sentence not found!')
-    #     return redirect('sentence-memory')
     
-    # return render(request, 'dashboard/sentence-writer.html', context)
 
 @login_required
 def article_title_writer(request, uniqueId=''):
@@ -1374,7 +1372,7 @@ def delete_title(request, uniqueId):
     try:
         title = ArticleTitle.objects.get(uniqueId=uniqueId)
 
-        if title.profile == request.profile:
+        if title.profile == request.user.profile:
             title.deleted=True
             title.save()
 
@@ -1495,7 +1493,7 @@ def delete_meta_descr(request, uniqueId):
     try:
         meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
 
-        if meta_descr.profile == request.profile:
+        if meta_descr.profile == request.user.profile:
             meta_descr.deleted=True
             meta_descr.save()
 
@@ -1618,7 +1616,7 @@ def delete_summary(request, uniqueId):
     try:
         content = ContentSummary.objects.get(uniqueId=uniqueId)
 
-        if content.profile == request.profile:
+        if content.profile == request.user.profile:
             content.deleted=True
             content.save()
 
@@ -1743,7 +1741,7 @@ def delete_page_copy(request, uniqueId):
     try:
         content = LandingPageCopy.objects.get(uniqueId=uniqueId)
 
-        if content.profile == request.profile:
+        if content.profile == request.user.profile:
             content.deleted=True
             content.save()
 
