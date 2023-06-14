@@ -1234,15 +1234,15 @@ def delete_sentence(request, uniqueId):
             sentence.save()
 
             messages.info(request, "Sentence deleted successfully!")
-            return redirect('sentence-memory')
+            # return redirect('sentence-memory')
         else:
             messages.error(request, "Access denied!")
-            # return redirect('sentence-memory')
+            return redirect('sentence-memory')
     except:
         messages.error(request, "Sentence not found!")
         return redirect('sentence-memory')
     
-    return render(request, 'dashboard/sentence-memory.html', context)
+    return render(request, 'dashboard/sentence-writer.html', context)
 
 @login_required
 def article_title_writer(request, uniqueId=''):
