@@ -107,7 +107,7 @@
                         {% for paragraph in saved_paragraphs %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{paragraph.paragraph_topic}}</a></h6>
+                              <h6 class="mb-0"><a>{{ paragraph.paragraph_topic|truncatechars:80 }}</a></h6>
                             </td>
                             <td>
                               {% for client in client_list %}

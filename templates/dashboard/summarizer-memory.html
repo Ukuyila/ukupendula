@@ -109,9 +109,9 @@
                           <tr>
                             <td >
                               <h6 class="mb-0"><a >{% if summary.summary_title|length > 0 %}
-                                {{summary.summary_title}}
+                                {{ summary.summary_title|truncatechars:80 }}
                                 {% else %}
-                                {{summary.slug}}
+                                {{ summary.slug|truncatechars:80 }}
                                 {% endif %}</a></h6>
                               
                             </td>

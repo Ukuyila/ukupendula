@@ -109,12 +109,12 @@
                             <td >
                               <h6 class="mb-0">
                                 <a >{% if saved_page_copy.copy_title|length > 0 %}
-                                {{saved_page_copy.copy_title}}
+                                {{ saved_page_copy.copy_title|truncatechars:80 }}
                                 {% else %}
-                                {{saved_page_copy.company_name}}
+                                {{ saved_page_copy.company_name|truncatechars:80 }}
                                 {% endif %}</a>
                               </h6>
-                              <small class="text-primary me-1">{{saved_page_copy.company_purpose}}</small>
+                              <small class="text-primary me-1">{{ saved_page_copy.company_purpose|truncatechars:60 }}</small>
                             </td>
                             <td>
                               {% for client in client_list %}
