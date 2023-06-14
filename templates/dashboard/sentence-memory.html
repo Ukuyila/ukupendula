@@ -116,7 +116,7 @@
                                   {% if category.client == client %}
                                     
                                     {% if category.uniqueId == sentence.category %}
-                                    {{client.client_name}}{{' - '}}{{category.category_name}}
+                                    {{ client.client_name }}{{' - '}}{{ category.category_name }}
                                     {% endif %}
                                     
                                   {% endif %}
@@ -126,7 +126,7 @@
                             <td>
                               <small class="text-primary me-1">{{sentence.tone_of_voice}}</small>
                             </td>
-                            <td>{{sentence.last_updated|date:"Y-m-d"}} {{sentence.last_updated|time:"H:i"}}</td>
+                            <td>{{ sentence.last_updated|date:"Y-m-d" }} {{ sentence.last_updated|time:"H:i" }}</td>
                             <td>
                               <a href="{% url 'sentence-writer-response' sentence.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>
                             </td>
