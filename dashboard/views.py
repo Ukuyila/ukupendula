@@ -765,6 +765,26 @@ def view_social_post(request, postType, uniqueId):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    blog_posts = []
+    tone_of_voices = []
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+    
+    blogs = Blog.objects.filter(profile=request.user.profile)
+
+    for blog in blogs:
+        if not blog.deleted:
+            sections = BlogSection.objects.filter(blog=blog)
+            if sections.exists():
+                blog_posts.append(blog)
+
+    context['blog_posts'] = blog_posts
+
     try:
         post = BlogSocialPost.objects.get(uniqueId=uniqueId)
     except:

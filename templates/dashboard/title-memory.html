@@ -133,7 +133,7 @@
                             <td>
                               <small class="text-primary me-1">{{title.tone_of_voice}}</small>
                             </td>
-                            <td>{{title.last_updated|date:"Y-m-d"}} {{title.last_updated|time:"H:i"}}</td>
+                            <td>{{title.date_created|date:"Y-m-d"}} {{title.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'title-writer-response' title.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>
                             </td>
