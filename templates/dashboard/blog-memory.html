@@ -128,7 +128,7 @@
                             <td>
                               <small class="text-primary me-1">{{blog.tone_of_voice}}</small>
                             </td>
-                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>{{blog.date_created|date:"Y-m-d"}} {{blog.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="" type="button" class="btn btn-sm btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
@@ -174,7 +174,7 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>{{blog.date_created|date:"Y-m-d"}} {{blog.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'generate-blog-from-topic' blog.uniqueId %}" class="btn btn-outline-primary btn-sm btn-generate"><i class="icon icon-note"></i></a>&nbsp;<a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-sm btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
@@ -220,7 +220,7 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td>{{blog.last_updated|date:"Y-m-d"}} {{blog.last_updated|time:"H:i"}}</td>
+                            <td>{{blog.date_created|date:"Y-m-d"}} {{blog.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'edit-gen-blog' blog.uniqueId %}" class="btn btn-outline-primary btn-sm"><i class="icon icon-note"></i></a>&nbsp;<a href="{% url 'delete-blog-topic' blog.uniqueId %}" type="button" class="btn btn-sm btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
