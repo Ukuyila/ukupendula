@@ -100,7 +100,7 @@
                   {% if blogs_status == 'complete' %}
                     {% if complete_blogs|length > 0 %}
                     <div class="table-responsive mb-0 ">
-                      <table id="memoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                      <table id="memoryTable" class="table table-hover table-striped" style="width:100%">
                         <thead>
                           <tr>
                             <th style="width:35%">Blog Title</th>
@@ -137,7 +137,7 @@
                             </td>
                             <td>{{blog.date_created|date:"Y-m-d"}} {{blog.date_created|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-blog' blog.uniqueId %}" type="button" class="btn btn-sm btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'view-generated-blog' blog.slug %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-blog' blog.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

@@ -99,7 +99,7 @@
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
                     <div class="table-responsive mb-0 ">
-                      <table id="memoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                      <table id="memoryTable" class="table table-hover table-striped" style="width:100%">
                         <thead>
                           <tr>
                             <th style="width:40%">Topic</th>
@@ -135,7 +135,7 @@
                             </td>
                             <td>{{ paragraph.last_updated|date:"Y-m-d" }} {{ paragraph.last_updated|time:"H:i" }}</td>
                             <td>
-                              <a href="{% url 'paragraph-writer-response' paragraph.uniqueId %}" type="button" class="btn btn-sm btn-outline-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'paragraph-writer-response' paragraph.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-paragraph' paragraph.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
