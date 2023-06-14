@@ -359,8 +359,13 @@ def delete_saved_blog(request, uniqueId):
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
         if blog.profile == request.user.profile:
-            blog.deleted=True
-            blog.save()
+
+            saved_blogs = SavedBlogEdit.objects.all()
+            for s_blog in saved_blogs:
+                if s_blog.blog == blog:
+
+                    s_blog.delete()
+
             messages.info(request, "Blog deleted successfully!")
             return redirect('saved-blog-memory')
         else:
@@ -578,11 +583,8 @@ def save_section_head(request, uniqueId, section_head):
 def view_gen_blog(request, slug):
 
     context = {}
-
     current_page = 'Blog Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     min_words = 300
@@ -609,10 +611,9 @@ def view_gen_blog(request, slug):
                     # convert selectd_sections list to a prog string
                     if section_heads:
                         section_heads = section_heads + '\n'
+
                     section_heads = section_heads + val
-
                     api_call_code = str(uuid4()).split('-')[4]
-
                     add_to_list = add_to_api_requests('generate_full_blog', api_call_code, request.user.profile)
 
                     n = 1
@@ -699,23 +700,27 @@ def edit_gen_blog(request, uniqueId):
     blog_sections = []
     got_b_body = False
     s_blog_body = ''
+    s_blog_title = ''
 
     saved_blogs = SavedBlogEdit.objects.all()
     for s_blog in saved_blogs:
         if s_blog.blog == blog:
             got_b_body = True
+            s_blog_title = s_blog.title
             s_blog_body = s_blog.body
             saved_blog = s_blog
             break
 
     if got_b_body == True:
         blog_body = s_blog_body
+        blog_title = s_blog_title
 
     else:
         blog_sects = BlogSection.objects.filter(blog=blog)
 
         for blog_sect in blog_sects:
             blog_sections.append(blog_sect.body)
+            blog_title = blog_sect.title
 
         blog_body = "\n".join(blog_sections)
 
@@ -727,7 +732,7 @@ def edit_gen_blog(request, uniqueId):
         saved_blog.save()
 
     context['blog'] = blog
-    context['blog_title'] = blog.title
+    context['blog_title'] = blog_title
     context['blog_audience'] = blog.audience
     context['uniqueId'] = uniqueId
     context['saved_blog'] = saved_blog
@@ -792,18 +797,7 @@ def gen_social_post(request, postType, uniqueId):
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
-            # calculate blog words
-            # blog_words = 0
-            # for section in sections:
-
-            #     blog_words += int(section.word_count)
-
-                # month_word_count += int(section.word_count)
-            # blog.word_count = str(blog_words)
-            # blog.save()
             complete_blogs.append(blog)
-        # else:
-        #     empty_blogs.append(blog)
     
     blog_sections = []
 
@@ -880,6 +874,23 @@ def gen_social_post(request, postType, uniqueId):
             n += 1
 
     return render(request, 'dashboard/social-media-post.html', context)
+
+
+@login_required
+def delete_social_post(request, uniqueId):
+    try:
+        post = BlogSocialPost.objects.get(uniqueId=uniqueId)
+        if post.blog.profile == request.user.profile:
+            post.deleted=True
+            post.save()
+            messages.info(request, "Social media post deleted successfully!")
+            return redirect('social-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('social-memory')
+    except:
+        messages.error(request, "Social media post not found!")
+        return redirect('social-memory')
 
 
 @login_required
@@ -2094,8 +2105,38 @@ def memory_blogs(request, status):
 
 
 @login_required
+def memory_social_post(request):
+    context = {}
+
+    s_posts = []
+    my_blogs = []
+
+    # Get total blogs
+    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
+    for blog in blogs:
+        if not blog.deleted:
+            my_blogs.append(blog)
+
+    # get social posts
+    soc_posts = BlogSocialPost.objects.filter(deleted=False)
+    for post in soc_posts:
+        if post.blog.profile == request.user.profile:
+            s_posts.append(post)
+
+    context['s_posts'] = s_posts
+    context['my_blogs'] = my_blogs
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Social Media Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/social-media-memory.html', context)
+
+
+@login_required
 def memory_paragraph(request):
-    context ={}
+    context = {}
     saved_paragraphs = []
     today_date = datetime.datetime.now()
 

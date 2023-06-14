@@ -82,6 +82,13 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Page Copies
                   </a>
+                  <a href="{% url 'social-post-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Social Media Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Social Media Posts
+                  </a>
                 </div>
               </div>
 

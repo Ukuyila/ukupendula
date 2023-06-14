@@ -19,7 +19,7 @@
               <div class="card-body p-0 border">
                 <div class="list-group list-group-transparent mb-0 mail-inbox">
                   <div class="mt-4 mb-4 ms-4 me-4 text-center">
-                    <a href="{% url 'meta-description-generator' %}" class="btn btn-primary btn-lg btn-block">Generate New</a>
+                    <a href="{% url 'content-summarizer' %}" class="btn btn-primary btn-lg btn-block">Generate New</a>
                   </div>
 
                   <a href="{% url 'blog-memory' 'complete' %}" class="list-group-item list-group-item-action d-flex align-items-center
@@ -98,43 +98,43 @@
               <div class="">
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
-                    
+
                     <div class="table-responsive mb-0 ">
                       <table id="memoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
                             <th style="width:40%">Title</th>
-                            <th>Category</th>
-                            <th>Tone</th>
+                            <th>Blog</th>
+                            <th>Type</th>
                             <th>Datetime</th>
                             <th></th>
                             
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                        {% for saved_meta_descr in saved_meta_descriptions %}
+                        {% for post in s_posts %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{ saved_meta_descr.article_title|truncatechars:80 }}</a></h6>
+                              <h6 class="mb-0"><a >{% if post.title|length > 0 %}
+                                {{ post.title|truncatechars:80 }}
+                                {% else %}
+                                {{ post.slug|truncatechars:80 }}
+                                {% endif %}</a></h6>
+                              
                             </td>
-                            <td><small class="text-primary me-1">{{ saved_meta_descr.tone_of_voice }}</small></td>
                             <td>
-                              {% for client in client_list %}
+                              {% for blog in my_blogs %}
+                              
+                                {% if blog = post.blog %}
+                                {{ blog.title|truncatechars:80 }}
+                                {% endif %}
                                 
-                                {% for category in cate_list %}
-                                  {% if category.client == client %}
-                                    
-                                    {% if category.uniqueId == saved_meta_descr.category %}
-                                    {{client.client_name}}{{' - '}}{{category.category_name}}
-                                    {% endif %}
-                                    
-                                  {% endif %}
-                                {% endfor %}
                               {% endfor %}
                             </td>
-                            <td>{{saved_meta_descr.date_created|date:"Y-m-d"}}</td>
+                            <td><small class="text-primary me-1">{{ post.post_type }}</small></td>
+                            <td>{{ post.date_created|date:"Y-m-d" }}</td>
                             <td>
-                              <a href="{% url 'meta-description-generator-response' saved_meta_descr.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
+                              <a href="#" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
                               <a href="" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
