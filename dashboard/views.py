@@ -757,7 +757,37 @@ def edit_gen_blog(request, uniqueId):
 
 
 @login_required
-def gen_social_post(request, postType, uniqueId):
+def view_social_post(request, postType, uniqueId):
+    context = {}
+
+    current_page = 'View Blog Social Post'
+    context['current_page'] = current_page
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    try:
+        post = BlogSocialPost.objects.get(uniqueId=uniqueId)
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('gen-blog-social-media', postType, uniqueId)
+    
+    post_type = postType.replace('_', ' ').title()
+
+    context['post_type_title'] = post_type
+    context['post_type'] = postType
+    context['social_post'] = post
+    context['post_blog'] = post.blog
+    context['post_tite'] = post.title
+    context['post_body'] = post.post
+    context['post_audience'] = post.audience
+    context['post_keywords'] = post.keywords
+    context['post_tone'] = post.tone_of_voice
+    
+    return render(request, 'dashboard/social-media-post.html', context)
+
+
+@login_required
+def gen_social_from_blog(request, postType, uniqueId):
     context = {}
 
     current_page = 'Generated Social Post From Blog'
@@ -781,6 +811,8 @@ def gen_social_post(request, postType, uniqueId):
         max_char = 3000
     elif postType == "facebook":
         max_char = 10000
+    else:
+        max_char = 280
 
     complete_blogs = []
     tone_of_voices = []
@@ -821,18 +853,17 @@ def gen_social_post(request, postType, uniqueId):
         )
         saved_blog.save()
 
-    context['blog'] = this_blog
-    context['blog_keywords'] = this_blog.keywords
-    context['blog_audience'] = this_blog.audience
-    context['blog_tone'] = this_blog.tone_of_voice
-    context['uniqueId'] = uniqueId
-    context['saved_blog'] = saved_blog
-    context['blog_posts'] = complete_blogs
+    context['post_type_title'] = post_type
     context['post_type'] = postType
+    context['post_blog'] = this_blog
+    context['post_tite'] = this_blog.title
+    context['post_audience'] = this_blog.audience
+    context['post_keywords'] = this_blog.keywords
+    context['post_tone'] = this_blog.tone_of_voice
 
     if request.method == "POST":
 
-        blog_title = request.POST['blog_title']
+        post_title = request.POST['post_title']
         post_keywords = request.POST['keywords']
         post_audience = request.POST['audience']
 
@@ -854,8 +885,11 @@ def gen_social_post(request, postType, uniqueId):
 
                 # create database record
                 new_post = BlogSocialPost.objects.create(
-                    title=this_blog.title,
+                    title=post_title,
                     post_type=postType,
+                    tone_of_voice=tone_of_voice,
+                    keywords=post_keywords,
+                    audience=post_audience,
                     post=social_post,
                     blog=blog,
                 )
@@ -866,7 +900,7 @@ def gen_social_post(request, postType, uniqueId):
                 
                 context['new_post'] = new_post
 
-                return redirect('social-media', postType, uniqueId)
+                return redirect('view-social-media', postType, new_post.uniqueId)
 
             else:
                 # we might need to delete all abandoned calls

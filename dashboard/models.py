@@ -294,6 +294,9 @@ class BlogSection(models.Model):
 class BlogSocialPost(models.Model):
     title = models.CharField(max_length=255)
     post_type = models.CharField(null=True, blank=True, max_length=255)
+    tone_of_voice = models.CharField(null=True, blank=True, max_length=255)
+    keywords = models.CharField(null=True, blank=True, max_length=255)
+    audience = models.CharField(null=True, blank=True, max_length=255)
     post = models.TextField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
     word_count = models.CharField(null=True, blank=True, max_length=100)

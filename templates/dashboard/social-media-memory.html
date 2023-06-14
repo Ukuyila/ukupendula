@@ -134,8 +134,8 @@
                             <td><small class="text-primary me-1">{{ post.post_type }}</small></td>
                             <td>{{ post.date_created|date:"Y-m-d" }}</td>
                             <td>
-                              <a href="#" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'delete-social-media' post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

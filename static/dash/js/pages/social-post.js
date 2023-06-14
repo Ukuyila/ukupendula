@@ -2,9 +2,18 @@ $(document).ready(function(){
   "use strict";
   var maxLength = 250;
 
+  $('.title_counter').text($('#post_title').val().length+'/'+maxLength);
   $('.audience_counter').text($('#audience').val().length+'/'+maxLength);
   $('.keywords_counter').text($('#keywords').val().length+'/'+maxLength);
+  
 
+  $('#post_title').keyup(function() {
+    var curr_textlen = $(this).val().length;
+
+    var textlen = maxLength - curr_textlen;
+
+    $('.title_counter').text(curr_textlen+'/'+maxLength);
+  });
 
   $('#audience').keyup(function() {
     var curr_textlen = $(this).val().length;

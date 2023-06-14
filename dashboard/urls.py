@@ -43,7 +43,9 @@ urlpatterns = [
     path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
     path('edit-blog/<str:uniqueId>/', views.edit_gen_blog, name='edit-gen-blog'),
 
-    path('social-media/<str:postType>/<str:uniqueId>/', views.gen_social_post, name='social-media'),
+    path('blog-social-media/<str:postType>/<str:uniqueId>/', views.gen_social_from_blog, name='gen-blog-social-media'),
+    # path('social-media/<str:postType>/', views.gen_social_post, name='social-media'),
+    path('view-social-media/<str:postType>/<str:uniqueId>/', views.view_social_post, name='view-social-media'),
     path('del-social-media/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
 
     # Paragraph writer urls

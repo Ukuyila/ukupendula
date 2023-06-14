@@ -24,11 +24,15 @@
                                     {% else %}
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h4 class="mb-0">Generate {{post_type}}</h4>
+                                            <h4 class="mb-0">Generate {{post_type_title}}</h4>
                                         </div>
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="post_title" class=" ">Title</label> <span class="title_counter text-muted">0/250</span></div>
+                                                    <input type="text" class="form-control" id="post_title" name="post_title" placeholder="Post saving title" value="{{ post_title }}" maxlength="250" required/>
+                                                </div>
 
                                                 <div class="mb-3">
                                                   <label for="blog_post" class=" ">Blog</label>
@@ -36,7 +40,7 @@
 
                                                   {% for blog in blog_posts %}
                                                     <option
-                                                    {% if uniqueId == blog.uniqueId %}
+                                                    {% if post_blog == blog %}
                                                     selected 
                                                     {% endif %}
                                                     value="{{blog.uniqueId}}" id="{{blog.uniqueId}}" >{{blog.title}}</option>
@@ -47,11 +51,11 @@
 
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="audience" class=" ">Target Audience</label> <span class="audience_counter text-muted">0/250</span></div>
-                                                  <input type="text" class="form-control" id="audience" name="audience" placeholder="anyone" value="{{blog_audience}}" maxlength="250" required/>
+                                                  <input type="text" class="form-control" id="audience" name="audience" placeholder="anyone" value="{{post_audience}}" maxlength="250" required/>
                                                 </div>
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="keywords" class=" ">Keywords</label> <span class="keywords_counter text-muted">0/250</span></div>
-                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" value="{{blog_keywords}}" maxlength="250" />
+                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" value="{{post_keywords}}" maxlength="250" />
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="tone_of_voice" class=" ">Tone of voice</label>
@@ -59,7 +63,7 @@
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if blog_tone == tone.tone_of_voice %}
+                                                      {% if post_tone == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -92,7 +96,7 @@
                                                       <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                           <div class="card-body text-dark">
                                                               <div class="ideas">
-                                                                {{new_post}}
+                                                                {{post_body}}
                                                               </div>
                                                           </div>
                                                       </div>
