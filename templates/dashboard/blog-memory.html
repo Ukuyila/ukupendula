@@ -108,7 +108,7 @@
                         {% for blog in complete_blogs %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <h6 class="mb-0"><a>{{ blog.title|truncatechars:80 }}</a></h6>
                               <small class="text-muted d-block mb-1">{{ blog.blog_idea|truncatechars:80 }}</small>
                             </td>
                             <td>
@@ -157,7 +157,7 @@
                         {% for blog in empty_blogs %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <h6 class="mb-0"><a>{{ blog.title|truncatechars:80 }}</a></h6>
                               <small class="text-muted d-block mb-1">{{ blog.blog_idea|truncatechars:80 }}</small>
                             </td>
                             <td>
@@ -203,7 +203,7 @@
                         {% for blog in edited_blogs %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a>{{blog.title}}</a></h6>
+                              <h6 class="mb-0"><a>{{ blog.title|truncatechars:80 }}</a></h6>
                               <small class="text-muted d-block mb-1">{{ blog.blog_idea|truncatechars:80 }}</small>
                             </td>
                             <td>
@@ -213,7 +213,7 @@
                                   {% if category.client == client %}
                                     
                                     {% if category.uniqueId == blog.category %}
-                                    {{client.client_name}}{{' - '}}{{category.category_name}}
+                                    {{ client.client_name }}{{' - '}}{{ category.category_name }}
                                     {% endif %}
                                     
                                   {% endif %}
