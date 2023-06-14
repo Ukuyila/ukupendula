@@ -328,13 +328,13 @@ def delete_blog_topic(request, uniqueId):
         if blog.profile == request.user.profile:
             blog.delete()
             messages.info(request, "Blog deleted successfully!")
-            return redirect('blog-memory' 'incomplete')
+            return redirect('blog-memory', 'incomplete')
         else:
             messages.error(request, "Access denied!")
-            return redirect('blog-memory' 'incomplete')
+            return redirect('blog-memory', 'incomplete')
     except:
         messages.error(request, "Blog not found!")
-        return redirect('blog-memory' 'incomplete')
+        return redirect('blog-memory', 'incomplete')
     
 
 @login_required
@@ -345,13 +345,13 @@ def delete_blog(request, uniqueId):
             blog.deleted=True
             blog.save()
             messages.info(request, "Blog deleted successfully!")
-            return redirect('blog-memory' 'complete')
+            return redirect('blog-memory', 'complete')
         else:
             messages.error(request, "Access denied!")
-            return redirect('blog-memory' 'complete')
+            return redirect('blog-memory', 'complete')
     except:
         messages.error(request, "Blog not found!")
-        return redirect('blog-memory' 'complete')
+        return redirect('blog-memory', 'complete')
     
 
 @login_required
@@ -367,13 +367,13 @@ def delete_saved_blog(request, uniqueId):
                     s_blog.delete()
 
             messages.info(request, "Blog deleted successfully!")
-            return redirect('blog-memory' 'saved')
+            return redirect('blog-memory', 'saved')
         else:
             messages.error(request, "Access denied!")
-            return redirect('blog-memory' 'saved')
+            return redirect('blog-memory', 'saved')
     except:
         messages.error(request, "Blog not found!")
-        return redirect('blog-memory' 'saved')
+        return redirect('blog-memory', 'saved')
 
 
 @login_required
