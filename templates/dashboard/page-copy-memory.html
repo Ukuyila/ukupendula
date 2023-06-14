@@ -97,7 +97,6 @@
                         <thead>
                           <tr>
                             <th style="width:40%">Title</th>
-                            <th>Purpose</th>
                             <th>Category</th>
                             <th>Datetime</th>
                             <th></th>
@@ -115,8 +114,8 @@
                                 {{saved_page_copy.company_name}}
                                 {% endif %}</a>
                               </h6>
+                              <small class="text-primary me-1">{{saved_page_copy.company_purpose}}</small>
                             </td>
-                            <td><small class="text-primary me-1">{{saved_page_copy.company_purpose}}</small></td>
                             <td>
                               {% for client in client_list %}
                                 
