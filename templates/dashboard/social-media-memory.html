@@ -100,12 +100,11 @@
                   <div class="inbox-body">
 
                     <div class="table-responsive mb-0 ">
-                      <table id="memoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+                      <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:40%">Title</th>
-                            <th>Blog</th>
-                            <th>Type</th>
+                            <th>Title</th>
+                            <th style="width:40%">Blog</th>
                             <th>Datetime</th>
                             <th></th>
                             
@@ -120,7 +119,7 @@
                                 {% else %}
                                 {{ post.slug|truncatechars:80 }}
                                 {% endif %}</a></h6>
-                              
+                                <small class="text-primary me-1">{{ post.post_type_title }}</small>
                             </td>
                             <td>
                               {% for blog in my_blogs %}
@@ -131,7 +130,6 @@
                                 
                               {% endfor %}
                             </td>
-                            <td><small class="text-primary me-1">{{ post.post_type }}</small></td>
                             <td>{{ post.date_created|date:"Y-m-d" }} {{post.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
