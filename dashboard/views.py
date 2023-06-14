@@ -1226,26 +1226,27 @@ def sentence_writer(request, uniqueId=''):
 def delete_sentence(request, uniqueId):
     context = {}
 
-    try:
-        sentence = Sentence.objects.get(uniqueId=uniqueId)
+    sentence = Sentence.objects.get(uniqueId=uniqueId)
 
-        if sentence.profile == request.profile:
-            sentence.deleted=True
-            sentence.save()
+    # try:
 
-            messages.info(request, "Sentence deleted successfully!")
-            print('Sentence deleted successfully')
-            return redirect('sentence-memory')
-        else:
-            messages.error(request, "Access denied!")
-            print('Access denied')
-            # return redirect('sentence-memory')
-    except:
-        messages.error(request, "Sentence not found!")
-        print('Sentence not found!')
+    if sentence.profile == request.profile:
+        sentence.deleted=True
+        sentence.save()
+
+        messages.info(request, "Sentence deleted successfully!")
+        print('Sentence deleted successfully')
         return redirect('sentence-memory')
+    else:
+        messages.error(request, "Access denied!")
+        print('Access denied')
+        return redirect('sentence-memory')
+    # except:
+    #     messages.error(request, "Sentence not found!")
+    #     print('Sentence not found!')
+    #     return redirect('sentence-memory')
     
-    return render(request, 'dashboard/sentence-writer.html', context)
+    # return render(request, 'dashboard/sentence-writer.html', context)
 
 @login_required
 def article_title_writer(request, uniqueId=''):
