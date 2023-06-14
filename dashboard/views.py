@@ -938,13 +938,13 @@ def delete_social_post(request, uniqueId):
             post.deleted=True
             post.save()
             messages.info(request, "Social media post deleted successfully!")
-            return redirect('social-memory')
+            return redirect('social-post-memory')
         else:
             messages.error(request, "Access denied!")
-            return redirect('social-memory')
+            return redirect('social-post-memory')
     except:
         messages.error(request, "Social media post not found!")
-        return redirect('social-memory')
+        return redirect('social-post-memory')
 
 
 @login_required
