@@ -124,8 +124,8 @@
                             </td>
                             <td>
                               {% for blog in my_blogs %}
-                              
-                                {% if blog = post.blog %}
+
+                                {% if blog == post.blog %}
                                 {{ blog.title|truncatechars:80 }}
                                 {% endif %}
                                 
