@@ -84,8 +84,9 @@ def home(request):
                 blog_words += int(section.word_count)
 
                 # month_word_count += int(section.word_count)
-            blog.word_count = str(blog_words)
-            blog.save()
+            if int(blog.word_count) < 1:
+                blog.word_count = str(blog_words)
+                blog.save()
             complete_blogs.append(blog)
         elif not sections.exists():
             empty_blogs.append(blog)
@@ -2038,8 +2039,9 @@ def memory_blogs(request, status):
             for section in sections:
                 blog_words += int(section.word_count)
                 # month_word_count += int(section.word_count)
-            blog.word_count = str(blog_words)
-            blog.save()
+            if int(blog.word_count) < 1:
+                blog.word_count = str(blog_words)
+                blog.save()
             complete_blogs.append(blog)
         else:
             empty_blogs.append(blog)
