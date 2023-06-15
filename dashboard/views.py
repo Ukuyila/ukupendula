@@ -126,6 +126,8 @@ def home(request):
         context['blg_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_blog_word_cnt'] = get_percent_of(blog_word_cnt, lm_blog_word_cnt)
+        if blog_word_cnt < 1:
+            context['clm_blog_word_cnt'] = 100
         context['blg_carret_set'] = ' fa-caret-down text-danger '
 
     if int(summarizer_word_cnt) > int(lm_summarizer_word_cnt):
@@ -135,6 +137,8 @@ def home(request):
         context['sumry_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_summarizer_word_cnt'] = get_percent_of(summarizer_word_cnt, lm_summarizer_word_cnt)
+        if summarizer_word_cnt < 1:
+            context['clm_summarizer_word_cnt'] = 100
         context['sumry_carret_set'] = ' fa-caret-down text-danger '
 
     if int(meta_word_cnt) > int(lm_meta_word_cnt):
@@ -144,6 +148,8 @@ def home(request):
         context['meta_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_meta_word_cnt'] = get_percent_of(meta_word_cnt, lm_meta_word_cnt)
+        if meta_word_cnt < 1:
+            context['clm_meta_word_cnt'] = 100
         context['meta_carret_set'] = ' fa-caret-down text-danger '
 
     if int(landing_copy_word_cnt) > int(lm_landing_copy_word_cnt):
@@ -153,6 +159,8 @@ def home(request):
         context['lpc_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_landing_copy_word_cnt'] = get_percent_of(landing_copy_word_cnt, lm_landing_copy_word_cnt)
+        if landing_copy_word_cnt < 1:
+            context['clm_landing_copy_word_cnt'] = 100
         context['lpc_carret_set'] = ' fa-caret-down text-danger '
 
     context['clm_para_word_cnt'] = para_word_cnt
