@@ -1234,15 +1234,12 @@ def delete_sentence(request, uniqueId):
             sentence.save()
 
             messages.info(request, "Sentence deleted successfully!")
-            print('Sentence deleted successfully')
             return redirect('sentence-memory')
         else:
             messages.error(request, "Access denied!")
-            print('Access denied')
             return redirect('sentence-memory')
     except:
         messages.error(request, "Sentence not found!")
-        print('Sentence not found!')
         return redirect('sentence-memory')
     
 
@@ -1320,7 +1317,6 @@ def article_title_writer(request, uniqueId=''):
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
             return redirect('title-writer')
         else:
-
             api_call_code = str(uuid4()).split('-')[4]
 
             add_to_list = add_to_api_requests('rewriter_article_title', api_call_code, request.user.profile)

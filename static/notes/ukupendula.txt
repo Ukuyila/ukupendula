@@ -75,68 +75,22 @@ close port ->$ sudo fuser -k 8000/tcp
   /home/drycko/development/writesome/repo/
 
 SitRep:
-- login: DONE
-- Register:
-    Phase 1&2 done
-    Phase 3 need to test the SMTP on a secure HTTPS call.IN PROGRESS )
-- account management: DONE
-- services and related screens: DONE
-- API call limiter:
-    Phase 1. Space API calls with time.sleep(10) seconds on the client side.DONE
-    Phase 2. Create a django backend function to queue all requests sitewide.IN PROGRESS )
-- Team management:
-    Phase 1. The ability for a user not belonging to any Team to create a team - DONE
-    Phase 2. The ability to invite new members - Function in place we just need to be able to send emails with SMTP
-    Phase 3. CRUD and role management permissions given to Team leader - Not Done
-- Device Management:
-    Phase 1. User Be able to see devices you have session on - DONE 
-    Phase 2. User able to delete devices - DONE
-- Forgot Password:
-    This entirely depends on the SMTP, so once the SMPT issue is address we will be able to do this
+- Add Tone of voice for blogs => DONE
+
+- Set amount of word count min 300 - max 1500 => DONE
+
+- Save and use section titles => DONE
+
+- Remove text editor ?? => DONE
+
+- Edit and save blog => DONE
+
+- Social media text generator tool with specific word count => DONE
+
+- Categorise clients/categories (Projects / Client / Job) => DONE
+
+- Re-generate blog with options to create meta, summary and titles => IN PROGRESS
 
 
-upstream keepalive-upstream {
-    server http://unix:/run/ukupendula.sock;
-    keepalive 64;
-}
-
-server {
-    server_name app.writesome.ai;
-
-    location = /static/img/favicon/favicon.ico { access_log off; log_not_found off; }
-    location /static/ {
-        root /home/drycko/development/ukupendula/ukupendula;
-    }
-
-    location /uploads/ {
-        root /home/drycko/development/ukupendula/ukupendula;
-    }
-
-    location / {
-        include proxy_params;
-        proxy_pass http://keepalive-upstream;
-        proxy_set_header Connection "";
-    }
-
-    listen [::]:443 ssl ipv6only=on; # managed by Certbot
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/app.writesome.ai/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/app.writesome.ai/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
 
-}
-server {
-    if ($host = app.writesome.ai) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    listen 80;
-    listen [::]:80;
-    server_name app.writesome.ai;
-    return 404; # managed by Certbot
-
-
-}
