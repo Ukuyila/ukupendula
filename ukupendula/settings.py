@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'django_user_agents',
-    'import_export',
 
     # Local APPS
     'landing',
@@ -184,9 +183,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
-
-IMPORT_EXPORT_IMPORT_PERMISSION_CODE = 'delete' 
-IMPORT_EXPORT_EXPORT_PERMISSION_CODE = 'delete'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
