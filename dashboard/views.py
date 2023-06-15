@@ -121,6 +121,8 @@ def home(request):
     # find percentage from last month
     if int(blog_word_cnt) > int(lm_blog_word_cnt):
         context['clm_blog_word_cnt'] = get_percent_of(lm_blog_word_cnt, blog_word_cnt)
+        if lm_blog_word_cnt == 0:
+            context['clm_blog_word_cnt'] == 100
         context['blg_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_blog_word_cnt'] = get_percent_of(blog_word_cnt, lm_blog_word_cnt)
@@ -128,6 +130,8 @@ def home(request):
 
     if int(summarizer_word_cnt) > int(lm_summarizer_word_cnt):
         context['clm_summarizer_word_cnt'] = get_percent_of(lm_summarizer_word_cnt, summarizer_word_cnt)
+        if lm_summarizer_word_cnt == 0:
+            context['clm_summarizer_word_cnt'] == 100
         context['sumry_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_summarizer_word_cnt'] = get_percent_of(summarizer_word_cnt, lm_summarizer_word_cnt)
@@ -135,6 +139,8 @@ def home(request):
 
     if int(meta_word_cnt) > int(lm_meta_word_cnt):
         context['clm_meta_word_cnt'] = get_percent_of(lm_meta_word_cnt, meta_word_cnt)
+        if lm_meta_word_cnt == 0:
+            context['clm_meta_word_cnt'] == 100
         context['meta_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_meta_word_cnt'] = get_percent_of(meta_word_cnt, lm_meta_word_cnt)
@@ -142,6 +148,8 @@ def home(request):
 
     if int(landing_copy_word_cnt) > int(lm_landing_copy_word_cnt):
         context['clm_landing_copy_word_cnt'] = get_percent_of(lm_landing_copy_word_cnt, landing_copy_word_cnt)
+        if lm_landing_copy_word_cnt == 0:
+            context['clm_landing_copy_word_cnt'] == 100
         context['lpc_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_landing_copy_word_cnt'] = get_percent_of(landing_copy_word_cnt, lm_landing_copy_word_cnt)

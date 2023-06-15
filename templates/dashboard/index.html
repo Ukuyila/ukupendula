@@ -35,9 +35,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-primary w-{{clm_summarizer_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_summarizer_word_cnt > 0 %}
+          {% comment %} {% if clm_summarizer_word_cnt > 0 %} {% endcomment %}
           <div class="text-muted fs-12"><i class="fa {{sumry_carret_set}} me-1"></i>{{clm_summarizer_word_cnt}}% than last month</div>
-          {% endif %}
+          {% comment %} {% endif %} {% endcomment %}
         </div>
       </div>
     </div>
@@ -52,9 +52,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-dark w-{{clm_landing_copy_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_landing_copy_word_cnt > 0 %}
+          {% comment %} {% if clm_landing_copy_word_cnt > 0 %} {% endcomment %}
           <div class="text-muted fs-12"><i class="fa {{lpc_carret_set}} me-1"></i>{{clm_landing_copy_word_cnt}}% than last month</div>
-          {% endif %}
+          {% comment %} {% endif %} {% endcomment %}
         </div>
       </div>
     </div>
@@ -69,9 +69,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-info w-{{clm_meta_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_meta_word_cnt > 0 %}
+          {% comment %} {% if clm_meta_word_cnt > 0 %} {% endcomment %}
           <div class="text-muted fs-12"><i class="fa {{meta_carret_set}} me-1"></i>{{clm_meta_word_cnt}}% than last month</div>
-          {% endif %}
+          {% comment %} {% endif %} {% endcomment %}
         </div>
       </div>
     </div>
