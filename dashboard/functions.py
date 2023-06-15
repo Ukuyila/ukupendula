@@ -6,6 +6,7 @@ import uuid
 import socket
 import requests
 import platform
+from math import ceil, floor
 
 from .models import *
 
@@ -542,7 +543,18 @@ def get_percent_of(num_a, num_b):
         percent = (int(num_a) / int(num_b)) * 100
     else:
         percent = 0
-    return round(percent)
+    return round_to_multiple(percent, 5)
+
+
+def round_to_multiple(number, multiple, direction='nearest'):
+    if direction == 'nearest':
+        return multiple * round(number / multiple)
+    elif direction == 'up':
+        return multiple * ceil(number / multiple)
+    elif direction == 'down':
+        return multiple * floor(number / multiple)
+    else:
+        return multiple * round(number / multiple)
 
 
 def get_subscription_details(profile):
