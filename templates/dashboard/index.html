@@ -17,9 +17,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-danger w-{{clm_blog_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_blog_word_cnt > 0 %}
+          {% comment %} {% if clm_blog_word_cnt > 0 %} {% endcomment %}
           <div class="text-muted fs-12"><i class="fa {{blg_carret_set}} me-1"></i>{{clm_blog_word_cnt}}% than last month</div>
-          {% endif %}
+          {% comment %} {% endif %} {% endcomment %}
         </div>
       </div>
     </div>
