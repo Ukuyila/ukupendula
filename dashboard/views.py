@@ -122,6 +122,8 @@ def home(request):
     if int(blog_word_cnt) > int(lm_blog_word_cnt):
         context['clm_blog_word_cnt'] = get_percent_of(lm_blog_word_cnt, blog_word_cnt)
         if lm_blog_word_cnt < 1:
+            
+            print("lm_blog_word_cnt: {}".format(lm_blog_word_cnt))
             context['clm_blog_word_cnt'] == 100
         context['blg_carret_set'] = ' fa-caret-up text-success '
     else:
