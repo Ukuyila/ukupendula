@@ -33,7 +33,7 @@
 
           <h3 class="text-dark mt-0 font-weight-semibold">{{summarizer_word_cnt}}</h3>
           <div class="progress progress-sm mt-0 mb-2">
-            <div class="progress-bar bg-primary w-32" role="progressbar"></div>
+            <div class="progress-bar bg-danger w-{{clm_summarizer_word_cnt}}" role="progressbar"></div>
           </div>
           {% if clm_summarizer_word_cnt > 0 %}
           <div class="text-muted fs-12"><i class="fa {{sumry_carret_set}} me-1"></i>{{clm_summarizer_word_cnt}}% than last month</div>
