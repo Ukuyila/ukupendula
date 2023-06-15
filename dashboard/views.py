@@ -130,7 +130,7 @@ def home(request):
         context['clm_summarizer_word_cnt'] = get_percent_of(lm_summarizer_word_cnt, summarizer_word_cnt)
         context['sumry_carret_set'] = ' fa-caret-up text-success '
     else:
-        context['clm_summarizer_word_cnt'] = str(get_percent_of(summarizer_word_cnt, lm_summarizer_word_cnt))
+        context['clm_summarizer_word_cnt'] = get_percent_of(summarizer_word_cnt, lm_summarizer_word_cnt)
         context['sumry_carret_set'] = ' fa-caret-down text-danger '
 
     if int(meta_word_cnt) > int(lm_meta_word_cnt):
