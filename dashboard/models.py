@@ -1,3 +1,4 @@
+from import_export.admin import ImportExportModelAdmin
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
@@ -576,7 +577,7 @@ class SubscriptionPackage(models.Model):
         super(SubscriptionPackage, self).save(*args, **kwargs)
 
 
-class ToneOfVoice(models.Model):
+class ToneOfVoice(ImportExportModelAdmin, models.Model):
     tone_of_voice = models.CharField(max_length=200)
     tone_status = models.BooleanField(default=True)
     tone_description = models.TextField(null=True, blank=True)
