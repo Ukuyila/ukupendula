@@ -1396,10 +1396,11 @@ def generate_blog_meta(request, uniqueId):
         if client.team == user_profile.user_team:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile)
+    team_categories = ClientCategory.objects.filter(team=request.user.profile)
 
     for category in team_categories:
-        cate_list.append(category)
+        if category.team == user_profile.user_team:
+            cate_list.append(category)
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
