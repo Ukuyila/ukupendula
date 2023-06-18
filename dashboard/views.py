@@ -1432,6 +1432,7 @@ def generate_blog_meta(request, uniqueId):
     context['post_blog'] = this_blog
     context['article_title'] = this_blog.title
     context['category'] = this_blog.category
+    context['category'] = this_blog.category
     context['tone_of_voice'] = this_blog.tone_of_voice
 
     if request.method == 'POST':
@@ -1476,7 +1477,7 @@ def generate_blog_meta(request, uniqueId):
 
                         context['meta_descr_uniqueId'] = s_meta_descr.uniqueId
 
-                        return redirect('meta-description-generator-response', uniqueId=s_meta_descr.uniqueId)
+                        return redirect('meta-description-generator-response', s_meta_descr.uniqueId)
                     
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
