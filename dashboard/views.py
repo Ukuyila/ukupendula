@@ -1396,7 +1396,7 @@ def generate_blog_meta(request, uniqueId):
         if client.team == user_profile.user_team:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    team_categories = ClientCategory.objects.filter(team=user_profile)
 
     for category in team_categories:
         cate_list.append(category)
@@ -1418,7 +1418,7 @@ def generate_blog_meta(request, uniqueId):
         messages.error(request, "Blog not found!")
         return redirect('blog-memory')
     
-    blogs = Blog.objects.filter(profile=user_profile.profile)
+    blogs = Blog.objects.filter(profile=user_profile)
 
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
@@ -1480,7 +1480,7 @@ def generate_blog_meta(request, uniqueId):
                     
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
-                        return redirect('meta-description-generator')
+                        return redirect('generate-blog-meta', uniqueId)
                 else:
                     # we might need to delete all abandoned calls
                     pass
