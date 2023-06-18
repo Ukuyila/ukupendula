@@ -5,6 +5,10 @@ $(document).ready(function(){
 
   $('.prompt_counter').text($('#long_content').val().length+'/'+lcMaxLength);
 
+  if ( $('#long_content').val().length > 10 ) {
+    $('#btn-generate').prop('disabled', false)
+  }
+
   $('#long_content').keyup(function() {
     var curr_textlen = $(this).val().length;
 
