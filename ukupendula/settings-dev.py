@@ -3,6 +3,10 @@ import os
 import sys
 import dj_database_url
 
+# for dev
+from os.path import join, dirname
+from dotenv import load_dotenv, find_dotenv
+
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
 
@@ -18,6 +22,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,12 +30,17 @@ MESSAGE_TAGS = {
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,.vercel.app").split(",")
+if DEBUG is True:
+    ALLOWED_HOSTS = ['138.68.155.44', 'localhost', 'app.writesome.ai']
+    dotenv_file = find_dotenv(".env")
+    load_dotenv(dotenv_file)
+else:
+    ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 # Application definition
 
