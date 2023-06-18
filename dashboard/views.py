@@ -1432,8 +1432,7 @@ def generate_blog_meta(request, uniqueId):
 
     context['post_blog'] = this_blog
     context['article_title'] = this_blog.title
-    context['category'] = this_blog.category
-    context['category'] = this_blog.category
+    context['this_blog_cate'] = this_blog.category
     context['tone_of_voice'] = this_blog.tone_of_voice
 
     if request.method == 'POST':

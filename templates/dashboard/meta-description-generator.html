@@ -47,7 +47,7 @@
                                                             {% for category in cate_list %}
                                                                 {% if category.client == client %}
                                                                 <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                                {% if category.uniqueId == category %}
+                                                                {% if category.uniqueId == this_blog_cate %}
                                                                 selected
                                                                 {% endif %}
                                                                 >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
