@@ -93,7 +93,6 @@ def home(request):
 
     blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month), user_profile)
     lm_blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month-1), user_profile)
-    # lm_blog_word_cnt = 10000
 
     para_word_cnt = get_para_word_cnt(str(q_year), str(q_month), user_profile)
     lm_para_word_cnt = get_para_word_cnt(str(q_year), str(q_month-1), user_profile)
