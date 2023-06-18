@@ -1376,7 +1376,7 @@ def delete_title(request, uniqueId):
     
 
 @login_required
-def gen_blog_meta(request, uniqueId):
+def generate_blog_meta(request, uniqueId):
     context = {}
 
     tone_of_voices = []

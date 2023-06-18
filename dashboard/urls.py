@@ -65,6 +65,7 @@ urlpatterns = [
 
     # meta description generator urls
     path('meta-description-generator', views.meta_description_writer, name='meta-description-generator'),
+    path('generate-blog-meta/<str:uniqueId>/', views.generate_blog_meta, name='generate-blog-meta'),
     path('meta-description-generator/<str:uniqueId>/', views.meta_description_writer, name='meta-description-generator-response'),
     path('delete-meta-description/<str:uniqueId>/', views.delete_meta_descr, name='delete-meta-descr'),
     
