@@ -1469,6 +1469,7 @@ def generate_blog_meta(request, uniqueId):
                             meta_description=gen_meta_descr,
                             profile=request.user.profile,
                             category=meta_category,
+                            blog_id=uniqueId,
                         )
                         s_meta_descr.save()
 
