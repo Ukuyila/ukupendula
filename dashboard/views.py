@@ -1384,9 +1384,10 @@ def generate_blog_meta(request, uniqueId):
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    blog_posts = []
+
     cate_list = []
     client_list = []
-    blog_posts = []
 
     user_profile = request.user.profile
 
@@ -1396,7 +1397,7 @@ def generate_blog_meta(request, uniqueId):
         if client.team == user_profile.user_team:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=request.user.profile)
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
 
     for category in team_categories:
         cate_list.append(category)
