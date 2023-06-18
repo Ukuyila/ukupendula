@@ -1626,6 +1626,10 @@ def summarize_blog(request, uniqueId):
     client_list = []
     blog_posts = []
 
+    blog_sections = []
+
+    blog_body = ''
+
     user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_active=True)
@@ -1642,8 +1646,10 @@ def summarize_blog(request, uniqueId):
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
             blog_posts.append(blog)
-    
-    blog_sections = []
+            for blog_sect in sections:
+                blog_sections.append(blog_sect.body)
+
+    blog_body = "\n".join(blog_sections)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1671,7 +1677,7 @@ def summarize_blog(request, uniqueId):
     context['tone_of_voice'] = this_blog.tone_of_voice
 
 
-    context['long_content'] = blog_sections
+    context['long_content'] = blog_body
 
     if request.method == 'POST':
         long_content = request.POST['long_content']
