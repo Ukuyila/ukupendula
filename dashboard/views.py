@@ -1649,7 +1649,7 @@ def summarize_blog(request, uniqueId):
             for blog_sect in sections:
                 blog_sections.append(blog_sect.body)
 
-    blog_body = "\n".join(blog_sections)
+    blog_body = "\n".join(blog_sections.replace('<br>', '\n'))
 
     for client in team_clients:
         if client.team == user_profile.user_team:
