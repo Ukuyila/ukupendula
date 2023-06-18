@@ -5,6 +5,10 @@ $(document).ready(function(){
   
   $('.counter').text($('#article_title').val().length+'/'+maxLength);
 
+  if ( $('#article_title').val().length > 10 ) {
+    $('#btn-generate').prop('disabled', false)
+  }
+
   $('#article_title').keyup(function() {
     var curr_textlen = $(this).val().length;
 
