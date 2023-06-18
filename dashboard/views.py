@@ -1676,7 +1676,6 @@ def summarize_blog(request, uniqueId):
     context['this_summary_cate'] = this_blog.category
     context['tone_of_voice'] = this_blog.tone_of_voice
 
-
     context['long_content'] = blog_body
 
     if request.method == 'POST':
@@ -1724,11 +1723,11 @@ def summarize_blog(request, uniqueId):
 
                         context['content_data_uniqueId'] = s_content_data.uniqueId
 
-                        return redirect('content-summarizer-response', uniqueId=s_content_data.uniqueId)
+                        return redirect('content-summarizer-response', s_content_data.uniqueId)
             
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
-                        return redirect('content-summarizer')
+                        return redirect('generate-blog-summary', uniqueId)
                 else:
                     # we might need to delete all abandoned calls
                     pass
@@ -1781,6 +1780,7 @@ def summarize_content(request, uniqueId=""):
         context['this_summary_cate'] = content_summary.category
         context['tone_of_voice'] = content_summary.tone_of_voice
         context['long_content'] = content_summary.long_content
+        context['summarized_content'] = content_summary.summarized
 
     else:
         pass
