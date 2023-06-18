@@ -84,6 +84,7 @@ urlpatterns = [
     # content summarizer urls
     path('content-summarizer', views.summarize_content, name='content-summarizer'),
     path('content-summarizer/<str:uniqueId>/', views.summarize_content, name='content-summarizer-response'),
+    path('generate-blog-summary/<str:uniqueId>/', views.summarize_blog, name='generate-blog-summary'),
     path('delete-summary/<str:uniqueId>/', views.delete_summary, name='delete-summary'),
 
     # content landing page copy urls
