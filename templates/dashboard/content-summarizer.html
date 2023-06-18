@@ -36,8 +36,8 @@
                                                 {% csrf_token %}
                                                 
                                                 <div class="mb-3">
-                                                    <div class="d-flex align-items-center justify-content-between"><label for="summary_title" class=" ">Title</label><span class="title_counter text-muted">0/160</span></div>
-                                                    <input type="text" class="form-control" id="summary_title" name="summary_title" placeholder="Enter summary title" value="{{content_summary.summary_title|safe}}" maxlength="160" />
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="summary_title" class=" ">Title</label><span class="title_counter text-muted">0/250</span></div>
+                                                    <input type="text" class="form-control" id="summary_title" name="summary_title" placeholder="Enter summary title" value="{{summary_title|safe}}" maxlength="250" />
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="category" class=" ">Category</label>
@@ -47,7 +47,7 @@
                                                         {% for category in cate_list %}
                                                         {% if category.client == client %}
                                                             <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                            {% if category.uniqueId == content_summary.category %}
+                                                            {% if category.uniqueId == this_summary_cate %}
                                                             selected
                                                             {% endif %}
                                                             >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
@@ -59,7 +59,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="long_content" class=" ">Content to summarize</label><span class="prompt_counter text-muted">0/14000</span></div>
-                                                    <textarea type="text" maxlength="14000" rows="10" class="form-control" id="long_content" name="long_content" placeholder="Input your content here" required>{{content_summary.long_content|safe}}</textarea>
+                                                    <textarea type="text" maxlength="14000" rows="10" class="form-control" id="long_content" name="long_content" placeholder="Input your content here" required>{{long_content|safe}}</textarea>
                                                 </div>
 
                                                 <div class="mb-3">
@@ -68,7 +68,7 @@
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if content_summary.tone_of_voice == tone.tone_of_voice %}
+                                                      {% if tone_of_voice == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -111,7 +111,7 @@
                                             
                                                             <div class="card-body text-dark">
                                                                 <div class="ideas">
-                                                                    {{content_summary.summarized|safe}}
+                                                                    {{summarized|safe}}
                                                                 </div>
                                                             </div>
                                                         </div>

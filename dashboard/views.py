@@ -1611,6 +1611,121 @@ def delete_meta_descr(request, uniqueId):
     except:
         messages.error(request, "Item not found!")
         return redirect('meta-descr-memory')
+    
+
+@login_required
+def summarize_blog(request, uniqueId):
+    context = {}
+
+    tone_of_voices = []
+    current_page = 'Content Summarizer'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+    blog_posts = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    try:
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
+
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory')
+    
+    blogs = Blog.objects.filter(profile=user_profile)
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
+    
+    blog_sections = []
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['blog_posts'] = blog_posts
+
+    context['post_blog'] = this_blog
+    context['article_title'] = this_blog.title
+    context['this_blog_cate'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
+    context['this_summary_cate'] = this_blog.category
+
+    if request.method == 'POST':
+        long_content = request.POST['long_content']
+        summary_title = request.POST['summary_title']
+        tone_of_voice = request.POST['tone_of_voice']
+        summary_cate = request.POST['category']
+        request.session['long_content'] = long_content
+
+        if len(long_content) > 14000:
+            messages.error(request, "The engine could not generate content for your prompt, please try again!")
+            return redirect('meta-description-generator')
+        else:
+            
+            api_call_code = str(uuid4()).split('-')[4]
+
+            add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+
+                    content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
+
+                    if len(content_summary) > 0:
+
+                        # create database record
+                        s_content_data = ContentSummary.objects.create(
+                            long_content=long_content,
+                            summary_title=summary_title,
+                            tone_of_voice=tone_of_voice,
+                            summarized=content_summary,
+                            profile=request.user.profile,
+                            category=summary_cate,
+                            blog_id=uniqueId,
+                        )
+                        s_content_data.save()
+
+                        add_to_list.is_done=True
+                        add_to_list.save()
+
+                        context['content_data_uniqueId'] = s_content_data.uniqueId
+
+                        return redirect('content-summarizer-response', uniqueId=s_content_data.uniqueId)
+            
+                    else:
+                        messages.error(request, "The engine could not understand your command, please try again!")
+                        return redirect('content-summarizer')
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+
+    return render(request, 'dashboard/content-summarizer.html', context)
 
 
 @login_required
@@ -1653,6 +1768,11 @@ def summarize_content(request, uniqueId=""):
         content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
 
         context['content_summary'] = content_summary
+        context['article_title'] = content_summary.summary_title
+        context['this_summary_cate'] = content_summary.category
+        context['tone_of_voice'] = content_summary.tone_of_voice
+        context['long_content'] = content_summary.long_content
+
     else:
         pass
 

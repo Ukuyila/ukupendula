@@ -462,8 +462,8 @@ class ContentSummary(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
     category = models.CharField(null=True, blank=True, max_length=255)
+    blog_id = models.CharField(null=True, blank=True, max_length=100)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
