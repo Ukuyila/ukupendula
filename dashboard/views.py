@@ -1663,6 +1663,7 @@ def summarize_blog(request, uniqueId):
         tone_of_voices.append(tone)
 
     context['blog_posts'] = blog_posts
+    context['tone_of_voices'] = tone_of_voices
 
     context['post_blog'] = this_blog
     context['article_title'] = this_blog.title
