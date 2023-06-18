@@ -9,23 +9,23 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="mb-0">AI Generated Response</h4>
-														<div class="float-end">
-															<div class="btn-group ">
-																	<button class="btn btn-outline-primary" hidden>Copy Text</button>
-																	<button  onclick="return window.location.href='{% url 'edit-gen-blog' blog.uniqueId %}'" class="btn btn-primary">Edit Blog</button>
-															</div>
-															<div class="btn-group">
-																	<a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
-																			Tools
-																			<i class="fa fa-angle-down "></i>
-																	</a>
-																	<ul class="dropdown-menu">
-																			<li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Create Meta</a></li>
-																			<li><a href="{% url 'generate-blog-summary' blog.uniqueId %}">Summarize Blog</a></li>
-																			<li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Rewrite Title</a></li>
-																	</ul>
-															</div>
-														</div>
+                            <div class="float-end">
+                                <div class="btn-group ">
+                                        <button class="btn btn-outline-primary" hidden>Copy Text</button>
+                                        <button  onclick="return window.location.href='{% url 'edit-gen-blog' blog.uniqueId %}'" class="btn btn-primary">Edit Blog</button>
+                                </div>
+                                <div class="btn-group">
+                                        <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
+                                        Tools
+                                        <i class="fa fa-angle-down "></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Create Meta</a></li>
+                                            <li><a href="{% url 'generate-blog-summary' blog.uniqueId %}">Summarize Blog</a></li>
+                                            <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Rewrite Title</a></li>
+                                        </ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <form action="#" method="POST">

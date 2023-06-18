@@ -1666,10 +1666,12 @@ def summarize_blog(request, uniqueId):
     context['tone_of_voices'] = tone_of_voices
 
     context['post_blog'] = this_blog
-    context['article_title'] = this_blog.title
-    context['this_blog_cate'] = this_blog.category
-    context['tone_of_voice'] = this_blog.tone_of_voice
+    context['summary_title'] = this_blog.title
     context['this_summary_cate'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
+
+
+    context['long_content'] = blog_sections
 
     if request.method == 'POST':
         long_content = request.POST['long_content']
@@ -1769,7 +1771,7 @@ def summarize_content(request, uniqueId=""):
         content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
 
         context['content_summary'] = content_summary
-        context['article_title'] = content_summary.summary_title
+        context['summary_title'] = content_summary.summary_title
         context['this_summary_cate'] = content_summary.category
         context['tone_of_voice'] = content_summary.tone_of_voice
         context['long_content'] = content_summary.long_content
