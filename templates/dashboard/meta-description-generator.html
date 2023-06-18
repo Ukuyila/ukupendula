@@ -45,7 +45,7 @@
                                                         {% for client in client_list %}
                                                         <optgroup label="{{client.client_name}}">
                                                         {% for category in cate_list %}
-                                                        {% if category.client == client.uniqueId %}
+                                                        {% if category.client == client %}
                                                             <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
                                                             {% if category.uniqueId == category %}
                                                             selected
