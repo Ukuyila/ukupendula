@@ -6,6 +6,7 @@ import uuid
 import socket
 import requests
 import platform
+from math import ceil, floor
 
 from .models import *
 
@@ -20,7 +21,7 @@ def generate_blog_topic_ideas(topic, audience, keywords):
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate 5 blog topic ideas about: {}\nAudience: {}\nKeywords: {}\n\n*".format(topic, audience, keywords),
+        prompt="Generate 5 blog topic ideas without numbering prefixes about {}\nAudience: {}\nKeywords: {}\n\n*".format(topic, audience, keywords),
         temperature=0.7,
         max_tokens=250,
         top_p=1,
@@ -80,13 +81,50 @@ def generate_blog_section_headings(topic, audience, keywords):
     return blog_sections
 
 
+def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_words, max_words, profile):
+
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Generate a blog write-up with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n*".format(
+            min_words, max_words, blog_topic, audience, tone, keywords, section_heads),
+        temperature=1,
+        max_tokens=1000,
+        top_p=1,
+        best_of=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+
+    if 'choices' in response:
+        if len(response['choices']) > 0:
+            res = response['choices'][0]['text']
+            if not res == '':
+                cleaned_res = res.replace('*', '').replace('\n', '<br>')
+                if profile.monthly_count:
+                    prof_count = int(profile.monthly_count)
+                else:
+                    prof_count = 0
+
+                prof_count += len(cleaned_res.split(' '))
+
+                profile.monthly_count = str(prof_count)
+                profile.save()
+                return cleaned_res
+            else:
+                return ''
+        else:
+            return ''
+    else:
+        return ''
+
+
 def generate_blog_section_details(blog_topic, section_topic, audience, keywords, profile):
 
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt="Generate a detailed blog section write-up for the following blog section heading, using the blog title, target audience, and keywords:\nBlog Title: {}\nSection Heading: {}\nAudience: {}\nKeywords: {}\n*".format(
             blog_topic, section_topic, audience, keywords),
-        temperature=0.7,
+        temperature=1,
         max_tokens=1000,
         top_p=1,
         best_of=1,
@@ -144,14 +182,47 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
             return ''
     else:
         return ''
+
+
+def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body, max_char, profile):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Write a {} post with a maximum of {} characters from this article using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, max_char, keywords,tone_of_voice, audience, blog_body),
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        best_of=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
     
+    if 'choices' in response:
+        if len(response['choices']) > 0:
+            res = response['choices'][0]['text']
+
+            cleaned_res = res.replace('*', '').replace('\n', '<br>')
+            if profile.monthly_count:
+                prof_count = int(profile.monthly_count)
+            else:
+                prof_count = 0
+
+            prof_count += len(cleaned_res.split(' '))
+
+            profile.monthly_count = str(prof_count)
+            profile.save()
+            return cleaned_res
+        else:
+            return []
+    else:
+        return []
+
 
 def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
@@ -180,7 +251,7 @@ def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
             profile.monthly_count = str(prof_count)
             profile.save()
-            return res
+            return cleaned_res
         else:
             return []
     else:
@@ -214,7 +285,7 @@ def rewriter_article_title(old_title, tone_of_voice, profile):
 
             profile.monthly_count = str(prof_count)
             profile.save()
-            return res
+            return cleaned_res
         else:
             return []
     else:
@@ -248,7 +319,7 @@ def generate_meta_description(article_title, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -283,7 +354,7 @@ def write_content_summary(article_title, tone_of_voice, profile):
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -319,7 +390,7 @@ def generate_landing_page_copy(company_name, company_purpose, page_sections, pro
 
                 profile.monthly_count = str(prof_count)
                 profile.save()
-                return res
+                return cleaned_res
             else:
                 return ''
         else:
@@ -472,7 +543,18 @@ def get_percent_of(num_a, num_b):
         percent = (int(num_a) / int(num_b)) * 100
     else:
         percent = 0
-    return round(percent)
+    return round_to_multiple(percent, 5)
+
+
+def round_to_multiple(number, multiple, direction='nearest'):
+    if direction == 'nearest':
+        return multiple * round(number / multiple)
+    elif direction == 'up':
+        return multiple * ceil(number / multiple)
+    elif direction == 'down':
+        return multiple * floor(number / multiple)
+    else:
+        return multiple * round(number / multiple)
 
 
 def get_subscription_details(profile):
@@ -584,6 +666,29 @@ def device_registration(request, max_devices_allow):
         return logged_device.uniqueId
     
 
+def save_section_head(blog_unique_id, section_head):
+    response = {}
+
+    blog = Blog.objects.get(uniqueId=blog_unique_id)
+
+    if blog:
+        saved_sect_head = SavedBlogSectionHead.objects.create(
+            section_head=section_head,
+            blog=blog,
+        )
+        saved_sect_head.save()
+
+        # blog_section_heads = request.session['blog-sections']
+        response['uniqueId'] = blog.uniqueId
+        # adding the sections to the context
+        response['saved_sect_head'] = saved_sect_head
+        # response['blog_sections'] = blog_section_heads
+        print("saved: ".format(section_head))
+        return response
+    else:
+        return response
+    
+
 # Django backend check every 5 seconds
 def check_api_requests():
     cnt_requests = 0
@@ -604,8 +709,33 @@ def check_api_requests():
     return result
 
 
+def remove_api_requests(profile):
+    cnt_req = 0
+    user_requests = RequestsQueue.objects.filter(profile=profile)
+    if user_requests:
+        for u_req in user_requests:
+            if not u_req.is_done:
+                u_req.is_done=True
+                u_req.save()
+                u_req.delete()
+
+                cnt_req+=1
+            
+    return cnt_req
+
+
 # add new call to the list
 def add_to_api_requests(request_type, call_code, profile):
+    # first delete all user requests
+    user_requests = RequestsQueue.objects.filter(profile=profile)
+    if user_requests:
+        for u_req in user_requests:
+            if not u_req.is_done:
+                u_req.is_done=True
+                u_req.save()
+                u_req.delete()
+
+    # add new request
     add_to_queue = RequestsQueue.objects.create(
         request_type=request_type,
         call_code=call_code,

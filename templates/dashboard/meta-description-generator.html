@@ -34,20 +34,37 @@
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
-                                                
                                                 <div class="mb-3">   
-                                                    <div class="d-flex align-items-center justify-content-between"><label for="article_title" class=" ">Title</label> <span class="counter text-muted">0/160</span></div>
-                                                    {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{meta_descr.article_title|safe}}" maxlength="160" required/> {% endcomment %}
-                                                    <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="160" required>{{meta_descr.article_title|safe}}</textarea>
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="article_title" class=" ">Title</label> <span class="counter text-muted">0/200</span></div>
+                                                    {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{article_title|safe}}" maxlength="200" required/> {% endcomment %}
+                                                    <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="200" required>{{article_title|safe}}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                            <optgroup label="{{client.client_name}}">
+                                                            {% for category in cate_list %}
+                                                                {% if category.client == client %}
+                                                                <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                                {% if category.uniqueId == this_blog_cate %}
+                                                                selected
+                                                                {% endif %}
+                                                                >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            </optgroup>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label for="tone_of_voice" class=" ">Tone of voice</label>
-                                                    <select type="text" class="form-control select2-show-search" id="tone_of_voice" name="tone_of_voice">
+                                                    <select type="text" class="form-control select2" id="tone_of_voice" name="tone_of_voice">
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if meta_descr.tone_of_voice == tone.tone_of_voice %}
+                                                      {% if tone_of_voice == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -80,7 +97,9 @@
                                     <div class="card-body">
                                         
                                             <div class="row">
-    
+                                                <div class="col-lg-12">
+                                                    <small class="text-primary">Disclaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small>
+                                                </div>
                                                 <div class="col-lg-12 ">
     
                                                     <div class="form-group">
@@ -90,7 +109,7 @@
                                             
                                                             <div class="card-body text-dark">
                                                                 <div class="ideas">
-                                                                    {{meta_descr.meta_description|safe}}
+                                                                    {{meta_description|safe}}
                                                                 </div>
                                                             </div>
                                                         </div>

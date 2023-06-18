@@ -44,6 +44,8 @@ def home(request):
 
     today_date = datetime.datetime.now()
 
+    remove_api_requests(user_profile)
+
     remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
 
     q_year = today_date.year
@@ -82,15 +84,15 @@ def home(request):
                 blog_words += int(section.word_count)
 
                 # month_word_count += int(section.word_count)
-            blog.word_count = str(blog_words)
-            blog.save()
+            if int(blog.word_count) < 1:
+                blog.word_count = str(blog_words)
+                blog.save()
             complete_blogs.append(blog)
-        else:
+        elif not sections.exists():
             empty_blogs.append(blog)
 
     blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month), user_profile)
     lm_blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month-1), user_profile)
-    # lm_blog_word_cnt = 10000
 
     para_word_cnt = get_para_word_cnt(str(q_year), str(q_month), user_profile)
     lm_para_word_cnt = get_para_word_cnt(str(q_year), str(q_month-1), user_profile)
@@ -118,30 +120,46 @@ def home(request):
     # find percentage from last month
     if int(blog_word_cnt) > int(lm_blog_word_cnt):
         context['clm_blog_word_cnt'] = get_percent_of(lm_blog_word_cnt, blog_word_cnt)
+        if lm_blog_word_cnt < 1:
+            context['clm_blog_word_cnt'] = 100
         context['blg_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_blog_word_cnt'] = get_percent_of(blog_word_cnt, lm_blog_word_cnt)
+        if blog_word_cnt < 1:
+            context['clm_blog_word_cnt'] = 100
         context['blg_carret_set'] = ' fa-caret-down text-danger '
 
     if int(summarizer_word_cnt) > int(lm_summarizer_word_cnt):
         context['clm_summarizer_word_cnt'] = get_percent_of(lm_summarizer_word_cnt, summarizer_word_cnt)
+        if lm_summarizer_word_cnt < 1:
+            context['clm_summarizer_word_cnt'] = 100
         context['sumry_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_summarizer_word_cnt'] = get_percent_of(summarizer_word_cnt, lm_summarizer_word_cnt)
+        if summarizer_word_cnt < 1:
+            context['clm_summarizer_word_cnt'] = 100
         context['sumry_carret_set'] = ' fa-caret-down text-danger '
 
     if int(meta_word_cnt) > int(lm_meta_word_cnt):
         context['clm_meta_word_cnt'] = get_percent_of(lm_meta_word_cnt, meta_word_cnt)
+        if lm_meta_word_cnt < 1:
+            context['clm_meta_word_cnt'] = 100
         context['meta_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_meta_word_cnt'] = get_percent_of(meta_word_cnt, lm_meta_word_cnt)
+        if meta_word_cnt < 1:
+            context['clm_meta_word_cnt'] = 100
         context['meta_carret_set'] = ' fa-caret-down text-danger '
 
     if int(landing_copy_word_cnt) > int(lm_landing_copy_word_cnt):
         context['clm_landing_copy_word_cnt'] = get_percent_of(lm_landing_copy_word_cnt, landing_copy_word_cnt)
+        if lm_landing_copy_word_cnt < 1:
+            context['clm_landing_copy_word_cnt'] = 100
         context['lpc_carret_set'] = ' fa-caret-up text-success '
     else:
         context['clm_landing_copy_word_cnt'] = get_percent_of(landing_copy_word_cnt, lm_landing_copy_word_cnt)
+        if landing_copy_word_cnt < 1:
+            context['clm_landing_copy_word_cnt'] = 100
         context['lpc_carret_set'] = ' fa-caret-down text-danger '
 
     context['clm_para_word_cnt'] = para_word_cnt
@@ -170,6 +188,8 @@ def profile(request):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    remove_api_requests(request.user.profile)
+
     if request.method == 'GET':
         form = ProfileForm(instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(instance=request.user.profile)
@@ -191,7 +211,6 @@ def profile(request):
             return redirect('profile')
         else:
             messages.error(request, "Something is a foot")
-            
 
     return render(request, 'dashboard/profile.html', context)
 
@@ -200,13 +219,42 @@ def profile(request):
 def blog_topic(request):
     context = {}
 
+    tone_of_voices = []
     current_page = 'Blog Topic Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
+    remove_api_requests(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
     if request.method == 'POST':
+        cate_id = request.POST['category']
+        request.session['category'] = cate_id
+
         blog_idea = request.POST['blog_idea']
         request.session['blog_idea'] = blog_idea
 
@@ -216,7 +264,19 @@ def blog_topic(request):
         audience = request.POST['audience']
         request.session['audience'] = audience
 
-        if len(blog_idea) > 160 or len(keywords) > 100 or len(audience) > 160:
+        tone_of_voice = request.POST['tone_of_voice']
+        request.session['tone_of_voice'] = tone_of_voice
+
+        if int(request.POST['max_words']) < 300:
+            max_words = 300
+        elif int(request.POST['max_words']) > 1500:
+            max_words = 1500
+        else:
+            max_words = int(request.POST['max_words'])
+
+        request.session['max_words'] = max_words
+
+        if len(blog_idea) > 250 or len(keywords) > 250 or len(audience) > 250:
             messages.error(request, "The engine could not generate blog ideas, please try again!")
             return redirect('blog-topic')
         else:
@@ -259,6 +319,8 @@ def blog_sections(request):
 
     current_page = 'Blog Topic Generator'
 
+    remove_api_requests(request.user.profile)
+
     if 'blog_topics' in request.session:
         pass
     else:
@@ -277,17 +339,58 @@ def delete_blog_topic(request, uniqueId):
         if blog.profile == request.user.profile:
             blog.delete()
             messages.info(request, "Blog deleted successfully!")
-            return redirect('dashboard')
+            return redirect('blog-memory', 'incomplete')
         else:
             messages.error(request, "Access denied!")
-            return redirect('dashboard')
+            return redirect('blog-memory', 'incomplete')
     except:
         messages.error(request, "Blog not found!")
-        return redirect('dashboard')
+        return redirect('blog-memory', 'incomplete')
+    
+
+@login_required
+def delete_blog(request, uniqueId):
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+        if blog.profile == request.user.profile:
+            blog.deleted=True
+            blog.save()
+            messages.info(request, "Blog deleted successfully!")
+            return redirect('blog-memory', 'complete')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('blog-memory', 'complete')
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory', 'complete')
+    
+
+@login_required
+def delete_saved_blog(request, uniqueId):
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+        if blog.profile == request.user.profile:
+
+            saved_blogs = SavedBlogEdit.objects.all()
+            for s_blog in saved_blogs:
+                if s_blog.blog == blog:
+
+                    s_blog.delete()
+
+            messages.info(request, "Blog deleted successfully!")
+            return redirect('blog-memory', 'saved')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('blog-memory', 'saved')
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory', 'saved')
 
 
 @login_required
 def save_blog_topic(request, blog_topic):
+
+    remove_api_requests(request.user.profile)
 
     if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session and 'blog_topics' in request.session:
         blog = Blog.objects.create(
@@ -295,6 +398,8 @@ def save_blog_topic(request, blog_topic):
             blog_idea=request.session['blog_idea'],
             keywords=request.session['keywords'],
             audience=request.session['audience'],
+            tone_of_voice=request.session['tone_of_voice'],
+            max_words=str(request.session['max_words']),
             profile=request.user.profile,
         )
         blog.save()
@@ -302,6 +407,8 @@ def save_blog_topic(request, blog_topic):
         blog_topics = request.session['blog_topics']
         blog_topics.remove(blog_topic)
         request.session['blog_topics'] = blog_topics
+
+        request.session['uniqueId'] = blog.uniqueId
 
         return redirect('blog-sections')
     else:
@@ -317,51 +424,70 @@ def use_blog_topic(request, blog_topic):
     context = {}
 
     current_page = 'Use Blog Sections Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
-        # save blog topic idea first
-        # code to save
-        blog = Blog.objects.create(
-            title=blog_topic,
-            blog_idea=request.session['blog_idea'],
-            keywords=request.session['keywords'],
-            audience=request.session['audience'],
-            profile=request.user.profile,
-        )
-        blog.save()
+    remove_api_requests(request.user.profile)
 
-        api_call_code = str(uuid4()).split('-')[4]
+    if 'blog-sections' in request.session and 'uniqueId' in request.session:
 
-        # api_requests = check_api_requests()
+        uniqueId = request.session['uniqueId']
+        context['uniqueId'] = uniqueId
+        blog_section_heads = request.session['blog-sections']
 
-        add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
+        blog = Blog.objects.get(uniqueId=uniqueId)
 
-        n = 1
-        # runs until n < 50,just to avoid the infinite loop.
-        # this will execute the check_api_requests() func in every 5 seconds.
-        while n < 50:
-            # api_requests = check_api_requests()
-            time.sleep(5)
-            if api_call_process(api_call_code, add_to_list):
-                blog_section_heads = generate_blog_section_headings(blog_topic, request.session['audience'], request.session['keywords'])
-                
-                add_to_list.is_done=True
-                add_to_list.save()
-                break
-            else:
-                # we might need to delete all abandoned calls
-                pass
-            n += 1
+        if 'saved-sect-head' == request.session:
+            saved_sect_head = request.session['saved-sect-head']
+            context['saved-sect-head'] = saved_sect_head
     else:
-        return redirect('blog-topic')
+        if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session:
+            cate_id = request.session['category'] if request.session['category'] else ''
+            # category = ClientCategory.objects.get(uniqueId=cate_id)
+            # save blog topic idea first
+            # code to save
+            blog = Blog.objects.create(
+                title=blog_topic,
+                blog_idea=request.session['blog_idea'],
+                keywords=request.session['keywords'],
+                audience=request.session['audience'],
+                tone_of_voice=request.session['tone_of_voice'],
+                profile=request.user.profile,
+                category=cate_id,
+            )
+            blog.save()
+
+            context['uniqueId'] = blog.uniqueId
+            request.session['uniqueId'] = blog.uniqueId
+
+            api_call_code = str(uuid4()).split('-')[4]
+
+            # api_requests = check_api_requests()
+
+            add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+                    blog_section_heads = generate_blog_section_headings(blog_topic, request.session['audience'], request.session['keywords'])
+                    
+                    add_to_list.is_done=True
+                    add_to_list.save()
+                    break
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+        else:
+            return redirect('blog-topic')
 
     if len(blog_section_heads) > 0:
         # Adding the sections to the session
-        # request.session['blog-sections'] = blog_section_heads
+        request.session['blog-sections'] = blog_section_heads
 
         # adding the sections to the context
         context['blog_sections'] = blog_section_heads
@@ -377,26 +503,20 @@ def use_blog_topic(request, blog_topic):
 
     return render(request, 'dashboard/select-blog-sections.html', context)
 
-
+    
 # this generates blog from saved topic
 @login_required
 def create_blog_from_topic(request, uniqueId):
     context = {}
 
     current_page = 'Use Blog Sections Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+    request.session['uniqueId'] = uniqueId
 
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
-
-        # blog_section_heads = generate_blog_section_headings(blog.title, blog.audience, blog.keywords)
-
         api_call_code = str(uuid4()).split('-')[4]
-
-        # api_requests = check_api_requests()
 
         add_to_list = add_to_api_requests('generate_blog_section_headings', api_call_code, request.user.profile)
 
@@ -430,65 +550,9 @@ def create_blog_from_topic(request, uniqueId):
             return redirect('blog-topic')
 
         if request.method == 'POST':
-            for val in request.POST:
-                if not 'csrfmiddlewaretoken' in val:
+            request.session['selectd_sections'] = request.POST
 
-                    api_call_code = str(uuid4()).split('-')[4]
-
-                    # api_requests = check_api_requests()
-
-                    add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
-
-                    n = 1
-                    # runs until n < 50,just to avoid the infinite loop.
-                    # this will execute the check_api_requests() func in every 5 seconds.
-                    while n < 50:
-                        # api_requests = check_api_requests()
-                        time.sleep(5)
-                        if api_call_process(api_call_code, add_to_list):
-                            gen_section = generate_blog_section_details(blog.title, val, blog.audience, blog.keywords, request.user.profile)
-
-                            # create database record
-                            blog_sect = BlogSection.objects.create(
-                                title=val,
-                                body=gen_section,
-                                blog=blog,
-                            )
-                            blog_sect.save()
-
-                            add_to_list.is_done=True
-                            add_to_list.save()
-
-                            time.sleep(5)
-                            break
-                        else:
-                            # we might need to delete all abandoned calls
-                            pass
-                        n += 1
-
-                    # Analyze how this makes the AI not to repeat what was already done
-                    # collect previous blog sections
-                    # prev_blog = ''
-                    # b_sections = BlogSection.objects.filter(blog=blog).order_by('date_created')
-                    # for sec in b_sections:
-                    #     prev_blog += sec.title + '\n'
-                    #     prev_blog += sec.body.replace('<br>', '\n')
-                    # # generating blog section details
-                    # prev_blog = ''
-                    # gen_section = generate_blog_section_details(
-                    #     blog_topic, val, request.session['audience'], request.session['keywords'], prev_blog,
-                    #     request.user.profile)
-                    #
-                    # # create database record
-                    # blog_sect = BlogSection.objects.create(
-                    #     title=val,
-                    #     body=gen_section,
-                    #     blog=blog,
-                    # )
-                    # blog_sect.save()
-                    # time.sleep(2)
-
-            return redirect('view-generated-blog', slug=blog.slug)
+            return redirect('view-gen-blog', slug=blog.slug)
 
     except:
         messages.error(request, "Blog not found!")
@@ -498,15 +562,42 @@ def create_blog_from_topic(request, uniqueId):
 
 
 @login_required
+def save_section_head(request, uniqueId, section_head):
+    context = {}
+
+    blog = Blog.objects.get(uniqueId=uniqueId)
+    section_head = requests.utils.unquote(section_head)
+
+    if blog:
+        blog_topic = urllib.parse.quote(blog.title)
+
+        saved_sect_head = SavedBlogSectionHead.objects.create(
+            section_head=section_head,
+            blog=blog,
+        )
+        saved_sect_head.save()
+
+        blog_section_heads = request.session['blog-sections']
+        context['uniqueId'] = blog.uniqueId
+        request.session['uniqueId'] = blog.uniqueId
+        # adding the sections to the context
+        request.session['saved-sect-head'] = section_head
+        context['blog_sections'] = blog_section_heads
+        print("saved: ".format(section_head))
+        return redirect('use-blog-topic', blog_topic)
+    else:
+        return redirect('blog-sections')
+
+
+@login_required
 def view_gen_blog(request, slug):
 
     context = {}
-
     current_page = 'Blog Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    min_words = 300
 
     try:
         blog = Blog.objects.get(slug=slug)
@@ -516,57 +607,361 @@ def view_gen_blog(request, slug):
 
     if 'selectd_sections' in request.session:
 
-        for val in request.session['selectd_sections']:
-            if not 'csrfmiddlewaretoken' in val:
-                prev_blog = ''
-                api_call_code = str(uuid4()).split('-')[4]
+        sect_cnt = 1
+        total_sect_heads = len(request.session['selectd_sections'])
+        section_heads = ""
 
-                add_to_list = add_to_api_requests('generate_blog_section_details', api_call_code, request.user.profile)
+        if total_sect_heads > 0:
+            # section_heads = '\n'.join(map(str, request.session['selectd_sections']))
 
-                n = 1
-                # runs until n < 50,just to avoid the infinite loop.
-                # this will execute the check_api_requests() func in every 5 seconds.
-                while n < 50:
-                    # api_requests = check_api_requests()
-                    time.sleep(5)
-                    if api_call_process(api_call_code, add_to_list):
-                        gen_section = generate_blog_section_details(
-                            blog.title, val, blog.audience, blog.keywords, request.user.profile)
-
-                        # create database record
-                        blog_sect = BlogSection.objects.create(
-                            title=val,
-                            body=gen_section,
-                            blog=blog,
-                        )
-                        blog_sect.save()
-
-                        add_to_list.is_done=True
-                        add_to_list.save()
-
-                        # fetch created blog sections
-                        blog_sects = BlogSection.objects.filter(blog=blog)
-
-                        context['blog'] = blog
-                        context['blog_sects'] = blog_sects
-
-                        return redirect('view-generated-blog', slug=blog.slug)
+            for val in request.session['selectd_sections']:
+                if not 'csrfmiddlewaretoken' in val:
+                    # prev_blog = ''
                     
-                    else:
-                        # we might need to delete all abandoned calls
-                        pass
-                    n += 1
+                    # convert selectd_sections list to a prog string
+                    if section_heads:
+                        section_heads = section_heads + '\n'
+
+                    section_heads = section_heads + val
+                    api_call_code = str(uuid4()).split('-')[4]
+                    add_to_list = add_to_api_requests('generate_full_blog', api_call_code, request.user.profile)
+
+                    n = 1
+                    # runs until n < 50,just to avoid the infinite loop.
+                    # this will execute the check_api_requests() func in every 5 seconds.
+                    while n < 50:
+                        # api_requests = check_api_requests()
+                        time.sleep(5)
+                        if api_call_process(api_call_code, add_to_list):
+                            gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
+
+                            # create database record
+                            blog_sect = BlogSection.objects.create(
+                                title=blog.title,
+                                body=gen_section,
+                                blog=blog,
+                            )
+                            blog_sect.save()
+
+                            add_to_list.is_done=True
+                            add_to_list.save()
+
+                            # fetch created blog sections
+                            blog_sects = BlogSection.objects.filter(blog=blog)
+
+                            del request.session['uniqueId']
+                            del request.session['blog-sections']
+                            del request.session['selectd_sections']
+                            del request.session['blog_idea']
+                            del request.session['keywords']
+                            del request.session['audience']
+                            del request.session['saved-sect-head']
+
+                            request.session.modified = True
+
+                            context['blog'] = blog
+                            context['blog_sects'] = blog_sects
+
+                            return redirect('view-generated-blog', slug=blog.slug)
+                        
+                        else:
+                            # we might need to delete all abandoned calls
+                            pass
+                        n += 1
+                    sect_cnt += 1
+        else:
+            messages.error(request, "Something went wrong with your request, please try again!")
+            return redirect('blog-topic')
 
     return render(request, 'dashboard/view-generated-blog.html', context)
+
+
+def edit_gen_blog(request, uniqueId):
+    context = {}
+    current_page = 'Edit Generated Blog'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    try:
+        blog = Blog.objects.get(uniqueId=uniqueId)
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('blog-topic')
+    
+    blog_sections = []
+    got_b_body = False
+    s_blog_body = ''
+    s_blog_title = ''
+
+    saved_blogs = SavedBlogEdit.objects.all()
+    for s_blog in saved_blogs:
+        if s_blog.blog == blog:
+            got_b_body = True
+            s_blog_title = s_blog.title
+            s_blog_body = s_blog.body
+            saved_blog = s_blog
+            break
+
+    if got_b_body == True:
+        blog_body = s_blog_body
+        blog_title = s_blog_title
+
+    else:
+        blog_sects = BlogSection.objects.filter(blog=blog)
+
+        for blog_sect in blog_sects:
+            blog_sections.append(blog_sect.body)
+            blog_title = blog_sect.title
+
+        blog_body = "\n".join(blog_sections)
+
+        saved_blog = SavedBlogEdit.objects.create(
+            title=blog.title,
+            body=blog_body,
+            blog=blog,
+        )
+        saved_blog.save()
+
+    context['blog'] = blog
+    context['blog_title'] = blog_title
+    context['blog_audience'] = blog.audience
+    context['uniqueId'] = uniqueId
+    context['saved_blog'] = saved_blog
+    context['blog_body'] = blog_body
+    context['blog_cate'] = blog.category
+
+    if request.method == 'POST':
+        blog_title = request.POST['blog-title']
+        generated_blog_edit = request.POST['generated-blog']
+        gen_blog_category = request.POST['category']
+
+        saved_blog.title = blog_title
+        saved_blog.body = generated_blog_edit
+        saved_blog.category = gen_blog_category
+        saved_blog.save()
+
+        return redirect('edit-gen-blog', uniqueId)
+
+        # print('new title: {}'.format(blog_title))
+
+    return render(request, 'dashboard/edit-generated-blog.html', context)
+
+
+@login_required
+def view_social_post(request, postType, uniqueId):
+    context = {}
+
+    current_page = 'View Blog Social Post'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    blog_posts = []
+    tone_of_voices = []
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+    
+    blogs = Blog.objects.filter(profile=request.user.profile)
+
+    for blog in blogs:
+        if not blog.deleted:
+            sections = BlogSection.objects.filter(blog=blog)
+            if sections.exists():
+                blog_posts.append(blog)
+
+    context['blog_posts'] = blog_posts
+
+    try:
+        post = BlogSocialPost.objects.get(uniqueId=uniqueId)
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('gen-blog-social-media', postType, uniqueId)
+    
+    post_type = postType.replace('_', ' ').title()
+
+    context['post_type_title'] = post_type
+    context['post_type'] = postType
+    context['social_post'] = post
+    context['post_blog'] = post.blog
+    context['post_title'] = post.title
+    context['post_body'] = post.post
+    context['post_audience'] = post.audience
+    context['post_keywords'] = post.keywords
+    context['post_tone'] = post.tone_of_voice
+    
+    return render(request, 'dashboard/social-media-post.html', context)
+
+
+@login_required
+def gen_social_from_blog(request, postType, uniqueId):
+    context = {}
+
+    current_page = 'Generated Social Post From Blog'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    try:
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
+        created_post = True
+    except:
+        messages.error(request, "Something went wrong with your request, please try again!")
+        return redirect('blog-topic')
+    
+    post_type = postType.replace('_', ' ').title()
+
+    if postType == "twitter":
+        max_char = 280
+    elif postType == "twitter_blue":
+        max_char = 10000
+    elif postType == "linkedin":
+        max_char = 3000
+    elif postType == "facebook":
+        max_char = 10000
+    else:
+        max_char = 280
+
+    blog_posts = []
+    tone_of_voices = []
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+    
+    blogs = Blog.objects.filter(profile=request.user.profile)
+
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
+    
+    blog_sections = []
+
+    context['blog_posts'] = blog_posts
+
+    saved_blog = SavedBlogEdit.objects.get(blog=this_blog)
+
+    if saved_blog:
+        blog_body = saved_blog.body
+
+    else:
+        blog_sects = BlogSection.objects.filter(blog=this_blog)
+
+        for blog_sect in blog_sects:
+            blog_sections.append(blog_sect.body)
+
+        blog_body = "\n".join(blog_sections)
+
+        saved_blog = SavedBlogEdit.objects.create(
+            title=this_blog.title,
+            body=blog_body,
+            blog=this_blog,
+        )
+        saved_blog.save()
+
+    context['post_type_title'] = post_type
+    context['post_type'] = postType
+    context['post_blog'] = this_blog
+    context['post_title'] = this_blog.title
+    context['post_audience'] = this_blog.audience
+    context['post_keywords'] = this_blog.keywords
+    context['post_tone'] = this_blog.tone_of_voice
+
+    if request.method == "POST":
+
+        post_title = request.POST['post_title']
+        post_keywords = request.POST['keywords']
+        post_audience = request.POST['audience']
+
+        tone_of_voice = request.POST['tone_of_voice']
+        api_call_code = str(uuid4()).split('-')[4]
+
+        add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+
+        n = 1
+        # runs until n < 50,just to avoid the infinite loop.
+        # this will execute the check_api_requests() func in every 5 seconds.
+        while n < 50:
+            # api_requests = check_api_requests()
+            time.sleep(5)
+            if api_call_process(api_call_code, add_to_list):
+                # generate social post options
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, blog_body, max_char, request.user.profile)
+
+                # create database record
+                new_post = BlogSocialPost.objects.create(
+                    title=post_title,
+                    post_type=postType,
+                    tone_of_voice=tone_of_voice,
+                    keywords=post_keywords,
+                    audience=post_audience,
+                    post=social_post,
+                    blog=blog,
+                )
+                new_post.save()
+
+                add_to_list.is_done=True
+                add_to_list.save()
+                
+                context['new_post'] = new_post
+
+                return redirect('view-social-media', postType, new_post.uniqueId)
+
+            else:
+                # we might need to delete all abandoned calls
+                pass
+            n += 1
+
+    return render(request, 'dashboard/social-media-post.html', context)
+
+
+@login_required
+def delete_social_post(request, uniqueId):
+    try:
+        post = BlogSocialPost.objects.get(uniqueId=uniqueId)
+        if post.blog.profile == request.user.profile:
+            post.deleted=True
+            post.save()
+            messages.info(request, "Social media post deleted successfully!")
+            return redirect('social-post-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('social-post-memory')
+    except:
+        messages.error(request, "Social media post not found!")
+        return redirect('social-post-memory')
+
 
 @login_required
 def view_generated_blog(request, slug):
     context = {}
 
     current_page = 'Blog Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     try:
@@ -589,12 +984,26 @@ def paragraph_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Paragraph Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+    user_profile = request.user.profile
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -614,6 +1023,8 @@ def paragraph_writer(request, uniqueId=''):
     if request.method == 'POST':
         paragraph_topic = request.POST['paragraph_topic']
         request.session['paragraph_topic'] = paragraph_topic
+
+        paragraph_cate = request.POST['category']
 
         if len(paragraph_topic) > 300:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
@@ -647,6 +1058,7 @@ def paragraph_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             paragraph=gen_paragraph,
                             profile=request.user.profile,
+                            category=paragraph_cate
                         )
                         s_paragraph.save()
 
@@ -669,17 +1081,54 @@ def paragraph_writer(request, uniqueId=''):
     return render(request, 'dashboard/paragraph-writer.html', context)
 
 
+
+@login_required
+def delete_paragraph(request, uniqueId):
+
+    try:
+        content = Paragraph.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.user.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('paragraph-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('paragraph-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('paragraph-memory')
+
+
 @login_required
 def sentence_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Sentence Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -708,6 +1157,7 @@ def sentence_writer(request, uniqueId=''):
             context['old_sentence'] = sentence_obj.old_sentence
             context['tone_of_voice'] = sentence_obj.tone_of_voice
             context['sentence_uniqueId'] = sentence_obj.uniqueId
+            context['sentence_cate'] = sentence_obj.category
 
         # context['paragraph'] = sentence
     else:
@@ -716,7 +1166,7 @@ def sentence_writer(request, uniqueId=''):
     if request.method == 'POST':
         old_sentence = request.POST['old_sentence']
         tone_of_voice = request.POST['tone_of_voice']
-        # request.session['old_sentence'] = old_sentence
+        sentnc_cate = request.POST['category']
 
         if len(old_sentence) > 160:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
@@ -745,6 +1195,7 @@ def sentence_writer(request, uniqueId=''):
                             new_sentence=new_sentence,
                             tone_of_voice=tone_of_voice,
                             profile=request.user.profile,
+                            category=sentnc_cate
                         )
                         s_sentence.save()
 
@@ -768,17 +1219,53 @@ def sentence_writer(request, uniqueId=''):
 
 
 @login_required
+def delete_sentence(request, uniqueId):
+    context = {}
+
+    try:
+        sentence = Sentence.objects.get(uniqueId=uniqueId)
+
+        if sentence.profile == request.user.profile:
+            sentence.deleted=True
+            sentence.save()
+
+            messages.info(request, "Sentence deleted successfully!")
+            return redirect('sentence-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('sentence-memory')
+    except:
+        messages.error(request, "Sentence not found!")
+        return redirect('sentence-memory')
+    
+
+@login_required
 def article_title_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Title Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
-    
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -806,6 +1293,7 @@ def article_title_writer(request, uniqueId=''):
             context['old_title'] = title_obj.old_title
             context['tone_of_voice'] = title_obj.tone_of_voice
             context['title_uniqueId'] = title_obj.uniqueId
+            context['title_cate'] = title_obj.category
 
         # context['paragraph'] = title
     else:
@@ -814,13 +1302,13 @@ def article_title_writer(request, uniqueId=''):
     if request.method == 'POST':
         old_title = request.POST['old_title']
         tone_of_voice = request.POST['tone_of_voice']
+        title_cate = request.POST['category']
         # request.session['old_title'] = old_title
 
         if len(old_title) > 160:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
             return redirect('title-writer')
         else:
-
             api_call_code = str(uuid4()).split('-')[4]
 
             add_to_list = add_to_api_requests('rewriter_article_title', api_call_code, request.user.profile)
@@ -843,6 +1331,7 @@ def article_title_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             new_title_options=new_titles,
                             profile=request.user.profile,
+                            category=title_cate,
                         )
                         s_title.save()
 
@@ -866,16 +1355,54 @@ def article_title_writer(request, uniqueId=''):
 
 
 @login_required
-def meta_description_writer(request, uniqueId=''):
+def delete_title(request, uniqueId):
+
+    try:
+        title = ArticleTitle.objects.get(uniqueId=uniqueId)
+
+        if title.profile == request.user.profile:
+            title.deleted=True
+            title.save()
+
+            messages.info(request, "Title deleted successfully!")
+            return redirect('title-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('title-memory')
+    except:
+        messages.error(request, "Title not found!")
+        return redirect('title-memory')
+    
+
+@login_required
+def generate_blog_meta(request, uniqueId):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Meta Description Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    blog_posts = []
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
         
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
@@ -884,17 +1411,33 @@ def meta_description_writer(request, uniqueId=''):
 
     context['tone_of_voices'] = tone_of_voices
 
-    if len(uniqueId) > 0:
-        # search database for meta descriptions with this slug
-        meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
+    try:
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
 
-        context['meta_descr'] = meta_descr
-    else:
-        pass
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory')
+    
+    blogs = Blog.objects.filter(profile=user_profile)
+
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
+    
+    blog_sections = []
+
+    context['blog_posts'] = blog_posts
+
+    context['post_blog'] = this_blog
+    context['article_title'] = this_blog.title
+    context['this_blog_cate'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
 
     if request.method == 'POST':
         article_title = request.POST['article_title']
         tone_of_voice = request.POST['tone_of_voice']
+        meta_category = request.POST['category']
         request.session['article_title'] = article_title
 
         if len(article_title) > 160:
@@ -924,6 +1467,110 @@ def meta_description_writer(request, uniqueId=''):
                             tone_of_voice=tone_of_voice,
                             meta_description=gen_meta_descr,
                             profile=request.user.profile,
+                            category=meta_category,
+                            blog_id=uniqueId,
+                        )
+                        s_meta_descr.save()
+
+                        add_to_list.is_done=True
+                        add_to_list.save()
+
+                        context['meta_descr_uniqueId'] = s_meta_descr.uniqueId
+
+                        return redirect('meta-description-generator-response', s_meta_descr.uniqueId)
+                    
+                    else:
+                        messages.error(request, "The engine could not understand your command, please try again!")
+                        return redirect('generate-blog-meta', uniqueId)
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+
+    return render(request, 'dashboard/meta-description-generator.html', context)
+
+
+@login_required
+def meta_description_writer(request, uniqueId=''):
+    context = {}
+
+    tone_of_voices = []
+    current_page = 'Meta Description Generator'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+        
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    if len(uniqueId) > 0:
+        # search database for meta descriptions with this slug
+        meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
+
+        context['meta_descr'] = meta_descr
+        context['article_title'] = meta_descr.article_title
+        context['category'] = meta_descr.category
+        context['tone_of_voice'] = meta_descr.tone_of_voice
+        context['meta_description'] = meta_descr.meta_description
+    else:
+        pass
+
+    if request.method == 'POST':
+        article_title = request.POST['article_title']
+        tone_of_voice = request.POST['tone_of_voice']
+        meta_category = request.POST['category']
+        request.session['article_title'] = article_title
+
+        if len(article_title) > 160:
+            messages.error(request, "The engine could not generate content for your prompt, please try again!")
+            return redirect('meta-description-generator')
+        else:
+
+            api_call_code = str(uuid4()).split('-')[4]
+
+            add_to_list = add_to_api_requests('generate_meta_description', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+
+                    gen_meta_descr = generate_meta_description(article_title, tone_of_voice, request.user.profile)
+
+                    if len(gen_meta_descr) > 0:
+
+                        # create database record
+                        s_meta_descr = MetaDescription.objects.create(
+                            article_title=article_title,
+                            tone_of_voice=tone_of_voice,
+                            meta_description=gen_meta_descr,
+                            profile=request.user.profile,
+                            category=meta_category,
                         )
                         s_meta_descr.save()
 
@@ -942,41 +1589,99 @@ def meta_description_writer(request, uniqueId=''):
                     pass
                 n += 1
 
-
     return render(request, 'dashboard/meta-description-generator.html', context)
 
 
 @login_required
-def summarize_content(request, uniqueId=""):
+def delete_meta_descr(request, uniqueId):
+
+    try:
+        meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
+
+        if meta_descr.profile == request.user.profile:
+            meta_descr.deleted=True
+            meta_descr.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('meta-descr-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('meta-descr-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('meta-descr-memory')
+    
+
+@login_required
+def summarize_blog(request, uniqueId):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Content Summarizer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+    blog_posts = []
+
+    blog_sections = []
+
+    blog_body = ''
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    try:
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
+
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory')
+    
+    blogs = Blog.objects.filter(profile=user_profile)
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
+            for blog_sect in sections:
+                blog_sections.append(blog_sect.body)
+
+    blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
 
+    context['blog_posts'] = blog_posts
     context['tone_of_voices'] = tone_of_voices
 
-    if len(uniqueId) > 0:
-        # search database for meta descriptions with this slug
-        content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
+    context['post_blog'] = this_blog
+    context['summary_title'] = this_blog.title
+    context['this_summary_cate'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
 
-        context['content_summary'] = content_summary
-    else:
-        pass
+    context['long_content'] = blog_body
 
     if request.method == 'POST':
         long_content = request.POST['long_content']
         summary_title = request.POST['summary_title']
         tone_of_voice = request.POST['tone_of_voice']
+        summary_cate = request.POST['category']
         request.session['long_content'] = long_content
 
         if len(long_content) > 14000:
@@ -1007,6 +1712,114 @@ def summarize_content(request, uniqueId=""):
                             tone_of_voice=tone_of_voice,
                             summarized=content_summary,
                             profile=request.user.profile,
+                            category=summary_cate,
+                            blog_id=uniqueId,
+                        )
+                        s_content_data.save()
+
+                        add_to_list.is_done=True
+                        add_to_list.save()
+
+                        context['content_data_uniqueId'] = s_content_data.uniqueId
+
+                        return redirect('content-summarizer-response', s_content_data.uniqueId)
+            
+                    else:
+                        messages.error(request, "The engine could not understand your command, please try again!")
+                        return redirect('generate-blog-summary', uniqueId)
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+
+    return render(request, 'dashboard/content-summarizer.html', context)
+
+
+@login_required
+def summarize_content(request, uniqueId=""):
+    context = {}
+
+    tone_of_voices = []
+    current_page = 'Content Summarizer'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    if len(uniqueId) > 0:
+        # search database for meta descriptions with this slug
+        content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
+
+        context['content_summary'] = content_summary
+        context['summary_title'] = content_summary.summary_title
+        context['this_summary_cate'] = content_summary.category
+        context['tone_of_voice'] = content_summary.tone_of_voice
+        context['long_content'] = content_summary.long_content
+        context['summarized_content'] = content_summary.summarized
+
+    else:
+        pass
+
+    if request.method == 'POST':
+        long_content = request.POST['long_content']
+        summary_title = request.POST['summary_title']
+        tone_of_voice = request.POST['tone_of_voice']
+        summary_cate = request.POST['category']
+        request.session['long_content'] = long_content
+
+        if len(long_content) > 14000:
+            messages.error(request, "The engine could not generate content for your prompt, please try again!")
+            return redirect('meta-description-generator')
+        else:
+            
+            api_call_code = str(uuid4()).split('-')[4]
+
+            add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+
+                    content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
+
+                    if len(content_summary) > 0:
+
+                        # create database record
+                        s_content_data = ContentSummary.objects.create(
+                            long_content=long_content,
+                            summary_title=summary_title,
+                            tone_of_voice=tone_of_voice,
+                            summarized=content_summary,
+                            profile=request.user.profile,
+                            category=summary_cate,
                         )
                         s_content_data.save()
 
@@ -1029,22 +1842,60 @@ def summarize_content(request, uniqueId=""):
 
 
 @login_required
+def delete_summary(request, uniqueId):
+
+    try:
+        content = ContentSummary.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.user.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('summarizer-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('summarizer-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('summarizer-memory')
+
+
+@login_required
 def landing_page_copy(request, uniqueId=""):
     context = {}
 
     current_page = 'Landing Page Copy Generator'
-
     context['current_page'] = current_page
-
     page_sections = "Header, Subheader, About Us, Call to Action, FAQ, Testimonials"
-
     context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     context['page_sections'] = page_sections
 
     if len(uniqueId) > 0:
         # search database for meta descriptions with this slug
         copy_content = LandingPageCopy.objects.get(uniqueId=uniqueId)
+        copy_content.page_copy=copy_content.page_copy.replace('\n', '<br>')
+        copy_content.save()
 
         context['copy_content'] = copy_content
         context['page_sections'] = copy_content.page_sections
@@ -1054,6 +1905,7 @@ def landing_page_copy(request, uniqueId=""):
     if request.method == 'POST':
         company_name = request.POST['company_name']
         copy_title = request.POST['copy_title']
+        copy_category = request.POST['category']
         # request.session['company_name'] = company_name
 
         company_purpose = request.POST['company_purpose']
@@ -1089,6 +1941,7 @@ def landing_page_copy(request, uniqueId=""):
                             page_sections=page_sections,
                             page_copy=gen_page_copy,
                             profile=request.user.profile,
+                            category=copy_category,
                         )
                         s_content_data.save()
 
@@ -1108,6 +1961,26 @@ def landing_page_copy(request, uniqueId=""):
                 n += 1
 
     return render(request, 'dashboard/landing-page-copy.html', context)
+
+
+@login_required
+def delete_page_copy(request, uniqueId):
+
+    try:
+        content = LandingPageCopy.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.user.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('page-copy-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('page-copy-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('page-copy-memory')
 
 
 @login_required
@@ -1533,14 +2406,10 @@ def device_manager(request):
     context = {}
 
     current_page = 'Device Manager'
-
     total_devices = 0
     max_devices = 5
-
     context['current_page'] = current_page
-
     reg_devices = []
-
     user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
 
     for user_device in user_reg_devices:
@@ -1571,38 +2440,66 @@ def delete_device(request, uniqueId):
 
 
 @login_required
-def memory_blogs(request):
+def memory_blogs(request, status):
     context = {}
 
     empty_blogs = []
     complete_blogs = []
+    edited_blogs = []
 
     today_date = datetime.datetime.now()
 
     q_year = today_date.year
     q_month = today_date.month
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    context['blogs_status'] = status
+
     # Get total blogs
-    blogs = Blog.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month).order_by('last_updated')
+    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for blog in blogs:
-        sections = BlogSection.objects.filter(blog=blog)
-        if sections.exists():
-            # calculate blog words
-            blog_words = 0
-            for section in sections:
+        if not blog.deleted:
+            sections = BlogSection.objects.filter(blog=blog)
+            saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
-                blog_words += int(section.word_count)
+            if saved_sections.exists():
+                edited_blogs.append(blog)
 
-                # month_word_count += int(section.word_count)
-            blog.word_count = str(blog_words)
-            blog.save()
-            complete_blogs.append(blog)
-        else:
-            empty_blogs.append(blog)
+            if sections.exists():
+                # calculate blog words
+                blog_words = 0
+                for section in sections:
+                    blog_words += int(section.word_count)
+                    # month_word_count += int(section.word_count)
+                if int(blog.word_count) < 1:
+                    blog.word_count = str(blog_words)
+                    blog.save()
+                complete_blogs.append(blog)
+            else:
+                empty_blogs.append(blog)
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
+    context['edited_blogs'] = edited_blogs
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
@@ -1610,6 +2507,168 @@ def memory_blogs(request):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/blog-memory.html', context)
+
+
+@login_required
+def memory_social_post(request):
+    context = {}
+
+    s_posts = []
+    my_blogs = []
+
+    # Get total blogs
+    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
+    for blog in blogs:
+        if not blog.deleted:
+            my_blogs.append(blog)
+
+    # get social posts
+    soc_posts = BlogSocialPost.objects.filter(deleted=False)
+    for post in soc_posts:
+        if post.blog.profile == request.user.profile:
+            s_posts.append(post)
+
+    context['s_posts'] = s_posts
+    context['my_blogs'] = my_blogs
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Social Media Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/social-media-memory.html', context)
+
+
+@login_required
+def memory_paragraph(request):
+    context = {}
+    saved_paragraphs = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    paragraphs = Paragraph.objects.filter(profile=request.user.profile).order_by('last_updated')
+
+    for summary in paragraphs:
+        if not summary.deleted:
+            saved_paragraphs.append(summary)
+
+    context['saved_paragraphs'] = saved_paragraphs
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Paragraph Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/paragraph-memory.html', context)
+
+
+@login_required
+def memory_sentence(request):
+    context ={}
+    saved_sentence = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    sentences = Sentence.objects.filter(profile=request.user.profile).order_by('last_updated')
+
+    for sentence in sentences:
+        if not sentence.deleted:
+            saved_sentence.append(sentence)
+
+    context['saved_sentence'] = saved_sentence
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Sentence Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/sentence-memory.html', context)
+
+
+@login_required
+def memory_title(request):
+    context ={}
+    saved_title = []
+    today_date = datetime.datetime.now()
+
+    q_year = today_date.year
+    q_month = today_date.month
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    article_titles = ArticleTitle.objects.filter(profile=request.user.profile).order_by('last_updated')
+
+    for title in article_titles:
+        if not title.deleted:
+            saved_title.append(title)
+
+    context['saved_title'] = saved_title
+
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    current_page = 'Title Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/title-memory.html', context)
 
 
 @login_required
@@ -1623,11 +2682,31 @@ def memory_summarizer(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     # Get total summaries
-    summaries = ContentSummary.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    summaries = ContentSummary.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for summary in summaries:
-        saved_summaries.append(summary)
+        if not summary.deleted:
+            saved_summaries.append(summary)
 
     context['saved_summaries'] = saved_summaries
 
@@ -1650,11 +2729,31 @@ def memory_page_copy(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     # Get total summaries
-    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for page_copy in page_copies:
-        saved_page_copies.append(page_copy)
+        if not page_copy.deleted:
+            saved_page_copies.append(page_copy)
 
     context['saved_page_copies'] = saved_page_copies
 
@@ -1672,16 +2771,31 @@ def memory_meta_descr(request):
     
     saved_meta_descriptions = []
 
-    today_date = datetime.datetime.now()
+    cate_list = []
+    client_list = []
 
-    q_year = today_date.year
-    q_month = today_date.month
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
     # Get total summaries
-    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile, date_created__year=q_year, date_created__month=q_month)
+    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for meta_description in meta_descriptions:
-        saved_meta_descriptions.append(meta_description)
+        if not meta_description.deleted:
+            saved_meta_descriptions.append(meta_description)
 
     context['saved_meta_descriptions'] = saved_meta_descriptions
 
@@ -1691,4 +2805,271 @@ def memory_meta_descr(request):
     context['current_page'] = current_page
 
     return render(request, 'dashboard/meta-description-memory.html', context)
+
+
+def categories(request):
+    context = {}
+
+    current_page = 'Categories'
+    context['current_page'] = current_page
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    if request.method == "POST":
+        client_id = request.POST['client']
+
+        team_client = TeamClient.objects.get(uniqueId=client_id)
+
+        category_name = request.POST['new-cate-name']
+        cate_descr = request.POST['cate-description']
+
+        if len(category_name) > 3:
+            new_cate = ClientCategory.objects.create(
+                category_name=category_name,
+                description=cate_descr,
+                created_by=user_profile.uniqueId,
+                team=user_profile.user_team,
+                client=team_client,
+            )
+            new_cate.save()
+            return redirect('categories')
+
+    return render(request, 'dashboard/categories.html', context)
+
+
+def clients(request):
+    context = {}
+
+    current_page = 'Clients'
+    context['current_page'] = current_page
+
+    client_list = []
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(team=user_profile.user_team)
+
+    for client in team_clients:
+        client_list.append(client)
+
+    context['client_list'] = client_list
+
+    if request.method == "POST":
+        client_name = request.POST['new-client-name']
+        contact_name = request.POST['nc-contact-name']
+        client_email = request.POST['nc-contact-email']
+        client_industry = request.POST['nc-industry']
+        client_address = request.POST['nc-address']
+
+        if len(client_name) > 3:
+            new_client = TeamClient.objects.create(
+                client_name=client_name,
+                contact_person=contact_name,
+                industry=client_industry,
+                client_email=client_email,
+                business_address=client_address,
+                created_by=user_profile.uniqueId,
+                team=user_profile.user_team,
+            )
+            new_client.save()
+
+            return redirect('clients')
+
+    return render(request, 'dashboard/clients.html', context)
+
+
+def delete_client(request, uniqueId):
+    context = {}
+
+    current_page = 'Delete Client'
+    context['current_page'] = current_page
+
+    user_profile = request.user.profile
+
+    client = TeamClient.objects.get(uniqueId=uniqueId)
+
+    if client.team == user_profile.user_team:
+        client.delete()
+    else:
+        messages.error(request, "Action denied on this client!")
+        return redirect('clients')
+
+    return redirect('clients')
+
+
+def change_client_status(request, status, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    client_status = False
+
+    if status == 'activate':
+        client_status = True
+
+    user_profile = request.user.profile
+
+    client = TeamClient.objects.get(uniqueId=uniqueId)
+
+    if client.team == user_profile.user_team:
+        client.is_active=client_status
+        client.save()
+    else:
+        messages.error(request, "Action denied on this client!")
+        return redirect('clients')
+
+    return redirect('clients')
+
+
+def edit_client(request, uniqueId):
+    context = {}
+
+    current_page = 'Edit Client'
+    parent_page = 'Clients'
+    context['current_page'] = current_page
+    context['parent_page'] = parent_page
+    context['parent_page_url'] = 'client'
+
+    user_profile = request.user.profile
+
+    this_client = TeamClient.objects.get(uniqueId=uniqueId)
+    context['client_name'] = this_client.client_name
+    context['cont_person'] = this_client.contact_person
+    context['client_ind'] = this_client.industry
+    context['client_email'] = this_client.client_email
+    context['client_addr'] = this_client.business_address
+    context['client_descr'] = this_client.description
+
+    if request.method == 'POST':
+        client_name = request.POST['new-client-name']
+        contact_name = request.POST['nc-contact-name']
+        client_email = request.POST['nc-contact-email']
+        client_industry = request.POST['nc-industry']
+        client_address = request.POST['nc-address']
+        client_descr = request.POST['client-descr']
+
+        if len(client_name) > 3:
+            this_client.client_name=client_name
+            this_client.contact_person=contact_name
+            this_client.industry=client_industry
+            this_client.client_email=client_email
+            this_client.business_address=client_address
+            this_client.description=client_descr
+            this_client.save()
+
+            return redirect('clients')
+
+    return render(request, 'dashboard/clients.html', context)
+
+
+def edit_category(request, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    parent_page = 'Categories'
+    context['current_page'] = current_page
+    context['parent_page'] = parent_page
+    context['parent_page_url'] = 'categories'
+
+    client_list = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    context['client_list'] = client_list
+
+    this_cate = ClientCategory.objects.get(uniqueId=uniqueId)
+    this_cate_name = this_cate.category_name
+    this_cate_descr = this_cate.description
+
+    context['cate_name'] = this_cate_name
+    context['cate_descr'] = this_cate_descr
+    context['cate_client'] = this_cate.client.uniqueId
+
+    if request.method == 'POST':
+        category_name = request.POST['new-cate-name']
+        cate_descr = request.POST['cate-description']
+        cate_descr = request.POST['cate-description']
+
+        client_id = request.POST['client']
+
+        team_client = TeamClient.objects.get(uniqueId=client_id)
+
+        if len(category_name) > 3:
+            this_cate.category_name=category_name
+            this_cate.description=cate_descr
+            this_cate.client=team_client
+            this_cate.save()
+
+            return redirect('categories')
+
+    return render(request, 'dashboard/edit-category.html', context)
+
+
+def change_category_status(request, status, uniqueId):
+    context = {}
+
+    current_page = 'Edit Category'
+    context['current_page'] = current_page
+
+    cate_status = False
+
+    if status == 'activate':
+        cate_status = True
+
+    user_profile = request.user.profile
+
+    category = ClientCategory.objects.get(uniqueId=uniqueId)
+
+    if category.client.team == user_profile.user_team:
+        category.is_active=cate_status
+        category.save()
+    else:
+        messages.error(request, "Action denied on this category!")
+        
+        return redirect('categories')
+
+    return redirect('categories')
+
+
+def delete_category(request, uniqueId):
+    context = {}
+
+    current_page = 'Delete Category'
+    context['current_page'] = current_page
+
+    user_profile = request.user.profile
+
+    category = ClientCategory.objects.get(uniqueId=uniqueId)
+
+    if category.client.team == user_profile.user_team:
+        category.delete()
+    else:
+        messages.error(request, "Action denied on this category!")
+        
+        return redirect('categories')
+
+    return redirect('categories')
 #

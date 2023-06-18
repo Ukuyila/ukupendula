@@ -1,9 +1,13 @@
 
 $(document).ready(function(){
   "use strict";
-  const maxLength = 160;
+  const maxLength = 200;
   
   $('.counter').text($('#article_title').val().length+'/'+maxLength);
+
+  if ( $('#article_title').val().length > 10 ) {
+    $('#btn-generate').prop('disabled', false)
+  }
 
   $('#article_title').keyup(function() {
     var curr_textlen = $(this).val().length;

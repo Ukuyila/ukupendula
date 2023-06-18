@@ -1,8 +1,11 @@
 $(function(e) {
 	
-	$('.content').richText();
+	$('.content').richText({
+		height: 150,
+	});
 	$('.content2').richText({
-		minimumResultsForSearch: Infinity
+		minimumResultsForSearch: Infinity,
+		height: 150,
 	});
 
 });

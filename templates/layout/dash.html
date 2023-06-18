@@ -22,6 +22,9 @@
 		<!-- Bootstrap Css -->
 		<link id="style" href="{% static 'dash/plugins/bootstrap-5/css/bootstrap.min.css' %}" rel="stylesheet" />
 
+		<!-- select2 Plugin -->
+		<link href="{% static 'dash/plugins/select2/select2.min.css' %}" rel="stylesheet" />
+
 		<!-- Sidemenu Css -->
 		<link href="{% static 'dash/css/sidemenu.css' %}" rel="stylesheet" />
 
@@ -185,7 +188,7 @@
 													</a>
 													<a href="chats.html" class="dropdown-item text-center border-top py-3">View all Messages</a>
 												</div>
-											</div>
+											</div> -->
 											<div class="dropdown d-sm-flex">
 												<a class="nav-link icon" data-bs-toggle="dropdown">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m21.706 5.291-2.999-2.998A.996.996 0 0 0 18 2H6a.996.996 0 0 0-.707.293L2.294 5.291A.994.994 0 0 0 2 5.999V19c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5.999a.994.994 0 0 0-.294-.708zM6.414 4h11.172l.999.999H5.415L6.414 4zM4 19V6.999h16L20.002 19H4z"/><path d="M15 12H9v-2H7v4h10v-4h-2z"/></svg>
@@ -193,46 +196,27 @@
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow  app-selector py-0">
 													<ul class="drop-icon-wrap p-2">
 														<li>
-															<a href="emailservice.html" class="drop-icon-item">
-																<i class="icon icon-speech text-dark"></i>
-																<span class="block"> E-mail</span>
+															<a href="{% url 'categories' %}" class="drop-icon-item">
+																<i class="icon icon-folder-alt text-dark"></i>
+																<span class="block">Categories</span>
 															</a>
 														</li>
 														<li>
-															<a href="maps.html" class="drop-icon-item">
-																<i class="icon icon-map text-dark"></i>
-																<span class="block">map</span>
-															</a>
-														</li>
-
-														<li>
-															<a href="chats.html" class="drop-icon-item">
-																<i class="icon icon-bubbles text-dark"></i>
-																<span class="block">Messages</span>
+															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
+																<i class="icon icon-layers text-dark"></i>
+																<span class="block">Memories</span>
 															</a>
 														</li>
 														<li>
-															<a href="profile-1.html" class="drop-icon-item">
-																<i class="icon icon-user-follow text-dark"></i>
-																<span class="block">Followers</span>
-															</a>
-														</li>
-														<li>
-															<a href="gallery.html" class="drop-icon-item">
-																<i class="icon icon-picture text-dark"></i>
-																<span class="block">Photos</span>
-															</a>
-														</li>
-														<li>
-															<a href="settings.html" class="drop-icon-item">
+															<a href="#" class="drop-icon-item">
 																<i class="icon icon-settings text-dark"></i>
 																<span class="block">Settings</span>
 															</a>
 														</li>
 													</ul>
-													<a href="settings.html" class="dropdown-item text-center border-top">View all</a>
+													<a hidden href="#" class="dropdown-item text-center border-top">View all</a>
 												</div>
-											</div> -->
+											</div>
 											<div class="dropdown show">
 												<a href="javascript:void(0);" class="leading-none user-img" data-bs-toggle="dropdown">
                           {% if user.profile.profile_image.name %}
@@ -246,14 +230,15 @@
 													<a class="dropdown-item" href="{% url 'profile' %}">
 														<i class="dropdown-icon icon icon-user"></i> My Profile
 													</a>
-													<a class="dropdown-item" href="{% url 'device-manager' %}">
-														<i class="dropdown-icon  icon icon-screen-desktop"></i> Devices
-													</a>
 													{% if user.profile.subscription_type == 'teams' %}
 													<a class="dropdown-item" href="{% url 'team-manager' %}">
 														<i class="dropdown-icon  icon icon-people"></i> Team
 													</a>
 													{% endif %}
+													
+													<a class="dropdown-item" href="{% url 'device-manager' %}">
+														<i class="dropdown-icon  icon icon-screen-desktop"></i> Devices
+													</a>
 													<a class="dropdown-item" href="{% url 'billing' %}">
 														<i class="dropdown-icon  icon icon-credit-card"></i> Billing
 													</a>
@@ -439,10 +424,14 @@
 					<div class="side-app">
             <div class="page-header">
               <h4 class="page-title">{{current_page}}</h4>
+							
               <ol class="breadcrumb">
                 {% if not current_page == 'Dashboard' %}
                 <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
                 {% endif %}
+								{% if parent_page %}
+								<li class="breadcrumb-item"><a href="{% url parent_page_url %}">{{parent_page}}</a></li>
+								{% endif %}
                 <li class="breadcrumb-item active" aria-current="page">{{current_page}}</li>
               </ol>
             </div>
@@ -480,6 +469,9 @@
 		<!-- Fullside-menu Js-->
 		<script src="{% static 'dash/plugins/toggle-sidebar/sidemenu.js' %}"></script>
 
+		<!--Select2 js -->
+		<script src="{% static 'dash/plugins/select2/select2.full.min.js' %}"></script>
+
 		<!-- p-scroll bar Js-->
 		<script src="{% static 'dash/plugins/pscrollbar/pscrollbar.js' %}"></script>
 		<script src="{% static 'dash/plugins/pscrollbar/pscroll.js' %}"></script>
@@ -487,6 +479,9 @@
 		<!--Counters -->
 		<script src="{% static 'dash/plugins/counters/counterup.min.js' %}"></script>
 		<script src="{% static 'dash/plugins/counters/waypoints.min.js' %}"></script>
+
+		<!-- Inline js -->
+		<script src="{% static 'dash/js/select2.js' %}"></script>
 
 		<!-- Switcher js -->
 		<script src="{% static 'dash/switcher/js/switcher.js' %}"></script>

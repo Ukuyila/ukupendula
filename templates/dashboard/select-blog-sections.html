@@ -28,13 +28,19 @@
                                                     {% for section_head in blog_sections %}
                                                         <tr>
                                                             <td>
-
                                                                 <div class="form-check form-switch mb-2">
                                                                     <input class="form-check-input" type="checkbox" name="{{section_head}}" />
 
                                                                 </div>
                                                             </td>
                                                             <td>{{section_head}}</td>
+                                                            <td>
+                                                                {% if saved_sect_head == section_head %}
+                                                                <a href="javascript:void(0);" disabled class="btn btn-xs btn-primary">Saved</a>
+                                                                {% else %}
+                                                                <a href="{% url 'save-section-head' uniqueId section_head|urlencode %}" class="btn btn-xs btn-outline-primary">Save</a>
+                                                                {% endif %}
+                                                            </td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>

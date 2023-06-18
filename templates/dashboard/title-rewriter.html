@@ -35,13 +35,31 @@
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
                                                 <div class="mb-3">
+                                                    <label for="category" class=" ">Category</label>
+                                                    <select type="text" class="form-control select2" id="category" name="category">
+                                                        {% for client in client_list %}
+                                                        <optgroup label="{{client.client_name}}">
+                                                        {% for category in cate_list %}
+                                                        {% if category.client == client %}
+                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                            {% if category.uniqueId == title_cate %}
+                                                            selected
+                                                            {% endif %}
+                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="old_title" class=" ">Get alternative title options</label><span class="title_counter text-muted">0/200</span></div>
                                                     <textarea type="text" rows="10" class="form-control" id="old_title" name="old_title" placeholder="Input your title here" maxlength="200" required>{{old_title|safe}}</textarea>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label for="tone_of_voice" class=" ">Tone of voice</label>
-                                                    <select type="text" class="form-control select2-show-search" id="tone_of_voice" name="tone_of_voice">
+                                                    <select type="text" class="form-control select2" id="tone_of_voice" name="tone_of_voice">
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
@@ -70,12 +88,9 @@
                                   <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-left">
                                         <h5 class="mb-0">AI Generated Response</h5>
-                                        <div class="btn-group float-end">
-                                            <!-- <button class="btn btn-outline-primary">View</button> -->
-                                            <!-- <button class="btn btn-primary">Download</button> -->
-                                        </div>
                                     </div>
                                     <div class="card-body">
+                                        <div class="mb-5"><small class="text-primary">Disclaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small></div>
                                         <label class=" ">Use the generated content as you please</label>
                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                             

@@ -9,7 +9,7 @@
       <div class="card overflow-hidden">
         <div class="card-header">
           <h3 class="card-title">Blog Words</h3>
-          <div class="card-options"> <a class="btn btn-sm btn-danger" href="{% url 'blog-memory' %}">View</a> </div>
+          <div class="card-options"> <a class="btn btn-sm btn-danger" href="{% url 'blog-memory' 'complete' %}">View</a> </div>
         </div>
         <div class="card-body ">
           <h3 class="mt-0 font-weight-semibold">{{blog_word_cnt}}</h3>
@@ -17,9 +17,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-danger w-{{clm_blog_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_blog_word_cnt > 0 %}
-          <div class="text-muted fs-12"><i class="fa {{blg_carret_set}} me-1"></i>{{clm_blog_word_cnt}}% than last month</div>
-          {% endif %}
+          
+          <div class="text-muted fs-12">{{clm_blog_word_cnt}}% <i class="fa {{blg_carret_set}} me-1"></i> than last month</div>
+          
         </div>
       </div>
     </div>
@@ -35,9 +35,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-primary w-{{clm_summarizer_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_summarizer_word_cnt > 0 %}
-          <div class="text-muted fs-12"><i class="fa {{sumry_carret_set}} me-1"></i>{{clm_summarizer_word_cnt}}% than last month</div>
-          {% endif %}
+          
+          <div class="text-muted fs-12">{{clm_summarizer_word_cnt}}% <i class="fa {{sumry_carret_set}} me-1"></i> than last month</div>
+          
         </div>
       </div>
     </div>
@@ -52,9 +52,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-dark w-{{clm_landing_copy_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_landing_copy_word_cnt > 0 %}
-          <div class="text-muted fs-12"><i class="fa {{lpc_carret_set}} me-1"></i>{{clm_landing_copy_word_cnt}}% than last month</div>
-          {% endif %}
+          
+          <div class="text-muted fs-12">{{clm_landing_copy_word_cnt}}% <i class="fa {{lpc_carret_set}} me-1"></i> than last month</div>
+          
         </div>
       </div>
     </div>
@@ -69,9 +69,9 @@
           <div class="progress progress-sm mt-0 mb-2">
             <div class="progress-bar bg-info w-{{clm_meta_word_cnt}}" role="progressbar"></div>
           </div>
-          {% if clm_meta_word_cnt > 0 %}
-          <div class="text-muted fs-12"><i class="fa {{meta_carret_set}} me-1"></i>{{clm_meta_word_cnt}}% than last month</div>
-          {% endif %}
+          
+          <div class="text-muted fs-12">{{clm_meta_word_cnt}}% <i class="fa {{meta_carret_set}} me-1"></i> than last month</div>
+          
         </div>
       </div>
     </div>

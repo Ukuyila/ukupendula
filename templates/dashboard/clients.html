@@ -1,0 +1,127 @@
+{% extends 'layout/dash.html' %}
+{% load static %}
+
+
+{% block css %}
+		<!-- Data table css -->
+		<link href="{% static 'dash/plugins/datatable/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/plugins/datatable/jquery.dataTables.min.css' %}" rel="stylesheet" />
+    <!-- select2 Plugin -->
+    <link href="{% static 'dash/plugins/select2/select2.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Client List</h3>
+          <div class="card-options">
+            <a href="{% url 'categories' %}" type="button" class="btn btn-outline-primary btn-sm">Categories</a>
+            <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewClient" class="btn btn-primary btn-sm">Add Client</a>
+          </div>
+        </div>
+        <div class="card-body">
+          {% if client_list|length > 0 %}
+          <div class="table-responsive mb-0 ">
+            <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
+              <thead>
+                <tr>
+                  <th style="width:50%">Client</th>
+                  <th>Status</th>
+                  <th>Datetime</th>
+                  <th></th>
+                  
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+              {% for client in client_list %}
+                <tr>
+                  <td class="text-primary me-1">
+                    <a href="{% url 'edit-client' client.uniqueId %}">{{client.client_name}}</a>
+                  </td>
+                  <td>
+                    {% if client.is_active %}
+                    <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' 'deactivate' client.uniqueId %}'"  class="badge badge-success">Active</a>
+                    {% else %}
+                    <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' 'activate' client.uniqueId %}'" class="badge badge-danger">Not Active</a>
+                    {% endif %}
+                  </td>
+                  <td>{{client.date_created|date:"Y-m-d"}}</td>
+                  <td>
+                    <a href="{% url 'edit-client' client.uniqueId %}" type="button" class="btn btn-xs btn-primary">Edit</a>
+                    <a href="{% url 'delete-client' client.uniqueId %}" type="button" class="btn btn-xs btn-danger">Delete</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div><h5>You have no data to display here yet, <a href="javascript:void(0);" type="button" data-bs-toggle="modal" data-bs-target="#addNewClient">Add New </a></h5></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- New Client Modal -->
+  <div class="modal fade" id="addNewClient" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="client-modal-title">New Client</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="new-client-name" class="control-label mb-10">Client Name:</label>
+              <input type="text" class="form-control" name="new-client-name" id="new-client-name" maxlength="255" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nc-contact-name" class="control-label mb-10">Contact Person:</label>
+              <input type="text" class="form-control" name="nc-contact-name" id="nc-contact-name" maxlength="255" >
+
+            </div>
+
+            <div class="form-group">
+              <label for="nc-contact-email" class="control-label mb-10">Email:</label>
+              <input type="text" class="form-control" name="nc-contact-email" id="nc-contact-email" maxlength="255" >
+
+            </div>
+
+            <div class="form-group">
+              <label for="nc-industry" class="control-label mb-10">Industry:</label>
+              <input type="text" class="form-control" name="nc-industry" id="nc-industry" maxlength="255" >
+
+            </div>
+            
+            <div class="form-group">
+              <label for="nc-address" class="control-label mb-10">Address:</label>
+              <textarea class="form-control" name="nc-address" id="nc-address" ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+		<!-- Data tables -->
+		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
+		<script src="{% static 'dash/js/datatable.js' %}"></script>
+    <!--Select2 js -->
+    <script src="{% static 'dash/plugins/select2/select2.full.min.js' %}"></script>
+    <script src="{% static 'dash/js/select2.js' %}"></script>
+{% endblock %}
