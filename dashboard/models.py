@@ -423,15 +423,15 @@ class ArticleTitle(models.Model):
 
 
 class MetaDescription(models.Model):
-    article_title = models.CharField(max_length=200)
+    article_title = models.CharField(max_length=255)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     meta_description = models.TextField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
     category = models.CharField(null=True, blank=True, max_length=255)
+    blog_id = models.CharField(max_length=100, blank=True, null=True)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)

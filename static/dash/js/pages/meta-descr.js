@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
   "use strict";
-  const maxLength = 160;
+  const maxLength = 200;
   
   $('.counter').text($('#article_title').val().length+'/'+maxLength);
 

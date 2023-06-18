@@ -221,11 +221,8 @@ def blog_topic(request):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Blog Topic Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     remove_api_requests(request.user.profile)
@@ -234,7 +231,6 @@ def blog_topic(request):
     client_list = []
 
     user_profile = request.user.profile
-
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -571,7 +567,6 @@ def save_section_head(request, uniqueId, section_head):
     context = {}
 
     blog = Blog.objects.get(uniqueId=uniqueId)
-
     section_head = requests.utils.unquote(section_head)
 
     if blog:
@@ -692,7 +687,6 @@ def edit_gen_blog(request, uniqueId):
     client_list = []
 
     user_profile = request.user.profile
-
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -778,7 +772,6 @@ def view_social_post(request, postType, uniqueId):
 
     current_page = 'View Blog Social Post'
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     blog_posts = []
@@ -828,7 +821,6 @@ def gen_social_from_blog(request, postType, uniqueId):
 
     current_page = 'Generated Social Post From Blog'
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     try:
@@ -907,7 +899,6 @@ def gen_social_from_blog(request, postType, uniqueId):
         post_audience = request.POST['audience']
 
         tone_of_voice = request.POST['tone_of_voice']
-        
         api_call_code = str(uuid4()).split('-')[4]
 
         add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
@@ -971,9 +962,7 @@ def view_generated_blog(request, slug):
     context = {}
 
     current_page = 'Blog Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     try:
@@ -996,18 +985,13 @@ def paragraph_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Paragraph Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
     client_list = []
-
     user_profile = request.user.profile
-
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -1124,11 +1108,8 @@ def sentence_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Sentence Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
@@ -1264,11 +1245,8 @@ def article_title_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Title Writer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
@@ -1289,7 +1267,6 @@ def article_title_writer(request, uniqueId=''):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
-    
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -1396,6 +1373,120 @@ def delete_title(request, uniqueId):
     except:
         messages.error(request, "Title not found!")
         return redirect('title-memory')
+    
+
+@login_required
+def gen_blog_meta(request, uniqueId):
+    context = {}
+
+    tone_of_voices = []
+    current_page = 'Meta Description Generator'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(request.user.profile)
+
+    cate_list = []
+    client_list = []
+    blog_posts = []
+
+    user_profile = request.user.profile
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+        
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    try:
+        this_blog = Blog.objects.get(uniqueId=uniqueId)
+
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory')
+    
+    blogs = Blog.objects.filter(profile=user_profile.profile)
+
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
+    
+    blog_sections = []
+
+    context['blog_posts'] = blog_posts
+
+    context['post_blog'] = this_blog
+    context['article_title'] = this_blog.title
+    context['category'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
+
+    if request.method == 'POST':
+        article_title = request.POST['article_title']
+        tone_of_voice = request.POST['tone_of_voice']
+        meta_category = request.POST['category']
+        request.session['article_title'] = article_title
+
+        if len(article_title) > 160:
+            messages.error(request, "The engine could not generate content for your prompt, please try again!")
+            return redirect('meta-description-generator')
+        else:
+
+            api_call_code = str(uuid4()).split('-')[4]
+
+            add_to_list = add_to_api_requests('generate_meta_description', api_call_code, request.user.profile)
+
+            n = 1
+            # runs until n < 50,just to avoid the infinite loop.
+            # this will execute the check_api_requests() func in every 5 seconds.
+            while n < 50:
+                # api_requests = check_api_requests()
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
+
+                    gen_meta_descr = generate_meta_description(article_title, tone_of_voice, request.user.profile)
+
+                    if len(gen_meta_descr) > 0:
+
+                        # create database record
+                        s_meta_descr = MetaDescription.objects.create(
+                            article_title=article_title,
+                            tone_of_voice=tone_of_voice,
+                            meta_description=gen_meta_descr,
+                            profile=request.user.profile,
+                            category=meta_category,
+                        )
+                        s_meta_descr.save()
+
+                        add_to_list.is_done=True
+                        add_to_list.save()
+
+                        context['meta_descr_uniqueId'] = s_meta_descr.uniqueId
+
+                        return redirect('meta-description-generator-response', uniqueId=s_meta_descr.uniqueId)
+                    
+                    else:
+                        messages.error(request, "The engine could not understand your command, please try again!")
+                        return redirect('meta-description-generator')
+                else:
+                    # we might need to delete all abandoned calls
+                    pass
+                n += 1
+
+    return render(request, 'dashboard/meta-description-generator.html', context)
 
 
 @login_required
@@ -1403,11 +1494,8 @@ def meta_description_writer(request, uniqueId=''):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Meta Description Generator'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
@@ -1441,6 +1529,10 @@ def meta_description_writer(request, uniqueId=''):
         meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
 
         context['meta_descr'] = meta_descr
+        context['article_title'] = meta_descr.article_title
+        context['category'] = meta_descr.category
+        context['tone_of_voice'] = meta_descr.tone_of_voice
+        context['meta_description'] = meta_descr.meta_description
     else:
         pass
 
@@ -1524,11 +1616,8 @@ def summarize_content(request, uniqueId=""):
     context = {}
 
     tone_of_voices = []
-
     current_page = 'Content Summarizer'
-
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
@@ -1647,11 +1736,8 @@ def landing_page_copy(request, uniqueId=""):
     context = {}
 
     current_page = 'Landing Page Copy Generator'
-
     context['current_page'] = current_page
-
     page_sections = "Header, Subheader, About Us, Call to Action, FAQ, Testimonials"
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     cate_list = []
@@ -2190,14 +2276,10 @@ def device_manager(request):
     context = {}
 
     current_page = 'Device Manager'
-
     total_devices = 0
     max_devices = 5
-
     context['current_page'] = current_page
-
     reg_devices = []
-
     user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
 
     for user_device in user_reg_devices:

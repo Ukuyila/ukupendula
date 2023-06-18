@@ -35,9 +35,9 @@
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
                                                 <div class="mb-3">   
-                                                    <div class="d-flex align-items-center justify-content-between"><label for="article_title" class=" ">Title</label> <span class="counter text-muted">0/160</span></div>
-                                                    {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{meta_descr.article_title|safe}}" maxlength="160" required/> {% endcomment %}
-                                                    <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="160" required>{{meta_descr.article_title|safe}}</textarea>
+                                                    <div class="d-flex align-items-center justify-content-between"><label for="article_title" class=" ">Title</label> <span class="counter text-muted">0/200</span></div>
+                                                    {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{article_title|safe}}" maxlength="200" required/> {% endcomment %}
+                                                    <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="200" required>{{article_title|safe}}</textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="category" class=" ">Category</label>
@@ -47,7 +47,7 @@
                                                         {% for category in cate_list %}
                                                         {% if category.client == client %}
                                                             <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                            {% if category.uniqueId == meta_descr.category %}
+                                                            {% if category.uniqueId == category %}
                                                             selected
                                                             {% endif %}
                                                             >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
@@ -64,7 +64,7 @@
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if meta_descr.tone_of_voice == tone.tone_of_voice %}
+                                                      {% if tone_of_voice == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -109,7 +109,7 @@
                                             
                                                             <div class="card-body text-dark">
                                                                 <div class="ideas">
-                                                                    {{meta_descr.meta_description|safe}}
+                                                                    {{meta_description|safe}}
                                                                 </div>
                                                             </div>
                                                         </div>
