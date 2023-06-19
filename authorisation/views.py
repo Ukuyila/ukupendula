@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 
-from dashboard.models import RegisteredDevice
+from dashboard.models import RegisteredDevice, Profile
 from dashboard.functions import get_device_mac, get_device_info
 
 
@@ -79,6 +79,9 @@ def register(request):
 
         user = User.objects.create_user(email=email, username=email, password=password1)
         user.save()
+
+        user_profile = Profile.objects.create(user=user)
+        user_profile.save()
 
         # begin email verification
         # to get the domain of the current site

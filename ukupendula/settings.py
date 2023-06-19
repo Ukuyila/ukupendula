@@ -100,15 +100,15 @@ WSGI_APPLICATION = 'ukupendula.wsgi.app'
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pendula',
-        'USER': 'ukuser',
-        'PASSWORD': 'gbHzwLohKxjf9dLFC7QqXJBY',
-        'HOST': 'localhost',
-        'PORT': '',
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'pendula',
+            'USER': 'ukuser',
+            'PASSWORD': 'gbHzwLohKxjf9dLFC7QqXJBY',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
     if os.getenv("DATABASE_URL", None) is None:
         raise Exception("DATABASE_URL environment variable not defined")
@@ -181,12 +181,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django SMTP mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'writesome.ai'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'writesomeai@gmail.com'
+EMAIL_HOST_USER = 'no-reply@writesome.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
-DEFAULT_FROM_EMAIL = 'writesomeai@gmail.com'
+DEFAULT_FROM_EMAIL = 'no-reply@writesome.ai'
 
 # CRISPY
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
