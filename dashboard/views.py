@@ -244,7 +244,7 @@ def blog_topic(request):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -776,7 +776,7 @@ def view_social_post(request, postType, uniqueId):
     blog_posts = []
     tone_of_voices = []
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -845,7 +845,7 @@ def gen_social_from_blog(request, postType, uniqueId):
     blog_posts = []
     tone_of_voices = []
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1005,7 +1005,7 @@ def paragraph_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1130,7 +1130,7 @@ def sentence_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1266,7 +1266,7 @@ def article_title_writer(request, uniqueId=''):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1404,7 +1404,7 @@ def generate_blog_meta(request, uniqueId):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
         
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1518,7 +1518,7 @@ def meta_description_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
         
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1662,7 +1662,7 @@ def summarize_blog(request, uniqueId):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1763,7 +1763,7 @@ def summarize_content(request, uniqueId=""):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(is_active=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
