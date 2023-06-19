@@ -578,8 +578,10 @@ class SubscriptionPackage(models.Model):
 
 class ToneOfVoice(models.Model):
     tone_of_voice = models.CharField(max_length=200)
-    is_active = models.BooleanField(default=True)
+    tone_status = models.BooleanField(default=True)
     tone_description = models.TextField(null=True, blank=True)
+
+    is_active = models.BooleanField(default=False)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
