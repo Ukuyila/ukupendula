@@ -80,9 +80,6 @@ def register(request):
         user = User.objects.create_user(email=email, username=email, password=password1)
         user.save()
 
-        # user_profile = Profile.objects.create(user=user)
-        # user_profile.save()
-
         # begin email verification
         # to get the domain of the current site
         # current_site = get_current_site(request)
