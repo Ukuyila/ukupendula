@@ -6,7 +6,7 @@
 }
 
 .ai-answer-card .card-body .ideas {
-  max-height: 55vh;
+  max-height: 35vh;
   overflow: auto;
 
 }
