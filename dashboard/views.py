@@ -1144,7 +1144,7 @@ def sentence_writer(request, uniqueId=''):
 
         new_sentences = sentence_obj.new_sentence
 
-        a_list = new_sentences.split('*')
+        a_list = new_sentences.split('<br>')
         if len(a_list) > 0:
             for sentence in a_list:
                 sentence_opts.append(sentence)
@@ -1185,14 +1185,14 @@ def sentence_writer(request, uniqueId=''):
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
 
-                    new_sentence = rewrite_sentence(old_sentence, tone_of_voice, request.user.profile)
+                    new_sentences = rewrite_sentence(old_sentence, tone_of_voice, request.user.profile)
 
-                    if len(new_sentence) > 0:
+                    if len(new_sentences) > 0:
 
                         # create database record
                         s_sentence = Sentence.objects.create(
                             old_sentence=old_sentence,
-                            new_sentence=new_sentence,
+                            new_sentence=new_sentences,
                             tone_of_voice=tone_of_voice,
                             profile=request.user.profile,
                             category=sentnc_cate
@@ -1280,7 +1280,7 @@ def article_title_writer(request, uniqueId=''):
 
         new_titles = title_obj.new_title_options
 
-        a_list = new_titles.split('*')
+        a_list = new_titles.split('<br>')
         if len(a_list) > 0:
             for title in a_list:
                 title_opts.append(title)

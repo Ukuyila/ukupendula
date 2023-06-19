@@ -228,7 +228,7 @@ def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Give me 5 rewrite options for this sentence: {}\nTone of voice: {}\n\n*".format(old_sentence, tone_of_voice),
+        prompt="Give me an unnumbered list of 5 rewrite options for this sentence: {}\nTone of voice: {}\n\n*".format(old_sentence, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
         top_p=1,
