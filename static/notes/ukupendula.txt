@@ -92,5 +92,7 @@ SitRep:
 - Re-generate blog with options to create meta, summary and titles => IN PROGRESS
 
 
+OPENAI_API_KEY=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
+
 
 
