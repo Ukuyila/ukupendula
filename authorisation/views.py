@@ -13,7 +13,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage,send_mail
 
 from dashboard.models import RegisteredDevice, Profile
 from dashboard.functions import get_device_mac, get_device_info
@@ -95,6 +95,8 @@ def register(request):
                     mail_subject, message, to=[to_email]
         )
         email.send()
+
+        # send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [to_email], fail_silently=False)
 
         messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
         return redirect('register')
