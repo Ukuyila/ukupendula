@@ -82,26 +82,26 @@ def register(request):
 
         # begin email verification
         # to get the domain of the current site
-        # current_site = get_current_site(request)
-        # mail_subject = 'Email verification for writesome.ai'
-        # message = render_to_string('authorisation/email-verification.html', {
-        #     'user': user,
-        #     'domain': current_site.domain,
-        #     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-        #     'token':account_activation_token.make_token(user),
-        # })
-        # to_email = email
-        # email = EmailMessage(
-        #             mail_subject, message, to=[to_email]
-        # )
-        # email.send()
+        current_site = get_current_site(request)
+        mail_subject = 'Email verification for writesome.ai'
+        message = render_to_string('authorisation/email-verification.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            'token':account_activation_token.make_token(user),
+        })
+        to_email = email
+        email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+        )
+        email.send()
 
-        # messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
-        # return redirect('register')
+        messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
+        return redirect('register')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
-        auth.login(request, user)
-        return redirect('dashboard')
+        # auth.login(request, user)
+        # return redirect('dashboard')
 
     return render(request, 'authorisation/register.html', {})
 
@@ -123,6 +123,7 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        redirect('login')
         return HttpResponse('Thank you for verifying you email. Now you can login your account.')
     else:
         return HttpResponse('Verification link is invalid!')
