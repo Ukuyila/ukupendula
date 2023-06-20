@@ -180,12 +180,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django SMTP mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'writesome.ai'
+EMAIL_HOST = 'mail.ukupendula.ai'
 EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'no-reply@writesome.ai'
+EMAIL_HOST_USER = 'no-reply@ukupendula.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
-DEFAULT_FROM_EMAIL = 'no-reply@writesome.ai'
+DEFAULT_FROM_EMAIL = 'no-reply@ukupendula.ai'
 
 # CRISPY
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
