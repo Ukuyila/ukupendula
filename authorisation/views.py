@@ -123,6 +123,11 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        profile = Profile.objects.get(user=user)
+        profile.is_active = True
+        profile.is_verified = True
+        profile.save()
+        
         redirect('login')
         return HttpResponse('Thank you for verifying you email. Now you can login your account.')
     else:
