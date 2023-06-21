@@ -53,15 +53,7 @@ def home(request):
 
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    try:
-        user_settings = UserSetting.objects.get(profile=user_profile)
-    except:
-        user_settings = UserSetting.objects.create(lang=lang, profile=user_profile)
-        user_settings.save()
-
-    if user_settings.lang is not None:
-        lang = user_settings.lang
-        print('Language: {}'.format(user_settings.lang))
+    lang = check_user_lang(profile, lang)
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'

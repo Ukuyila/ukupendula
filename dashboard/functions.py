@@ -769,4 +769,18 @@ def api_call_process(api_call_code, add_to_list):
         # else:
         #     messages.error(request, "The engine could not generate blog ideas, please try again!")
         #     return redirect('blog-topic')
+
+
+def check_user_lang(profile, lang):
+    try:
+        user_settings = UserSetting.objects.get(profile=profile)
+    except:
+        user_settings = UserSetting.objects.create(lang=lang, profile=profile)
+        user_settings.save()
+
+    if user_settings.lang is not None:
+        lang = user_settings.lang
+        print('Language: {}'.format(user_settings.lang))
+
+    return lang
 #
