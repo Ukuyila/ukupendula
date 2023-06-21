@@ -50,7 +50,6 @@ def home(request):
     remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
 
     lang = settings.LANGUAGE_CODE
-
     flag_avatar = 'dash/images/gb_flag.jpg'
 
     lang = check_user_lang(user_profile, lang)
@@ -203,6 +202,19 @@ def profile(request):
 
     remove_api_requests(request.user.profile)
 
+    user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     if request.method == 'GET':
         form = ProfileForm(instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(instance=request.user.profile)
@@ -243,6 +255,18 @@ def blog_topic(request):
     client_list = []
 
     user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -333,6 +357,19 @@ def blog_sections(request):
     current_page = 'Blog Topic Generator'
 
     remove_api_requests(request.user.profile)
+
+    user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     if 'blog_topics' in request.session:
         pass
@@ -436,11 +473,25 @@ def use_blog_topic(request, blog_topic):
     print('Blog topic: '.format(blog_topic))
     context = {}
 
+    
+    user_profile = request.user.profile
+
     current_page = 'Use Blog Sections Generator'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
 
-    remove_api_requests(request.user.profile)
+    remove_api_requests(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     if 'blog-sections' in request.session and 'uniqueId' in request.session:
 
@@ -522,10 +573,23 @@ def use_blog_topic(request, blog_topic):
 def create_blog_from_topic(request, uniqueId):
     context = {}
 
+    user_profile = request.user.profile
+
     current_page = 'Use Blog Sections Generator'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
     request.session['uniqueId'] = uniqueId
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
@@ -604,11 +668,22 @@ def save_section_head(request, uniqueId, section_head):
 
 @login_required
 def view_gen_blog(request, slug):
-
+    user_profile = request.user.profile
     context = {}
     current_page = 'Blog Generator'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     min_words = 300
 
@@ -701,6 +776,17 @@ def edit_gen_blog(request, uniqueId):
     user_profile = request.user.profile
     team_clients = TeamClient.objects.filter(is_active=True)
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     for client in team_clients:
         if client.team == user_profile.user_team:
             client_list.append(client)
@@ -781,10 +867,21 @@ def edit_gen_blog(request, uniqueId):
 @login_required
 def view_social_post(request, postType, uniqueId):
     context = {}
-
+    user_profile = request.user.profile
     current_page = 'View Blog Social Post'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     blog_posts = []
     tone_of_voices = []
@@ -830,10 +927,21 @@ def view_social_post(request, postType, uniqueId):
 @login_required
 def gen_social_from_blog(request, postType, uniqueId):
     context = {}
-
+    user_profile = request.user.profile
     current_page = 'Generated Social Post From Blog'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
@@ -972,10 +1080,21 @@ def delete_social_post(request, uniqueId):
 @login_required
 def view_generated_blog(request, slug):
     context = {}
-
+    user_profile = request.user.profile
     current_page = 'Blog Generator'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+    
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     try:
         blog = Blog.objects.get(slug=slug)
@@ -995,11 +1114,22 @@ def view_generated_blog(request, slug):
 @login_required
 def paragraph_writer(request, uniqueId=''):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Paragraph Writer'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
@@ -1118,11 +1248,22 @@ def delete_paragraph(request, uniqueId):
 @login_required
 def sentence_writer(request, uniqueId=''):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Sentence Writer'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
@@ -1255,11 +1396,22 @@ def delete_sentence(request, uniqueId):
 @login_required
 def article_title_writer(request, uniqueId=''):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Title Writer'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
@@ -1390,11 +1542,22 @@ def delete_title(request, uniqueId):
 @login_required
 def generate_blog_meta(request, uniqueId):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Meta Description Generator'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     blog_posts = []
 
@@ -1506,16 +1669,25 @@ def generate_blog_meta(request, uniqueId):
 @login_required
 def meta_description_writer(request, uniqueId=''):
     context = {}
-
+    user_profile = request.user.profile    
     tone_of_voices = []
     current_page = 'Meta Description Generator'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+    
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
-
-    user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -1628,21 +1800,28 @@ def delete_meta_descr(request, uniqueId):
 @login_required
 def summarize_blog(request, uniqueId):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Content Summarizer'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
     blog_posts = []
-
     blog_sections = []
-
     blog_body = ''
-
-    user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -1751,16 +1930,25 @@ def summarize_blog(request, uniqueId):
 @login_required
 def summarize_content(request, uniqueId=""):
     context = {}
-
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Content Summarizer'
     context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
-
-    user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -1878,15 +2066,25 @@ def delete_summary(request, uniqueId):
 def landing_page_copy(request, uniqueId=""):
     context = {}
 
+    user_profile = request.user.profile
     current_page = 'Landing Page Copy Generator'
     context['current_page'] = current_page
     page_sections = "Header, Subheader, About Us, Call to Action, FAQ, Testimonials"
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     cate_list = []
     client_list = []
-
-    user_profile = request.user.profile
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2002,6 +2200,17 @@ def billing(request):
 
     current_page = 'Billing'
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     user_sub_type = request.user.profile.subscription_type.title()
 
     # get user current tier
@@ -2020,6 +2229,17 @@ def payment_plans(request):
     
     current_page = 'Payment Plans'
     context['current_page'] = current_page
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     return render(request, 'dashboard/process-initiator-plan.html', context)
 
@@ -2040,6 +2260,17 @@ def process_initiator_plan(request):
     
     current_page = 'Billing | Initiator'
     context['current_page'] = current_page
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     pfData = {
         "merchant_id": merchant_id,
@@ -2261,6 +2492,17 @@ def team_manager(request):
 
     user_profile = request.user.profile
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     if not user_profile.subscription_type == 'teams':
         messages.error(request, "You subscription packages does not have access to this feature!")
         return redirect('billing')
@@ -2425,6 +2667,17 @@ def device_manager(request):
     reg_devices = []
     user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     for user_device in user_reg_devices:
         reg_devices.append(user_device)
         total_devices += 1
@@ -2469,6 +2722,17 @@ def memory_blogs(request, status):
     client_list = []
 
     user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2544,6 +2808,17 @@ def memory_social_post(request):
     context['s_posts'] = s_posts
     context['my_blogs'] = my_blogs
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     context['allowance'] = check_count_allowance(request.user.profile)
 
     current_page = 'Social Media Memory'
@@ -2565,6 +2840,17 @@ def memory_paragraph(request):
     client_list = []
 
     user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2609,6 +2895,16 @@ def memory_sentence(request):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2653,6 +2949,17 @@ def memory_title(request):
     client_list = []
 
     user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2699,6 +3006,16 @@ def memory_summarizer(request):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2746,6 +3063,16 @@ def memory_page_copy(request):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2788,6 +3115,16 @@ def memory_meta_descr(request):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2830,6 +3167,16 @@ def categories(request):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2875,6 +3222,16 @@ def clients(request):
 
     client_list = []
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(team=user_profile.user_team)
 
@@ -2961,6 +3318,16 @@ def edit_client(request, uniqueId):
     context['parent_page_url'] = 'client'
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     this_client = TeamClient.objects.get(uniqueId=uniqueId)
     context['client_name'] = this_client.client_name
@@ -3004,6 +3371,16 @@ def edit_category(request, uniqueId):
     client_list = []
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -3053,7 +3430,17 @@ def change_category_status(request, status, uniqueId):
         cate_status = True
 
     user_profile = request.user.profile
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
 
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+    
     category = ClientCategory.objects.get(uniqueId=uniqueId)
 
     if category.client.team == user_profile.user_team:
