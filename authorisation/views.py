@@ -82,26 +82,26 @@ def register(request):
 
         # begin email verification
         # to get the domain of the current site
-        current_site = get_current_site(request)
-        mail_subject = 'Email verification for writesome.ai'
-        message = render_to_string('authorisation/email-verification.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-            'token':account_activation_token.make_token(user),
-        })
-        to_email = email
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
+        # current_site = get_current_site(request)
+        # mail_subject = 'Email verification for writesome.ai'
+        # message = render_to_string('authorisation/email-verification.html', {
+        #     'user': user,
+        #     'domain': current_site.domain,
+        #     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+        #     'token':account_activation_token.make_token(user),
+        # })
+        # to_email = email
+        # email = EmailMessage(mail_subject, message, to=[to_email])
+        # email.send()
 
-        # send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [to_email], fail_silently=False)
+        # # send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [to_email], fail_silently=False)
 
-        messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
-        return redirect('register')
+        # messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
+        # return redirect('register')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
-        # auth.login(request, user)
-        # return redirect('dashboard')
+        auth.login(request, user)
+        return redirect('dashboard')
 
     return render(request, 'authorisation/register.html', {})
 
