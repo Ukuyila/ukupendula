@@ -53,7 +53,7 @@ def home(request):
 
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(profile, lang)
+    lang = check_user_lang(user_profile, lang)
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
