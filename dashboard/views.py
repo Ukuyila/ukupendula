@@ -64,39 +64,39 @@ def home(request):
     q_month = today_date.month
 
     # add user team
-    new_user_team = Team.objects.create(
-        business_name='Default',
-        is_active=True,
-        business_status=True,
-        team_principal=user_profile.uniqueId,
-    )
-    new_user_team.save()
+    # new_user_team = Team.objects.create(
+    #     business_name='Default',
+    #     is_active=True,
+    #     business_status=True,
+    #     team_principal=user_profile.uniqueId,
+    # )
+    # new_user_team.save()
 
-    user_profile.user_team = new_user_team.uniqueId
-    user_profile.save()
-    time.sleep(3)
+    # user_profile.user_team = new_user_team.uniqueId
+    # user_profile.save()
+    # time.sleep(3)
 
-    # add default client
-    new_client = TeamClient.objects.create(
-        client_name='Default',
-        contact_person=request.user.first_name,
-        industry='General',
-        client_email=request.user.email,
-        business_address='',
-        created_by=user_profile.uniqueId,
-        team=user_profile.user_team,
-    )
-    new_client.save()
+    # # add default client
+    # new_client = TeamClient.objects.create(
+    #     client_name='Default',
+    #     contact_person=request.user.first_name,
+    #     industry='General',
+    #     client_email=request.user.email,
+    #     business_address='',
+    #     created_by=user_profile.uniqueId,
+    #     team=user_profile.user_team,
+    # )
+    # new_client.save()
 
-    # add default category
-    new_cate = ClientCategory.objects.create(
-        category_name='General',
-        description='General category',
-        created_by=user_profile.uniqueId,
-        team=user_profile.user_team,
-        client=new_client,
-    )
-    new_cate.save()
+    # # add default category
+    # new_cate = ClientCategory.objects.create(
+    #     category_name='General',
+    #     description='General category',
+    #     created_by=user_profile.uniqueId,
+    #     team=user_profile.user_team,
+    #     client=new_client,
+    # )
+    # new_cate.save()
 
     # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
     if User.first_name is None:
