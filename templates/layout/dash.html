@@ -131,18 +131,18 @@
 													</div>
 												</a>
 												<div class="language-width dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-													{% if user.profile.lang == 'en-gb' %}
-													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
-														<img src="{% static 'dash/images/gb_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
-														<div>
-															<p class="mb-0">English (GB)</p>
-														</div>
-													</a>
-													{% else %}
+													{% if lang == 'en-us' %}
 													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
 														<img src="{% static 'dash/images/us_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
 														<div>
 															<p class="mb-0">English (US)</p>
+														</div>
+													</a>
+													{% else %}
+													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
+														<img src="{% static 'dash/images/gb_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
+														<div>
+															<p class="mb-0">English (GB)</p>
 														</div>
 													</a>
 													{% endif %}
