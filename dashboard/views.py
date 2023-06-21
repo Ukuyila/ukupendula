@@ -84,7 +84,7 @@ def home(request):
         client_email=request.user.email,
         business_address='',
         created_by=user_profile.uniqueId,
-        team=profile.user_team,
+        team=user_profile.user_team,
     )
     new_client.save()
 
