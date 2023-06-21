@@ -18,7 +18,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
 
-from dashboard.models import RegisteredDevice, Profile, UserSetting
+from dashboard.models import *
 from dashboard.functions import get_device_mac, get_device_info
 
 
@@ -86,7 +86,6 @@ def register(request):
         time.sleep(5)
 
         lang = settings.LANGUAGE_CODE
-
         profile = Profile.objects.get(user=user)
 
         user_settings = UserSetting.objects.create(
@@ -94,6 +93,28 @@ def register(request):
             profile=profile,
         )
         user_settings.save()
+
+        # add default client
+        new_client = TeamClient.objects.create(
+            client_name='Default',
+            contact_person=user.first_name,
+            industry='General',
+            client_email=email,
+            business_address='',
+            created_by=profile.uniqueId,
+            team=profile.user_team,
+        )
+        new_client.save()
+
+        # add default category
+        new_cate = ClientCategory.objects.create(
+            category_name='General',
+            description='General category',
+            created_by=profile.uniqueId,
+            team=profile.user_team,
+            client=new_client,
+        )
+        new_cate.save()
 
         # begin email verification
         # to get the domain of the current site

@@ -63,6 +63,28 @@ def home(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    # add default client
+    new_client = TeamClient.objects.create(
+        client_name='Default',
+        contact_person=request.user.first_name,
+        industry='General',
+        client_email=request.user.email,
+        business_address='',
+        created_by=user_profile.uniqueId,
+        team=profile.user_team,
+    )
+    new_client.save()
+
+    # add default category
+    new_cate = ClientCategory.objects.create(
+        category_name='General',
+        description='General category',
+        created_by=user_profile.uniqueId,
+        team=user_profile.user_team,
+        client=new_client,
+    )
+    new_cate.save()
+
     # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
     if User.first_name is None:
         messages.error(request, "Your profile is not complete, please fill all the details!")
@@ -2994,7 +3016,6 @@ def memory_title(request):
 @login_required
 def memory_summarizer(request):
     context = {}
-    
     saved_summaries = []
 
     today_date = datetime.datetime.now()
@@ -3157,6 +3178,7 @@ def memory_meta_descr(request):
     return render(request, 'dashboard/meta-description-memory.html', context)
 
 
+@login_required
 def categories(request):
     context = {}
 
@@ -3214,6 +3236,7 @@ def categories(request):
     return render(request, 'dashboard/categories.html', context)
 
 
+@login_required
 def clients(request):
     context = {}
 
@@ -3264,6 +3287,7 @@ def clients(request):
     return render(request, 'dashboard/clients.html', context)
 
 
+@login_required
 def delete_client(request, uniqueId):
     context = {}
 
@@ -3283,6 +3307,7 @@ def delete_client(request, uniqueId):
     return redirect('clients')
 
 
+@login_required
 def change_client_status(request, status, uniqueId):
     context = {}
 
@@ -3308,6 +3333,7 @@ def change_client_status(request, status, uniqueId):
     return redirect('clients')
 
 
+@login_required
 def edit_client(request, uniqueId):
     context = {}
 
@@ -3359,6 +3385,7 @@ def edit_client(request, uniqueId):
     return render(request, 'dashboard/clients.html', context)
 
 
+@login_required
 def edit_category(request, uniqueId):
     context = {}
 
@@ -3418,6 +3445,7 @@ def edit_category(request, uniqueId):
     return render(request, 'dashboard/edit-category.html', context)
 
 
+@login_required
 def change_category_status(request, status, uniqueId):
     context = {}
 
@@ -3440,7 +3468,7 @@ def change_category_status(request, status, uniqueId):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
-    
+
     category = ClientCategory.objects.get(uniqueId=uniqueId)
 
     if category.client.team == user_profile.user_team:
@@ -3454,6 +3482,7 @@ def change_category_status(request, status, uniqueId):
     return redirect('categories')
 
 
+@login_required
 def delete_category(request, uniqueId):
     context = {}
 
