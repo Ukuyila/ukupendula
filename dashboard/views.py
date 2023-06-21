@@ -48,6 +48,19 @@ def home(request):
 
     remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
 
+    lang = settings.LANGUAGE_CODE
+
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    if user_profile.lang is not None:
+        lang = user_profile.lang
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
     q_year = today_date.year
     q_month = today_date.month
 
@@ -2490,7 +2503,7 @@ def memory_blogs(request, status):
                 for section in sections:
                     blog_words += int(section.word_count)
                     # month_word_count += int(section.word_count)
-                if int(blog.word_count) < 1:
+                if blog.word_count is not None and int(blog.word_count) < 1:
                     blog.word_count = str(blog_words)
                     blog.save()
                 complete_blogs.append(blog)

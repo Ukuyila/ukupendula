@@ -125,19 +125,27 @@
 											</div>
 											<div class="dropdown d-sm-flex country-selector">
 												<a href="javascript:void(0);" class="d-sm-flex nav-link leading-none" data-bs-toggle="dropdown">
-													<img src="{% static 'dash/images/gb_flag.jpg' %}" alt="img" class="avatar avatar-xs me-sm-1 align-self-center">
+													<img src="{% static flag_avatar %}" alt="img" class="avatar avatar-xs me-sm-1 align-self-center">
 													<div>
-														<p class="text-dark mb-0">English</p>
+														<p class="text-dark mb-0">English (GB)</p>
 													</div>
 												</a>
 												<div class="language-width dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+													{% if user.profile.lang == 'en-gb' %}
 													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
 														<img src="{% static 'dash/images/gb_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
 														<div>
-															<p class="mb-0">English</p>
+															<p class="mb-0">English (GB)</p>
 														</div>
 													</a>
-													
+													{% else %}
+													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
+														<img src="{% static 'dash/images/us_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
+														<div>
+															<p class="mb-0">English (US)</p>
+														</div>
+													</a>
+													{% endif %}
 												</div>
 											</div>
 											<div class="dropdown d-sm-flex">
