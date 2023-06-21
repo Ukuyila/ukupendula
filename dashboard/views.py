@@ -54,13 +54,19 @@ def home(request):
 
     user_settings = UserSetting.objects.get(profile=user_profile)
 
-    if user_settings.exists():
+    if not user_settings.exists():
 
-        if user_settings.lang is not None:
-            lang = user_settings.lang
+        user_settings = UserSetting.objects.create(
+            lang=lang,
+            profile=user_profile,
+        )
+        user_settings.save()
 
-        if lang == 'en-us':
-            flag_avatar = 'dash/images/us_flag.jpg'
+    if user_settings.lang is not None:
+        lang = user_settings.lang
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
