@@ -29,8 +29,6 @@ class Profile(models.Model):
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
-    lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
-
     # subscription helpers
     monthly_count = models.CharField(null=True, blank=True, max_length=100)
     subscribed = models.BooleanField(default=False)
@@ -62,6 +60,40 @@ class Profile(models.Model):
         self.slug = slugify('{} {} {}'.format(self.user.first_name, self.user.last_name, self.user.email))
         self.last_updated = timezone.localtime(timezone.now())
         super(Profile, self).save(*args, **kwargs)
+
+
+class UserSetting(models.Model):
+    facebook_link = models.CharField(null=True, blank=True, max_length=255)
+    twitter_link = models.CharField(null=True, blank=True, max_length=255)
+    instagram_link = models.CharField(null=True, blank=True, max_length=255)
+    linkedin_link = models.CharField(null=True, blank=True, max_length=255)
+    website_link = models.CharField(null=True, blank=True, max_length=255)
+    lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
+
+    email_notify = models.BooleanField(default=True)
+    sms_notify = models.BooleanField(default=True)
+
+    # django related field
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.profile.user.email, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.profile.user.email, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(UserSetting, self).save(*args, **kwargs)
 
 
 class RegisteredDevice(models.Model):
