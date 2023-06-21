@@ -3,6 +3,10 @@ import os
 import sys
 import dj_database_url
 
+# for dev
+from os.path import join, dirname
+from dotenv import load_dotenv, find_dotenv
+
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
 
@@ -18,6 +22,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,12 +30,17 @@ MESSAGE_TAGS = {
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+if DEBUG is True:
+    ALLOWED_HOSTS = ['138.68.155.44', 'localhost', 'app.writesome.ai']
+    dotenv_file = find_dotenv(".env")
+    load_dotenv(dotenv_file)
+else:
+    ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 # Application definition
 
@@ -100,21 +110,22 @@ WSGI_APPLICATION = 'ukupendula.wsgi.app'
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'pendula',
-            'USER': 'ukuser',
-            'PASSWORD': 'gbHzwLohKxjf9dLFC7QqXJBY',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pendula',
+        'USER': 'ukuser',
+        'PASSWORD': 'gbHzwLohKxjf9dLFC7QqXJBY',
+        'HOST': 'localhost',
+        'PORT': '',
     }
+}
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
     if os.getenv("DATABASE_URL", None) is None:
         raise Exception("DATABASE_URL environment variable not defined")
     DATABASES = {
         "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -139,9 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
-
-FLAG_GB = 'dash/images/gb_flag.jpg'
-FLAG_US = 'dash/images/us_flag.jpg'
 
 TIME_ZONE = 'Africa/Johannesburg'
 
@@ -183,18 +191,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django SMTP mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv("EMAIL_HOST", "mail.ukupendula.ai")
-EMAIL_PORT = os.getenv("EMAIL_PORT", "465")
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
+EMAIL_HOST_USER = 'writesomeai@gmail.com'
+EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
+DEFAULT_FROM_EMAIL = 'writesomeai@gmail.com'
 
 # CRISPY
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #payfast.io
-PAYFAST_MERCHANT_ID = os.getenv("PAYFAST_MERCHANT_ID")
-PAYFAST_MERCHANT_KEY = os.getenv("PAYFAST_MERCHANT_KEY")
+PAYFAST_MERCHANT_ID = '10024789'
+PAYFAST_MERCHANT_KEY = 'dtz5khr0cbz74'
 PAYFAST_URL_BASE = ''
