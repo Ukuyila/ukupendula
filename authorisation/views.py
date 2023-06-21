@@ -1,6 +1,9 @@
+import time
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+
+from django.conf import settings
 
 # Other imports
 from django.contrib.auth.decorators import login_required
@@ -15,7 +18,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
 
-from dashboard.models import RegisteredDevice, Profile
+from dashboard.models import RegisteredDevice, Profile, UserSetting
 from dashboard.functions import get_device_mac, get_device_info
 
 
@@ -79,6 +82,18 @@ def register(request):
 
         user = User.objects.create_user(email=email, username=email, password=password1)
         user.save()
+
+        time.sleep(5)
+
+        lang = settings.LANGUAGE_CODE
+
+        profile = Profile.objects.get(user=user)
+
+        user_settings = UserSetting.objects.create(
+            lang=lang,
+            profile=profile,
+        )
+        user_settings.save()
 
         # begin email verification
         # to get the domain of the current site
