@@ -89,11 +89,11 @@ def register(request):
 
         profile = Profile.objects.get(user=user)
 
-        user_settings = UserSetting.objects.create(
-            lang=lang,
-            profile=profile,
-        )
-        user_settings.save()
+        # user_settings = UserSetting.objects.create(
+        #     lang=lang,
+        #     profile=profile,
+        # )
+        # user_settings.save()
 
         # begin email verification
         # to get the domain of the current site

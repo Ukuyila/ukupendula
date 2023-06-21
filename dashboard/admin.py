@@ -5,7 +5,7 @@ from .models import *
 admin.site.register(Profile)
 admin.site.register(Team)
 admin.site.register(MemberInvite)
-admin.site.register(UserSetting)
+# admin.site.register(UserSetting)
 admin.site.register(RegisteredDevice)
 admin.site.register(Blog)
 admin.site.register(SavedBlogSectionHead)
