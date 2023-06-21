@@ -53,10 +53,10 @@ def home(request):
 
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    user_settings = UserSetting.objects.get(profile=user_profile)
+    try:
 
-    if not user_settings.exists():
-
+        user_settings = UserSetting.objects.get(profile=user_profile)
+    except:
         user_settings = UserSetting.objects.create(
             lang=lang,
             profile=user_profile,
