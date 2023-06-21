@@ -140,6 +140,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-gb'
 
+FLAG_GB = 'dash/images/gb_flag.jpg'
+FLAG_US = 'dash/images/us_flag.jpg'
+
 TIME_ZONE = 'Africa/Johannesburg'
 
 USE_I18N = True

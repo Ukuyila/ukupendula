@@ -29,6 +29,8 @@ class Profile(models.Model):
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
+    lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
+
     # subscription helpers
     monthly_count = models.CharField(null=True, blank=True, max_length=100)
     subscribed = models.BooleanField(default=False)
