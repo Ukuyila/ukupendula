@@ -63,6 +63,19 @@ def home(request):
     q_year = today_date.year
     q_month = today_date.month
 
+    # add user team
+    new_user_team = Team.objects.create(
+        business_name='Default',
+        is_active=True,
+        business_status=True,
+        team_principal=user_profile.uniqueId,
+    )
+    new_user_team.save()
+
+    user_profile.user_team = new_user_team.uniqueId
+    user_profile.save()
+    time.sleep(3)
+
     # add default client
     new_client = TeamClient.objects.create(
         client_name='Default',

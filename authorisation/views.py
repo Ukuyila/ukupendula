@@ -94,6 +94,19 @@ def register(request):
         )
         user_settings.save()
 
+        # add user team
+        new_user_team = Team.objects.create(
+            business_name='Default',
+            is_active=True,
+            business_status=True,
+            team_principal=profile.uniqueId,
+        )
+        new_user_team.save()
+
+        profile.user_team = new_user_team.uniqueId
+        profile.save()
+        time.sleep(3)
+
         # add default client
         new_client = TeamClient.objects.create(
             client_name='Default',
