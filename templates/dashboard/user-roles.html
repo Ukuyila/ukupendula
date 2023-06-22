@@ -46,46 +46,40 @@
                     <span class="text-muted">Level: {{user_role.permission.permission_name}}</span>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input disabled type="checkbox" class="custom-control-input" name="role-can-write" {% if user_role.can_write %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input disabled type="checkbox" class="custom-control-input" name="role-can-write" {% if user_role.can_write %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="role-can-edit" {% if user_role.can_edit %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="role-can-edit" {% if user_role.can_edit %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="role-can-delete" {% if user_role.can_delete %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="role-can-delete" {% if user_role.can_delete %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="role-can-create-team" {% if user_role.can_create_team %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="role-can-create-team" {% if user_role.can_create_team %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="role-can-edit-team" {% if user_role.can_edit_team %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="role-can-edit-team" {% if user_role.can_edit_team %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
-                    <div class="form-group">
-                      <label class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" name="role-can-delete-team" {% if user_role.can_delete_team %} checked {% endif %}>
-                      </label>
-                    </div>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="role-can-delete-team" {% if user_role.can_delete_team %} checked {% endif %}>
+                      <span class="custom-control-label"></span>
+                    </label>
                   </td>
                   <td>
                     {% if user.profile.uniqueId == this_user_team.team_principal %}
