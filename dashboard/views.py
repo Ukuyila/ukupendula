@@ -3507,11 +3507,11 @@ def user_roles(request):
     if user_profile.user_team is not None:
         
         try:
-            perm_levels = PermissionLevel.objects.filter(is_active=True)
+            perm_levels = PermissionLevel.objects.filter(is_active=True).order_by('date_created')
             for p_level in perm_levels:
                 permission_levels.append(p_level)
 
-            u_roles = UserRole.objects.filter(is_active=True)
+            u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
             for role in u_roles:
                 user_roles.append(role)
 

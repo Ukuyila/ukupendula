@@ -115,7 +115,7 @@
             <div class="form-group">
               <label for="permission" class="control-label mb-10">Permission Level <span class="text-danger">*</span></label>
               
-                <select type="text" class="form-control " id="permission" name="permission">
+                <select type="text" class="form-control select2" id="permission" name="permission">
                   {% for permission in permission_levels %}
                   <option value="{{permission.uniqueId}}" id="{{permission.uniqueId}}" >{{permission.permission_name}}</option>
                   {% endfor %}
@@ -133,7 +133,7 @@
             </div>
 
             <div class="form-group">
-              <h5 class="form-title" >Content Permission</h5>
+              <h5 class="form-label" >Content Permission</h5>
             </div>
 
             <div class="form-group">
@@ -155,7 +155,7 @@
             </div>
 
             <div class="form-group">
-              <h5 class="form-title" >Settings Permission</h5>
+              <h5 class="form-label" >Settings Permission</h5>
             </div>
 
             <div class="form-group">
@@ -176,16 +176,18 @@
               </div>
             </div>
 
-            <div class="form-group mt-4">
+            <div class="form-group mt-5">
               <blockquote>
                 <p><span class="text-danger">*</span><i> Denotes required field.</i></p>
               </blockquote>
             </div>
 
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
           </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Save</button>
-          </div>
+          
         </div>
       </form>
     </div>
