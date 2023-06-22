@@ -3537,23 +3537,25 @@ def user_roles(request):
         can_edit = request.POST['role-can-edit']
         can_delete = request.POST['role-can-delete']
 
-        can_create_team = request.POST['role-can-invite']
+        can_create_team = request.POST['can-invite']
         can_edit_team = request.POST['can-edit-team']
         can_delete_team = request.POST['can-delete-team']
 
-        new_role = UserRole.objects.create(
-            role_name=role_name,
-            abbreviation=abbreviation,
-            permission=permission,
-            user_team=request.user.profile.user_team,
-            can_write=can_write,
-            can_edit=can_edit,
-            can_delete=can_delete,
-            can_create_team=can_create_team,
-            can_edit_team=can_edit_team,
-            can_delete_team=can_delete_team,
-        )
-        new_role.save()
+        print('can_create_team: {}'.format(can_create_team))
+
+        # new_role = UserRole.objects.create(
+        #     role_name=role_name,
+        #     abbreviation=abbreviation,
+        #     permission=permission,
+        #     user_team=request.user.profile.user_team,
+        #     can_write=can_write,
+        #     can_edit=can_edit,
+        #     can_delete=can_delete,
+        #     can_create_team=can_create_team,
+        #     can_edit_team=can_edit_team,
+        #     can_delete_team=can_delete_team,
+        # )
+        # new_role.save()
 
 
     return render(request, 'dashboard/user-roles.html', context)
