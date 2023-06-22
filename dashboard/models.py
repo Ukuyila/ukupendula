@@ -129,7 +129,7 @@ class RegisteredDevice(models.Model):
 
 
 class PermissionLevel(models.Model):
-    permisson_name = models.CharField(max_length=255)
+    permission_name = models.CharField(max_length=255)
     abbreviation = models.CharField(null=True, blank=True, max_length=60)
     is_active = models.BooleanField(default=True)
     
@@ -140,7 +140,7 @@ class PermissionLevel(models.Model):
     last_updated = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return '{} {}'.format(self.permisson_name, self.uniqueId)
+        return '{} {}'.format(self.permission_name, self.uniqueId)
 
     def save(self, *args, **kwargs):
         if self.date_created is None:
@@ -148,7 +148,7 @@ class PermissionLevel(models.Model):
         if self.uniqueId is None:
             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.permisson_name, self.uniqueId))
+        self.slug = slugify('{} {}'.format(self.permission_name, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
         super(PermissionLevel, self).save(*args, **kwargs)
 

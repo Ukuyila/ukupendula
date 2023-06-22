@@ -36,21 +36,28 @@
                                                 {% csrf_token %}
                                                 <div class="mb-3">
                                                     <label for="category" class=" ">Category</label>
-                                                    <select type="text" class="form-control select2" id="category" name="category">
-                                                        {% for client in client_list %}
-                                                        <optgroup label="{{client.client_name}}">
-                                                        {% for category in cate_list %}
-                                                        {% if category.client == client %}
-                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                            {% if category.uniqueId == sentence_cate %}
-                                                            selected
-                                                            {% endif %}
-                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
-                                                        {% endif %}
-                                                        {% endfor %}
-                                                        </optgroup>
-                                                        {% endfor %}
-                                                    </select>
+                                                    <div class="row gutters-xs">
+														<div class="col">
+                                                            <select type="text" class="form-control select2" id="category" name="category">
+                                                                {% for client in client_list %}
+                                                                <optgroup label="{{client.client_name}}">
+                                                                {% for category in cate_list %}
+                                                                {% if category.client == client %}
+                                                                    <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                                    {% if category.uniqueId == sentence_cate %}
+                                                                    selected
+                                                                    {% endif %}
+                                                                    >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                                </optgroup>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <span class="col-auto">
+                                                            <button onclick="window.location.href='{% url 'categories' %}'" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Create Category" type="button"><i class="fe fe-plus"></i></button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="old_sentence" class=" ">Get alternative sentence options</label><span class="title_counter text-muted">0/200</span></div>
