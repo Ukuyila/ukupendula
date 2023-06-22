@@ -128,6 +128,69 @@ class RegisteredDevice(models.Model):
         super(RegisteredDevice, self).save(*args, **kwargs)
 
 
+class PermissionLevel(models.Model):
+    permisson_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(null=True, blank=True, max_length=60)
+    is_active = models.BooleanField(default=True)
+    
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.permission, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.permission, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(PermissionLevel, self).save(*args, **kwargs)
+
+
+class UserRole(models.Model):
+    role_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(null=True, blank=True, max_length=60)
+    permission = models.ForeignKey(PermissionLevel, on_delete=models.CASCADE)
+    # team
+    user_team = models.CharField(null=True, blank=True, max_length=100)
+    # generator
+    can_write = models.BooleanField(default=True)
+    can_edit = models.BooleanField(default=False)
+    can_delete = models.BooleanField(default=False)
+
+    # teams
+    can_create_team = models.BooleanField(default=False)
+    can_edit_team = models.BooleanField(default=False)
+    can_delete_team = models.BooleanField(default=False)
+
+    is_active = models.BooleanField(default=True)
+    
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.role_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.role_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(UserRole, self).save(*args, **kwargs)
+
+
 class Team(models.Model):
     business_name = models.CharField(max_length=255)
     business_size = models.CharField(null=True, blank=True, max_length=100)
@@ -615,7 +678,7 @@ class ToneOfVoice(models.Model):
     tone_status = models.BooleanField(default=True)
     tone_description = models.TextField(null=True, blank=True)
 
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)

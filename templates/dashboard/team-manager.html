@@ -156,7 +156,7 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">My Team</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_members}}/{{max_members}} members</span></h6>
+          <h3 class="card-title">My Team</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_members}}/{{max_members}} members</span>
           <div class="card-options">
             {% if this_user_team.team_principal == user.profile.uniqueId %}
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">Invite New</button>
@@ -214,7 +214,7 @@
       
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">My Invites</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_invites}} invites</span></h6>
+          <h3 class="card-title">My Invites</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_invites}} invites</span>
           <div class="card-options">
             {% if this_user_team.team_principal == user.profile.uniqueId %}
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">Invite New</button>

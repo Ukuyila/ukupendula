@@ -281,7 +281,7 @@ def blog_topic(request):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -886,7 +886,7 @@ def view_social_post(request, postType, uniqueId):
     blog_posts = []
     tone_of_voices = []
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -966,7 +966,7 @@ def gen_social_from_blog(request, postType, uniqueId):
     blog_posts = []
     tone_of_voices = []
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1148,7 +1148,7 @@ def paragraph_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1284,7 +1284,7 @@ def sentence_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1431,7 +1431,7 @@ def article_title_writer(request, uniqueId=''):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1580,7 +1580,7 @@ def generate_blog_meta(request, uniqueId):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
         
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1703,7 +1703,7 @@ def meta_description_writer(request, uniqueId=''):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
         
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1854,7 +1854,7 @@ def summarize_blog(request, uniqueId):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -1964,7 +1964,7 @@ def summarize_content(request, uniqueId=""):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(is_active=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
         tone_of_voices.append(tone)
@@ -3479,4 +3479,100 @@ def delete_category(request, uniqueId):
         return redirect('categories')
 
     return redirect('categories')
+
+
+@login_required
+def user_roles(request):
+    context = {}
+
+    current_page = "User Roles"
+    user_roles = []
+
+    permission_levels = []
+
+    user_profile = request.user.profile
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    if not user_profile.subscription_type == 'teams':
+        messages.error(request, "You subscription packages does not have access to this feature!")
+        return redirect('billing')
+
+    if user_profile.user_team is not None:
+        
+        try:
+            perm_levels = PermissionLevel.objects.filter(is_active=True)
+            for p_level in perm_levels:
+                permission_levels.append(p_level)
+
+            u_roles = UserRole.objects.filter(is_active=True)
+            for role in u_roles:
+                user_roles.append(role)
+
+        except:
+            return redirect('profile')
+    
+        context['current_page'] = current_page
+        context['user_roles'] = user_roles
+        context['permission_levels'] = permission_levels
+        context['lang'] = lang
+        context['flag_avatar'] = flag_avatar
+
+    else:
+        return redirect('billing')
+    
+
+    if request.method == 'POST':
+        permission = PermissionLevel.objects.get(uniqueId=request.POST['permission'])
+        role_name = request.POST['role-name']
+        abbreviation = request.POST['abbreviation']
+
+        can_write = request.POST['role-can-write']
+        can_edit = request.POST['role-can-edit']
+        can_delete = request.POST['role-can-delete']
+
+        can_create_team = request.POST['role-can-invite']
+        can_edit_team = request.POST['can-edit-team']
+        can_delete_team = request.POST['can-delete-team']
+
+        new_role = UserRole.objects.create(
+            role_name=role_name,
+            abbreviation=abbreviation,
+            permission=permission,
+            user_team=request.user.profile.user_team,
+            can_write=can_write,
+            can_edit=can_edit,
+            can_delete=can_delete,
+            can_create_team=can_create_team,
+            can_edit_team=can_edit_team,
+            can_delete_team=can_delete_team,
+        )
+        new_role.save()
+
+
+    return render(request, 'dashboard/user-roles.html', context)
+
+
+@login_required
+def delete_user_role(request, team_uid, uniqueId):
+
+    try:
+        user_role = UserRole.objects.get(uniqueId=uniqueId)
+
+        if team_uid == request.user.profile.user_team:
+            # assign users to the closest role
+            user_role.is_active
+            user_role.save()
+    except:
+        messages.error(request, "Something went wrong, please try again!")
+        return redirect('user-roles')
+    
+    return redirect('user-roles')
+
 #
