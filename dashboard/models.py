@@ -140,7 +140,7 @@ class PermissionLevel(models.Model):
     last_updated = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return '{} {}'.format(self.permission, self.uniqueId)
+        return '{} {}'.format(self.permisson_name, self.uniqueId)
 
     def save(self, *args, **kwargs):
         if self.date_created is None:
@@ -148,7 +148,7 @@ class PermissionLevel(models.Model):
         if self.uniqueId is None:
             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.permission, self.uniqueId))
+        self.slug = slugify('{} {}'.format(self.permisson_name, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
         super(PermissionLevel, self).save(*args, **kwargs)
 
