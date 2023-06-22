@@ -19,13 +19,11 @@
         <div class="card-header">
           <h3 class="card-title">Current Roles</h3>
           <div class="card-options">
-            {% if this_user_team.team_principal == user.profile.uniqueId %}
             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#create_user_role">Create New Role</button>
-            {% endif %}
           </div>
         </div>
         <div class="card-body">
-          {% if team_user_roles|length > 0 %}
+          {% if user_roles|length > 0 %}
           <div class="table-responsive mb-0 table-wrap">
             <table class="table table-sm table-hover " style="width:100%">
               <thead>

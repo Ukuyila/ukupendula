@@ -3519,6 +3519,7 @@ def user_roles(request):
             return redirect('profile')
     
         context['current_page'] = current_page
+        context['this_user_team'] = user_profile.user_team
         context['user_roles'] = user_roles
         context['permission_levels'] = permission_levels
         context['lang'] = lang
