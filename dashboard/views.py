@@ -3533,29 +3533,29 @@ def user_roles(request):
         role_name = request.POST['role-name']
         abbreviation = request.POST['abbreviation']
 
-        can_write = request.POST['role-can-write']
-        can_edit = request.POST['role-can-edit']
-        can_delete = request.POST['role-can-delete']
+        can_write = True if request.POST['role-can-write'] == 'on' else False
+        can_edit = True if request.POST['role-can-edit'] == 'on' else False
+        can_delete = True if request.POST['role-can-delete'] == 'on' else False
 
-        can_create_team = request.POST['can-invite']
-        can_edit_team = request.POST['can-edit-team']
-        can_delete_team = request.POST['can-delete-team']
+        can_create_team = True if request.POST['can-invite'] == 'on' else False
+        can_edit_team = True if request.POST['can-edit-team'] == 'on' else False
+        can_delete_team = True if request.POST['can-delete-team'] == 'on' else False
 
         print('can_create_team: {}'.format(can_create_team))
 
-        # new_role = UserRole.objects.create(
-        #     role_name=role_name,
-        #     abbreviation=abbreviation,
-        #     permission=permission,
-        #     user_team=request.user.profile.user_team,
-        #     can_write=can_write,
-        #     can_edit=can_edit,
-        #     can_delete=can_delete,
-        #     can_create_team=can_create_team,
-        #     can_edit_team=can_edit_team,
-        #     can_delete_team=can_delete_team,
-        # )
-        # new_role.save()
+        new_role = UserRole.objects.create(
+            role_name=role_name,
+            abbreviation=abbreviation,
+            permission=permission,
+            user_team=request.user.profile.user_team,
+            can_write=can_write,
+            can_edit=can_edit,
+            can_delete=can_delete,
+            can_create_team=can_create_team,
+            can_edit_team=can_edit_team,
+            can_delete_team=can_delete_team,
+        )
+        new_role.save()
 
 
     return render(request, 'dashboard/user-roles.html', context)
