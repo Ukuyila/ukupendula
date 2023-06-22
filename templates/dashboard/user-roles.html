@@ -76,8 +76,8 @@
                     </label>
                   </td>
                   <td>
-                    {% if not user.profile.uniqueId == this_user_team.team_principal %}
-                    <a href="#" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-pencil"></i></a>&nbsp;<a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-user-role' team_uid user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    {% if user.profile.uniqueId == this_user_team.team_principal %}
+                    <a href="#" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-pencil"></i></a>&nbsp;<a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-user-role' this_user_team.uniqueId user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                     {% endif %}
                   </td>
                   

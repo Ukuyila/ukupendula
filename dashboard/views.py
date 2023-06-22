@@ -3492,6 +3492,8 @@ def user_roles(request):
 
     user_profile = request.user.profile
 
+    this_user_team = Team.objects.get(uniqueId=user_profile.user_team) 
+
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3519,7 +3521,7 @@ def user_roles(request):
             return redirect('profile')
     
         context['current_page'] = current_page
-        context['this_user_team'] = user_profile.user_team
+        context['this_user_team'] = this_user_team
         context['user_roles'] = user_roles
         context['permission_levels'] = permission_levels
         context['lang'] = lang
