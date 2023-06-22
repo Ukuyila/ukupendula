@@ -3544,8 +3544,6 @@ def user_roles(request):
         can_edit_team = True if request.POST['can-edit-team'] == 'on' else False
         can_delete_team = True if request.POST['can-delete-team'] == 'on' else False
 
-        print('can_create_team: {}'.format(can_create_team))
-
         new_role = UserRole.objects.create(
             role_name=role_name,
             abbreviation=abbreviation,

@@ -107,7 +107,29 @@ def register(request):
         profile.save()
         time.sleep(3)
 
-        # add default client
+        try:
+            permission = PermissionLevel.objects.get(permission_name='Manager')
+
+            #create team manager role
+            new_role = UserRole.objects.create(
+                role_name='Team Manager',
+                abbreviation='TM',
+                permission=permission,
+                user_team=profile.user_team,
+                can_write=True,
+                can_edit=True,
+                can_delete=True,
+                can_create_team=True,
+                can_edit_team=True,
+                can_delete_team=True,
+            )
+            new_role.save()
+
+            profile.user_role=new_role
+        except:
+            pass
+
+        # create default client
         new_client = TeamClient.objects.create(
             client_name='Default',
             contact_person=user.first_name,
@@ -119,7 +141,7 @@ def register(request):
         )
         new_client.save()
 
-        # add default category
+        # create default category
         new_cate = ClientCategory.objects.create(
             category_name='General',
             description='General category',
