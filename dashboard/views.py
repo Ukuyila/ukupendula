@@ -3475,7 +3475,6 @@ def delete_category(request, uniqueId):
         category.delete()
     else:
         messages.error(request, "Action denied on this category!")
-        
         return redirect('categories')
 
     return redirect('categories')
@@ -3489,9 +3488,7 @@ def user_roles(request):
     user_roles = []
 
     permission_levels = []
-
     user_profile = request.user.profile
-
     this_user_team = Team.objects.get(uniqueId=user_profile.user_team) 
 
     lang = settings.LANGUAGE_CODE
