@@ -88,12 +88,6 @@ def register(request):
         lang = settings.LANGUAGE_CODE
         profile = Profile.objects.get(user=user)
 
-        user_settings = UserSetting.objects.create(
-            lang=lang,
-            profile=profile,
-        )
-        user_settings.save()
-
         # add user team
         new_user_team = Team.objects.create(
             business_name='Default',
@@ -125,7 +119,12 @@ def register(request):
             )
             new_role.save()
 
-            profile.user_role=new_role
+            user_settings = UserSetting.objects.create(
+                lang=lang,
+                user_role=new_role,
+                profile=profile,
+            )
+            user_settings.save()
         except:
             pass
 

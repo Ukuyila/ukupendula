@@ -10,6 +10,58 @@ import os
 
 
 # My models
+class Profile(models.Model):
+    SUBSCRIPTION_OPTIONS = [
+        ('free', 'free'),
+        ('initiator', 'Initiator'),
+        ('teams', 'Teams'),
+    ]
+    # Standard Variables
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    address_line1 = models.CharField(null=True, blank=True, max_length=100)
+    address_line2 = models.CharField(null=True, blank=True, max_length=100)
+    city = models.CharField(null=True, blank=True, max_length=60)
+    province = models.CharField(null=True, blank=True, max_length=100)
+    country = models.CharField(null=True, blank=True, max_length=100)
+    postal_code = models.CharField(null=True, blank=True, max_length=5)
+    profile_image = ResizedImageField(size=[200, 200], quality=90, upload_to='profile_images')
+
+    is_verified = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+
+    # subscription helpers
+    monthly_count = models.CharField(null=True, blank=True, max_length=100)
+    subscribed = models.BooleanField(default=False)
+    subscription_type = models.CharField(choices=SUBSCRIPTION_OPTIONS, default='free', max_length=100)
+    subscription_reference = models.CharField(null=True, blank=True, max_length=500)
+
+    # device
+    current_ip = models.CharField(null=True, blank=True, max_length=100)
+    current_device = models.CharField(null=True, blank=True, max_length=100)
+
+    # team
+    user_team = models.CharField(null=True, blank=True, max_length=100)
+    
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {} {}'.format(self.user.first_name, self.user.last_name, self.user.email)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {} {}'.format(self.user.first_name, self.user.last_name, self.user.email))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(Profile, self).save(*args, **kwargs)
+
+
 class PermissionLevel(models.Model):
     permission_name = models.CharField(max_length=255)
     abbreviation = models.CharField(null=True, blank=True, max_length=60)
@@ -73,60 +125,6 @@ class UserRole(models.Model):
         super(UserRole, self).save(*args, **kwargs)
 
 
-class Profile(models.Model):
-    SUBSCRIPTION_OPTIONS = [
-        ('free', 'free'),
-        ('initiator', 'Initiator'),
-        ('teams', 'Teams'),
-    ]
-    # Standard Variables
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    address_line1 = models.CharField(null=True, blank=True, max_length=100)
-    address_line2 = models.CharField(null=True, blank=True, max_length=100)
-    city = models.CharField(null=True, blank=True, max_length=60)
-    province = models.CharField(null=True, blank=True, max_length=100)
-    country = models.CharField(null=True, blank=True, max_length=100)
-    postal_code = models.CharField(null=True, blank=True, max_length=5)
-    profile_image = ResizedImageField(size=[200, 200], quality=90, upload_to='profile_images')
-
-    is_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-
-    user_role = models.ForeignKey(UserRole, on_delete=models.PROTECT)
-
-    # subscription helpers
-    monthly_count = models.CharField(null=True, blank=True, max_length=100)
-    subscribed = models.BooleanField(default=False)
-    subscription_type = models.CharField(choices=SUBSCRIPTION_OPTIONS, default='free', max_length=100)
-    subscription_reference = models.CharField(null=True, blank=True, max_length=500)
-
-    # device
-    current_ip = models.CharField(null=True, blank=True, max_length=100)
-    current_device = models.CharField(null=True, blank=True, max_length=100)
-
-    # team
-    user_team = models.CharField(null=True, blank=True, max_length=100)
-    
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
-
-    def __str__(self):
-        return '{} {} {}'.format(self.user.first_name, self.user.last_name, self.user.email)
-
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
-
-        self.slug = slugify('{} {} {}'.format(self.user.first_name, self.user.last_name, self.user.email))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(Profile, self).save(*args, **kwargs)
-
-
 class UserSetting(models.Model):
     facebook_link = models.CharField(null=True, blank=True, max_length=255)
     twitter_link = models.CharField(null=True, blank=True, max_length=255)
@@ -140,6 +138,7 @@ class UserSetting(models.Model):
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user_role = models.ForeignKey(UserRole, on_delete=models.PROTECT)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
