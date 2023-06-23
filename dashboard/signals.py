@@ -10,10 +10,10 @@ from .models import ClientCategory, PermissionLevel, Profile, Team, TeamClient, 
 
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        profile = Profile.objects.create(user=instance)
         
         lang = settings.LANGUAGE_CODE
-        profile = Profile.objects.get(user=instance)
+        # profile = Profile.objects.get(user=instance)
 
         # add user team
         new_user_team = Team.objects.create(
@@ -23,10 +23,10 @@ def create_profile(sender, instance, created, **kwargs):
             team_principal=profile.uniqueId,
         )
         new_user_team.save()
+        time.sleep(3)
 
         profile.user_team = new_user_team.uniqueId
         profile.save()
-        time.sleep(3)
 
         try:
             permission = PermissionLevel.objects.get(permission_name='Manager')
