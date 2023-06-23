@@ -3512,7 +3512,8 @@ def user_roles(request):
 
             u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
             for role in u_roles:
-                user_roles.append(role)
+                if role.user_team == this_user_team.uniqueId:
+                    user_roles.append(role)
 
         except:
             return redirect('profile')
