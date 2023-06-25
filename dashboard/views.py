@@ -3339,7 +3339,7 @@ def edit_client(request, uniqueId):
     parent_page = 'Clients'
     context['current_page'] = current_page
     context['parent_page'] = parent_page
-    context['parent_page_url'] = 'client'
+    context['parent_page_url'] = 'clients'
 
     user_profile = request.user.profile
     lang = settings.LANGUAGE_CODE
