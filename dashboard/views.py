@@ -231,9 +231,6 @@ def profile(request):
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
 
-        print(request.POST['multiple-email-notify'])
-        breakpoint
-
         user_settings.lang = request.POST['user-language']
         user_settings.website_link = request.POST['user-website']
         user_settings.twitter_link = request.POST['user-twitter']
@@ -636,7 +633,6 @@ def create_blog_from_topic(request, uniqueId):
         if len(blog_section_heads) > 0:
             # Adding the sections to the session
             request.session['blog-sections'] = blog_section_heads
-
             # adding the sections to the context
             context['blog_sections'] = blog_section_heads
 
@@ -646,7 +642,6 @@ def create_blog_from_topic(request, uniqueId):
 
         if request.method == 'POST':
             request.session['selectd_sections'] = request.POST
-
             return redirect('view-gen-blog', slug=blog.slug)
 
     except:

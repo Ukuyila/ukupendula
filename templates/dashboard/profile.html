@@ -98,11 +98,11 @@
                 <div class="col-md-9">
                   <div class="custom-controls-stacked">
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="email-notify" {% if user_settings.email_notify %} checked {% endif %}>
+                      <input type="checkbox" class="custom-control-input" name="email-notify" value="{{user_settings.email_notify}}" {% if user_settings.email_notify %} checked {% endif %}>
                       <span class="custom-control-label">Accept to receive post or page notification emails</span>
                     </label>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="multiple-email-notify"  {% if user_settings.multiple_email_notify %} checked {% endif %} >
+                      <input type="checkbox" class="custom-control-input" name="multiple-email-notify" value="{{user_settings.multiple_email_notify}}" {% if user_settings.multiple_email_notify %} checked {% endif %} >
                       <span class="custom-control-label">Accept to receive email sent to multiple recipients </span>
                     </label>
                   </div>
