@@ -238,8 +238,8 @@ def profile(request):
         user_settings.instagram_link = request.POST['user-instagram']
         user_settings.linkedin_link = request.POST['user-linkedin']
 
-        user_email_notify = request.POST['email-notify', user_settings.email_notify]
-        user_email_notify_multi = request.POST['multiple-email-notify', user_settings.multiple_email_notify]
+        user_email_notify = request.POST.get('email-notify', user_settings.email_notify)
+        user_email_notify_multi = request.POST.get('multiple-email-notify', user_settings.multiple_email_notify)
 
         print('user_email_notify: '.format(user_email_notify_multi))
         breakpoint
