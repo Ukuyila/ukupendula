@@ -197,21 +197,25 @@ def profile(request):
 
     current_page = 'My Profile'
     context['current_page'] = current_page
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
     remove_api_requests(request.user.profile)
 
     user_profile = request.user.profile
-
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
     lang = check_user_lang(user_profile, lang)
 
+    user_settings = UserSetting.objects.get(profile=user_profile)
+
+    # user_website = user_settings.website_link
+    # user_website = user_settings.website_link
+
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
 
+    context['user_settings'] = user_settings
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
@@ -226,6 +230,17 @@ def profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
+
+        user_settings.lang = request.POST['user-language']
+        user_settings.website_link = request.POST['user-website']
+        user_settings.twitter_link = request.POST['user-twitter']
+        user_settings.facebook_link = request.POST['user-facebook']
+        user_settings.instagram_link = request.POST['user-instagram']
+        user_settings.linkedin_link = request.POST['user-linkedin']
+        user_settings.email_notify = True if request.POST['email-notify'] == 'on' else False
+        user_settings.multiple_email_notify = True if request.POST['multiple-email-notify'] == 'on' else False
+
+        user_settings.save()
 
         if form.is_valid():
             form.save()

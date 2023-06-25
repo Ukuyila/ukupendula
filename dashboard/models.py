@@ -134,7 +134,7 @@ class UserSetting(models.Model):
     lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
 
     email_notify = models.BooleanField(default=True)
-    sms_notify = models.BooleanField(default=True)
+    multiple_email_notify = models.BooleanField(default=True)
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

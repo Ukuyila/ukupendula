@@ -21,16 +21,30 @@
           </form>
         </div>
         <div class="card-body">
-          <h4 class="mb-4 font-weight-semibold">Contact Info</h4>
-          <form class="form-horizontal">
+          <h4 class="mb-4 font-weight-semibold">Settings</h4>
+          <form method="post" action="#" class="form-horizontal">
             {% csrf_token %}
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Language</label>
+                </div>
+                <div class="col-md-9">
+                  <select class="form-control select2" name="user-language">
+                    <option disabled >Site Default</option>
+                    <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
+                    <option {% if lang == 'en-gb' %} selected {% endif %} value="en-gb">GB English</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="form-group ">
               <div class="row">
                 <div class="col-md-3">
                   <label class="form-label">Website</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="https://writesome.ai">
+                  <input type="text" class="form-control" name="user-website" value="{{user_settings.website_link}}" placeholder="https://writesome.ai">
                 </div>
               </div>
             </div>
@@ -40,7 +54,7 @@
                   <label class="form-label">Twitter</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="https://twitter.com/writesome">
+                  <input type="text" class="form-control" name="user-twitter" value="{{user_settings.twitter_link}}" placeholder="https://twitter.com/writesome">
                 </div>
               </div>
             </div>
@@ -50,54 +64,45 @@
                   <label class="form-label">Facebook</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="https://www.facebook.com/writesome">
+                  <input type="text" class="form-control" name="user-facebook" value="{{user_settings.facebook_link}}" placeholder="https://www.facebook.com/writesome">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Instagram</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-instagram" value="{{user_settings.instagram_link}}" placeholder="">
                 </div>
               </div>
             </div>
             <div class="form-group ">
               <div class="row">
                 <div class="col-md-3">
-                  <label class="form-label">Google+</label>
+                  <label class="form-label">LinkedIn</label>
                 </div>
                 <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="">
+                  <input type="text" class="form-control" name="user-linkedin" value="{{user_settings.linkedin_link}}" placeholder="">
                 </div>
               </div>
             </div>
-            <div class="form-group ">
-              <div class="row">
-                <div class="col-md-3">
-                  <label class="form-label">Twitter username (without@)</label>
-                </div>
-                <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="">
-                </div>
-              </div>
-            </div>
-            <div class="form-group ">
-              <div class="row">
-                <div class="col-md-3">
-                  <label class="form-label">Facebook profile Url</label>
-                </div>
-                <div class="col-md-9">
-                  <input type="text" class="form-control"  placeholder="">
-                </div>
-              </div>
-            </div>
-            <h4 class="mb-4 font-weight-semibold">Email Preferences</h4>
+            <h4 class="mb-4 font-weight-semibold">Preferences</h4>
             <div class="form-group mb-0">
               <div class="row">
                 <div class="col-md-3">
-                  <label class="form-label">Verified User</label>
+                  <label class="form-label">Email Preferences</label>
                 </div>
                 <div class="col-md-9">
                   <div class="custom-controls-stacked">
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" checked >
+                      <input type="checkbox" class="custom-control-input" name="email-notify" {% if user_settings.email_notify %} checked {% endif %}>
                       <span class="custom-control-label">Accept to receive post or page notification emails</span>
                     </label>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" checked >
+                      <input type="checkbox" class="custom-control-input" name="multiple-email-notify"  {% if user_settings.multiple_email_notify %} checked {% endif %} >
                       <span class="custom-control-label">Accept to receive email sent to multiple recipients </span>
                     </label>
                   </div>
@@ -105,7 +110,7 @@
               </div>
             </div>
             <div class="form-group mb-0">
-              <button type="submit" class="btn btn-primary waves-effect waves-light">Update</button>
+              <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
             </div>
           </form>
         </div>
