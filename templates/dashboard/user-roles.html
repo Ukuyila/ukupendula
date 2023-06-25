@@ -83,7 +83,10 @@
                   </td>
                   <td>
                     {% if user.profile.uniqueId == this_user_team.team_principal %}
-                    <a href="#" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-pencil"></i></a>&nbsp;<a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-user-role' this_user_team.uniqueId user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    <a href="#" type="button" class="text-center"><i class="icon icon-pencil"></i></a>&nbsp;
+                    {% if user_role.role_name == 'Team Manager' %}
+                    <a href="javascript:void(0);"  type="button" onclick="window.location.href='{% url 'delete-user-role' this_user_team.uniqueId user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    {% endif %}
                     {% endif %}
                   </td>
                   
