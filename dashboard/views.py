@@ -231,6 +231,10 @@ def profile(request):
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
 
+        print(request.POST['multiple-email-notify'])
+        print(request.POST['email-notify'])
+        breakpoint
+
         user_settings.lang = request.POST['user-language']
         user_settings.website_link = request.POST['user-website']
         user_settings.twitter_link = request.POST['user-twitter']
