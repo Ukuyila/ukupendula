@@ -100,7 +100,7 @@ class ProfileForm(forms.ModelForm):
                 Column('postal_code', css_class='form-group col-md-6'),
                 css_class='row'
             ),
-            # Submit('submit', 'Save', css_class="btn btn-primary me-2")
+            Submit('submit', 'Save', css_class="btn btn-primary me-2")
         )
 
     class Meta:

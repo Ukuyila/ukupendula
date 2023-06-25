@@ -17,8 +17,13 @@
           <form  method="post" action="#">
             {% csrf_token %}
             {% crispy form %}
-            
-            <h4 class="mb-4 font-weight-semibold">Settings</h4>
+
+          </form>
+        </div>
+        <div class="card-body">
+          
+          <form method="post" action="#" class="form-horizontal">
+            {% csrf_token %}
             <div class="form-group ">
               <div class="row">
                 <div class="col-md-3">
