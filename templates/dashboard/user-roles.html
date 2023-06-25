@@ -28,6 +28,7 @@
             <table class="table table-hover table-sm " id="normalTable" style="width:100%">
               <thead>
                 <tr>
+                  <th hidden></th>
                   <th>Role Name</th>
                   <th>Write</th>
                   <th>Edit</th>
@@ -41,6 +42,7 @@
               <tbody class="">
               {% for user_role in user_roles %}
                 <tr>
+                  <td hidden>{{user_role.date_created|date:"Y-m-d"}} {{user_role.date_created|date:"H:i"}}</td>
                   <td>
                     <h6>{{user_role.role_name}}<h6>
                     <span class="text-muted">Level: {{user_role.permission.permission_name}}</span>
