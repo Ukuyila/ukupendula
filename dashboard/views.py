@@ -3554,13 +3554,13 @@ def user_roles(request):
         role_name = request.POST['role-name']
         abbreviation = request.POST['abbreviation']
 
-        can_write = True if request.POST['role-can-write'] == 'on' else False
-        can_edit = True if request.POST['role-can-edit'] == 'on' else False
-        can_delete = True if request.POST['role-can-delete'] == 'on' else False
+        can_write = True if request.POST.get('role-can-write', False) == 'on' else False
+        can_edit = True if request.POST.get('role-can-edit', False) == 'on' else False
+        can_delete = True if request.POST.get('role-can-delete', False) == 'on' else False
 
-        can_create_team = True if request.POST['can-invite'] == 'on' else False
-        can_edit_team = True if request.POST['can-edit-team'] == 'on' else False
-        can_delete_team = True if request.POST['can-delete-team'] == 'on' else False
+        can_create_team = True if request.POST.get('can-invite', False) == 'on' else False
+        can_edit_team = True if request.POST.get('can-edit-team', False) == 'on' else False
+        can_delete_team = True if request.POST.get('can-delete-team', False) == 'on' else False
 
         new_role = UserRole.objects.create(
             role_name=role_name,
