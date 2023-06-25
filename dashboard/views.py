@@ -237,8 +237,8 @@ def profile(request):
         user_settings.facebook_link = request.POST['user-facebook']
         user_settings.instagram_link = request.POST['user-instagram']
         user_settings.linkedin_link = request.POST['user-linkedin']
-        user_settings.email_notify = True if request.POST['email-notify'] == 'on' else False
-        user_settings.multiple_email_notify = True if request.POST['multiple-email-notify'] == 'on' else False
+        user_settings.email_notify = True if request.POST['email-notify'] else False
+        user_settings.multiple_email_notify = True if request.POST['multiple-email-notify'] else False
 
         user_settings.save()
 
