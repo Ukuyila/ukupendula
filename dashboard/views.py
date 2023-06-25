@@ -244,8 +244,8 @@ def profile(request):
         print('user_email_notify: '.format(user_email_notify_multi))
         breakpoint
 
-        user_settings.email_notify = user_email_notify
-        user_settings.multiple_email_notify = user_email_notify_multi
+        user_settings.email_notify = True if user_email_notify == 'on' else False
+        user_settings.multiple_email_notify = True if user_email_notify_multi == 'on' else False
 
         user_settings.save()
 
