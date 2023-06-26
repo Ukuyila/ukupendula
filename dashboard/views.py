@@ -2608,14 +2608,14 @@ def add_team_member(request):
 
     if request.method == 'POST':
         
-        first_name = request.POST['user-fname']
-        last_name = request.POST['user-lname']
-        user_email = request.POST['user-email']
+        first_name = request.POST['first_name']
+        last_name = request.POST['user_lname']
+        user_email = request.POST['user_email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        email_notify = False if request.POST.get('email-notify', False) == 'off' else True
-        user_language = request.POST['user-language']
-        user_role = UserRole.objects.get(uniqueId=request.POST['user-role'])
+        email_notify = False if request.POST.get('email_notify', False) == 'off' else True
+        user_language = request.POST['user_language']
+        user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
         if not password1 == password2:
             messages.error(request, "Passwords do not match!")
