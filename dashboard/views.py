@@ -2565,40 +2565,40 @@ def team_manager(request):
     context['member_invites'] = member_invites
     context['user_roles'] = user_roles
 
-    if request.method == 'POST':
+    # if request.method == 'POST':
 
-        biz_name = request.POST['biz_name']
-        industry = request.POST['industry']
-        business_size = request.POST['business_size']
-        biz_email = request.POST['biz_email']
-        biz_address = request.POST['biz_address']
-        biz_description = request.POST['biz_description']
+    #     biz_name = request.POST['biz_name']
+    #     industry = request.POST['industry']
+    #     business_size = request.POST['business_size']
+    #     biz_email = request.POST['biz_email']
+    #     biz_address = request.POST['biz_address']
+    #     biz_description = request.POST['biz_description']
 
-        if user_profile.user_team is None:
-            new_team = Team.objects.create(
-                business_name=biz_name,
-                business_size=business_size,
-                industry=industry,
-                business_email=biz_email,
-                business_description=biz_description,
-                business_address=biz_address,
-                business_status=True,
-                team_principal=request.user.profile.uniqueId,
-            )
-            new_team.save()
-            profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
-            profile.user_team = new_team.uniqueId
-            profile.save()
-        else:
-            edit_org = Team.objects.get(uniqueId=user_profile.user_team)
+    #     if user_profile.user_team is None:
+    #         new_team = Team.objects.create(
+    #             business_name=biz_name,
+    #             business_size=business_size,
+    #             industry=industry,
+    #             business_email=biz_email,
+    #             business_description=biz_description,
+    #             business_address=biz_address,
+    #             business_status=True,
+    #             team_principal=request.user.profile.uniqueId,
+    #         )
+    #         new_team.save()
+    #         profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+    #         profile.user_team = new_team.uniqueId
+    #         profile.save()
+    #     else:
+    #         edit_org = Team.objects.get(uniqueId=user_profile.user_team)
 
-            if edit_org.team_principal == request.user.profile.uniqueId:
-                edit_org.business_name=biz_name
-                edit_org.business_size=business_size
-                edit_org.industry=industry
-                edit_org.business_email=biz_email
-                edit_org.business_description=biz_description
-                edit_org.business_address=biz_address
+    #         if edit_org.team_principal == request.user.profile.uniqueId:
+    #             edit_org.business_name=biz_name
+    #             edit_org.business_size=business_size
+    #             edit_org.industry=industry
+    #             edit_org.business_email=biz_email
+    #             edit_org.business_description=biz_description
+    #             edit_org.business_address=biz_address
 
     return render(request, 'dashboard/team-manager.html', context)
 
