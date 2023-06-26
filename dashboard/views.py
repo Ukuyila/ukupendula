@@ -2633,7 +2633,7 @@ def add_team_member(request):
         user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
 
         user_profile = Profile.objects.get(user=new_member)
-        user_profile.user_team=user_team
+        user_profile.user_team=user_team.uniqueId
         user_profile.save()
 
         user_settings = UserSetting.objects.create(lang=user_language,user_role=user_role,profile=user_profile)
