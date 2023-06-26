@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from uuid import uuid4
 
@@ -2540,10 +2540,10 @@ def team_manager(request):
             total_members +=1
             team_members.append(team_member)
 
-        if request.method == 'GET':
-            invite_form = MemberInviteForm(instance=request.user.profile, user=request.user)
+        # if request.method == 'GET':
+        #     invite_form = MemberInviteForm(instance=request.user.profile, user=request.user)
 
-            context['invite_form'] = invite_form
+        #     context['invite_form'] = invite_form
 
             # return render(request, 'dashboard/team-manager.html', context)
 
@@ -2566,28 +2566,6 @@ def team_manager(request):
     context['user_roles'] = user_roles
 
     if request.method == 'POST':
-
-        invite_form = MemberInviteForm(request.POST, instance=request.user.profile, user=request.user)
-
-        if invite_form.is_valid():
-            invite_email = request.POST['invite_email']
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-
-            # invite submit form
-            new_invite = MemberInvite.objects.create(
-                invite_email=invite_email,
-                first_name=first_name,
-                last_name=last_name,
-                invited_by=request.user.profile.uniqueId,
-                inviter_team=request.user.profile.user_team,
-                invite_code=str(uuid4()).split('-')[4],
-            )
-            new_invite.save()
-
-            # send invite email
-
-            return redirect('team-manager')
 
         biz_name = request.POST['biz_name']
         industry = request.POST['industry']
@@ -2623,6 +2601,52 @@ def team_manager(request):
                 edit_org.business_address=biz_address
 
     return render(request, 'dashboard/team-manager.html', context)
+
+
+@login_required
+def add_team_member(request):
+
+    if request.method == 'POST':
+        
+        first_name = request.POST['user_fname']
+        last_name = request.POST['user_lname']
+        user_email = request.POST['user_email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        email_notify = False if request.POST.get('email-notify', False) == 'off' else True
+        user_language = request.POST['user-language']
+        user_role = UserRole.objects.get(uniqueId=request.POST['user-role'])
+
+        if not password1 == password2:
+            messages.error(request, "Passwords do not match!")
+            return redirect('team-manager')
+
+        if User.objects.filter(email=user_email).exists():
+            messages.error(request, "User email address {} already exists, please use a different email address!".format(user_email))
+            return redirect('team-manager')
+
+        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1)
+        new_member.save()
+        time.sleep(2)
+
+        # get user team
+        user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
+
+        user_profile = Profile.objects.get(user=new_member)
+        user_profile.user_team=user_team
+        user_profile.save()
+
+        user_settings = UserSetting.objects.create(lang=user_language,user_role=user_role,profile=user_profile)
+        user_settings.save()
+
+        success = 'Member added successfully!'
+
+        if email_notify:
+            # send invite email
+            pass
+        
+        return HttpResponse(success)
+        # return redirect('team-manager')
 
 
 @login_required

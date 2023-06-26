@@ -269,7 +269,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <form method="POST">
+          <div class="alert alert-danger" id="error-alert" hidden role="alert"></div>
+          <div class="alert alert-success" id="success-alert" hidden role="alert"></div>
+          <form id="member-modal-form">
             {% csrf_token %}
             <h4 class="mb-4 font-weight-semibold">User Details</h4>
             <div class="row">
@@ -292,7 +294,7 @@
               <div class="form-group form-password-toggle col-md-6">
                 <label class="form-label" for="password1">Password</label>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password1" class="form-control" name="password1" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
+                  <input type="password" id="password1" class="form-control" name="password1" id="password1" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
                   />
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>
@@ -300,7 +302,7 @@
               <div class="form-group form-password-toggle col-md-6">
                 <label class="form-label" for="password2">Repeat Password</label>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password2" class="form-control" name="password2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
+                  <input type="password" id="password2" class="form-control" name="password2" id="password2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
                   />
                   <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                 </div>
@@ -308,14 +310,14 @@
             </div>
             <h4 class="mb-4 font-weight-semibold">Preferences</h4>
             <div class="form-group">
-              <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="email-notify" checked>
+              <label class="custom-control custom-checkbox"> 
+                <input type="checkbox" class="custom-control-input" name="email-notify" id="email-notify" checked>
                 <span class="custom-control-label">Send user a welcome email.</span>
               </label>
             </div>
             <div class="form-group">
               <label class="form-label" for="user-language">User Language</label>
-              <select class="form-control select2" name="user-language">
+              <select class="form-control select2" name="user-language" id="user-language">
                 <option disabled >Site Default</option>
                 <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
                 <option {% if lang == 'en-gb' %} selected {% endif %} value="en-gb">GB English</option>
@@ -324,7 +326,7 @@
             <h4 class="mb-4 font-weight-semibold">User Settings</h4>
             <div class="form-group">
               <label class="form-label" for="user-role">User Role</label>
-              <select class="form-control select2" name="user-role">
+              <select class="form-control select2" name="user-role" id="user-role">
                 {% for user_role in user_roles %}
                 <option value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
                 {% endif %}

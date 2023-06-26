@@ -1,5 +1,50 @@
 $(document).ready(function(){
   "use strict";
+
+  error_alert = $('#error-alert')
+  success_alert = $('#success-alert')
+  $('.alert').prop('hidden', true)
+
+  $("#member-modal-form").on('submit', function (event){
+    
+    if (event.isDefaultPrevented()) {
+      error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Please fill in all required form fields?')
+      error_alert.prop('hidden', false)
+    } else {
+      event.preventDefault();
+
+      if ($('#password1').val() == $('#password2').val()) {
+        $('.alert').prop('hidden', true)
+        $.ajax({
+          type: 'POST',
+          url: 'add-new-member',
+          data: {
+            first_name: $('#user-fname').val(),
+            last_name: $('#user-lname').val(),
+            user_email: $('#user-email').val(),
+            password1: $('#password1').val(),
+            email_notify: $('#email-notify').val(),
+            user_language: $('#user-language').val(),
+            user_role: $('#user-role').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+          },
+          success: function (data) {
+            success_alert.html(data)
+            success_alert.prop('hidden', false)
+            $('invite_new_member').modal('hide')
+            window.location.href="{% url 'team-manager' %}"
+          }
+        })
+      }
+      else {
+        error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Password does not match!')
+        error_alert.prop('hidden', false)
+      }
+      
+
+    }
+  })
+
   var maxLength = 200;
   var emailMaxLength = 100;
   var addrMaxLength = 300;

@@ -12,6 +12,7 @@ urlpatterns = [
     path('delete-device/<str:uniqueId>/', views.delete_device, name='delete-device'),
 
     path('team-manager', views.team_manager, name='team-manager'),
+    path('add-new-member', views.add_team_member, name='add-new-member'),
     path('delete-member/<str:orgUniqueId>/<str:uniqueId>/', views.delete_member, name='delete-member'),
     path('delete-invite/<str:userUid>/<str:uniqueId>/', views.delete_invite, name='delete-invite'),
 
