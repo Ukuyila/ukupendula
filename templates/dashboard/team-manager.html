@@ -196,8 +196,12 @@
                     {% endif %}
                   </td>
                   <td>
-                    {% if not member.uniqueId == user.profile.uniqueId %}
+                    {% if not member.uniqueId == user.profile.uniqueId and user.profile.uniqueId == this_user_team.team_principal %}
+                    <a href="#" type="button" class="text-center"><i class="icon icon-pencil"></i></a>&nbsp;
+                    {% if not user_role.role_name == 'Team Manager' %}
                     <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-member' team_uid member.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    {% endif %}
+                    
                     {% endif %}
                   </td>
                   
@@ -257,17 +261,78 @@
   </div>
 
   <div class="modal fade" id="invite_new_member" tabindex="-1" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog  modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="example-Modal3">New member</h5>
+          <h5 class="modal-title" id="member-modal-title">New member</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           </button>
         </div>
         <div class="modal-body">
           <form method="POST">
             {% csrf_token %}
-            {% crispy invite_form %}
+            <h4 class="mb-4 font-weight-semibold">User Details</h4>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="user-fname" class="form-control-label">First Name:</label>
+                <input type="text" class="form-control" name="user-fname" id="user-fname">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="user-lname" class="form-control-label">Last Name:</label>
+                <input type="text" class="form-control" name="user-lname" id="user-lname">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="user-email" class="form-control-label">User Email:</label>
+                <input type="text" class="form-control" name="user-email" id="user-email">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group form-password-toggle col-md-6">
+                <label class="form-label" for="password1">Password</label>
+                <div class="input-group input-group-merge">
+                  <input type="password" id="password1" class="form-control" name="password1" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
+                  />
+                  <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+              </div>
+              <div class="form-group form-password-toggle col-md-6">
+                <label class="form-label" for="password2">Repeat Password</label>
+                <div class="input-group input-group-merge">
+                  <input type="password" id="password2" class="form-control" name="password2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required
+                  />
+                  <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+              </div>
+            </div>
+            <h4 class="mb-4 font-weight-semibold">Preferences</h4>
+            <div class="form-group">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="email-notify" checked>
+                <span class="custom-control-label">Send user a welcome email.</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="user-language">User Language</label>
+              <select class="form-control select2" name="user-language">
+                <option disabled >Site Default</option>
+                <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
+                <option {% if lang == 'en-gb' %} selected {% endif %} value="en-gb">GB English</option>
+              </select>
+            </div>
+            <h4 class="mb-4 font-weight-semibold">User Settings</h4>
+            <div class="form-group">
+              <label class="form-label" for="user-role">User Role</label>
+              <select class="form-control select2" name="user-role">
+                {% for user_role in user_roles %}
+                <option value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="form-group register-btn-container">
+              <button id="register-btn" type="submit" class="btn btn-primary d-grid w-100">Add</button>
+            </div>
           </form>
         </div>
 

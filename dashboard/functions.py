@@ -8,6 +8,7 @@ import requests
 import platform
 from math import ceil, floor
 
+
 from .models import *
 
 
@@ -15,13 +16,14 @@ from .models import *
 openai.api_key = settings.OPENAI_API_KEYS
 
 
-def generate_blog_topic_ideas(topic, audience, keywords):
+def generate_blog_topic_ideas(profile, topic, audience, keywords):
 
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
     blog_topics = []
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate 5 blog topic ideas without numbering prefixes about {}\nAudience: {}\nKeywords: {}\n\n*".format(topic, audience, keywords),
+        prompt="Generate 5 blog topic ideas in {} without numbering prefixes about {}\nAudience: {}\nKeywords: {}\n\n*".format(lang, topic, audience, keywords),
         temperature=0.7,
         max_tokens=250,
         top_p=1,
@@ -48,13 +50,14 @@ def generate_blog_topic_ideas(topic, audience, keywords):
     return blog_topics
 
 
-def generate_blog_section_headings(topic, audience, keywords):
+def generate_blog_section_headings(profile, topic, audience, keywords):
 
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
     blog_sections = []
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate Blog Sections for the following blog topic, target audience, and keywords:\nTopic: {}\nAudience: {}\nKeywords: {}\n*".format(topic, audience, keywords),
+        prompt="Generate Blog Sections in {} for the following blog topic, target audience, and keywords:\nTopic: {}\nAudience: {}\nKeywords: {}\n*".format(lang, topic, audience, keywords),
         temperature=0.7,
         max_tokens=250,
         top_p=1,
@@ -83,9 +86,11 @@ def generate_blog_section_headings(topic, audience, keywords):
 
 def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_words, max_words, profile):
 
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate a blog write-up with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n*".format(
+        prompt="Generate a blog write-up in {} with a length between {} and {} words for the following blog title, target audience, tone of voice, and keywords:\nBlog Title: {}\nAudience: {}\nThe tone of voice: {}\nKeywords: {}\nUse the section headings below: \n{}\n*".format(lang, 
             min_words, max_words, blog_topic, audience, tone, keywords, section_heads),
         temperature=1,
         max_tokens=1000,
@@ -120,9 +125,11 @@ def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_
 
 def generate_blog_section_details(blog_topic, section_topic, audience, keywords, profile):
 
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate a detailed blog section write-up for the following blog section heading, using the blog title, target audience, and keywords:\nBlog Title: {}\nSection Heading: {}\nAudience: {}\nKeywords: {}\n*".format(
+        prompt="Generate a detailed blog section write-up in {} for the following blog section heading, using the blog title, target audience, and keywords:\nBlog Title: {}\nSection Heading: {}\nAudience: {}\nKeywords: {}\n*".format(lang, 
             blog_topic, section_topic, audience, keywords),
         temperature=1,
         max_tokens=1000,
@@ -156,9 +163,11 @@ def generate_blog_section_details(blog_topic, section_topic, audience, keywords,
     
 
 def generate_paragraph(paragraph_topic, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write a short paragraph on the given topic and tone of voice:\nTopic: {}\nTone of voice: {}\n".format(
+        prompt="Write a short paragraph in {} on the given topic and tone of voice:\nTopic: {}\nTone of voice: {}\n".format(lang, 
             paragraph_topic, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
@@ -192,9 +201,11 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
 
 
 def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body, max_char, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write a {} post with a maximum of {} characters from this article using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, max_char, keywords,tone_of_voice, audience, blog_body),
+        prompt="Write a {} post in {} with a maximum of {} characters from this article using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, lang, max_char, keywords,tone_of_voice, audience, blog_body),
         temperature=1,
         max_tokens=256,
         top_p=1,
@@ -225,10 +236,11 @@ def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body
 
 
 def rewrite_sentence(old_sentence, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Give me an unnumbered list of 5 rewrite options for this sentence: {}\nTone of voice: {}\n\n*".format(old_sentence, tone_of_voice),
+        prompt="Give me an unnumbered list of 5 rewrite options in {} for this sentence: {}\nTone of voice: {}\n\n*".format(lang, old_sentence, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
         top_p=1,
@@ -259,10 +271,11 @@ def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
 
 def rewriter_article_title(old_title, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Give me 5 rewrite options for this article title: {}\nTone of voice: {}\n\n*".format(old_title, tone_of_voice),
+        prompt="Give me 5 rewrite options in {} for this article title: {}\nTone of voice: {}\n\n*".format(lang, old_title, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
         top_p=1,
@@ -293,10 +306,12 @@ def rewriter_article_title(old_title, tone_of_voice, profile):
     
 
 def generate_meta_description(article_title, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write an article meta description on this article title using given tone of voice:\nTitle: {}\nTone of voice: {}\n\n".format(
-            article_title, tone_of_voice),
+        prompt="Write an article meta description on this article title in {} using given tone of voice:\nTitle: {}\nTone of voice: {}\n\n".format(
+            lang, article_title, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
         top_p=1,
@@ -329,9 +344,11 @@ def generate_meta_description(article_title, tone_of_voice, profile):
     
 
 def write_content_summary(article_title, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write a {} summary for this content;\n{}\n\nSummary:\n".format(tone_of_voice, article_title),
+        prompt="Write a {} summary in {} for this content;\n{}\n\nSummary:\n".format(tone_of_voice, lang, article_title),
         temperature=0.8,
         max_tokens=1000,
         top_p=1,
@@ -364,9 +381,11 @@ def write_content_summary(article_title, tone_of_voice, profile):
     
 
 def generate_landing_page_copy(company_name, company_purpose, page_sections, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate a website landing page copy for the given company name and company purpose, and sections below:\nCompany Name: {}\nCompany Purpose: {}\nSection: {}\n\n".format(
+        prompt="Generate a website landing page copy in {} for the given company name and company purpose, and sections below:\nCompany Name: {}\nCompany Purpose: {}\nSection: {}\n\n".format(lang, 
             company_name, company_purpose, page_sections),
         temperature=0.7,
         max_tokens=1000,
@@ -780,7 +799,7 @@ def check_user_lang(profile, lang):
 
     if user_settings.lang is not None:
         lang = user_settings.lang
-        print('Language: {}'.format(user_settings.lang))
+        # print('Language: {}'.format(user_settings.lang))
 
     return lang
 #

@@ -352,7 +352,7 @@ def blog_topic(request):
                 # api_requests = check_api_requests()
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
-                    blog_topics = generate_blog_topic_ideas(blog_idea, audience, keywords)
+                    blog_topics = generate_blog_topic_ideas(user_profile, blog_idea, audience, keywords)
                 
                     add_to_list.is_done=True
                     add_to_list.save()
@@ -559,7 +559,7 @@ def use_blog_topic(request, blog_topic):
                 # api_requests = check_api_requests()
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
-                    blog_section_heads = generate_blog_section_headings(blog_topic, request.session['audience'], request.session['keywords'])
+                    blog_section_heads = generate_blog_section_headings(user_profile, blog_topic, request.session['audience'], request.session['keywords'])
                     
                     add_to_list.is_done=True
                     add_to_list.save()
@@ -626,7 +626,7 @@ def create_blog_from_topic(request, uniqueId):
             # api_requests = check_api_requests()
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
-                blog_section_heads = generate_blog_section_headings(blog.title, blog.audience, blog.keywords)
+                blog_section_heads = generate_blog_section_headings(user_profile, blog.title, blog.audience, blog.keywords)
                 
                 add_to_list.is_done=True
                 add_to_list.save()
@@ -2509,6 +2509,7 @@ def team_manager(request):
 
     total_invites = 0
     member_invites = []
+    user_roles = []
 
     user_profile = request.user.profile
 
@@ -2550,6 +2551,11 @@ def team_manager(request):
     for member_inv in my_invites:
         member_invites.append(member_inv)
 
+    u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
+    for role in u_roles:
+        if role.user_team == this_user_team.uniqueId:
+            user_roles.append(role)
+
     context['current_page'] = current_page
     context['total_members'] = str(total_members)
     context['team_members'] = team_members
@@ -2557,6 +2563,7 @@ def team_manager(request):
     context['team_uid'] = user_profile.user_team
     context['total_invites'] = total_invites
     context['member_invites'] = member_invites
+    context['user_roles'] = user_roles
 
     if request.method == 'POST':
 
