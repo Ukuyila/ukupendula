@@ -1,8 +1,8 @@
 $(document).ready(function(){
   "use strict";
 
-  error_alert = $('#error-alert')
-  success_alert = $('#success-alert')
+  let error_alert = $('#error-alert')
+  let success_alert = $('#success-alert')
   $('.alert').prop('hidden', true)
 
   $("#member-modal-form").on('submit', function (event){
