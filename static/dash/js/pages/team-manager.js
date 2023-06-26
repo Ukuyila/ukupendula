@@ -23,6 +23,7 @@ $(document).ready(function(){
             last_name: $('#user-lname').val(),
             user_email: $('#user-email').val(),
             password1: $('#password1').val(),
+            password2: $('#password2').val(),
             email_notify: $('#email-notify').val(),
             user_language: $('#user-language').val(),
             user_role: $('#user-role').val(),
