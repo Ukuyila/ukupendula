@@ -34,7 +34,7 @@ $(document).ready(function(){
             success_alert.prop('hidden', false)
             setTimeout(() => {
               $("#member-modal-form")[0].reset()
-              window.location.href="{% url 'team-manager' %}"
+              window.location.href="team-manager"
             }, 3000)
             $('invite_new_member').modal('hide')
           }
