@@ -329,7 +329,7 @@
               <select class="form-control select2" name="user-role" id="user-role">
                 {% for user_role in user_roles %}
                 <option value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
-                {% endif %}
+                {% endfor %}
               </select>
             </div>
             <div class="form-group register-btn-container">
