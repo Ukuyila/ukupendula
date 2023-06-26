@@ -2609,7 +2609,7 @@ def add_team_member(request):
     if request.method == 'POST':
         
         first_name = request.POST['first_name']
-        last_name = request.POST['user_lname']
+        last_name = request.POST['last_name']
         user_email = request.POST['user_email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
