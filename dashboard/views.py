@@ -2608,9 +2608,9 @@ def add_team_member(request):
 
     if request.method == 'POST':
         
-        first_name = request.POST['user_fname']
-        last_name = request.POST['user_lname']
-        user_email = request.POST['user_email']
+        first_name = request.POST['user-fname']
+        last_name = request.POST['user-lname']
+        user_email = request.POST['user-email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         email_notify = False if request.POST.get('email-notify', False) == 'off' else True
