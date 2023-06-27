@@ -2636,7 +2636,8 @@ def add_team_member(request):
         user_profile.user_team=user_team.uniqueId
         user_profile.save()
 
-        verification_code = uuid4()[:32]
+        uuid_code = uuid4()
+        verification_code = str(uuid_code)[:32]
 
         user_settings = UserSetting.objects.create(lang=user_language,email_verification=verification_code,user_role=user_role,profile=user_profile)
         user_settings.save()
