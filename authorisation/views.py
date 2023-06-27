@@ -185,7 +185,7 @@ def logout(request):
 def activate(request, token, uniqueId):  
 
     # decode_token = force_str(urlsafe_base64_decode(token))
-    print('decode_emai: '.format(token))
+    print('token: '.format(token))
     return None
 
     # try:  
