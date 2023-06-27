@@ -2659,7 +2659,7 @@ def add_team_member(request):
             data = {'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
 
             response = requests.post(url, params=data)
-            result = json.loads(response.text)
+            result = json.loads(response.text.decode('utf-8'))
             time.sleep(2)
             success = result
             print(success)
