@@ -185,31 +185,34 @@ def logout(request):
 def activate(request, token, uniqueId):  
 
     # decode_token = force_str(urlsafe_base64_decode(token))
-    print('token: '.format(token))
-    return None
+    # print('token: '.format(token))
+    # return HttpResponse('Verification link is invalid!')
 
-    # try:  
-    #     decode_email = force_str(urlsafe_base64_decode(encodedmail))
-    #     profile = Profile.objects.get(uniqueId=uniqueId)
-    #     p_settings = UserSetting.objects.get(profile=profile)
-    #     user = User.objects.get(profile=profile)
-    # except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
-    #     user = None
-    #     profile = None
-    # if user is not None and profile is not None and p_settings.email_verification == token:
+    try:  
+        # decode_email = force_str(urlsafe_base64_decode(encodedmail))
+        profile = Profile.objects.get(uniqueId=uniqueId)
+        p_settings = UserSetting.objects.get(profile=profile)
+        user = User.objects.get(profile=profile)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
+        user = None
+        profile = None
+    if user is not None and profile is not None and p_settings.email_verification == token:
 
-    #     user.is_active = True
-    #     user.save()
-    #     profile = Profile.objects.get(user=user)
-    #     profile.is_active = True
-    #     profile.is_verified = True
-    #     profile.save()
+        user.is_active = True
+        user.save()
+        profile = Profile.objects.get(user=user)
+        profile.is_active = True
+        profile.is_verified = True
+        profile.save()
+
+        p_settings.email_verification = 'None'
+        p_settings.save()
         
-    #     redirect('login')
-    #     return HttpResponse('Thank you for verifying you email. Now you can login your account.')
+        redirect('login')
+        return HttpResponse('Thank you for verifying you email. Now you can login your account.')
 
-    # else:
-    #     return HttpResponse('Verification link is invalid!')
+    else:
+        return HttpResponse('Verification link is invalid!')
 
 
 def forgot_password(request):
