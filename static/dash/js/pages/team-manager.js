@@ -33,11 +33,11 @@ $(document).ready(function(){
             if ( data.includes('success') ) {
               success_alert.html(data)
               success_alert.prop('hidden', false)
+              $("#member-modal-form")[0].reset()
+              $('invite_new_member').modal('hide')
               setTimeout(() => {
-                $("#member-modal-form")[0].reset()
                 window.location.href="team-manager"
               }, 3000)
-              $('invite_new_member').modal('hide')
             }
             else {
               error_alert.html(data).prop('hidden', false)
