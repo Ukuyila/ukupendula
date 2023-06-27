@@ -2650,17 +2650,17 @@ def add_team_member(request):
             api_url = settings.MAILER_API_URL
             mailer_api_key = settings.MAILER_API_KEY
 
-            url = '{}/mailer-api/?r=inv-user-welcome'.format(api_url)
+            url = '{}/mailer-api/'.format(api_url)
 
             api_business_id = settings.API_KEY_OWNER
 
             headers = {'content-type': 'application/json'}
             
-            payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':request.user.profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':'My Team'}
+            data = {'r':'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': request.user.profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password': password1, 'team_name':'My Team'}
 
-            # payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
+            # payload = {'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password':p assword1, 'team_name': user_team.business_name}
 
-            response = requests.post(url, headers=headers, data = payload)
+            response = requests.post(url, params=data)
             time.sleep(2)
             print(response)
         
