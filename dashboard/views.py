@@ -2659,7 +2659,7 @@ def add_team_member(request):
             # payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
             headers = {'content-type': 'application/json'}
 
-            response = requests.post(url, data=json.dumps(payload), headers=headers)
+            response = requests.post(url, data=payload, headers=headers)
             time.sleep(2)
             print(response)
         
