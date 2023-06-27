@@ -182,10 +182,10 @@ def logout(request):
     return redirect('login')
 
 
-def activate(request, encodedmail, token, uniqueId):  
+def activate(request, token, uniqueId):  
 
-    decode_email = force_str(urlsafe_base64_decode(encodedmail))
-    print('decode_emai: '.format(decode_email))
+    # decode_token = force_str(urlsafe_base64_decode(token))
+    print('decode_emai: '.format(token))
     return None
 
     # try:  
