@@ -2656,7 +2656,7 @@ def add_team_member(request):
 
             headers = {'content-type': 'application/json'}
 
-            data = {'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
+            data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
 
             response = requests.post(url, params=data)
             # result = json.loads(response.text.decode('utf-8'))
