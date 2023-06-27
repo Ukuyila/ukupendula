@@ -133,6 +133,8 @@ class UserSetting(models.Model):
     website_link = models.CharField(null=True, blank=True, max_length=255)
     lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
 
+    email_verification = models.CharField(null=True, blank=True, max_length=255)
+
     email_notify = models.BooleanField(default=True)
     multiple_email_notify = models.BooleanField(default=True)
 
