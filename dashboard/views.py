@@ -2661,7 +2661,7 @@ def add_team_member(request):
             response = requests.post(url, params=data)
             time.sleep(2)
             success = response.text
-            print(json.decoder(success))
+            print(success)
         
         return HttpResponse(success)
         # return redirect('team-manager')
