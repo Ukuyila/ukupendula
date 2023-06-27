@@ -7,7 +7,7 @@ import urllib.parse
 import requests
 import urllib.parse
 import socket
-import json
+import httplib2, json
 from werkzeug.urls import url_parse
 
 # Django imports
@@ -2654,14 +2654,32 @@ def add_team_member(request):
 
             api_business_id = settings.API_KEY_OWNER
 
-            payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':request.user.profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':'My Team'}
+            headers = { "charset" : "utf-8", "Content-Type": "application/json" }
+
+            conn = httplib2.HTTPConnection("localhost")
+
+            sample = { "temp_value" : 123 }
+
+            sampleJson = json.dumps(sample, ensure_ascii = 'False')
+
+            # Send the JSON data as-is -- we don't need to URL Encode this
+            conn.request("POST", url, sampleJson, headers)
+
+            response = conn.getresponse()
+
+            print(response.read())
+
+            conn.close()
+
+            # headers = {'content-type': 'application/json'}
+
+            # payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':request.user.profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':'My Team'}
 
             # payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
-            headers = {'content-type': 'application/json'}
 
-            response = requests.post(url, data=payload, headers=headers)
+            # response = requests.post(url, headers=headers, data=payload)
             time.sleep(2)
-            print(response)
+            # print(response)
         
         return HttpResponse(success)
         # return redirect('team-manager')
