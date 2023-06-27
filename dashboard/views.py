@@ -2622,26 +2622,26 @@ def add_team_member(request):
             messages.error(request, "Passwords do not match!")
             return redirect('team-manager')
 
-        if User.objects.filter(email=user_email).exists():
-            messages.error(request, "User email address {} already exists, please use a different email address!".format(user_email))
-            return redirect('team-manager')
+        # if User.objects.filter(email=user_email).exists():
+        #     messages.error(request, "User email address {} already exists, please use a different email address!".format(user_email))
+        #     return redirect('team-manager')
 
-        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1)
-        new_member.save()
-        time.sleep(2)
+        # new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1)
+        # new_member.save()
+        # time.sleep(2)
 
-        # get user team
-        user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
+        # # get user team
+        # user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
 
-        user_profile = Profile.objects.get(user=new_member)
-        user_profile.user_team=user_team.uniqueId
-        user_profile.save()
+        # user_profile = Profile.objects.get(user=new_member)
+        # user_profile.user_team=user_team.uniqueId
+        # user_profile.save()
 
         uuid_code = uuid4()
         verification_code = str(uuid_code)[:32]
 
-        user_settings = UserSetting.objects.create(lang=user_language,email_verification=verification_code,user_role=user_role,profile=user_profile)
-        user_settings.save()
+        # user_settings = UserSetting.objects.create(lang=user_language,email_verification=verification_code,user_role=user_role,profile=user_profile)
+        # user_settings.save()
 
         success = 'Member added successfully!'
 
@@ -2654,7 +2654,9 @@ def add_team_member(request):
 
             api_business_id = settings.API_KEY_OWNER
 
-            payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
+            payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':request.user.profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':'My Team'}
+
+            # payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
             headers = {'content-type': 'application/json'}
 
             response = requests.post(url, data=json.dumps(payload), headers=headers)
