@@ -30,13 +30,18 @@ $(document).ready(function(){
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
           },
           success: function (data) {
-            success_alert.html(data)
-            success_alert.prop('hidden', false)
-            setTimeout(() => {
-              $("#member-modal-form")[0].reset()
-              window.location.href="team-manager"
-            }, 3000)
-            $('invite_new_member').modal('hide')
+            if ( data.includes('success') ) {
+              success_alert.html(data)
+              success_alert.prop('hidden', false)
+              setTimeout(() => {
+                $("#member-modal-form")[0].reset()
+                window.location.href="team-manager"
+              }, 3000)
+              $('invite_new_member').modal('hide')
+            }
+            else {
+              error_alert.html(data).prop('hidden', false)
+            }
           }
         })
       }

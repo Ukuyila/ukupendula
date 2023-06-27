@@ -2643,7 +2643,7 @@ def add_team_member(request):
         # user_settings = UserSetting.objects.create(lang=user_language,email_verification=verification_code,user_role=user_role,profile=user_profile)
         # user_settings.save()
 
-        success = 'Member added successfully!'
+        success = 'Error'
 
         if email_notify:
             # send invite email
@@ -2662,7 +2662,8 @@ def add_team_member(request):
 
             response = requests.post(url, params=data)
             time.sleep(2)
-            print(response.text)
+            success = response.text
+            print(json.decoder(success))
         
         return HttpResponse(success)
         # return redirect('team-manager')
