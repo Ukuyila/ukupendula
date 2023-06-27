@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
@@ -182,25 +182,34 @@ def logout(request):
     return redirect('login')
 
 
-def activate(request, uidb64, token):  
-    # User = get_user_model()
-    try:  
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        profile = Profile.objects.get(user=user)
-        profile.is_active = True
-        profile.is_verified = True
-        profile.save()
+def activate(request, encodedmail, token, uniqueId):  
+
+    decode_email = force_str(urlsafe_base64_decode(encodedmail))
+    print('decode_emai: '.format(decode_email))
+    return None
+
+    # try:  
+    #     decode_email = force_str(urlsafe_base64_decode(encodedmail))
+    #     profile = Profile.objects.get(uniqueId=uniqueId)
+    #     p_settings = UserSetting.objects.get(profile=profile)
+    #     user = User.objects.get(profile=profile)
+    # except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
+    #     user = None
+    #     profile = None
+    # if user is not None and profile is not None and p_settings.email_verification == token:
+
+    #     user.is_active = True
+    #     user.save()
+    #     profile = Profile.objects.get(user=user)
+    #     profile.is_active = True
+    #     profile.is_verified = True
+    #     profile.save()
         
-        redirect('login')
-        return HttpResponse('Thank you for verifying you email. Now you can login your account.')
-    else:
-        return HttpResponse('Verification link is invalid!')
+    #     redirect('login')
+    #     return HttpResponse('Thank you for verifying you email. Now you can login your account.')
+
+    # else:
+    #     return HttpResponse('Verification link is invalid!')
 
 
 def forgot_password(request):

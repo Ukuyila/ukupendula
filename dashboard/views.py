@@ -20,11 +20,11 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 from django.http import JsonResponse, HttpResponse
-
 from uuid import uuid4
 
 # local imports.
@@ -2656,7 +2656,7 @@ def add_team_member(request):
 
             headers = {'content-type': 'application/json'}
 
-            data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': user_email, 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
+            data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': urlsafe_base64_encode(user_email), 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
 
             response = requests.post(url, params=data)
             # result = json.loads(response.text.decode('utf-8'))
