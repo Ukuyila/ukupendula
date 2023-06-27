@@ -7,6 +7,7 @@ import urllib.parse
 import requests
 import urllib.parse
 import socket
+import json
 from werkzeug.urls import url_parse
 
 # Django imports
@@ -2653,11 +2654,12 @@ def add_team_member(request):
 
             api_business_id = settings.API_KEY_OWNER
 
-            api_obj = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
+            payload = {'api-key':mailer_api_key, 'api-b-code':api_business_id, 'uniqueId':user_profile.uniqueId, 'uuid':verification_code, 'mailto':user_email, 'fname':first_name, 'lname':last_name, 'password':password1, 'team_name':user_team.business_name}
+            headers = {'content-type': 'application/json'}
 
-            api_call = requests.post(url, json=api_obj)
+            api_call = requests.post(url, data=json.dumps(payload), headers=headers)
             time.sleep(2)
-            print(api_call.text)
+            print(json.decoder(api_call))
         
         return HttpResponse(success)
         # return redirect('team-manager')
