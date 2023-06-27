@@ -2662,7 +2662,7 @@ def add_team_member(request):
 
             response = requests.post(url, params=data)
             time.sleep(2)
-            print(response)
+            print(response.text)
         
         return HttpResponse(success)
         # return redirect('team-manager')
