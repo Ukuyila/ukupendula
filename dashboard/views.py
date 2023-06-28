@@ -2608,7 +2608,7 @@ def team_manager(request):
     return render(request, 'dashboard/team-manager.html', context)
 
 
-def activateEmail(request, user, first_name, last_name, password1, user_email, user_team):
+def activateEmail(request, user, password1, user_team):
     # mail_subject = "Activate your user account."
     # message = render_to_string("authorisation/email-verification.html", {
     #     'user': user.username,
@@ -2617,9 +2617,6 @@ def activateEmail(request, user, first_name, last_name, password1, user_email, u
     #     'token': account_activation_token.make_token(user),
     #     "protocol": 'https' if request.is_secure() else 'http'
     # })
-
-    uuidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-    token = account_activation_token.make_token(user)
 
     user_profile = Profile.objects.get(user=user)
 
@@ -2637,10 +2634,10 @@ def activateEmail(request, user, first_name, last_name, password1, user_email, u
         'api-key': mailer_api_key,
         'api-b-code': api_business_id,
         'uniqueId': user_profile.uniqueId,
-        'uuid': uuidb64,
-        'token':token,
-        'mailto': user_email,
-        'name': first_name + last_name,
+        'uuid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'mailto': user.email,
+        'name': user.first_name + user.last_name,
         'password':password1,
         'team_name': user_team.business_name}
 
@@ -2699,7 +2696,8 @@ def add_team_member(request):
         user_settings.save()
 
         success = 'Member added successfully'
-        activateEmail(request, new_member, first_name, last_name, password1, user_email, user_team)
+
+        activateEmail(request, new_member, password1, user_team)
 
         # uuidb64 = urlsafe_base64_encode(v_code)
 
