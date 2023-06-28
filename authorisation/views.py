@@ -182,10 +182,10 @@ def logout(request):
     return redirect('login')
 
 
-def activate(request, token, uniqueId):  
+def activate(request, uuid, uniqueId):  
 
     # decode_token = force_str(urlsafe_base64_decode(token))
-    print('token: '.format(token))
+    print('token: '.format(uuid))
     # return HttpResponse('Verification link is invalid!')
 
     try:  
@@ -196,7 +196,7 @@ def activate(request, token, uniqueId):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
         user = None
         profile = None
-    if user is not None and profile is not None and p_settings.email_verification == token:
+    if user is not None and profile is not None and p_settings.email_verification == uuid:
 
         user.is_active = True
         user.save()
