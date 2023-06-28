@@ -2639,7 +2639,7 @@ def activateEmail(request, user, first_name, last_name, password1, user_email, u
         'uniqueId': user_profile.uniqueId,
         'uuid': uuidb64,
         'token':token,
-        'mailto': urlsafe_base64_encode(user_email),
+        'mailto': urlsafe_base64_encode(force_bytes(user_email)),
         'name': first_name + last_name,
         'password':password1,
         'team_name': user_team.business_name}
