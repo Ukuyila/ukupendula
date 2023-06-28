@@ -192,13 +192,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'writesome.ai'
+EMAIL_HOST = 'mail.writesome.ai'
 EMAIL_FROM = 'no-reply@writesome.ai'
 EMAIL_HOST_USER = 'no-reply@writesome.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 PASSWORD_RESET_TIMEOUT = 14400
 
