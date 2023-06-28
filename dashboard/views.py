@@ -19,8 +19,12 @@ from django.conf import settings
 # Other Auth imports
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.template.loader import render_to_string
+from authorisation.tokens import account_activation_token
+from django.core.mail import EmailMessage, send_mail
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
@@ -2604,6 +2608,23 @@ def team_manager(request):
     return render(request, 'dashboard/team-manager.html', context)
 
 
+def activateEmail(request, user, to_email):
+    mail_subject = "Activate your user account."
+    message = render_to_string("authorisation/template_activate_account.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        "protocol": 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    if email.send():
+        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{to_email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+    else:
+        messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+
+
 @login_required
 def add_team_member(request):
 
@@ -2626,7 +2647,7 @@ def add_team_member(request):
             messages.error(request, "User email address {} already exists, please use a different email address!".format(user_email))
             return redirect('team-manager')
 
-        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1)
+        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1, is_active=False)
         new_member.save()
         time.sleep(2)
 
@@ -2637,32 +2658,36 @@ def add_team_member(request):
         user_profile.user_team=user_team.uniqueId
         user_profile.save()
 
-        uuid_code = uuid4()
-        verification_code = str(uuid_code)[:32]
+        # uuid_code = uuid4()
+        # v_code = str(uuid_code)[:32]
 
-        user_settings = UserSetting.objects.create(lang=user_language,email_verification=verification_code,user_role=user_role,profile=user_profile)
+
+        user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
         user_settings.save()
 
         success = 'Member added successfully'
+        activateEmail(request, new_member, user_email)
 
-        if email_notify:
-            # send invite email
-            api_url = settings.MAILER_API_URL
-            mailer_api_key = settings.MAILER_API_KEY
+        # uuidb64 = urlsafe_base64_encode(v_code)
 
-            url = '{}/mailer-api/'.format(api_url)
+        # if email_notify:
+        #     # send invite email
+        #     api_url = settings.MAILER_API_URL
+        #     mailer_api_key = settings.MAILER_API_KEY
 
-            api_business_id = settings.API_KEY_OWNER
+        #     url = '{}/mailer-api/'.format(api_url)
 
-            headers = {'content-type': 'application/json'}
+        #     api_business_id = settings.API_KEY_OWNER
 
-            data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': verification_code, 'mailto': urlsafe_base64_encode(user_email), 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
+        #     headers = {'content-type': 'application/json'}
 
-            response = requests.post(url, params=data)
-            # result = json.loads(response.text.decode('utf-8'))
-            time.sleep(2)
-            success = response.text
-            print(success)
+        #     data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': uuidb64, 'mailto': urlsafe_base64_encode(user_email), 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
+
+        #     response = requests.post(url, params=data)
+        #     # result = json.loads(response.text.decode('utf-8'))
+        #     time.sleep(2)
+        #     success = response.text
+        #     print(success)
         
         return HttpResponse(success)
         # return redirect('team-manager')

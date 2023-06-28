@@ -1,6 +1,7 @@
 import time
 from django.conf import Settings
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
@@ -182,37 +183,60 @@ def logout(request):
     return redirect('login')
 
 
-def activate(request, uuidToken, uniqueId):  
+# def activate(request, uuidToken, uniqueId):  
 
-    # decode_token = force_str(urlsafe_base64_decode(token))
-    print('token: '.format(uuidToken))
-    # return HttpResponse('Verification link is invalid!')
+#     # decode_token = force_str(urlsafe_base64_decode(token))
+#     print('token: '.format(uuidToken))
+#     # return HttpResponse('Verification link is invalid!')
 
-    try:  
-        # decode_email = force_str(urlsafe_base64_decode(encodedmail))
-        profile = Profile.objects.get(uniqueId=uniqueId)
-        p_settings = UserSetting.objects.get(profile=profile)
-        user = User.objects.get(profile=profile)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
+#     try:  
+#         # decode_email = force_str(urlsafe_base64_decode(encodedmail))
+#         profile = Profile.objects.get(uniqueId=uniqueId)
+#         p_settings = UserSetting.objects.get(profile=profile)
+#         user = User.objects.get(profile=profile)
+#     except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
+#         user = None
+#         profile = None
+#     if user is not None and profile is not None and p_settings.email_verification == uuidToken:
+
+#         user.is_active = True
+#         user.save()
+#         profile = Profile.objects.get(user=user)
+#         profile.is_active = True
+#         profile.is_verified = True
+#         profile.save()
+
+#         p_settings.email_verification = 'None'
+#         p_settings.save()
+        
+#         redirect('login')
+#         return HttpResponse('Thank you for verifying you email. Now you can login your account.')
+
+#     else:
+#         return HttpResponse('Verification link is invalid!')
+
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
         user = None
-        profile = None
-    if user is not None and profile is not None and p_settings.email_verification == uuidToken:
 
+    if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
         profile = Profile.objects.get(user=user)
         profile.is_active = True
         profile.is_verified = True
         profile.save()
 
-        p_settings.email_verification = 'None'
-        p_settings.save()
-        
-        redirect('login')
-        return HttpResponse('Thank you for verifying you email. Now you can login your account.')
-
+        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        return redirect('login')
     else:
-        return HttpResponse('Verification link is invalid!')
+        messages.error(request, "Activation link is invalid!")
 
 
 def forgot_password(request):
