@@ -50,7 +50,7 @@
                   </td>
                   <td>{{client.date_created|date:"Y-m-d"}}</td>
                   <td>
-                    <ul>
+                    <ul hidden class="a7301e7fd">
                       <li>{{client.uniqueId}}</li>
                       <li>{{client.client_name}}</li>
                       <li>{{client.contact_person}}</li>
@@ -186,7 +186,7 @@
               
             </div>
             <div class="modal-footer">
-              <input readonly type="text" class="form-control" name="client-code" id="client-code" maxlength="255" >
+              <input readonly hidden type="text" class="form-control" name="client-code" id="client-code" maxlength="255" >
               <button id="client-submit-btn" type="submit" class="btn btn-primary">Save</button>
             </div>
           </div>

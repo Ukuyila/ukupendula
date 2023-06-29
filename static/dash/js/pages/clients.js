@@ -5,6 +5,9 @@ $(function () {
     
     $('#client-modal-title').html('Update Client')
 
+    $('#client-code').prop('hidden', true)
+    $('#a7301e7fd').prop('hidden', true)
+
     // let $tr = $(this).closest('tr');
 
     // var data = $tr.children("td").map(function ()  {
@@ -16,7 +19,7 @@ $(function () {
       return $(this).text()
     })
 
-    console.log(data[0])
+    // console.log(data[0])
 
     $('#client-code').val(data[0])
     $('#client-name').val(data[1])
