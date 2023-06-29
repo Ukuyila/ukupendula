@@ -768,7 +768,11 @@ def view_gen_blog(request, slug):
                             del request.session['blog_idea']
                             del request.session['keywords']
                             del request.session['audience']
-                            del request.session['saved-sect-head']
+
+                            try:
+                                del request.session['saved-sect-head']
+                            except:
+                                request.session.modified = True
 
                             request.session.modified = True
 
