@@ -1866,14 +1866,14 @@ def summarize_blog(request, uniqueId):
         return redirect('blog-memory')
     
     try:
-        saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
+        saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
         for blog_sect in saved_blog_sects:
             this_blog_sections.append(blog_sect.body)
             blog_title = blog_sect.title
 
         # blog_body = "\n".join(this_blog_sections)
     except:
-        gen_sections = BlogSection.objects.filter(blog=blog)
+        gen_sections = BlogSection.objects.filter(blog=this_blog)
         for blog_sect in gen_sections:
             this_blog_sections.append(blog_sect.body)
 
