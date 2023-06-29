@@ -53,6 +53,8 @@ $(function () {
   function submit_edit_client() {
     var client_btn = $("#client-submit-btn")
 
+    var client_form = $('#client-editor-form')[0]
+
     client_btn.prop("disabled", true)
 
     error_alert.prop('hidden', true)
