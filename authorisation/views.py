@@ -241,4 +241,9 @@ def activate(request, uidb64, token):
 
 def forgot_password(request):
 
+    if request.method == 'POST':
+        user_email = request.POST['email']
+
+        
+
     return render(request, 'authorisation/forgot-password.html', {})
