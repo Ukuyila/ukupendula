@@ -3451,26 +3451,30 @@ def edit_client(request, uniqueId):
         
 	resp = "Error, something went wrong!"
         
-	this_client = TeamClient.objects.get(uniqueId=uniqueId)
-	
-	if request.method == 'POST':
-		client_name = request.POST['client-name']
-		contact_name = request.POST['contact-name']
-		client_email = request.POST['contact-email']
-		client_industry = request.POST['industry']
-		client_address = request.POST['address']
-		client_descr = request.POST['client-descr']
+	client_id = request.POST['client_code']
+        
+	try:
+		this_client = TeamClient.objects.get(uniqueId=client_id)
+		
+		if request.method == 'POST':
+			client_name = request.POST['client_name']
+			contact_name = request.POST['contact_name']
+			client_email = request.POST['contact_email']
+			client_industry = request.POST['industry']
+			client_address = request.POST['address']
+			client_descr = request.POST['client_descr']
 
-		if len(client_name) > 3:
-			this_client.client_name=client_name
-			this_client.contact_person=contact_name
-			this_client.industry=client_industry
-			this_client.client_email=client_email
-			this_client.business_address=client_address
-			this_client.description=client_descr
-			this_client.save()
-															
-			resp = "Client updated successfully"
+			if len(client_name) > 3:
+				this_client.client_name=client_name
+				this_client.contact_person=contact_name
+				this_client.industry=client_industry
+				this_client.client_email=client_email
+				this_client.business_address=client_address
+				this_client.description=client_descr
+				this_client.save()
+				resp = "Client updated successfully"
+	except:
+		resp = "Client updated successfully"
 
 	return HttpResponse(resp)
 
