@@ -5,11 +5,14 @@ $(function () {
     
     $('#client-modal-title').html('Update Client')
 
-    let $ul = $(this).closest('ul');
+    // let $tr = $(this).closest('tr');
 
-    var data = $ul.children("li").map(function ()  {
-    return $(this).text();
-    }).get();
+    // var data = $tr.children("td").map(function ()  {
+    // return $(this).text();
+    // }).get();
+    let $ul = parent().find("ul")
+
+    var data = $ul.children("li")
 
     console.log(data[0])
 
