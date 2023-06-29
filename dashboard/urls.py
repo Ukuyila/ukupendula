@@ -78,7 +78,7 @@ urlpatterns = [
 
     # clients url
     path('clients', views.clients, name='clients'),
-    path('edit-client/<str:uniqueId>/', views.edit_client, name='edit-client'),
+    path('edit-client', views.edit_client, name='edit-client'),
     path('delete-client/<str:uniqueId>/', views.delete_client, name='delete-client'),
     path('client-status/<str:status>/<str:uniqueId>/', views.change_client_status, name='client-status'),
     
