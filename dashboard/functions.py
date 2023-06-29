@@ -310,7 +310,7 @@ def generate_meta_description(article_title, tone_of_voice, profile):
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write an article meta description on this article title in {} using given tone of voice:\nTitle: {}\nTone of voice: {}\n\n".format(
+        prompt="Write an article meta description with a maximum of 160 characters on this article title in {} using given tone of voice:\nTitle: {}\nTone of voice: {}\n\n".format(
             lang, article_title, tone_of_voice),
         temperature=0.7,
         max_tokens=256,
