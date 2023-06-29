@@ -1,7 +1,7 @@
 $(function () {
   'use strict'
 
-  $('body').on('click', '.edit-customer', function () {
+  $('body').on('click', '.edit-client', function () {
     
     $('#client-modal-title').html('Update Client')
 
