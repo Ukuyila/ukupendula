@@ -796,12 +796,12 @@ def view_gen_blog(request, slug):
 def edit_gen_blog(request, uniqueId):
     context = {}
     current_page = 'Edit Generated Blog'
-    parent_page = 'Blog Generator'
+    # parent_page = 'Blog Generator'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    context['parent_page'] = parent_page
-    context['parent_page_url'] = 'view-generated-blog'
+    # context['parent_page'] = parent_page
+    # context['parent_page_url'] = 'view-generated-blog'
 
     cate_list = []
     client_list = []
