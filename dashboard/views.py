@@ -3440,7 +3440,7 @@ def change_client_status(request, status, uniqueId):
 
 
 @login_required
-def edit_client(request, uniqueId):
+def edit_client(request):
 	context = {}
 	current_page = 'Edit Client'
 	parent_page = 'Clients'
