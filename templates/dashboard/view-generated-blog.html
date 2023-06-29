@@ -11,19 +11,19 @@
                             <h4 class="mb-0">AI Generated Response</h4>
                             <div class="float-end">
                                 <div class="btn-group ">
-                                        <button class="btn btn-outline-primary" hidden>Copy Text</button>
-                                        <button  onclick="return window.location.href='{% url 'edit-gen-blog' blog.uniqueId %}'" class="btn btn-primary">Edit Blog</button>
+                                    <button class="btn btn-outline-primary" hidden>Copy Text</button>
+                                    <button  onclick="return window.location.href='{% url 'edit-gen-blog' blog.uniqueId %}'" class="btn btn-primary">Edit Blog</button>
                                 </div>
                                 <div class="btn-group">
-                                        <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
-                                        Tools
-                                        <i class="fa fa-angle-down "></i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Create Meta</a></li>
-                                            <li><a href="{% url 'generate-blog-summary' blog.uniqueId %}">Summarize Blog</a></li>
-                                            <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Rewrite Title</a></li>
-                                        </ul>
+                                    <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
+                                    Tools
+                                    <i class="fa fa-angle-down "></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Create Meta</a></li>
+                                        <li><a href="{% url 'generate-blog-summary' blog.uniqueId %}">Summarize Blog</a></li>
+                                        <li><a href="{% url 'generate-blog-meta' blog.uniqueId %}">Rewrite Title</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-12 ">
-                                        <div class="mb-5"><small class="text-primary">Disclaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small></div>
+                                        <div class="alert alert-warning" role="alert">Disclaimer: <small class="">The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small></div>
                                         <div class="form-group mt-5">
                                             <h6 class="">Generated Blog Body</h6>
                                             <div class="card shadow-none bg-light-gray border border-secondary mb-3 ">

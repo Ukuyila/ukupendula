@@ -24,13 +24,13 @@
                                     {% else %}
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h4 class="mb-0">{{post_type_title}} Post</h4>
+                                            
                                             <div class="mb-0">
-                                                <h4>AI Generated Response</h4>
+                                                <h4 class="mb-0">{{post_type_title}} Post</h4>
                                             </div>
                                             <div class="float-end">
                                                 <div class="btn-group " >
-                                                    <a type="button" href="{% url 'edit-blog' post_blog.uniqueId %}" class="btn btn-default">Exit</a>
+                                                    <a type="button" href="{% url 'edit-gen-blog' post_blog.uniqueId %}" class="btn btn-default">Exit</a>
                                                 </div>
                                                 <div class="btn-group">
                                                     <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
@@ -38,10 +38,10 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">LinkedIn</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Twitter</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Instagram</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' post_blog.uniqueId %}">Facebook</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">Create LinkedIn</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Create Twitter</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Create Instagram</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' post_blog.uniqueId %}">Create Facebook</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
