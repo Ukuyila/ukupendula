@@ -11,6 +11,8 @@ $(function () {
     return $(this).text();
     }).get();
 
+    console.log(data[0])
+
     $('#client-code').val(data[0])
     $('#client-name').val(data[1])
     $('#contact-name').val(data[2])
