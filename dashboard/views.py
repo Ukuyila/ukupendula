@@ -101,7 +101,7 @@ def home(request):
                 blog_words += int(section.word_count)
 
                 # month_word_count += int(section.word_count)
-            if int(blog.word_count) < 1:
+            if blog.word_count is None or int(blog.word_count) == 0:
                 blog.word_count = str(blog_words)
                 blog.save()
             complete_blogs.append(blog)
