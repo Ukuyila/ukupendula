@@ -979,7 +979,7 @@ def gen_social_from_blog(request, postType, uniqueId):
 
     if postType == "twitter":
         max_char = 280
-    elif postType == "twitter_blue":
+    elif postType == "instagram":
         max_char = 10000
     elif postType == "linkedin":
         max_char = 3000
@@ -3477,58 +3477,6 @@ def edit_client(request):
 		resp = "Client updated successfully"
 
 	return HttpResponse(resp)
-
-
-# @login_required
-# def edit_client(request, uniqueId):
-#     context = {}
-
-#     current_page = 'Edit Client'
-#     parent_page = 'Clients'
-#     context['current_page'] = current_page
-#     context['parent_page'] = parent_page
-#     context['parent_page_url'] = 'clients'
-
-#     user_profile = request.user.profile
-#     lang = settings.LANGUAGE_CODE
-#     flag_avatar = 'dash/images/gb_flag.jpg'
-
-#     lang = check_user_lang(user_profile, lang)
-
-#     if lang == 'en-us':
-#         flag_avatar = 'dash/images/us_flag.jpg'
-
-#     context['lang'] = lang
-#     context['flag_avatar'] = flag_avatar
-
-#     this_client = TeamClient.objects.get(uniqueId=uniqueId)
-#     context['client_name'] = this_client.client_name
-#     context['cont_person'] = this_client.contact_person
-#     context['client_ind'] = this_client.industry
-#     context['client_email'] = this_client.client_email
-#     context['client_addr'] = this_client.business_address
-#     context['client_descr'] = this_client.description
-
-#     if request.method == 'POST':
-#         client_name = request.POST['new-client-name']
-#         contact_name = request.POST['nc-contact-name']
-#         client_email = request.POST['nc-contact-email']
-#         client_industry = request.POST['nc-industry']
-#         client_address = request.POST['nc-address']
-#         client_descr = request.POST['client-descr']
-
-#         if len(client_name) > 3:
-#             this_client.client_name=client_name
-#             this_client.contact_person=contact_name
-#             this_client.industry=client_industry
-#             this_client.client_email=client_email
-#             this_client.business_address=client_address
-#             this_client.description=client_descr
-#             this_client.save()
-
-#             return redirect('clients')
-
-#     return render(request, 'dashboard/clients.html', context)
 
 
 @login_required
