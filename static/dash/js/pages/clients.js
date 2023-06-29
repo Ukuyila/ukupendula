@@ -51,9 +51,6 @@ $(function () {
 	})
 
   function submit_edit_client() {
-    let client_form = $('#client-editor-form')[0]
-    var data = new FormData(client_form)
-
     var client_btn = $("#client-submit-btn")
 
     client_btn.prop("disabled", true)
@@ -64,7 +61,16 @@ $(function () {
     $.ajax({
       type: 'POST',
       url: 'edit-client',
-      data: data,
+      data: {
+        client_code: $('#client-code').val(),
+        client_name: $('#client-name').val(),
+        contact_name: $('#contact-name').val(),
+        contact_email: $('#contact-email').val(),
+        industry: $('#industry').val(),
+        address: $('#address').val(),
+        client_descr: $('#client-descr').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
       beforeSend: function () {
         client_btn.html('Saving&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
       },
