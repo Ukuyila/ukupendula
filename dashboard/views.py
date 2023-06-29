@@ -1853,7 +1853,7 @@ def summarize_blog(request, uniqueId):
     cate_list = []
     client_list = []
     blog_posts = []
-    blog_sections = []
+    this_blog_sections = []
     blog_body = ''
 
     team_clients = TeamClient.objects.filter(is_active=True)
@@ -1865,15 +1865,28 @@ def summarize_blog(request, uniqueId):
         messages.error(request, "Blog not found!")
         return redirect('blog-memory')
     
+    try:
+        saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
+        for blog_sect in saved_blog_sects:
+            this_blog_sections.append(blog_sect.body)
+            blog_title = blog_sect.title
+
+        # blog_body = "\n".join(this_blog_sections)
+    except:
+        gen_sections = BlogSection.objects.filter(blog=blog)
+        for blog_sect in gen_sections:
+            this_blog_sections.append(blog_sect.body)
+
+    
     blogs = Blog.objects.filter(profile=user_profile)
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
             blog_posts.append(blog)
-            for blog_sect in sections:
-                blog_sections.append(blog_sect.body)
+            # for blog_sect in sections:
+            #     blog_sections.append(blog_sect.body)
 
-    blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+    blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
 
     for client in team_clients:
         if client.team == user_profile.user_team:
