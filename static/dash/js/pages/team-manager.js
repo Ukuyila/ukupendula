@@ -34,7 +34,7 @@ $(document).ready(function(){
               success_alert.html(data)
               success_alert.prop('hidden', false)
               $("#member-modal-form")[0].reset()
-              $('invite_new_member').modal('hide')
+              $('#invite_new_member').modal('hide')
               setTimeout(() => {
                 window.location.href="team-manager"
               }, 3000)

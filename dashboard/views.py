@@ -3441,54 +3441,90 @@ def change_client_status(request, status, uniqueId):
 
 @login_required
 def edit_client(request, uniqueId):
-    context = {}
+	context = {}
+	current_page = 'Edit Client'
+	parent_page = 'Clients'
+	
+	context['current_page'] = current_page
+	context['parent_page'] = parent_page
+	context['parent_page_url'] = 'clients'
+        
+	resp = "Error, something went wrong!"
+        
+	this_client = TeamClient.objects.get(uniqueId=uniqueId)
+	
+	if request.method == 'POST':
+		client_name = request.POST['client-name']
+		contact_name = request.POST['contact-name']
+		client_email = request.POST['contact-email']
+		client_industry = request.POST['industry']
+		client_address = request.POST['address']
+		client_descr = request.POST['client-descr']
 
-    current_page = 'Edit Client'
-    parent_page = 'Clients'
-    context['current_page'] = current_page
-    context['parent_page'] = parent_page
-    context['parent_page_url'] = 'clients'
+		if len(client_name) > 3:
+			this_client.client_name=client_name
+			this_client.contact_person=contact_name
+			this_client.industry=client_industry
+			this_client.client_email=client_email
+			this_client.business_address=client_address
+			this_client.description=client_descr
+			this_client.save()
+															
+			resp = "Client updated successfully"
 
-    user_profile = request.user.profile
-    lang = settings.LANGUAGE_CODE
-    flag_avatar = 'dash/images/gb_flag.jpg'
+	return HttpResponse(resp)
 
-    lang = check_user_lang(user_profile, lang)
 
-    if lang == 'en-us':
-        flag_avatar = 'dash/images/us_flag.jpg'
+# @login_required
+# def edit_client(request, uniqueId):
+#     context = {}
 
-    context['lang'] = lang
-    context['flag_avatar'] = flag_avatar
+#     current_page = 'Edit Client'
+#     parent_page = 'Clients'
+#     context['current_page'] = current_page
+#     context['parent_page'] = parent_page
+#     context['parent_page_url'] = 'clients'
 
-    this_client = TeamClient.objects.get(uniqueId=uniqueId)
-    context['client_name'] = this_client.client_name
-    context['cont_person'] = this_client.contact_person
-    context['client_ind'] = this_client.industry
-    context['client_email'] = this_client.client_email
-    context['client_addr'] = this_client.business_address
-    context['client_descr'] = this_client.description
+#     user_profile = request.user.profile
+#     lang = settings.LANGUAGE_CODE
+#     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    if request.method == 'POST':
-        client_name = request.POST['new-client-name']
-        contact_name = request.POST['nc-contact-name']
-        client_email = request.POST['nc-contact-email']
-        client_industry = request.POST['nc-industry']
-        client_address = request.POST['nc-address']
-        client_descr = request.POST['client-descr']
+#     lang = check_user_lang(user_profile, lang)
 
-        if len(client_name) > 3:
-            this_client.client_name=client_name
-            this_client.contact_person=contact_name
-            this_client.industry=client_industry
-            this_client.client_email=client_email
-            this_client.business_address=client_address
-            this_client.description=client_descr
-            this_client.save()
+#     if lang == 'en-us':
+#         flag_avatar = 'dash/images/us_flag.jpg'
 
-            return redirect('clients')
+#     context['lang'] = lang
+#     context['flag_avatar'] = flag_avatar
 
-    return render(request, 'dashboard/clients.html', context)
+#     this_client = TeamClient.objects.get(uniqueId=uniqueId)
+#     context['client_name'] = this_client.client_name
+#     context['cont_person'] = this_client.contact_person
+#     context['client_ind'] = this_client.industry
+#     context['client_email'] = this_client.client_email
+#     context['client_addr'] = this_client.business_address
+#     context['client_descr'] = this_client.description
+
+#     if request.method == 'POST':
+#         client_name = request.POST['new-client-name']
+#         contact_name = request.POST['nc-contact-name']
+#         client_email = request.POST['nc-contact-email']
+#         client_industry = request.POST['nc-industry']
+#         client_address = request.POST['nc-address']
+#         client_descr = request.POST['client-descr']
+
+#         if len(client_name) > 3:
+#             this_client.client_name=client_name
+#             this_client.contact_person=contact_name
+#             this_client.industry=client_industry
+#             this_client.client_email=client_email
+#             this_client.business_address=client_address
+#             this_client.description=client_descr
+#             this_client.save()
+
+#             return redirect('clients')
+
+#     return render(request, 'dashboard/clients.html', context)
 
 
 @login_required
