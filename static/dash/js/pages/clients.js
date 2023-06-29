@@ -10,7 +10,7 @@ $(function () {
     // var data = $tr.children("td").map(function ()  {
     // return $(this).text();
     // }).get();
-    let $ul = parent().find("ul")
+    let $ul = $(this).parent().find("ul")
 
     var data = $ul.children("li")
 
