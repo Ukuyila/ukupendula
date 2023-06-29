@@ -14,15 +14,15 @@ $(function () {
 
     var data = $ul.children("li")
 
-    console.log(data[0])
+    console.log(data[0].html())
 
-    $('#client-code').val(data[0])
-    $('#client-name').val(data[1])
-    $('#contact-name').val(data[2])
-    $('#contact-email').val(data[3])
-    $('#industry').val(data[4])
-    $('#address').val(data[5])
-    $('#client-descr').val(data[6])
+    $('#client-code').val(data[0].html())
+    $('#client-name').val(data[1].html())
+    $('#contact-name').val(data[2].html())
+    $('#contact-email').val(data[3].html())
+    $('#industry').val(data[4].html())
+    $('#address').val(data[5].html())
+    $('#client-descr').val(data[6].html())
 
     $('#updateClientModal').modal('toggle')
 
