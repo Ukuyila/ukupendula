@@ -2693,7 +2693,6 @@ def edit_team_member(request):
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
 
-        print(user_uid)
         first_name = request.POST['user_fname']
         last_name = request.POST['user_lname']
         # user_email = request.POST['user_email']
@@ -2705,6 +2704,7 @@ def edit_team_member(request):
             edit_user = User.objects.get(uniqueId=user_uid)
             user_profile = Profile.objects.get(user=edit_user)
 
+            print(edit_user.first_name)
             edit_user.first_name=first_name
             edit_user.last_name=last_name
             edit_user.save()
