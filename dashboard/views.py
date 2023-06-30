@@ -2537,6 +2537,12 @@ def team_manager(request):
     member_invites = []
     user_roles = []
 
+    user_settings = []
+
+    u_settings = UserSetting.objects.all()
+    for u_set in u_settings:
+        user_settings.append(u_set)
+
     user_profile = request.user.profile
 
     lang = settings.LANGUAGE_CODE
@@ -2549,6 +2555,7 @@ def team_manager(request):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+    context['user_settings'] = user_settings
 
     if not user_profile.subscription_type == 'teams':
         messages.error(request, "You subscription packages does not have access to this feature!")
@@ -2716,7 +2723,6 @@ def add_team_member(request):
         # uuid_code = uuid4()
         # v_code = str(uuid_code)[:32]
 
-
         user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
         user_settings.save()
 
@@ -2751,7 +2757,6 @@ def add_team_member(request):
 
 @login_required
 def delete_member(request, orgUniqueId, uniqueId):
-
     get_this_org = Team.objects.get(uniqueId=orgUniqueId)
 
     try:

@@ -13,8 +13,8 @@
 
 
   <div class="row">
-    {% if team_uid is not None %}
-      {% if this_user_team.team_principal == user.profile.uniqueId %}
+    {% if this_user_team.team_principal == user.profile.uniqueId %}
+      {% if team_uid is not None %}
       <div class="col-md-4">
         <div class="card">
           <div class="card-header">
@@ -196,8 +196,19 @@
                     {% endif %}
                   </td>
                   <td>
+                    <ul hidden class="a7301e7fd">
+                      <li>{{member.uniqueId}}</li>
+                      <li>{{member.user.first_name}}</li>
+                      <li>{{member.user.last_name}}</li>
+                      <li>{{member.user.email}}</li>
+                      {% for sett in user_settings %}
+                      {% if sett.profile == member %}
+                      <li>{{sett.lang}}</li>
+                      <li>{{sett.user_role.uniqueId}}</li>
+                      {% endfor %}
+                    </ul>
                     {% if not member.uniqueId == user.profile.uniqueId and user.profile.uniqueId == this_user_team.team_principal %}
-                    <a href="#" type="button" class="text-center"><i class="icon icon-pencil"></i></a>&nbsp;
+                    <a href="javascript:void(0);" type="button" class="text-center"><i class="icon icon-pencil edit-member"></i></a>&nbsp;
                     {% if not user_role.role_name == 'Team Manager' %}
                     <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-member' team_uid member.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                     {% endif %}
@@ -342,7 +353,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="edit_member" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal fade" id="edit_member_modal" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog " role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -374,14 +385,9 @@
             </div>
 
             <h4 class="mb-4 font-weight-semibold">Preferences</h4>
+
             <div class="form-group">
-              <label class="custom-control custom-checkbox"> 
-                <input type="checkbox" class="custom-control-input" name="edit-email-notify" id="edit-email-notify" checked>
-                <span class="custom-control-label">Send user a welcome email.</span>
-              </label>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="user-language">User Language</label>
+              <label class="form-label" for="edit-user-language">User Language</label>
               <select class="form-control select2" name="edit-user-language" id="edit-user-language">
                 <option disabled >Site Default</option>
                 <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
@@ -393,12 +399,13 @@
               <label class="form-label" for="edit-user-role">User Role</label>
               <select class="form-control select2" name="edit-user-role" id="edit-user-role">
                 {% for user_role in user_roles %}
-                <option {% if lang == 'en-us' %} selected {% endif %} value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
+                <option value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
                 {% endfor %}
               </select>
             </div>
             <div class="form-group register-btn-container">
-              <button id="register-btn" type="submit" class="btn btn-primary ">Add</button>
+              <input type="text" class="form-control" name="edit-unique-id" id="edit-unique-id">
+              <button id="edit-member-btn" type="submit" class="btn btn-primary ">Save</button>
             </div>
           </form>
         </div>

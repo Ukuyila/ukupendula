@@ -50,9 +50,89 @@ $(document).ready(function(){
         error_alert.prop('hidden', false)
       }
       
-
     }
   })
+
+  $('body').on('click', '.edit-member', function () {
+    
+    // $('#client-modal-title').html('Update Client')
+
+    $('#edit-unique-id').prop('hidden', true)
+    $('#a7301e7fd').prop('hidden', true)
+
+    let $ul = $(this).parent().find("ul")
+
+    var data = $ul.children("li").map(function () {
+      return $(this).text()
+    })
+
+    // console.log(data[0])
+
+    $('#edit-unique-id').val(data[0])
+    $('#edit-user-fname').val(data[1])
+    $('#edit-user-lname').val(data[2])
+    $('#edit-user-email').val(data[3])
+    $('#edit-user-language').val(data[4])
+    $('#edit-user-role').val(data[5])
+
+    $('#edit_member_modal').modal('toggle')
+
+  });
+
+  let edit_error_alert = $('#edit-error-alert')
+  let edit_success_alert = $('#edit-success-alert')
+  $('.alert').prop('hidden', true)
+
+  $('#edit-member-modal-form').on('submit', function(event) {
+		if(event.isDefaultPrevented()) {
+			// handle the invalid form
+			edit_error_alert.html("Please fill in all the fields?").prop('hidden', false)
+		}
+		else {
+			event.preventDefault();
+			submit_edit_member()
+		}
+	})
+
+  function submit_edit_member() {
+    var member_btn = $("#edit-member-btn")
+    var member_form = $('#edit-member-modal-form')[0]
+
+    member_btn.prop("disabled", true)
+
+    edit_error_alert.prop('hidden', true)
+    edit_success_alert.prop('hidden', true)
+
+    $.ajax({
+      type: 'POST',
+      url: 'edit-member',
+      data: {
+        user_fname: $('#edit-user-fname').val(),
+        user_lname: $('#edit-user-lname').val(),
+        user_email: $('#edit-user-email').val(),
+        user_language: $('#edit-user-language').val(),
+        user_role: $('#edit-user-role').val(),
+      },
+      beforeSend: function () {
+        member_btn.html('Saving&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
+      },
+      success: function (resp) {
+        if ( resp.includes('success') ) {
+          success_alert.html(resp)
+          success_alert.prop('hidden', false)
+
+          member_form.reset()
+          $('#edit_member_modal').modal('hide')
+          setTimeout(() => {
+            window.location.href="team-manager"
+          }, 3000)
+        }
+        else {
+          error_alert.html(resp).prop('hidden', false)
+        }
+      }
+    })
+  }
 
   var maxLength = 200;
   var emailMaxLength = 100;
@@ -64,7 +144,6 @@ $(document).ready(function(){
   $('.email_counter').text($('#biz_email').val().length+'/'+emailMaxLength);
   $('.address_counter').text($('#biz_address').val().length+'/'+addrMaxLength);
   $('.descr_counter').text($('#biz_description').val().length+'/'+descMaxLength);
-
 
   $('#biz_name').keyup(function() {
     var curr_textlen = $(this).val().length;
