@@ -60,11 +60,17 @@ $(document).ready(function(){
     $('#edit-unique-id').prop('hidden', true)
     // $('.a7301e7fd').prop('hidden', true)
 
-    let $ul = $(this).parent().find("ul")
+    let $tr = $(this).closest('tr');
 
-    var data = $ul.children("li").map(function () {
-      return $(this).text()
-    })
+    var data = $tr.children("td").map(function ()  {
+    return $(this).text();
+    }).get();
+
+    // let $ul = $(this).parent().find("ul")
+
+    // var data = $ul.children("li").map(function () {
+    //   return $(this).text()
+    // })
 
     console.log(data[0])
 
