@@ -78,8 +78,22 @@ $(document).ready(function(){
     $('#edit-user-fname').val(data[5])
     $('#edit-user-lname').val(data[6])
     $('#edit-user-email').val(data[7])
-    $('#edit-user-language').val(data[8])
-    $('#edit-user-role').val(data[9])
+
+    let memb_lang = data[8]
+
+    $('#edit-user-language option')
+      .removeAttr('selected')
+      .filter('[value=' + memb_lang + ']')
+      .prop('selected', true);
+
+    $('#edit-user-language').val(memb_lang).change();
+
+    $('#edit-user-role option')
+      .removeAttr('selected')
+      .filter('[value=' + data[9] + ']')
+      .prop('selected', true);
+
+    $('#edit-user-role').val(data[9]).change();
 
     $('#edit_member_modal').modal('toggle')
 
