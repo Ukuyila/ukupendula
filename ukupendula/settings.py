@@ -198,7 +198,7 @@ EMAIL_FROM = 'no-reply@writesome.ai'
 EMAIL_HOST_USER = 'no-reply@writesome.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 
 
