@@ -2648,12 +2648,12 @@ def activateEmail(request, user, password1, user_team):
     
     email = EmailMessage(mail_subject, message, to=[user.email])
     if email.send():
-        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
+        msg = messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
                 received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
     else:
-        messages.error(request, f'Problem sending email to {user.email}, check if you typed it correctly.')
+        msg = messages.error(request, f'Problem sending email to {user.email}, check if you typed it correctly.')
 
-
+    return msg
 # def activateEmail(request, user, password1, user_team):
 
 #     # Using PHPMailer API
@@ -2759,9 +2759,9 @@ def add_team_member(request):
         user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
         user_settings.save()
 
-        success = 'Member added successfully'
+        # success = 'Member added successfully'
 
-        activateEmail(request, new_member, password1, user_team)
+        success = activateEmail(request, new_member, password1, user_team)
 
         # uuidb64 = urlsafe_base64_encode(v_code)
 
@@ -2782,7 +2782,7 @@ def add_team_member(request):
         #     # result = json.loads(response.text.decode('utf-8'))
         #     time.sleep(2)
         #     success = response.text
-        #     print(success)
+        print(success)
         
         return HttpResponse(success)
         # return redirect('team-manager')
