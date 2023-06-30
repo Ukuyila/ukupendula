@@ -202,7 +202,7 @@
                     {{member.last_updated|date:"Y-m-d"}} {{member.last_updated|time}}
                     {% endif %}
                   </td>
-                  <td hidden>{{member.uniqueId}}</td>
+                  <td hidden>{{member.user.uniqueId}}</td>
                   <td hidden>{{member.user.first_name}}</td>
                   <td hidden>{{member.user.last_name}}</td>
                   <td hidden>{{member.user.email}}</td>
