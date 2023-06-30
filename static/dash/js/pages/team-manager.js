@@ -127,6 +127,7 @@ $(document).ready(function(){
       type: 'POST',
       url: 'edit-member',
       data: {
+        user_uid: $('#edit-unique-id').val(),
         user_fname: $('#edit-user-fname').val(),
         user_lname: $('#edit-user-lname').val(),
         user_email: $('#edit-user-email').val(),
