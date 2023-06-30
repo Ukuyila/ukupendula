@@ -2643,15 +2643,18 @@ def activateEmail(request, user, password1, user_team):
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
-        "protocol": 'https' if request.is_secure() else 'http'
+        "protocol": 'https' if request.is_secure() else 'http',
+        "password": password1,
+        "user_team": user_team.team_name,
+        "email": user.email
     })
     
     email = EmailMessage(mail_subject, message, to=[user.email])
     if email.send():
-        msg = f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.'
+        msg = f'Member successfully added to team, please tell them go to their email <b>{user.email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> If not found check spam folder.'
     else:
-        f'Problem sending email to {user.email}, check if you typed it correctly.'
+        msg = f'Problem sending email to {user.email}, check if you typed it correctly.'
 
     return msg
 # def activateEmail(request, user, password1, user_team):
