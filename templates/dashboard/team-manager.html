@@ -205,6 +205,7 @@
                       {% if sett.profile == member %}
                       <li>{{sett.lang}}</li>
                       <li>{{sett.user_role.uniqueId}}</li>
+                      {% endif %}
                       {% endfor %}
                     </ul>
                     {% if not member.uniqueId == user.profile.uniqueId and user.profile.uniqueId == this_user_team.team_principal %}
