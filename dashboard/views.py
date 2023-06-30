@@ -2695,7 +2695,7 @@ def edit_team_member(request):
 
         try:
             edit_user = User.objects.get(uniqueId=user_uid)
-            user_profile = User.objects.get(user=edit_user)
+            user_profile = Profile.objects.get(user=edit_user)
         except:
             resp = 'User could not be found!'
 
