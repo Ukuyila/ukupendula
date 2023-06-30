@@ -66,7 +66,7 @@ $(document).ready(function(){
       return $(this).text()
     })
 
-    // console.log(data[0])
+    console.log(data[0])
 
     $('#edit-unique-id').val(data[0])
     $('#edit-user-fname').val(data[1])
