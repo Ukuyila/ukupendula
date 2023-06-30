@@ -2638,7 +2638,6 @@ def activateEmail(request, user, password1, user_team):
         'token': account_activation_token.make_token(user),
         "protocol": 'https' if request.is_secure() else 'http'
     })
-
     
     email = EmailMessage(mail_subject, message, to=[user.to_email])
     if email.send():
