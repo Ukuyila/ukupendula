@@ -2645,8 +2645,8 @@ def activateEmail(request, user, password1, user_team):
         'token': account_activation_token.make_token(user),
         "protocol": 'https' if request.is_secure() else 'http',
         "password": password1,
-        "user_team": user_team.team_name,
-        "email": user.email
+        "user_team": user_team.business_name,
+        "email": user.email,
     })
     
     email = EmailMessage(mail_subject, message, to=[user.email])
