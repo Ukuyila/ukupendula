@@ -133,6 +133,7 @@ $(document).ready(function(){
         user_email: $('#edit-user-email').val(),
         user_language: $('#edit-user-language').val(),
         user_role: $('#edit-user-role').val(),
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
       },
       beforeSend: function () {
         member_btn.html('Saving&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
