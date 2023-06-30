@@ -193,7 +193,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
-EMAIL_HOST = 'clik01.rocketseed.com'
+EMAIL_HOST = 'branding.writesome.ai'
 EMAIL_FROM = 'no-reply@writesome.ai'
 EMAIL_HOST_USER = 'no-reply@writesome.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
