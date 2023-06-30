@@ -2693,7 +2693,7 @@ def edit_team_member(request):
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
 
-
+        print(user_uid)
         first_name = request.POST['user_fname']
         last_name = request.POST['user_lname']
         # user_email = request.POST['user_email']
