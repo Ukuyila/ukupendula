@@ -2700,11 +2700,11 @@ def edit_team_member(request):
         user_language = request.POST['user_language']
         user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
+        print(user_uid)
         try:
             edit_user = User.objects.get(uniqueId=user_uid)
             user_profile = Profile.objects.get(user=edit_user)
 
-            print(edit_user.first_name)
             edit_user.first_name=first_name
             edit_user.last_name=last_name
             edit_user.save()

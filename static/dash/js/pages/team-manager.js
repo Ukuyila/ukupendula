@@ -72,6 +72,8 @@ $(document).ready(function(){
     //   return $(this).text()
     // })
 
+    console.log(data[4])
+
     $('#edit-unique-id').val(data[4])
     $('#edit-user-fname').val(data[5])
     $('#edit-user-lname').val(data[6])
