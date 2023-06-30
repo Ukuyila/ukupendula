@@ -58,7 +58,7 @@ $(document).ready(function(){
     // $('#client-modal-title').html('Update Client')
 
     $('#edit-unique-id').prop('hidden', true)
-    $('#a7301e7fd').prop('hidden', true)
+    // $('.a7301e7fd').prop('hidden', true)
 
     let $ul = $(this).parent().find("ul")
 
