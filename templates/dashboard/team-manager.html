@@ -173,12 +173,12 @@
                   <th>Count</th>
                   <th>Location</th>
                   <th>Last Seen</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
+                  <th hidden></th>
+                  <th hidden></th>
+                  <th hidden></th>
+                  <th hidden></th>
+                  <th hidden></th>
+                  <th hidden></th>
                   <th></th>
                   <th></th>
                   
@@ -202,15 +202,15 @@
                     {{member.last_updated|date:"Y-m-d"}} {{member.last_updated|time}}
                     {% endif %}
                   </td>
-                  <td>{{member.uniqueId}}</td>
-                  <td>{{member.user.first_name}}</td>
-                  <td>{{member.user.last_name}}</td>
-                  <td>{{member.user.email}}</td>
+                  <td hidden>{{member.uniqueId}}</td>
+                  <td hidden>{{member.user.first_name}}</td>
+                  <td hidden>{{member.user.last_name}}</td>
+                  <td hidden>{{member.user.email}}</td>
                   {% for sett in user_settings %}
                   {% if sett.profile == member %}
-                  <td>{{sett.lang}}</td>
+                  <td hidden>{{sett.lang}}</td>
+                  <td hidden>{{sett.user_role.uniqueId}}</td>
                   <td>{{sett.user_role.role_name}}</td>
-                  <td>{{sett.user_role.uniqueId}}</td>
                   {% endif %}
                   {% endfor %}
                   <td>
