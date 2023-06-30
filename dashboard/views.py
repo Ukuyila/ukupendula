@@ -2648,10 +2648,10 @@ def activateEmail(request, user, password1, user_team):
     
     email = EmailMessage(mail_subject, message, to=[user.email])
     if email.send():
-        msg = messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+        msg = f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.'
     else:
-        msg = messages.error(request, f'Problem sending email to {user.email}, check if you typed it correctly.')
+        f'Problem sending email to {user.email}, check if you typed it correctly.'
 
     return msg
 # def activateEmail(request, user, password1, user_team):
