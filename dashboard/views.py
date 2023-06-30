@@ -2693,11 +2693,6 @@ def edit_team_member(request):
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
 
-        try:
-            edit_user = User.objects.get(uniqueId=user_uid)
-            user_profile = Profile.objects.get(user=edit_user)
-        except:
-            resp = 'User could not be found!'
 
         first_name = request.POST['user_fname']
         last_name = request.POST['user_lname']
@@ -2706,16 +2701,22 @@ def edit_team_member(request):
         user_language = request.POST['user_language']
         user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
-        edit_user.first_name=first_name
-        edit_user.last_name=last_name
-        edit_user.save()
+        try:
+            edit_user = User.objects.get(uniqueId=user_uid)
+            user_profile = Profile.objects.get(user=edit_user)
 
-        user_set = UserSetting.objects.get(profile=user_profile)
-        user_set.lang=user_language
-        user_set.user_role=user_role
-        user_set.save()
+            edit_user.first_name=first_name
+            edit_user.last_name=last_name
+            edit_user.save()
 
-        resp = "Member details updated successfully!"
+            user_set = UserSetting.objects.get(profile=user_profile)
+            user_set.lang=user_language
+            user_set.user_role=user_role
+            user_set.save()
+
+            resp = "Member details updated successfully!"            
+        except:
+            resp = 'User could not be found!'
 
     return HttpResponse(resp)
 
