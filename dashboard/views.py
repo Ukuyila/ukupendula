@@ -2630,52 +2630,55 @@ def team_manager(request):
 
 
 def activateEmail(request, user, password1, user_team):
-    # mail_subject = "Activate your user account."
-    # message = render_to_string("authorisation/email-verification.html", {
-    #     'user': user.username,
-    #     'domain': get_current_site(request).domain,
-    #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-    #     'token': account_activation_token.make_token(user),
-    #     "protocol": 'https' if request.is_secure() else 'http'
-    # })
+    mail_subject = "Activate your user account."
+    message = render_to_string("authorisation/email-verification.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        "protocol": 'https' if request.is_secure() else 'http'
+    })
 
     
-    # email = EmailMessage(mail_subject, message, to=[to_email])
-    # if email.send():
-    #     messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{to_email}</b> inbox and click on \
-    #             received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
-    # else:
-    #     messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+    email = EmailMessage(mail_subject, message, to=[user.to_email])
+    if email.send():
+        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.to_email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+    else:
+        messages.error(request, f'Problem sending email to {user.to_email}, check if you typed it correctly.')
 
-    # Using PHPMailer API
-    user_profile = Profile.objects.get(user=user)
-    api_url = settings.MAILER_API_URL
-    mailer_api_key = settings.MAILER_API_KEY
 
-    url = '{}/mailer-api/'.format(api_url)
+# def activateEmail(request, user, password1, user_team):
 
-    api_business_id = settings.API_KEY_OWNER
+#     # Using PHPMailer API
+#     user_profile = Profile.objects.get(user=user)
+#     api_url = settings.MAILER_API_URL
+#     mailer_api_key = settings.MAILER_API_KEY
 
-    headers = {'content-type': 'application/json'}
+#     url = '{}/mailer-api/'.format(api_url)
 
-    data = {
-        'r': 'inv-user-welcome',
-        'api-key': mailer_api_key,
-        'api-b-code': api_business_id,
-        'uniqueId': user_profile.uniqueId,
-        'uuid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-        'mailto': user.email,
-        'name': user.first_name + user.last_name,
-        'password':password1,
-        'team_name': user_team.business_name}
+#     api_business_id = settings.API_KEY_OWNER
 
-    response = requests.post(url, params=data)
-    # result = json.loads(response.text.decode('utf-8'))
-    time.sleep(2)
-    success = response.text
-    print(success)
-    return response.text
+#     headers = {'content-type': 'application/json'}
+
+#     data = {
+#         'r': 'inv-user-welcome',
+#         'api-key': mailer_api_key,
+#         'api-b-code': api_business_id,
+#         'uniqueId': user_profile.uniqueId,
+#         'uuid': urlsafe_base64_encode(force_bytes(user.pk)),
+#         'token': account_activation_token.make_token(user),
+#         'mailto': user.email,
+#         'name': user.first_name + user.last_name,
+#         'password':password1,
+#         'team_name': user_team.business_name}
+
+#     response = requests.post(url, params=data)
+#     # result = json.loads(response.text.decode('utf-8'))
+#     time.sleep(2)
+#     success = response.text
+#     print(success)
+#     return response.text
 
 
 @login_required
