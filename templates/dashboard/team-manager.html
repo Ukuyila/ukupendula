@@ -172,8 +172,8 @@
                   <th >Name</th>
                   <th>Count</th>
                   <th>Location</th>
-                  <th>Last Seen</th>
-                  <th hidden></th>
+                  <th hidden>Last Seen</th>
+                  <th hidden>Role</th>
                   <th hidden></th>
                   <th hidden></th>
                   <th hidden></th>
@@ -195,7 +195,7 @@
                   </td>
                   <td>{{member.monthly_count}}</td>
                   <td>{{member.current_ip}}</td>
-                  <td>
+                  <td hidden>
                     {% if member.uniqueId == user.profile.uniqueId %}
                     This is you
                     {% else %}

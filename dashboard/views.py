@@ -2646,12 +2646,12 @@ def activateEmail(request, user, password1, user_team):
         "protocol": 'https' if request.is_secure() else 'http'
     })
     
-    email = EmailMessage(mail_subject, message, to=[user.to_email])
+    email = EmailMessage(mail_subject, message, to=[user.email])
     if email.send():
-        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.to_email}</b> inbox and click on \
+        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
                 received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
     else:
-        messages.error(request, f'Problem sending email to {user.to_email}, check if you typed it correctly.')
+        messages.error(request, f'Problem sending email to {user.email}, check if you typed it correctly.')
 
 
 # def activateEmail(request, user, password1, user_team):
