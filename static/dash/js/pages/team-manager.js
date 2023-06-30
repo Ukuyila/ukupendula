@@ -74,12 +74,12 @@ $(document).ready(function(){
 
     console.log(data[0])
 
-    $('#edit-unique-id').val(data[0])
-    $('#edit-user-fname').val(data[1])
-    $('#edit-user-lname').val(data[2])
-    $('#edit-user-email').val(data[3])
-    $('#edit-user-language').val(data[4])
-    $('#edit-user-role').val(data[5])
+    $('#edit-unique-id').val(data[4])
+    $('#edit-user-fname').val(data[5])
+    $('#edit-user-lname').val(data[6])
+    $('#edit-user-email').val(data[7])
+    $('#edit-user-language').val(data[8])
+    $('#edit-user-role').val(data[9])
 
     $('#edit_member_modal').modal('toggle')
 
