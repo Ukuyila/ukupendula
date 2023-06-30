@@ -342,6 +342,71 @@
     </div>
   </div>
 
+  <div class="modal fade" id="edit_member" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="member-modal-title">New member</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="edit-error-alert" hidden role="alert"></div>
+          <div class="alert alert-success" id="edit-success-alert" hidden role="alert"></div>
+          <form id="edit-member-modal-form" >
+            {% csrf_token %}
+            <h4 class="mb-4 font-weight-semibold">User Details</h4>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="edit-user-fname" class="form-control-label">First Name:</label>
+                <input type="text" class="form-control" name="edit-user-fname" id="edit-user-fname">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="edit-user-lname" class="form-control-label">Last Name:</label>
+                <input type="text" class="form-control" name="edit-user-lname" id="edit-user-lname">
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-12">
+                <label for="edit-user-email" class="form-control-label">User Email:</label>
+                <input type="email" class="form-control" name="edit-user-email" id="edit-user-email">
+              </div>
+            </div>
+
+            <h4 class="mb-4 font-weight-semibold">Preferences</h4>
+            <div class="form-group">
+              <label class="custom-control custom-checkbox"> 
+                <input type="checkbox" class="custom-control-input" name="edit-email-notify" id="edit-email-notify" checked>
+                <span class="custom-control-label">Send user a welcome email.</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="user-language">User Language</label>
+              <select class="form-control select2" name="edit-user-language" id="edit-user-language">
+                <option disabled >Site Default</option>
+                <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
+                <option {% if lang == 'en-gb' %} selected {% endif %} value="en-gb">GB English</option>
+              </select>
+            </div>
+            <h4 class="mb-4 font-weight-semibold">User Settings</h4>
+            <div class="form-group">
+              <label class="form-label" for="edit-user-role">User Role</label>
+              <select class="form-control select2" name="edit-user-role" id="edit-user-role">
+                {% for user_role in user_roles %}
+                <option {% if lang == 'en-us' %} selected {% endif %} value="{{user_role.uniqueId}}">{{user_role.role_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group register-btn-container">
+              <button id="register-btn" type="submit" class="btn btn-primary ">Add</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 
 {% endblock %}
 
