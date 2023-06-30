@@ -199,7 +199,7 @@
                     {% if member.uniqueId == user.profile.uniqueId %}
                     This is you
                     {% else %}
-                    {{member.last_updated|date:"Y-m-d"}} {{member.last_updated|time}}
+                    {{member.last_updated|date:"Y-m-d"}} {{member.last_updated|time:'H:i'}}
                     {% endif %}
                   </td>
                   <td hidden>{{member.uniqueId}}</td>
