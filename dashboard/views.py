@@ -2702,8 +2702,8 @@ def edit_team_member(request):
 
         print(user_uid)
         try:
-            edit_user = User.objects.get(uniqueId=user_uid)
-            user_profile = Profile.objects.get(user=edit_user)
+            user_profile = Profile.objects.get(uniqueId=user_uid)
+            edit_user = User.objects.get(profile=user_profile)
 
             edit_user.first_name=first_name
             edit_user.last_name=last_name
