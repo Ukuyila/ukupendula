@@ -193,9 +193,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
-EMAIL_HOST = 'geniusmail.themediagenius.com'
-EMAIL_FROM = 'no-reply@writesome.ai'
-EMAIL_HOST_USER = 'no-reply@writesome.ai'
+EMAIL_HOST = 'mail.ukupendula.ai'
+EMAIL_FROM = 'no-reply@ukupendula.ai'
+EMAIL_HOST_USER = 'no-reply@ukupendula.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = False
