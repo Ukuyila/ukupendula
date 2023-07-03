@@ -16,8 +16,8 @@
                                 <h4>AI Generated Response</h4>
                             </div>
                             <div class="float-end">
-                                <div class="btn-group " hidden>
-                                    <button class="btn btn-outline-primary">Copy Text</button>
+                                <div class="btn-group " >
+                                    <a type="button" href="{% url 'view-generated-blog' blog.slug %}" class="btn btn-default">Exit</a>
                                 </div>
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
@@ -25,10 +25,10 @@
                                         <i class="fa fa-angle-down "></i>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' uniqueId %}">LinkedIn</a></li>
-                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' uniqueId %}">Twitter</a></li>
-                                        <li><a href="{% url 'gen-blog-social-media' 'twitter_blue' uniqueId %}">Twitter Blue</a></li>
-                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' uniqueId %}">Facebook</a></li>
+                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' uniqueId %}">Create LinkedIn</a></li>
+                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' uniqueId %}">Create Twitter</a></li>
+                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' uniqueId %}">Create Instagram</a></li>
+                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' uniqueId %}">Create Facebook</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -38,9 +38,7 @@
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col-lg-12 ">
-                                        <div class="mb-3">
-                                            <p class="text-primary">Disclaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</p>
-                                        </div>
+                                        <div class="alert alert-warning" role="alert">Disclaimer: <small class="">The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for grammar and spelling checks.</small></div>
                                         <div class="mb-3">
                                             <div class="d-flex align-items-center justify-content-between"><label for="blog-title" class=" ">Blog Title</label> <span class="title_counter text-muted">0/250</span></div>
                                             <input type="text" class="form-control" id="blog-title" name="blog-title" value="{{blog.title}}"  maxlength="250" required/>

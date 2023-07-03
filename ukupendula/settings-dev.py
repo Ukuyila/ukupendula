@@ -22,7 +22,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -165,7 +164,9 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 
 OPENAI_API_KEYS = os.getenv("OPENAI_API_KEY")
-
+MAILER_API_URL = os.getenv("MAILER_API_URL", "https://api.ukudev.co.za")
+MAILER_API_KEY = os.getenv("MAILER_API_KEY", "UKU-MakNzlhMjFlYjlmZGNlY2MzY2UxMjJhODdjN2U2")
+API_KEY_OWNER = os.getenv("API_KEY_OWNER", "TTB0002")
 
 DJANGORESIZED_DEFAULT_SIZE = [500, 500]
 DJANGORESIZED_DEFAULT_QUALITY = 75
@@ -189,14 +190,19 @@ MEDIA_URL = '/uploads/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# django SMTP mail
+# Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'writesomeai@gmail.com'
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+EMAIL_HOST = 'branding.writesome.ai'
+EMAIL_FROM = 'no-reply@writesome.ai'
+EMAIL_HOST_USER = 'no-reply@writesome.ai'
 EMAIL_HOST_PASSWORD = 'DGA-xkx8tcj7jzb4ycf'
-DEFAULT_FROM_EMAIL = 'writesomeai@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+
+
+PASSWORD_RESET_TIMEOUT = 14400
 
 # CRISPY
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'

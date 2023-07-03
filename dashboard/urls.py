@@ -12,6 +12,8 @@ urlpatterns = [
     path('delete-device/<str:uniqueId>/', views.delete_device, name='delete-device'),
 
     path('team-manager', views.team_manager, name='team-manager'),
+    path('add-new-member', views.add_team_member, name='add-new-member'),
+    path('edit-member', views.edit_team_member, name='edit-member'),
     path('delete-member/<str:orgUniqueId>/<str:uniqueId>/', views.delete_member, name='delete-member'),
     path('delete-invite/<str:userUid>/<str:uniqueId>/', views.delete_invite, name='delete-invite'),
 
@@ -77,7 +79,7 @@ urlpatterns = [
 
     # clients url
     path('clients', views.clients, name='clients'),
-    path('edit-client/<str:uniqueId>/', views.edit_client, name='edit-client'),
+    path('edit-client', views.edit_client, name='edit-client'),
     path('delete-client/<str:uniqueId>/', views.delete_client, name='delete-client'),
     path('client-status/<str:status>/<str:uniqueId>/', views.change_client_status, name='client-status'),
     
@@ -107,4 +109,8 @@ urlpatterns = [
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),
     path('social-post-memory', views.memory_social_post, name='social-post-memory'),
+
+    # user roles
+    path('user-roles', views.user_roles, name='user-roles'),
+    path('delete-user-role/<str:team_uid>/<str:uniqueId>', views.delete_user_role, name='delete-user-role'),
 ]

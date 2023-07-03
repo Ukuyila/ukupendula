@@ -182,13 +182,18 @@ MEDIA_URL = '/uploads/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # django SMTP mail
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv("EMAIL_HOST", "mail.ukupendula.ai")
-EMAIL_PORT = os.getenv("EMAIL_PORT", "465")
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv("EMAIL_HOST", "branding.ukupendula.ai")
+EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
+
+PASSWORD_RESET_TIMEOUT = 14400
 
 # CRISPY
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'

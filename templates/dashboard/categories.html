@@ -81,13 +81,13 @@
         {% csrf_token %}
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="client-modal-title">New Category</h5>
+            <h5 class="modal-title" id="client-modal-title">Create New Category</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="client" class="control-label mb-10">Client:</label>
+              <label for="client" class="control-label mb-10">Client <span class="text-danger">*</span></label>
               <select type="text" class="form-control select2" id="client" name="client">
                 {% for client in client_list %}
                 <option value="{{client.uniqueId}}" id="{{client.uniqueId}}" >{{client.client_name}}</option>
@@ -96,13 +96,19 @@
             </div>
 
             <div class="form-group">
-              <label for="new-cate-name" class="control-label mb-10">Category Name:</label>
+              <label for="new-cate-name" class="control-label mb-10">Category Name <span class="text-danger">*</span></label>
               <input type="text" class="form-control" name="new-cate-name" id="new-cate-name" maxlength="255" required>
             </div>
 
             <div class="form-group">
-              <label for="cate-description" class="control-label mb-10">Description:</label>
+              <label for="cate-description" class="control-label mb-10">Description </label>
               <textarea class="form-control" name="cate-description" id="cate-description" maxlength="255" ></textarea>
+            </div>
+
+            <div class="form-group">
+              <blockquote>
+                <p><span class="text-danger">*</span><i> Denotes required field.</i></p>
+              </blockquote>
             </div>
 
           </div>

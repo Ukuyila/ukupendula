@@ -36,21 +36,28 @@
                                                 {% csrf_token %}
                                                 <div class="mb-3">
                                                     <label for="category" class=" ">Category</label>
-                                                    <select type="text" class="form-control select2" id="category" name="category">
-                                                        {% for client in client_list %}
-                                                        <optgroup label="{{client.client_name}}">
-                                                        {% for category in cate_list %}
-                                                        {% if category.client == client %}
-                                                            <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                            {% if category.uniqueId == sentence_cate %}
-                                                            selected
-                                                            {% endif %}
-                                                            >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
-                                                        {% endif %}
-                                                        {% endfor %}
-                                                        </optgroup>
-                                                        {% endfor %}
-                                                    </select>
+                                                    <div class="row gutters-xs">
+														<div class="col">
+                                                            <select type="text" class="form-control select2" id="category" name="category">
+                                                                {% for client in client_list %}
+                                                                <optgroup label="{{client.client_name}}">
+                                                                {% for category in cate_list %}
+                                                                {% if category.client == client %}
+                                                                    <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                                    {% if category.uniqueId == sentence_cate %}
+                                                                    selected
+                                                                    {% endif %}
+                                                                    >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                                {% endif %}
+                                                                {% endfor %}
+                                                                </optgroup>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <span class="col-auto">
+                                                            <button onclick="window.location.href='{% url 'categories' %}'" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Create Category" type="button"><i class="fe fe-plus"></i></button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="old_sentence" class=" ">Get alternative sentence options</label><span class="title_counter text-muted">0/200</span></div>
@@ -90,7 +97,7 @@
                                         <h5 class="mb-0">AI Generated Response</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="mb-5"><small class="text-primary">Disclaimer: The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for errors and unwanted text.</small></div>
+                                        <div class="alert alert-warning" role="alert">Disclaimer: <small class="">The content presented to you by our system is AI generated, please do your own fact checking and proof-reading for grammar and spelling checks.</small></div>
                                         <label class=" ">Use the generated content as you please</label>
                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                             

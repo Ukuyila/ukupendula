@@ -4,7 +4,7 @@ $(function(e) {
 		order: [[2, 'desc']],
 	});
 	
-	$('#example').DataTable();
+	$('#normalTable').DataTable();
 	
 	$('#memoryTable').DataTable({
 		order: [[3, 'desc']],

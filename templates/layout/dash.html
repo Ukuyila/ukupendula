@@ -127,11 +127,11 @@
 												<a href="javascript:void(0);" class="d-sm-flex nav-link leading-none" data-bs-toggle="dropdown">
 													<img src="{% static flag_avatar %}" alt="img" class="avatar avatar-xs me-sm-1 align-self-center">
 													<div>
-														<p class="text-dark mb-0">English (GB)</p>
+														<p class="text-dark mb-0">{% if lang == 'en-gb' %}English (GB){% else %}English (US){% endif %}</p>
 													</div>
 												</a>
 												<div class="language-width dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-													{% if lang == 'en-us' %}
+													{% if lang == 'en-gb' %}
 													<a href="javascript:void(0);" class="dropdown-item d-flex pb-3">
 														<img src="{% static 'dash/images/us_flag.jpg' %}"  alt="flag-img" class="avatar  me-3 align-self-center" >
 														<div>
@@ -216,7 +216,7 @@
 															</a>
 														</li>
 														<li>
-															<a href="#" class="drop-icon-item">
+															<a href="{% url 'user-roles' %}" class="drop-icon-item">
 																<i class="icon icon-settings text-dark"></i>
 																<span class="block">Settings</span>
 															</a>

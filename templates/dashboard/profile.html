@@ -3,80 +3,122 @@
 {% load crispy_forms_tags %}
 
 
-
-
 {% block body %}
-            <!-- Content -->
-            <div class="row ">
-							<div class="col-lg-4">
-								<div class="card">
-									<div class="card-header">
-										<h3 class="card-title">Profile Avatar</h3>
+  <!-- Content -->
+  <div class="row ">
 
-									</div>
-									<div class="card-body">
-											<div class="row mb-2">
-												<div class="col-auto">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Edit Profile</h3>
+        </div>
+        <div class="card-body">
+          <h4 class="mb-4 font-weight-semibold">Personal Information</h4>
+          <form  method="post" action="#">
+            {% csrf_token %}
+            {% crispy form %}
 
-                          {% if user.profile.profile_image.name %}
-                        <img
-                          src="{{user.profile.profile_image.url}}"
-                          alt="{{user.first_name}} avatar"
-                          class="d-block rounded"
-                          height="100"
+          </form>
+        </div>
+        <div class="card-body">
+          <h4 class="mb-4 font-weight-semibold">Settings</h4>
+          <form method="post" action="#" class="form-horizontal">
+            {% csrf_token %}
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Language</label>
+                </div>
+                <div class="col-md-9">
+                  <select class="form-control select2" name="user-language">
+                    <option disabled >Site Default</option>
+                    <option {% if lang == 'en-us' %} selected {% endif %} value="en-us">US English</option>
+                    <option {% if lang == 'en-gb' %} selected {% endif %} value="en-gb">GB English</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Website</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-website" value="{{user_settings.website_link}}" placeholder="https://writesome.ai">
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Twitter</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-twitter" value="{{user_settings.twitter_link}}" placeholder="https://twitter.com/writesome">
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Facebook</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-facebook" value="{{user_settings.facebook_link}}" placeholder="https://www.facebook.com/writesome">
+                </div>
+              </div>
+            </div>
 
-                        />
-                        {% else %}
-                        <img
-                          src="{% static 'dash/img/avatars/1.png' %}"
-                          alt="{{user.first_name}} avatar"
-                          class="d-block rounded"
-                          height="100"
-
-                        />
-                        {% endif %}
-
-                        <div class="button-wrapper">
-                          <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{image_form|crispy}}
-
-                            <button type="submit" class="btn btn-primary mb-4 mt-3">
-                            <span class="d-none d-sm-block">Save Image</span>
-                          </button>
-
-                          </form>
-
-                          <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                        </div>
-
-													{% comment %} <img class="avatar brround avatar-xl" src="../assets/images/faces/male/25.jpg" alt="Avatar-img"> {% endcomment %}
-												</div>
-											</div>
-									</div>
-								</div>
-							</div>
-
-              <div class="col-lg-8">
-                <div class="card">
-									<div class="card-header">
-										<h3 class="card-title">Edit Profile</h3>
-
-									</div>
-									<div class="card-body">
-                    <form  method="post" action="#">
-                      {% csrf_token %}
-                      {% crispy form %}
-
-                    </form>
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Instagram</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-instagram" value="{{user_settings.instagram_link}}" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">LinkedIn</label>
+                </div>
+                <div class="col-md-9">
+                  <input type="text" class="form-control" name="user-linkedin" value="{{user_settings.linkedin_link}}" placeholder="">
+                </div>
+              </div>
+            </div>
+            <h4 class="mb-4 font-weight-semibold">Preferences</h4>
+            <div class="form-group mb-0">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Email Preferences</label>
+                </div>
+                <div class="col-md-9">
+                  <div class="custom-controls-stacked">
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="email-notify" {% if user_settings.email_notify %} checked {% endif %}>
+                      <span class="custom-control-label">Accept to receive post or page notification emails</span>
+                    </label>
+                    <label class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" name="multiple-email-notify"  {% if user_settings.multiple_email_notify %} checked {% endif %} >
+                      <span class="custom-control-label">Accept to receive email sent to multiple recipients </span>
+                    </label>
                   </div>
                 </div>
               </div>
-
-
             </div>
+            <div class="form-group mb-0">
+              <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-            <!-- / Content -->
+  </div>
+  <!-- / Content -->
   <!-- New Client Modal -->
   <div class="modal fade" id="addNewClient" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">

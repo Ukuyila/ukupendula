@@ -62,6 +62,69 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
 
+class PermissionLevel(models.Model):
+    permission_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(null=True, blank=True, max_length=60)
+    is_active = models.BooleanField(default=True)
+    
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.permission_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.permission_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(PermissionLevel, self).save(*args, **kwargs)
+
+
+class UserRole(models.Model):
+    role_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(null=True, blank=True, max_length=60)
+    permission = models.ForeignKey(PermissionLevel, on_delete=models.CASCADE)
+    # team
+    user_team = models.CharField(null=True, blank=True, max_length=100)
+    # generator
+    can_write = models.BooleanField(default=True)
+    can_edit = models.BooleanField(default=False)
+    can_delete = models.BooleanField(default=False)
+
+    # teams
+    can_create_team = models.BooleanField(default=False)
+    can_edit_team = models.BooleanField(default=False)
+    can_delete_team = models.BooleanField(default=False)
+
+    is_active = models.BooleanField(default=True)
+    
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.role_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.role_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(UserRole, self).save(*args, **kwargs)
+
+
 class UserSetting(models.Model):
     facebook_link = models.CharField(null=True, blank=True, max_length=255)
     twitter_link = models.CharField(null=True, blank=True, max_length=255)
@@ -70,11 +133,14 @@ class UserSetting(models.Model):
     website_link = models.CharField(null=True, blank=True, max_length=255)
     lang = models.CharField(null=True, blank=True, max_length=100, default='en-gb')
 
+    email_verification = models.CharField(null=True, blank=True, max_length=255)
+
     email_notify = models.BooleanField(default=True)
-    sms_notify = models.BooleanField(default=True)
+    multiple_email_notify = models.BooleanField(default=True)
 
     # django related field
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user_role = models.ForeignKey(UserRole, on_delete=models.PROTECT)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
@@ -615,7 +681,7 @@ class ToneOfVoice(models.Model):
     tone_status = models.BooleanField(default=True)
     tone_description = models.TextField(null=True, blank=True)
 
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
