@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 # local imports
-from .models import ClientCategory, PermissionLevel, Profile, Team, TeamClient, UserRole, UserSetting
+from .models import Profile
 
 
 def create_profile(sender, instance, created, **kwargs):
