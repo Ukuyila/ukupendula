@@ -255,7 +255,8 @@ def forgot_password(request):
 
     if request.method == 'POST':
         user_email = request.POST['email']
-
+        print(f'user email: {user_email}')
+        
         
 
     return render(request, 'authorisation/forgot-password.html', {})
