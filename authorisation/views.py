@@ -1,3 +1,4 @@
+from base64 import urlsafe_b64encode
 import time
 from django.conf import Settings
 from django.shortcuts import render, redirect
@@ -56,6 +57,29 @@ def login(request):
             return redirect('login')
 
     return render(request, 'authorisation/login.html', {})
+
+
+def emailVerification(request, user, password1, user_team):
+    mail_subject = "Activate your user account."
+    message = render_to_string("authorisation/email-verification.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_b64encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        "protocol": 'https' if request.is_secure() else 'http',
+        "password": password1,
+        "user_team": user_team.business_name,
+        "email": user.email,
+    })
+    
+    email = EmailMessage(mail_subject, message, to=[user.email])
+    if email.send():
+        msg = f'Account successfully created, please go to your email <b>{user.email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> If not found check spam folder.'
+    else:
+        msg = f'Problem sending email to {user.email}, check if you typed it correctly.'
+
+    return msg
 
 
 @anonymous_required
@@ -151,27 +175,15 @@ def register(request):
         new_cate.save()
 
         # begin email verification
-        # to get the domain of the current site
-        # current_site = get_current_site(request)
-        # mail_subject = 'Email verification for writesome.ai'
-        # message = render_to_string('authorisation/email-verification.html', {
-        #     'user': user,
-        #     'domain': current_site.domain,
-        #     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-        #     'token':account_activation_token.make_token(user),
-        # })
-        # to_email = email
-        # email = EmailMessage(mail_subject, message, to=[to_email])
-        # email.send()
+        email = emailVerification(request, user, password1, new_user_team)
 
-        # # send_mail(mail_subject, message, settings.DEFAULT_FROM_EMAIL, [to_email], fail_silently=False)
-
-        # messages.info(request, "Email verification link has been sent to email address {}, please verify your email to start creating!".format(email))
-        # return redirect('register')
+        print(email)
+        messages.info(request, email)
+        return redirect('register')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
-        auth.login(request, user)
-        return redirect('dashboard')
+        # auth.login(request, user)
+        # return redirect('dashboard')
 
     return render(request, 'authorisation/register.html', {})
 
