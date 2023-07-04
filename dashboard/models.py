@@ -21,7 +21,7 @@ class Profile(models.Model):
     province = models.CharField(null=True, blank=True, max_length=100)
     country = models.CharField(null=True, blank=True, max_length=100)
     postal_code = models.CharField(null=True, blank=True, max_length=5)
-    profile_image = ResizedImageField(size=[200, 200], quality=90, upload_to='profile_images')
+    profile_image = ResizedImageField(null=True, blank=True, size=[200, 200], quality=90, upload_to='profile_images')
 
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
