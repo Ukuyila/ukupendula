@@ -30,6 +30,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from uuid import uuid4
 
+from django_gravatar.helpers import get_gravatar_url, has_gravatar, get_gravatar_profile_url, calculate_gravatar_hash
+
 # local imports.
 from .forms import *
 from .models import *
@@ -66,6 +68,13 @@ def home(request):
 
     q_year = today_date.year
     q_month = today_date.month
+
+    # gravatar
+    g_user_email = request.user.email
+    url = get_gravatar_url(g_user_email, size=150)
+    gravatar_exists = has_gravatar(g_user_email)
+    profile_url = get_gravatar_profile_url(g_user_email)
+    email_hash = calculate_gravatar_hash(g_user_email)
 
     # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
     if User.first_name is None:
