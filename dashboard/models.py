@@ -59,29 +59,29 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
 
-# class PermissionLevel(models.Model):
-#     permission_name = models.CharField(max_length=255)
-#     abbreviation = models.CharField(null=True, blank=True, max_length=60)
-#     is_active = models.BooleanField(default=True)
+class PermissionLevel(models.Model):
+    permission_name = models.CharField(max_length=255)
+    abbreviation = models.CharField(null=True, blank=True, max_length=60)
+    is_active = models.BooleanField(default=True)
     
-#     # Utility Variable
-#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
-#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-#     date_created = models.DateTimeField(blank=True, null=True)
-#     last_updated = models.DateTimeField(blank=True, null=True)
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
 
-#     def __str__(self):
-#         return '{} {}'.format(self.permission_name, self.uniqueId)
+    def __str__(self):
+        return '{} {}'.format(self.permission_name, self.uniqueId)
 
-#     def save(self, *args, **kwargs):
-#         if self.date_created is None:
-#             self.date_created = timezone.localtime(timezone.now())
-#         if self.uniqueId is None:
-#             self.uniqueId = str(uuid4()).split('-')[4]
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
 
-#         self.slug = slugify('{} {}'.format(self.permission_name, self.uniqueId))
-#         self.last_updated = timezone.localtime(timezone.now())
-#         super(PermissionLevel, self).save(*args, **kwargs)
+        self.slug = slugify('{} {}'.format(self.permission_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(PermissionLevel, self).save(*args, **kwargs)
 
 
 # class UserRole(models.Model):
