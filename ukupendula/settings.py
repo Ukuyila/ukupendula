@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'django_user_agents',
+    'django_gravatar',
 
     # Local APPS
     'landing',

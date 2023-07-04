@@ -1,4 +1,6 @@
 {% load static %}
+{% load gravatar %}
+
 
 {{ '<' }}{{ '!DOCTYPE html>' }}
 
@@ -230,7 +232,7 @@
                           {% if user.profile.profile_image.name %}
                               <img src="{{user.profile.profile_image.url}}" alt="profile-img" class="avatar avatar-md brround" />
                               {% else %}
-                              <img src="{% static 'dash/img/avatars/1.png' %}" alt="profile-img" class="avatar avatar-md brround"/>
+                              {% gravatar_url user.email 150 %}
                               {% endif %}
 													
 												</a>
