@@ -2658,6 +2658,7 @@ def activateEmail(request, user, password1, user_team):
     })
     
     email = EmailMessage(mail_subject, message, to=[user.email])
+    email.content_subtype = 'html'
     if email.send():
         msg = f'Member successfully added to team, please tell them go to their email <b>{user.email}</b> inbox and click on \
                 received activation link to confirm and complete the registration. <b>Note:</b> If not found check spam folder.'
