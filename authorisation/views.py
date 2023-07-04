@@ -69,7 +69,6 @@ def emailVerification(request, user, password1, user_team):
         "protocol": 'https' if request.is_secure() else 'http',
         "password": password1,
         "user_team": user_team.business_name,
-        "first_name": user.profile.first_name,
         "email": user.email,
     })
     
@@ -174,15 +173,11 @@ def register(request):
             client=new_client,
         )
         new_cate.save()
+        
+        # begin email verification
+        email = emailVerification(request, user, password1, new_user_team)
 
-        try:
-            # begin email verification
-            email_resp = emailVerification(request, user, password1, new_user_team)
-        except:
-            email_resp = 'Email failed to send!'
-            messages.error(request, email_resp)
-
-        messages.success(request, email_resp)
+        messages.info(request, email)
         return redirect('login')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
