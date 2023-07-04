@@ -3,7 +3,7 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Profile)
-# admin.site.register(PermissionLevel)
+admin.site.register(PermissionLevel)
 # admin.site.register(UserRole)
 # admin.site.register(UserSetting)
 admin.site.register(RegisteredDevice)
