@@ -248,6 +248,7 @@ def activate(request, uidb64, token):
         return redirect('login')
     else:
         messages.error(request, "Activation link is invalid!")
+        return redirect('login')
 
 
 def forgot_password(request):
