@@ -69,13 +69,14 @@ def emailVerification(request, user, password1, user_team):
         "protocol": 'https' if request.is_secure() else 'http',
         "password": password1,
         "user_team": user_team.business_name,
+        "first_name": user.profile.first_name,
         "email": user.email,
     })
     
     email = EmailMessage(mail_subject, message, to=[user.email])
     if email.send():
-        msg = f'Account successfully created, please go to your email <b>{user.email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> If not found check spam folder.'
+        msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
+                received activation link to confirm and complete the registration. Note: If not found check spam folder.'
     else:
         msg = f'Problem sending email to {user.email}, check if you typed it correctly.'
 
@@ -174,12 +175,15 @@ def register(request):
         )
         new_cate.save()
 
-        # begin email verification
-        email = emailVerification(request, user, password1, new_user_team)
+        try:
+            # begin email verification
+            email_resp = emailVerification(request, user, password1, new_user_team)
+        except:
+            email_resp = 'Email failed to send!'
+            messages.error(request, email_resp)
 
-        print(email)
-        messages.info(request, email)
-        return redirect('register')
+        messages.success(request, email_resp)
+        return redirect('login')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
         # auth.login(request, user)

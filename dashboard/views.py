@@ -2654,6 +2654,7 @@ def activateEmail(request, user, password1, user_team):
         "protocol": 'https' if request.is_secure() else 'http',
         "password": password1,
         "user_team": user_team.business_name,
+        "first_name": user.profile.first_name,
         "email": user.email,
     })
     

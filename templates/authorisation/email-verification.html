@@ -1,12 +1,12 @@
 {% autoescape off %}
-Hi {{ user.username }},
+Hi {{ first_name }},
 
-You have been added to join {{ user_team }} on {{ protocol }}://{{ domain }}, pease use these login details to access your account;
-{{ protocol }}://{{ domain }}/{% url 'login' %}
+You have been added to join {{ user_team }} on {{ domain }}, pease use these login details to access your account;
+{{ protocol }}://{{ domain }}{% url 'login' %}
 Email: {{ email }}
 Password: {{ password }}
 
 Please click on the link below to confirm your registration and activate your account:
 
-{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+<a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}">{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}</a>
 {% endautoescape %}
