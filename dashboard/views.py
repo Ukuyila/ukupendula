@@ -12,19 +12,18 @@ from werkzeug.urls import url_parse
 
 # Django imports
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
 
 # Other Auth imports
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from authorisation.tokens import account_activation_token
-from django.core.mail import EmailMessage, send_mail
+from django.core.mail import EmailMessage
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
