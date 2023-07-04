@@ -814,11 +814,10 @@ def populate_defaults():
     ]
 
     for tone in tones:
-        tone_exist = ToneOfVoice.objects.get(tone_of_voice=tone)
-        if not tone_exist:
+        try:
+            tone_exist = ToneOfVoice.objects.get(tone_of_voice=tone)
+        except:
             ToneOfVoice.objects.create(tone_of_voice=tone)
-        else:
-            pass
 
     populate_default_tones = populate_defaults()
 
