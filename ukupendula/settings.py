@@ -85,6 +85,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ukupendula.wsgi.app'
 
+APP_NAME = 'writesome.ai'
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
