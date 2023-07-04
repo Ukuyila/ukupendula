@@ -20,7 +20,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
 
 from dashboard.models import *
-from dashboard.functions import get_device_mac, get_device_info
+from dashboard.functions import get_device_mac, get_device_info, populate_defaults
 
 
 def anonymous_required(function=None, redirect_url=None):
@@ -85,6 +85,11 @@ def emailVerification(request, user, password1, user_team):
 @anonymous_required
 def register(request):
 
+    try:
+        populate_defaults()
+    except:
+        pass
+
     if request.method == 'POST':
 
         email = request.POST['email'].replace(' ', '').lower()
@@ -125,32 +130,32 @@ def register(request):
         profile.user_team = new_user_team.uniqueId
         profile.save()
 
-        # try:
-        #     permission = PermissionLevel.objects.get(permission_name='Manager')
+        try:
+            permission = PermissionLevel.objects.get(permission_name='Manager')
 
-        #     #create team manager role
-        #     new_role = UserRole.objects.create(
-        #         role_name='Team Manager',
-        #         abbreviation='TM',
-        #         permission=permission,
-        #         user_team=profile.user_team,
-        #         can_write=True,
-        #         can_edit=True,
-        #         can_delete=True,
-        #         can_create_team=True,
-        #         can_edit_team=True,
-        #         can_delete_team=True,
-        #     )
-        #     new_role.save()
+            #create team manager role
+            new_role = UserRole.objects.create(
+                role_name='Team Manager',
+                abbreviation='TM',
+                permission=permission,
+                user_team=profile.user_team,
+                can_write=True,
+                can_edit=True,
+                can_delete=True,
+                can_create_team=True,
+                can_edit_team=True,
+                can_delete_team=True,
+            )
+            new_role.save()
 
-        #     user_settings = UserSetting.objects.create(
-        #         lang=lang,
-        #         user_role=new_role,
-        #         profile=profile,
-        #     )
-        #     user_settings.save()
-        # except:
-        #     pass
+            user_settings = UserSetting.objects.create(
+                lang=lang,
+                user_role=new_role,
+                profile=profile,
+            )
+            user_settings.save()
+        except:
+            pass
 
         # create default client
         new_client = TeamClient.objects.create(
