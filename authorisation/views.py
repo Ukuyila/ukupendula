@@ -86,7 +86,7 @@ def emailVerification(request, user, password1, user_team):
 def register(request):
 
     try:
-        populate_defaults
+        populate_defaults()
     except:
         pass
 
