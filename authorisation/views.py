@@ -85,13 +85,6 @@ def emailVerification(request, user, password1, user_team):
 @anonymous_required
 def register(request):
 
-    # try:
-    pop_tones = populate_defaults()
-
-    print(pop_tones)
-    # except:
-    #     pass
-
     if request.method == 'POST':
 
         email = request.POST['email'].replace(' ', '').lower()
