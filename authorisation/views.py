@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
@@ -64,7 +64,7 @@ def emailVerification(request, user, password1, user_team):
     message = render_to_string("authorisation/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
-        'uid': urlsafe_b64encode(force_bytes(user.pk)),
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
         'protocol': 'https' if request.is_secure() else 'http',
         'password': password1,
