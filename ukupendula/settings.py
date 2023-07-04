@@ -186,13 +186,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv("EMAIL_HOST", "branding.ukupendula.ai")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "branding.writesome.ai")
 EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False")
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@writesome.ai")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER", "no-reply@ukupendula.ai")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@writesome.ai")
 
 PASSWORD_RESET_TIMEOUT = 14400
 
