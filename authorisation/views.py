@@ -66,10 +66,10 @@ def emailVerification(request, user, password1, user_team):
         'domain': get_current_site(request).domain,
         'uid': urlsafe_b64encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
-        "protocol": 'https' if request.is_secure() else 'http',
-        "password": password1,
-        "user_team": user_team.business_name,
-        "email": user.email,
+        'protocol': 'https' if request.is_secure() else 'http',
+        'password': password1,
+        'user_team': user_team.business_name,
+        'email': user.email,
     })
     
     email = EmailMessage(mail_subject, message, to=[user.email])
