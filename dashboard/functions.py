@@ -819,7 +819,4 @@ def populate_defaults():
         except:
             ToneOfVoice.objects.create(tone_of_voice=tone)
 
-    populate_default_tones = populate_defaults()
-
-    return populate_default_tones
 #
