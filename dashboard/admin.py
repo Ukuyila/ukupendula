@@ -3,12 +3,12 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Profile)
-admin.site.register(Team)
-admin.site.register(MemberInvite)
 admin.site.register(PermissionLevel)
 admin.site.register(UserRole)
 admin.site.register(UserSetting)
 admin.site.register(RegisteredDevice)
+admin.site.register(Team)
+admin.site.register(MemberInvite)
 admin.site.register(Blog)
 admin.site.register(SavedBlogSectionHead)
 admin.site.register(SavedBlogEdit)
