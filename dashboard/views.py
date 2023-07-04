@@ -211,7 +211,7 @@ def profile(request):
 
     lang = check_user_lang(user_profile, lang)
 
-    user_settings = UserSetting.objects.get(profile=user_profile)
+    # user_settings = UserSetting.objects.get(profile=user_profile)
 
     # user_website = user_settings.website_link
     # user_website = user_settings.website_link
@@ -219,7 +219,7 @@ def profile(request):
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
 
-    context['user_settings'] = user_settings
+    # context['user_settings'] = user_settings
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
@@ -235,23 +235,23 @@ def profile(request):
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
         image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
 
-        user_settings.lang = request.POST['user-language']
-        user_settings.website_link = request.POST['user-website']
-        user_settings.twitter_link = request.POST['user-twitter']
-        user_settings.facebook_link = request.POST['user-facebook']
-        user_settings.instagram_link = request.POST['user-instagram']
-        user_settings.linkedin_link = request.POST['user-linkedin']
+        # user_settings.lang = request.POST['user-language']
+        # user_settings.website_link = request.POST['user-website']
+        # user_settings.twitter_link = request.POST['user-twitter']
+        # user_settings.facebook_link = request.POST['user-facebook']
+        # user_settings.instagram_link = request.POST['user-instagram']
+        # user_settings.linkedin_link = request.POST['user-linkedin']
 
-        user_email_notify = request.POST.get('email-notify', user_settings.email_notify)
-        user_email_notify_multi = request.POST.get('multiple-email-notify', user_settings.multiple_email_notify)
+        # user_email_notify = request.POST.get('email-notify', user_settings.email_notify)
+        # user_email_notify_multi = request.POST.get('multiple-email-notify', user_settings.multiple_email_notify)
 
-        print('user_email_notify: '.format(user_email_notify_multi))
-        breakpoint
+        # print('user_email_notify: '.format(user_email_notify_multi))
+        # breakpoint
 
-        user_settings.email_notify = True if user_email_notify == 'on' else False
-        user_settings.multiple_email_notify = True if user_email_notify_multi == 'on' else False
+        # user_settings.email_notify = True if user_email_notify == 'on' else False
+        # user_settings.multiple_email_notify = True if user_email_notify_multi == 'on' else False
 
-        user_settings.save()
+        # user_settings.save()
 
         if form.is_valid():
             form.save()
@@ -2538,9 +2538,9 @@ def team_manager(request):
 
     user_settings = []
 
-    u_settings = UserSetting.objects.all()
-    for u_set in u_settings:
-        user_settings.append(u_set)
+    # u_settings = UserSetting.objects.all()
+    # for u_set in u_settings:
+    #     user_settings.append(u_set)
 
     user_profile = request.user.profile
 
@@ -2583,10 +2583,10 @@ def team_manager(request):
     for member_inv in my_invites:
         member_invites.append(member_inv)
 
-    u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
-    for role in u_roles:
-        if role.user_team == this_user_team.uniqueId:
-            user_roles.append(role)
+    # u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
+    # for role in u_roles:
+    #     if role.user_team == this_user_team.uniqueId:
+    #         user_roles.append(role)
 
     context['current_page'] = current_page
     context['total_members'] = str(total_members)
@@ -2700,7 +2700,7 @@ def edit_team_member(request):
         # user_email = request.POST['user_email']
         
         user_language = request.POST['user_language']
-        user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
+        # user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
         print(user_uid)
         try:
@@ -2711,10 +2711,10 @@ def edit_team_member(request):
             edit_user.last_name=last_name
             edit_user.save()
 
-            user_set = UserSetting.objects.get(profile=user_profile)
-            user_set.lang=user_language
-            user_set.user_role=user_role
-            user_set.save()
+            # user_set = UserSetting.objects.get(profile=user_profile)
+            # user_set.lang=user_language
+            # user_set.user_role=user_role
+            # user_set.save()
 
             resp = "Member details updated successfully!"            
         except:
@@ -2734,7 +2734,7 @@ def add_team_member(request):
         password2 = request.POST['password2']
         email_notify = False if request.POST.get('email_notify', False) == 'off' else True
         user_language = request.POST['user_language']
-        user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
+        # user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
         if not password1 == password2:
             messages.error(request, "Passwords do not match!")
@@ -2758,8 +2758,8 @@ def add_team_member(request):
         # uuid_code = uuid4()
         # v_code = str(uuid_code)[:32]
 
-        user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
-        user_settings.save()
+        # user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
+        # user_settings.save()
 
         # success = 'Member added successfully'
 
@@ -3684,18 +3684,18 @@ def user_roles(request):
 
     if user_profile.user_team is not None:
         
-        try:
-            perm_levels = PermissionLevel.objects.filter(is_active=True).order_by('date_created')
-            for p_level in perm_levels:
-                permission_levels.append(p_level)
+        # try:
+        #     perm_levels = PermissionLevel.objects.filter(is_active=True).order_by('date_created')
+        #     for p_level in perm_levels:
+        #         permission_levels.append(p_level)
 
-            u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
-            for role in u_roles:
-                if role.user_team == this_user_team.uniqueId:
-                    user_roles.append(role)
+        #     u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
+        #     for role in u_roles:
+        #         if role.user_team == this_user_team.uniqueId:
+        #             user_roles.append(role)
 
-        except:
-            return redirect('profile')
+        # except:
+        #     return redirect('profile')
     
         context['current_page'] = current_page
         context['this_user_team'] = this_user_team
@@ -3709,7 +3709,7 @@ def user_roles(request):
     
 
     if request.method == 'POST':
-        permission = PermissionLevel.objects.get(uniqueId=request.POST['permission'])
+        # permission = PermissionLevel.objects.get(uniqueId=request.POST['permission'])
         role_name = request.POST['role-name']
         abbreviation = request.POST['abbreviation']
 
@@ -3721,19 +3721,19 @@ def user_roles(request):
         can_edit_team = True if request.POST.get('can-edit-team', False) == 'on' else False
         can_delete_team = True if request.POST.get('can-delete-team', False) == 'on' else False
 
-        new_role = UserRole.objects.create(
-            role_name=role_name,
-            abbreviation=abbreviation,
-            permission=permission,
-            user_team=request.user.profile.user_team,
-            can_write=can_write,
-            can_edit=can_edit,
-            can_delete=can_delete,
-            can_create_team=can_create_team,
-            can_edit_team=can_edit_team,
-            can_delete_team=can_delete_team,
-        )
-        new_role.save()
+        # new_role = UserRole.objects.create(
+        #     role_name=role_name,
+        #     abbreviation=abbreviation,
+        #     permission=permission,
+        #     user_team=request.user.profile.user_team,
+        #     can_write=can_write,
+        #     can_edit=can_edit,
+        #     can_delete=can_delete,
+        #     can_create_team=can_create_team,
+        #     can_edit_team=can_edit_team,
+        #     can_delete_team=can_delete_team,
+        # )
+        # new_role.save()
 
 
     return render(request, 'dashboard/user-roles.html', context)
@@ -3742,16 +3742,16 @@ def user_roles(request):
 @login_required
 def delete_user_role(request, team_uid, uniqueId):
 
-    try:
-        user_role = UserRole.objects.get(uniqueId=uniqueId)
+    # try:
+        # user_role = UserRole.objects.get(uniqueId=uniqueId)
 
-        if team_uid == request.user.profile.user_team:
-            # assign users to the closest role
-            user_role.is_active
-            user_role.save()
-    except:
-        messages.error(request, "Something went wrong, please try again!")
-        return redirect('user-roles')
+        # if team_uid == request.user.profile.user_team:
+        #     # assign users to the closest role
+        #     user_role.is_active
+        #     user_role.save()
+    # except:
+    #     messages.error(request, "Something went wrong, please try again!")
+    #     return redirect('user-roles')
     
     return redirect('user-roles')
 

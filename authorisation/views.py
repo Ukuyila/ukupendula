@@ -125,32 +125,32 @@ def register(request):
         profile.user_team = new_user_team.uniqueId
         profile.save()
 
-        try:
-            permission = PermissionLevel.objects.get(permission_name='Manager')
+        # try:
+        #     permission = PermissionLevel.objects.get(permission_name='Manager')
 
-            #create team manager role
-            new_role = UserRole.objects.create(
-                role_name='Team Manager',
-                abbreviation='TM',
-                permission=permission,
-                user_team=profile.user_team,
-                can_write=True,
-                can_edit=True,
-                can_delete=True,
-                can_create_team=True,
-                can_edit_team=True,
-                can_delete_team=True,
-            )
-            new_role.save()
+        #     #create team manager role
+        #     new_role = UserRole.objects.create(
+        #         role_name='Team Manager',
+        #         abbreviation='TM',
+        #         permission=permission,
+        #         user_team=profile.user_team,
+        #         can_write=True,
+        #         can_edit=True,
+        #         can_delete=True,
+        #         can_create_team=True,
+        #         can_edit_team=True,
+        #         can_delete_team=True,
+        #     )
+        #     new_role.save()
 
-            user_settings = UserSetting.objects.create(
-                lang=lang,
-                user_role=new_role,
-                profile=profile,
-            )
-            user_settings.save()
-        except:
-            pass
+        #     user_settings = UserSetting.objects.create(
+        #         lang=lang,
+        #         user_role=new_role,
+        #         profile=profile,
+        #     )
+        #     user_settings.save()
+        # except:
+        #     pass
 
         # create default client
         new_client = TeamClient.objects.create(
