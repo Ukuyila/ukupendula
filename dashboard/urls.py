@@ -24,7 +24,8 @@ urlpatterns = [
     path('dea248f7-dcfa-4edb-b012-3ad3ca07ead6', views.webhook, name='webhook'),
 
     path('payment-plans', views.payment_plans, name='payment-plans'),
-    path('process-initiator-plan', views.process_initiator_plan, name='process-initiator-plan'),
+    path('pay-now', views.payfast_payment, name='pay-now'),
+    # path('process-initiator-plan', views.process_initiator_plan, name='process-initiator-plan'),
 
     # home page url paths
     path('delete-blog/<str:uniqueId>/', views.delete_blog, name='delete-blog'),

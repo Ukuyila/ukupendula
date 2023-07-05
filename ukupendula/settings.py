@@ -188,12 +188,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv("EMAIL_HOST", "branding.writesome.ai")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
 # EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", True)
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "no-reply@writesome.ai")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@writesome.ai")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 PASSWORD_RESET_TIMEOUT = os.getenv("PASSWORD_RESET_TIMEOUT", 14400)
 
@@ -202,6 +202,9 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #payfast.io
+SANDBOX_MODE = os.getenv("SANDBOX_MODE", False)
 PAYFAST_MERCHANT_ID = os.getenv("PAYFAST_MERCHANT_ID")
 PAYFAST_MERCHANT_KEY = os.getenv("PAYFAST_MERCHANT_KEY")
 PAYFAST_URL_BASE = os.getenv("PAYFAST_URL_BASE")
+PAYFAST_PASS_PHRASE = os.getenv("PAYFAST_PASS_PHRASE")
+PAYFAST_ACTION_URL = os.getenv("PAYFAST_ACTION_URL")
