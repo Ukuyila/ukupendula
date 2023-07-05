@@ -8,8 +8,10 @@ import requests
 import urllib.parse
 import socket
 import json
+
 from werkzeug.urls import url_parse
 
+from django_gravatar.helpers import get_gravatar_url, has_gravatar, get_gravatar_profile_url, calculate_gravatar_hash
 # Django imports
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -22,20 +24,18 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
-from authorisation.tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-
 from django.http import JsonResponse, HttpResponse
-from uuid import uuid4
 
-from django_gravatar.helpers import get_gravatar_url, has_gravatar, get_gravatar_profile_url, calculate_gravatar_hash
+from uuid import uuid4
 
 # local imports.
 from .forms import *
 from .models import *
 from .functions import *
+from authorisation.tokens import account_activation_token
 
 
 @login_required
@@ -222,7 +222,7 @@ def edit_settings(request):
         user_email_notify = request.POST.get('email_notify', user_settings.email_notify)
         user_email_notify_multi = request.POST.get('multi_email_notify', user_settings.multiple_email_notify)
 
-        print('user_email_notify: '.format(user_email_notify_multi))
+        # print('user_email_notify: '.format(user_email_notify_multi))
         # breakpoint
 
         user_settings.email_notify = True if user_email_notify == 'on' else False
@@ -2313,14 +2313,15 @@ def payment_plans(request):
 
 
 @login_required
-def process_initiator_plan(request):
+def payfast_payment(request, plan):
 
     context = {}
 
-    merchant_id = "10024789"
-    merchant_key = "dtz5khr0cbz74"
-    return_url = "http://138.68.155.44:8000/dash/billing"
-    notify_url = "http://138.68.155.44:8000/dash/payment-success"
+    merchant_id = settings.PAYFAST_MERCHANT_ID
+    merchant_key = settings.PAYFAST_MERCHANT_KEY
+    return_url = '{}/return'.format(settings.PAYFAST_URL_BASE)
+    notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
+    cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
     order_id = str(uuid4()).split('-')[4]
 
     amount = "550.00"
@@ -2345,6 +2346,7 @@ def process_initiator_plan(request):
         "merchant_key": merchant_key,
         "return_url": notify_url,
         "notify_url": notify_url,
+        "cancel_url": cancel_url,
         # # Buyer details
         "name_first": request.user.first_name,
         "name_last": request.user.last_name,
@@ -2373,7 +2375,7 @@ def process_initiator_plan(request):
             payload += f"&passphrase={passPhrase}"
         return hashlib.md5(payload.encode()).hexdigest()
 
-    passPhrase = 'AnotidaL2022'
+    passPhrase = settings.PAYFAST_PASS_PHRASE
     signature = generateSignature(pfData, passPhrase)
 
     context['signature'] = signature
@@ -2384,9 +2386,9 @@ def process_initiator_plan(request):
     context['notify_url'] = notify_url
     context['amount'] = amount
     context['item_name'] = item_name
-    context['action_url'] = "https://sandbox.payfast.co.za/eng/process"
+    context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
-    return render(request, 'dashboard/process-initiator-plan.html', context)
+    return render(request, 'dashboard/process-plan-payment.html', context)
 
 
 @require_POST
