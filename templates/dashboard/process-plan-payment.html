@@ -53,20 +53,19 @@
                                   <input type="hidden" name="m_payment_id" value="{{order_id}}">
                                   <input type="hidden" name="amount" value="{{amount}}">
                                   <input type="hidden" name="item_name" value="{{item_name}}">
-                                  <input type="hidden" name="item_description" value="Initiator subscription">
+                                  <input type="hidden" name="item_description" value="{{item_name}} package subscription">
 
                                   <!-- subscription -->
                                   <input type="hidden" name="subscription_type" value="1">
-                                  <input type="hidden" name="billing_date" value="">
+                                  {% comment %} <input type="hidden" name="billing_date" value=""> {% endcomment %}
                                   <input type="hidden" name="recurring_amount" value="{{amount}}">
                                   <input type="hidden" name="frequency" value="3">
                                   <input type="hidden" name="cycles" value="0">
                                   <input type="hidden" name="user_id" value="{{user.profile.uniqueId}}">
- 
+                                  
                                   <input type="hidden" name="signature" value="{{signature}}">
                                   
-                                  <input type="submit" class="btn btn-info" value="Pay Now">
- 
+                                  <input type="submit" class="btn btn-lg btn-danger" value="Pay Now">
                                </form>
                               </div>
                               <div class="card-footer text-muted">Pay with PayFast</div>
