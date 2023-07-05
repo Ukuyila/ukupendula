@@ -9,7 +9,7 @@ from django_resized import ResizedImageField
 # My models
 class Profile(models.Model):
     SUBSCRIPTION_OPTIONS = [
-        ('free', 'free'),
+        ('free', 'Free'),
         ('initiator', 'Initiator'),
         ('teams', 'Teams'),
     ]
