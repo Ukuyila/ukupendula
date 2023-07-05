@@ -9,7 +9,7 @@
   <div class="col-sm-12">
 
     <div class="card">
-      <h5 class="card-header">Availabe Subscription Plans {{ user.profile.subscription_type package.package_name }}</h5>
+      <h5 class="card-header">Availabe Subscription Plans {{ user.profile.subscription_type }} {{ package.package_name }}</h5>
       <div class="row">
         
       {% for package in sub_packages %}
