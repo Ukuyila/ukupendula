@@ -21,7 +21,7 @@
             </div>
             <ul class="list-group list-group-flush text-center">
 
-              {% with package.package_description|split:"\n" as package_descr %}
+              {% with package.package_description|split:"<\br>" as package_descr %}
                 {% for descr in package_descr %}
                 <li class="list-group-item">{{ descr }}</li>
                 {% endfor %}
