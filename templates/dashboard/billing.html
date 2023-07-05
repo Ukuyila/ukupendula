@@ -9,7 +9,7 @@
   <div class="col-sm-12">
 
     <div class="card">
-      <h5 class="card-header">Availabe Subscription Plans {{ user.profile.subscription_type }} {{ package.package_name }}</h5>
+      <h5 class="card-header">Availabe Subscription Plans ({{ user.profile.subscription_type }}) </h5>
       <div class="row">
         
       {% for package in sub_packages %}
@@ -27,7 +27,7 @@
               {% endwith %}
             </ul>
             
-            {% if user.profile.subscription_type == package.package_name %}
+            {% if user.profile.subscription_type|title == package.package_name %}
             <div class="panel-footer text-center border-top-0">
               <a class="btn btn-success " disabled href="javascript:void(0)">Current Package</a>
             </div>
