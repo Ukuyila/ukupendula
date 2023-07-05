@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('profile', views.profile, name='profile'),
 
+    path('edit-settings', views.edit_settings, name='edit-settings'),
+
     path('device-manager', views.device_manager, name='device-manager'),
     path('delete-device/<str:uniqueId>/', views.delete_device, name='delete-device'),
 
@@ -23,7 +25,6 @@ urlpatterns = [
 
     path('payment-plans', views.payment_plans, name='payment-plans'),
     path('process-initiator-plan', views.process_initiator_plan, name='process-initiator-plan'),
-
 
     # home page url paths
     path('delete-blog/<str:uniqueId>/', views.delete_blog, name='delete-blog'),

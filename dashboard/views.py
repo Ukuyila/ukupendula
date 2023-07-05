@@ -205,6 +205,39 @@ def home(request):
 
 
 @login_required
+def edit_settings(request):
+
+    user_profile = request.user.profile
+    user_settings = UserSetting.objects.get(profile=user_profile)
+
+    if request.method == 'POST':
+
+        user_settings.lang = request.POST['user_lang']
+        user_settings.website_link = request.POST['user_website']
+        user_settings.twitter_link = request.POST['user_twitter']
+        user_settings.facebook_link = request.POST['user_facebook']
+        user_settings.instagram_link = request.POST['user_instagram']
+        user_settings.linkedin_link = request.POST['user_linkedin']
+
+        user_email_notify = request.POST.get('email_notify', user_settings.email_notify)
+        user_email_notify_multi = request.POST.get('multi_email_notify', user_settings.multiple_email_notify)
+
+        print('user_email_notify: '.format(user_email_notify_multi))
+        # breakpoint
+
+        user_settings.email_notify = True if user_email_notify == 'on' else False
+        user_settings.multiple_email_notify = True if user_email_notify_multi == 'on' else False
+
+        try:
+            user_settings.save()
+            resp = "User settings saved successfully!"
+        except:
+            resp = "Something is a foot"
+
+    return HttpResponse(resp)
+
+
+@login_required
 def profile(request):
     context = {}
 
@@ -234,43 +267,25 @@ def profile(request):
 
     if request.method == 'GET':
         form = ProfileForm(instance=request.user.profile, user=request.user)
-        image_form = ProfileImageForm(instance=request.user.profile)
+        # image_form = ProfileImageForm(instance=request.user.profile)
         context['form'] = form
-        context['image_form'] = image_form
+        # context['image_form'] = image_form
 
         return render(request, 'dashboard/profile.html', context)
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
-        image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
-
-        user_settings.lang = request.POST['user-language']
-        user_settings.website_link = request.POST['user-website']
-        user_settings.twitter_link = request.POST['user-twitter']
-        user_settings.facebook_link = request.POST['user-facebook']
-        user_settings.instagram_link = request.POST['user-instagram']
-        user_settings.linkedin_link = request.POST['user-linkedin']
-
-        user_email_notify = request.POST.get('email-notify', user_settings.email_notify)
-        user_email_notify_multi = request.POST.get('multiple-email-notify', user_settings.multiple_email_notify)
-
-        print('user_email_notify: '.format(user_email_notify_multi))
-        breakpoint
-
-        user_settings.email_notify = True if user_email_notify == 'on' else False
-        user_settings.multiple_email_notify = True if user_email_notify_multi == 'on' else False
-
-        user_settings.save()
+        # image_form = ProfileImageForm(request.POST, request.FILES, instance=request.user.profile)
 
         if form.is_valid():
             form.save()
             return redirect('profile')
-
-        if image_form.is_valid():
-            image_form.save()
-            return redirect('profile')
         else:
             messages.error(request, "Something is a foot")
+
+        # if image_form.is_valid():
+        #     image_form.save()
+        #     return redirect('profile')
 
     return render(request, 'dashboard/profile.html', context)
 
