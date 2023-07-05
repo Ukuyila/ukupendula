@@ -2265,6 +2265,7 @@ def delete_page_copy(request, uniqueId):
 @login_required
 def billing(request):
     context = {}
+    packages = []
 
     current_page = 'Billing'
 
@@ -2284,9 +2285,16 @@ def billing(request):
     # get user current tier
     user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
+    # get packages
+    packs = SubscriptionPackage.objects.filter(is_active=True)
+
+    for pack in packs:
+        packages.append(pack)
+
     context['current_page'] = current_page
     context['month_word_count'] = request.user.profile.monthly_count
     context['user_curr_tier'] = user_curr_tier
+    context['sub_packages'] = packages
 
     return render(request, 'dashboard/billing.html', context)
 
@@ -2313,21 +2321,23 @@ def payment_plans(request):
 
 
 @login_required
-def payfast_payment(request, plan):
+def payfast_payment(request, planId):
 
     context = {}
 
     merchant_id = settings.PAYFAST_MERCHANT_ID
     merchant_key = settings.PAYFAST_MERCHANT_KEY
-    return_url = '{}/return'.format(settings.PAYFAST_URL_BASE)
-    notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
+    return_url = '{}/payment-success'.format(settings.PAYFAST_URL_BASE)
+    notify_url = '{}/payment-success'.format(settings.PAYFAST_URL_BASE)
+    cancel_url = '{}/payment-cancel'.format(settings.PAYFAST_URL_BASE)
     order_id = str(uuid4()).split('-')[4]
 
-    amount = "550.00"
-    item_name = "Initiator"
+    package = SubscriptionPackage.objects.get(uniqueId=planId)
+
+    amount = package.package_price
+    item_name = package.package_name
     
-    current_page = 'Billing | Initiator'
+    current_page = 'Billing | {}'.format(item_name)
     context['current_page'] = current_page
 
     lang = settings.LANGUAGE_CODE
@@ -2344,7 +2354,7 @@ def payfast_payment(request, plan):
     pfData = {
         "merchant_id": merchant_id,
         "merchant_key": merchant_key,
-        "return_url": notify_url,
+        "return_url": return_url,
         "notify_url": notify_url,
         "cancel_url": cancel_url,
         # # Buyer details
@@ -2404,13 +2414,15 @@ def webhook(request):
     return redirect('billing')
 
 
+def payment_cancel(request):
+    return redirect('billing')
+
+
 @csrf_exempt
 def payment_success(request):
 
-    cartTotal = '550.00'
-
     context = {}
-    SANDBOX_MODE = True
+    SANDBOX_MODE = settings.SANDBOX_MODE
 
     pfHost = 'sandbox.payfast.co.za' if SANDBOX_MODE else 'www.payfast.co.za'
 
@@ -2478,6 +2490,12 @@ def payment_success(request):
             }
         response = requests.post(url, data=pfParamString, headers=headers)
         return response.text == 'VALID'
+    
+    # get package
+    package_name = pfData.get('item_name')
+    package = SubscriptionPackage.objects.get(package_name=package_name)
+
+    cartTotal = package.package_price
     
     check1 = pfValidSignature(pfData, pfParamString)
     check2 = pfValidIP()

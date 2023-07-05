@@ -24,7 +24,7 @@ urlpatterns = [
     path('dea248f7-dcfa-4edb-b012-3ad3ca07ead6', views.webhook, name='webhook'),
 
     path('payment-plans', views.payment_plans, name='payment-plans'),
-    path('pay-now', views.payfast_payment, name='pay-now'),
+    path('pay-now/<str:planId>/', views.payfast_payment, name='pay-now'),
     # path('process-initiator-plan', views.process_initiator_plan, name='process-initiator-plan'),
 
     # home page url paths
@@ -99,6 +99,7 @@ urlpatterns = [
     # ajax URLs
     path('paypal-payment-success', views.paypal_payment_success, name='paypal-payment-success'),
     path('payment-success', views.payment_success, name='payment-success'),
+    path('payment-cancel', views.payment_cancel, name='payment-cancel'),
 
     #memory pages 
     path('blog-memory/<str:status>/', views.memory_blogs, name='blog-memory'),
