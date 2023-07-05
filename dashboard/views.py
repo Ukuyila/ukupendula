@@ -2294,7 +2294,7 @@ def billing(request):
     user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    packs = SubscriptionPackage.objects.filter(is_active=True)
+    packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
 
     for pack in packs:
         packages.append(pack)
