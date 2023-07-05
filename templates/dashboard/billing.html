@@ -9,7 +9,7 @@
   <div class="col-sm-12">
 
     <div class="card">
-      <h5 class="card-header">Availabe Subscription Plans</h5>
+      <h5 class="card-header">Availabe Subscription Plans {{ user.profile.subscription_type package.package_name }}</h5>
       <div class="row">
         
       {% for package in sub_packages %}
@@ -20,7 +20,6 @@
               <p class="display-5 mb-0">R{{ package.package_price }}</p>
             </div>
             <ul class="list-group list-group-flush text-center">
-
               {% with package.package_description|split:"<\br>" as package_descr %}
                 {% for descr in package_descr %}
                 <li class="list-group-item">{{ descr }}</li>
@@ -30,7 +29,7 @@
             
             {% if user.profile.subscription_type == package.package_name %}
             <div class="panel-footer text-center border-top-0">
-              <a class="btn btn-primary " disabled href="javascript:void(0)">Current Package</a>
+              <a class="btn btn-success " disabled href="javascript:void(0)">Current Package</a>
             </div>
             {% else %}
             <div class="panel-footer text-center border-top-0">
