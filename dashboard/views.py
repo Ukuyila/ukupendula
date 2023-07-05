@@ -280,6 +280,7 @@ def profile(request):
             return redirect('profile')
         else:
             messages.error(request, "Something is a foot")
+            return redirect('profile')
 
         # if image_form.is_valid():
         #     image_form.save()
