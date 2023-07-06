@@ -2448,7 +2448,7 @@ def payment_success(request):
 
     # Get posted variables from ITN and convert to a string
     pfData = {}
-    postData=json.loads(request.data).split('&')
+    postData=json.loads(request.ITN_Payload)
     # postData = request.get().split('&')
     for i in range(0,len(postData)):
         splitData = postData[i].split('=')
