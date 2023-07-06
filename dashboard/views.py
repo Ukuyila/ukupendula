@@ -2444,13 +2444,13 @@ def payment_success(request):
     SANDBOX_MODE = settings.SANDBOX_MODE
 
     pfHost = 'sandbox.payfast.co.za' if SANDBOX_MODE else 'www.payfast.co.za'
-    print(request)
-    
+
     # Get posted variables from ITN and convert to a string
     pfData = {}
-    postData=request.get()
 
-    # postData = request.get().split('&')
+    print(request.GET)
+
+    postData = request.GET.split('&')
     for i in range(0,len(postData)):
         splitData = postData[i].split('=')
         pfData[splitData[0]] = splitData[1]
