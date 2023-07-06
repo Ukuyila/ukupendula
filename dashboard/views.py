@@ -2363,8 +2363,8 @@ def payfast_payment(request, planId):
         "merchant_id": merchant_id,
         "merchant_key": merchant_key,
         "return_url": return_url,
-        "notify_url": notify_url,
         "cancel_url": cancel_url,
+        "notify_url": notify_url,
         # # Buyer details
         "name_first": request.user.first_name,
         "name_last": request.user.last_name,
@@ -2375,7 +2375,7 @@ def payfast_payment(request, planId):
         "item_description": "Initiator subscription",
         # # Subscription details
         "subscription_type": "1",
-        "billing_date": "",
+        # "billing_date": "",
         "recurring_amount": amount,
         "frequency": "3",
         "cycles": "0",
