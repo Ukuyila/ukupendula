@@ -2420,6 +2420,7 @@ def payfast_payment(request, planId):
     context['merchant_id'] = merchant_id
     context['merchant_key'] = merchant_key
     context['return_url'] = return_url
+    context['cancel_url'] = cancel_url
     context['notify_url'] = notify_url
     context['amount'] = amount
     context['item_name'] = item_name
