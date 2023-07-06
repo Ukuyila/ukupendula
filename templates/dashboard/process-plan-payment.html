@@ -26,7 +26,7 @@
                                 <h5 class="card-title">R{{amount}} per month</h5>
                                 {% comment %} <p class="card-text">Generate 40 000* Words</p> {% endcomment %}
 
-                                {% comment %} <form action="{{action_url}}" method="post">
+                                <form action="{{action_url}}" method="post">
                                   
                                   <input type="hidden" name="merchant_id" value="{{merchant_id}}">
                                   <input type="hidden" name="merchant_key" value="{{merchant_key}}">
@@ -56,8 +56,7 @@
                                   <input type="hidden" name="signature" value="{{signature}}">
                                   
                                   <input type="submit" class="btn btn-lg btn-danger" value="Pay Now">
-                               </form> {% endcomment %}
-                               {{ htmlForm }}
+                               </form>
                               </div>
                               <div class="card-footer text-muted">Pay with PayFast</div>
                             </div>
