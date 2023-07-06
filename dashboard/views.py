@@ -2346,7 +2346,7 @@ def payfast_payment(request, planId):
     amount = "%.2f" % int(recurring_amount)
     item_name = package.package_name
 
-    item_descr = package.package_description
+    item_descr = "{} Package".format(package.package_name)
     
     current_page = 'Billing | {}'.format(item_name)
     context['current_page'] = current_page
