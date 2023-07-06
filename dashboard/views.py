@@ -2448,7 +2448,7 @@ def payment_success(request):
     # Get posted variables from ITN and convert to a string
     pfData = {}
 
-    print(request.GET)
+    print(request.GET.decode())
 
     postData = request.GET.split('&')
     for i in range(0,len(postData)):
