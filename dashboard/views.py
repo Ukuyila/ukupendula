@@ -2342,7 +2342,8 @@ def payfast_payment(request, planId):
 
     package = SubscriptionPackage.objects.get(uniqueId=planId)
 
-    amount = package.package_price
+    recurring_amount = package.package_price
+    amount = "%.2f" % int(recurring_amount)
     item_name = package.package_name
 
     item_descr = package.package_description
@@ -2378,7 +2379,7 @@ def payfast_payment(request, planId):
         # # Subscription details
         "subscription_type": "1",
         # "billing_date": "",
-        "recurring_amount": amount,
+        "recurring_amount": recurring_amount,
         "frequency": "3",
         "cycles": "0"
     }
@@ -2412,6 +2413,7 @@ def payfast_payment(request, planId):
     context['cancel_url'] = cancel_url
     context['notify_url'] = notify_url
     context['amount'] = amount
+    context['recurring_amount'] = recurring_amount
     context['item_name'] = item_name
     context['item_descr'] = item_descr
     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
