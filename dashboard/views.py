@@ -2380,8 +2380,7 @@ def payfast_payment(request, planId):
         # "billing_date": "",
         "recurring_amount": amount,
         "frequency": "3",
-        "cycles": "0",
-        "user_id": request.user.profile.uniqueId
+        "cycles": "0"
     }
 
     def generateSignature(dataArray, passPhrase = ''):
@@ -2416,6 +2415,8 @@ def payfast_payment(request, planId):
     context['htmlForm'] = htmlForm
 
     context['signature'] = signature
+
+    context['user_id'] = request.user.profile.uniqueId
     context['order_id'] = order_id
     context['merchant_id'] = merchant_id
     context['merchant_key'] = merchant_key
