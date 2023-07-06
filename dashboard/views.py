@@ -2344,6 +2344,8 @@ def payfast_payment(request, planId):
 
     amount = package.package_price
     item_name = package.package_name
+
+    item_descr = package.package_description
     
     current_page = 'Billing | {}'.format(item_name)
     context['current_page'] = current_page
@@ -2372,7 +2374,7 @@ def payfast_payment(request, planId):
         "m_payment_id": order_id,
         "amount": amount,
         "item_name": item_name,
-        "item_description": "Initiator subscription",
+        "item_description": item_descr,
         # # Subscription details
         "subscription_type": "1",
         # "billing_date": "",
@@ -2394,8 +2396,25 @@ def payfast_payment(request, planId):
         return hashlib.md5(payload.encode()).hexdigest()
 
     passPhrase = settings.PAYFAST_PASS_PHRASE
-    signature = generateSignature(pfData, passPhrase)
+    # signature = generateSignature(pfData, passPhrase)
 
+    # Generate signature (see step 2)
+    # passphase = 'jt7NOE43FZPn';
+    signature = generateSignature(pfData, passPhrase)
+    pfData['signature'] = signature
+
+    # If in testing mode make use of either sandbox.payfast.co.za or www.payfast.co.za
+    # SANDBOX_MODE = True
+    pfHost = 'sandbox.payfast.co.za' if settings.SANDBOX_MODE else 'www.payfast.co.za'
+
+    htmlForm = f'<form action="https://{pfHost}/eng/process" method="post">'
+    for key in pfData:
+        htmlForm += f'<input name="{key}" type="hidden" value="{pfData[key]}" />'
+
+    htmlForm += '<input type="submit" class="btn btn-lg btn-danger" value="Pay Now" /></form>' 
+
+    context['htmlForm'] = htmlForm
+    
     context['signature'] = signature
     context['order_id'] = order_id
     context['merchant_id'] = merchant_id
