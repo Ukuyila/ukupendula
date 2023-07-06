@@ -2414,7 +2414,7 @@ def payfast_payment(request, planId):
     htmlForm += '<input type="submit" class="btn btn-lg btn-danger" value="Pay Now" /></form>' 
 
     context['htmlForm'] = htmlForm
-    
+
     context['signature'] = signature
     context['order_id'] = order_id
     context['merchant_id'] = merchant_id
@@ -2423,6 +2423,7 @@ def payfast_payment(request, planId):
     context['notify_url'] = notify_url
     context['amount'] = amount
     context['item_name'] = item_name
+    context['item_descr'] = item_descr
     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
     return render(request, 'dashboard/process-plan-payment.html', context)
