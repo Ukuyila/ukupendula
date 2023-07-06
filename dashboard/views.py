@@ -2395,24 +2395,12 @@ def payfast_payment(request, planId):
         return hashlib.md5(payload.encode()).hexdigest()
 
     passPhrase = settings.PAYFAST_PASS_PHRASE
-    # signature = generateSignature(pfData, passPhrase)
+    signature = generateSignature(pfData, passPhrase)
 
     # Generate signature (see step 2)
     # passphase = 'jt7NOE43FZPn';
-    signature = generateSignature(pfData, passPhrase)
-    pfData['signature'] = signature
-
-    # If in testing mode make use of either sandbox.payfast.co.za or www.payfast.co.za
-    # SANDBOX_MODE = True
-    pfHost = 'sandbox.payfast.co.za' if settings.SANDBOX_MODE else 'www.payfast.co.za'
-
-    htmlForm = f'<form action="https://{pfHost}/eng/process" method="post">'
-    for key in pfData:
-        htmlForm += f'<input name="{key}" type="hidden" value="{pfData[key]}" />'
-
-    htmlForm += '<input type="submit" class="btn btn-lg btn-danger" value="Pay Now" /></form>' 
-
-    context['htmlForm'] = htmlForm
+    # signature = generateSignature(pfData, passPhrase)
+    # pfData['signature'] = signature
 
     context['signature'] = signature
 
