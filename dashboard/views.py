@@ -2315,18 +2315,23 @@ def get_single_plan(request, uniqueId, planId):
         user_profile = Profile.objects.get(uniqueId=uniqueId)
         subplan = SubscriptionPackage.objects.get(uniqueId=planId)
 
-        response_data['result'] = 'success'
-        response_data['message'] = 'plan found'
-        response_data['user_team'] = user_profile.user_team
-        response_data['plan_amount'] = subplan.package_price
-        response_data['package_name'] = subplan.package_name
-        response_data['max_word'] = subplan.package_max_word
+        response_data = {
+            'result': 'success',
+            'message': 'plan found successfully',
+            'user_team': user_profile.user_team,
+            'plan_amount': subplan.package_price,
+            'package_name': subplan.package_name,
+            'max_word': subplan.package_max_word
+        }
 
     except:
-        response_data['result'] = 'error'
-        response_data['message'] = 'Some error message'
+        response_data = {
+            'result': 'error',
+            'message': 'Some error message'
+        }
 
-    return HttpResponse(response_data)
+    # return JsonResponse(response_data)
+    return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
 
 
 @login_required
