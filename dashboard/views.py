@@ -2642,6 +2642,7 @@ def team_manager(request):
                 edit_org.business_email=biz_email
                 edit_org.business_description=biz_description
                 edit_org.business_address=biz_address
+                edit_org.save()
 
     return render(request, 'dashboard/team-manager.html', context)
 
