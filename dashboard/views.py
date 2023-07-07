@@ -2333,11 +2333,15 @@ def payfast_payment(request, planId):
     user_profile = request.user.profile
     context = {}
 
+    protocol = 'https' if request.is_secure() else 'http'
+
     merchant_id = settings.PAYFAST_MERCHANT_ID
     merchant_key = settings.PAYFAST_MERCHANT_KEY
     return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
     notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
+    # cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
+    cancel_url = '{}://{}/billing'.format(protocol, get_current_site(request).domain)
+
     order_id = str(uuid4()).split('-')[4]
 
     package = SubscriptionPackage.objects.get(uniqueId=planId)
@@ -2345,8 +2349,9 @@ def payfast_payment(request, planId):
     recurring_amount = package.package_price
     amount = "%.2f" % int(recurring_amount)
     item_name = package.package_name
-
     item_descr = "{} Package".format(package.package_name)
+
+    m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
     
     current_page = 'Billing | {}'.format(item_name)
     context['current_page'] = current_page
@@ -2372,7 +2377,7 @@ def payfast_payment(request, planId):
         "name_first": request.user.first_name,
         "name_last": request.user.last_name,
         "email_address": request.user.email,
-        "m_payment_id": order_id,
+        "m_payment_id": m_payment_id,
         "amount": amount,
         "item_name": item_name,
         "item_description": item_descr,
@@ -2382,8 +2387,8 @@ def payfast_payment(request, planId):
         "recurring_amount": recurring_amount,
         "frequency": "3",
         "cycles": "0",
-        "custom_str1": user_profile.uniqueId,
-        "custom_str2": planId,
+        # "custom_str1": user_profile.uniqueId,
+        # "custom_str2": planId
     }
 
     def generateSignature(dataArray, passPhrase = ''):
@@ -2407,8 +2412,8 @@ def payfast_payment(request, planId):
 
     context['signature'] = signature
 
-    context['user_id'] = user_profile.uniqueId
-    context['order_id'] = order_id
+    # context['user_id'] = user_profile.uniqueId
+    context['m_payment_id'] = m_payment_id
     context['merchant_id'] = merchant_id
     context['merchant_key'] = merchant_key
     context['return_url'] = return_url
@@ -2418,7 +2423,7 @@ def payfast_payment(request, planId):
     context['recurring_amount'] = recurring_amount
     context['item_name'] = item_name
     context['item_descr'] = item_descr
-    context['plan_id'] = planId
+    # context['plan_id'] = planId
     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
     return render(request, 'dashboard/process-plan-payment.html', context)
@@ -2453,9 +2458,9 @@ def payment_success(request):
     # Get posted variables from ITN and convert to a string
     pfData = {}
 
-    print(request.GET)
+    print(request.POST)
 
-    postData = request.GET.split('&')
+    postData = request.POST.split('&')
     for i in range(0,len(postData)):
         splitData = postData[i].split('=')
         pfData[splitData[0]] = splitData[1]
