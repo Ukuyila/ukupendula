@@ -2434,10 +2434,12 @@ def webhook(request):
     return redirect('billing')
 
 
+@login_required
 def payment_cancel(request):
     return redirect('billing')
 
 
+@login_required
 @csrf_exempt
 def payment_success(request):
     context = {}
@@ -2448,7 +2450,7 @@ def payment_success(request):
     # Get posted variables from ITN and convert to a string
     pfData = {}
 
-    print(request.GET.get('signature'))
+    print(request.GET)
 
     postData = request.GET.split('&')
     for i in range(0,len(postData)):
