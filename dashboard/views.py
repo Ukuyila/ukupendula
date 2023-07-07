@@ -2335,9 +2335,9 @@ def payfast_payment(request, planId):
 
     merchant_id = settings.PAYFAST_MERCHANT_ID
     merchant_key = settings.PAYFAST_MERCHANT_KEY
-    return_url = '{}/payment/success'.format(settings.PAYFAST_URL_BASE)
-    notify_url = '{}/payment/notify'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}/payment/cancel'.format(settings.PAYFAST_URL_BASE)
+    return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
+    notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
+    cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
     order_id = str(uuid4()).split('-')[4]
 
     package = SubscriptionPackage.objects.get(uniqueId=planId)
@@ -2383,6 +2383,7 @@ def payfast_payment(request, planId):
         "frequency": "3",
         "cycles": "0",
         "custom_str1": user_profile.uniqueId,
+        "custom_str2": planId,
     }
 
     def generateSignature(dataArray, passPhrase = ''):
