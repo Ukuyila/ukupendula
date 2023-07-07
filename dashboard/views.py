@@ -2489,17 +2489,20 @@ def payment_success(request, uniqueId):
     plan_uid = uniqueId.split('-')[1]
     order_id = uniqueId.split('-')[2]
 
-    package = SubscriptionPackage.objects.get(uniqueId=plan_uid)
-
     try:
-        profile = Profile.objects.get(uniqueId=user_uid)
-        profile.subscribed = True
-        profile.subscription_type = package.item_name
-        profile.subscription_reference = uniqueId
-        profile.save()
-        return HttpResponse('SUCCESS')
+        package = SubscriptionPackage.objects.get(uniqueId=plan_uid)
+
+        try:
+            profile = Profile.objects.get(uniqueId=user_uid)
+            profile.subscribed = True
+            profile.subscription_type = package.item_name
+            profile.subscription_reference = uniqueId
+            profile.save()
+            return HttpResponse('SUCCESS')
+        except:
+            return HttpResponse('FAIL: 001')
     except:
-        return HttpResponse('FAIL')
+        return HttpResponse('FAIL: 002')
 
 
 @login_required
