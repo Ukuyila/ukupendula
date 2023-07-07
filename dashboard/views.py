@@ -2307,6 +2307,28 @@ def billing(request):
     return render(request, 'dashboard/billing.html', context)
 
 
+def get_single_plan(request, uniqueId, planId):
+    response_data = {}
+
+    # validate member
+    try:
+        user_profile = Profile.objects.get(uniqueId=uniqueId)
+        subplan = SubscriptionPackage.objects.get(uniqueId=planId)
+
+        response_data['result'] = 'success'
+        response_data['message'] = 'plan found'
+        response_data['user_team'] = user_profile.user_team
+        response_data['plan_amount'] = subplan.package_price
+        response_data['package_name'] = subplan.package_name
+        response_data['max_word'] = subplan.package_max_word
+
+    except:
+        response_data['result'] = 'error'
+        response_data['message'] = 'Some error message'
+
+    return HttpResponse(response_data)
+
+
 @login_required
 def payment_plans(request):
     context = {}
@@ -2367,6 +2389,13 @@ def payfast_payment(request, planId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if request.user.first_name is None or request.user.last_name is None:
+        messages.error(request, 'Your profile is not complete, please fill in your details to contiue!')
+        redirect('profile')
+
+    ws_user_fname = request.user.first_name
+    ws_user_lname = request.user.last_name
+
     pfData = {
         "merchant_id": merchant_id,
         "merchant_key": merchant_key,
@@ -2374,8 +2403,8 @@ def payfast_payment(request, planId):
         "cancel_url": cancel_url,
         "notify_url": notify_url,
         # # Buyer details
-        "name_first": request.user.first_name,
-        "name_last": request.user.last_name,
+        "name_first": ws_user_fname,
+        "name_last": ws_user_lname,
         "email_address": request.user.email,
         "m_payment_id": m_payment_id,
         "amount": amount,
