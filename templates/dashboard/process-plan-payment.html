@@ -51,7 +51,9 @@
                                   <input type="hidden" name="recurring_amount" value="{{recurring_amount}}">
                                   <input type="hidden" name="frequency" value="3">
                                   <input type="hidden" name="cycles" value="0">
-                                  <input type="hidden" name="user_id" value="{{user.profile.uniqueId}}">
+                                  <input type="hidden" name="custom_str1" value="{{user.profile.uniqueId}}">
+                                  <input type="hidden" name="custom_str2" value="{{plan_id}}">
+                                  {% comment %} <input type="hidden" name="user_id" value="{{user.profile.uniqueId}}"> {% endcomment %}
                                   
                                   <input type="hidden" name="signature" value="{{signature}}">
                                   
