@@ -2486,13 +2486,15 @@ def payment_success(request, uniqueId, planId, orderId):
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     print(order_ref)
 
+
     try:
         package = SubscriptionPackage.objects.get(uniqueId=planId)
+        package_name = package.package_name.lower()
 
         try:
             profile = Profile.objects.get(uniqueId=uniqueId)
             profile.subscribed = True
-            profile.subscription_type = package.package_name
+            profile.subscription_type = package_name
             profile.subscription_reference = order_ref
             profile.save()
             return HttpResponse('SUCCESS')
