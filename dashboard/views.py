@@ -2481,125 +2481,25 @@ def payment_cancel(request):
     return redirect('billing')
 
 
-@login_required
-@csrf_exempt
-def payment_success(request):
+
+def payment_success(request, uniqueId):
     context = {}
-    SANDBOX_MODE = settings.SANDBOX_MODE
+    print(uniqueId)
+    user_uid = uniqueId.split('-')[0]
+    plan_uid = uniqueId.split('-')[1]
+    order_id = uniqueId.split('-')[2]
 
-    pfHost = 'sandbox.payfast.co.za' if SANDBOX_MODE else 'www.payfast.co.za'
+    package = SubscriptionPackage.objects.get(uniqueId=plan_uid)
 
-    # Get posted variables from ITN and convert to a string
-    pfData = {}
-
-    print(request.POST)
-
-    postData = request.POST.split('&')
-    for i in range(0,len(postData)):
-        splitData = postData[i].split('=')
-        pfData[splitData[0]] = splitData[1]
-
-    pfParamString = ""
-    for key in pfData:
-    # Get all the data from Payfast and prepare parameter string
-        if key != 'signature':
-            pfParamString += key + "=" + urllib.parse.quote_plus(pfData[key].replace("+", " ")) + "&"
-    # After looping through, cut the last & or append your passphrase
-    # payload += "passphrase=SecretPassphrase123"
-    pfParamString = pfParamString[:-1]
-
-    def pfValidSignature(pfData, pfParamString):
-        # Generate our signature from Payfast parameters
-        signature = hashlib.md5(pfParamString.encode()).hexdigest()
-        return (pfData.get('signature') == signature)
-    
-    def pfValidIP():
-        valid_hosts = [
-        'www.payfast.co.za',
-        'sandbox.payfast.co.za',
-        'w1w.payfast.co.za',
-        'w2w.payfast.co.za',
-        ]
-        valid_ips = []
-
-        for item in valid_hosts:
-            ips = socket.gethostbyname_ex(item)
-            if ips:
-                for ip in ips:
-                    if ip:
-                        valid_ips.append(ip)
-        # Remove duplicates from array
-        clean_valid_ips = []
-        for item in valid_ips:
-            # Iterate through each variable to create one list
-            if isinstance(item, list):
-                for prop in item:
-                    if prop not in clean_valid_ips:
-                        clean_valid_ips.append(prop)
-            else:
-                if item not in clean_valid_ips:
-                    clean_valid_ips.append(item)
-
-        # Security Step 3, check if referrer is valid
-        if url_parse(request.headers.get("Referer")).host not in clean_valid_ips:
-            return False
-        else:
-            return True
-        
-    def pfValidPaymentData(cartTotal, pfData):
-        return not (abs(float(cartTotal)) - float(pfData.get('amount_gross'))) > 0.01
-    
-    def pfValidServerConfirmation(pfParamString, pfHost = 'sandbox.payfast.co.za'):
-        url = f"https://{pfHost}/eng/query/validate"
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        response = requests.post(url, data=pfParamString, headers=headers)
-        return response.text == 'VALID'
-    
-    # get package
-    package_name = pfData.get('item_name')
-    package = SubscriptionPackage.objects.get(package_name=package_name)
-
-    cartTotal = package.package_price
-    
-    check1 = pfValidSignature(pfData, pfParamString)
-    check2 = pfValidIP()
-    check3 = pfValidPaymentData(cartTotal, pfData)
-    check4 = pfValidServerConfirmation(pfParamString, pfHost)
-
-    if(check1 and check2 and check3 and check4):
-        # All checks have passed, the payment is successful
-
-        if pfData.get('item_name') == 'Initiator':
-            try:
-                profile = Profile.objects.get(uniqueId=pfData.get('user_id'))
-                profile.subscribed = True
-                profile.subscription_type = pfData.get('item_name')
-                profile.subscription_reference = request.POST['m_payment_id']
-                profile.save()
-                return redirect('billing')
-            except:
-                return redirect('billing')
-            
-        elif pfData.get('item_name') == 'Teams':
-            try:
-                profile = Profile.objects.get(uniqueId=pfData.get('user_id'))
-                profile.subscribed = True
-                profile.subscription_type = pfData.get('item_name')
-                profile.subscription_reference = request.POST['m_payment_id']
-                profile.save()
-                return redirect('billing')
-            except:
-                return redirect('billing')
-
-        else:
-            return redirect('billing')
-        
-    else:
-        # Some checks have failed, check payment manually and log for investigation
-        messages.error(request, "Payment verification failed!")
-        return redirect('billing')
+    try:
+        profile = Profile.objects.get(uniqueId=user_uid)
+        profile.subscribed = True
+        profile.subscription_type = package.item_name
+        profile.subscription_reference = uniqueId
+        profile.save()
+        return HttpResponse('SUCCESS')
+    except:
+        return HttpResponse('FAIL')
 
 
 @login_required
