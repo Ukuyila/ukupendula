@@ -40,7 +40,7 @@
                                   <input type="hidden" name="name_last" value="{{user.last_name}}">
                                   <input type="hidden" name="email_address" value="{{user.email}}">
 
-                                  <input type="hidden" name="m_payment_id" value="{{order_id}}">
+                                  <input type="hidden" name="m_payment_id" value="{{m_payment_id}}">
                                   <input type="hidden" name="amount" value="{{amount}}">
                                   <input type="hidden" name="item_name" value="{{item_name}}">
                                   <input type="hidden" name="item_description" value="{{item_descr}}">
@@ -51,9 +51,6 @@
                                   <input type="hidden" name="recurring_amount" value="{{recurring_amount}}">
                                   <input type="hidden" name="frequency" value="3">
                                   <input type="hidden" name="cycles" value="0">
-                                  <input type="hidden" name="custom_str1" value="{{user.profile.uniqueId}}">
-                                  <input type="hidden" name="custom_str2" value="{{plan_id}}">
-                                  {% comment %} <input type="hidden" name="user_id" value="{{user.profile.uniqueId}}"> {% endcomment %}
                                   
                                   <input type="hidden" name="signature" value="{{signature}}">
                                   
