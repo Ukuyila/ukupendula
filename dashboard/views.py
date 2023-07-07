@@ -2330,14 +2330,14 @@ def payment_plans(request):
 
 @login_required
 def payfast_payment(request, planId):
-
+    user_profile = request.user.profile
     context = {}
 
     merchant_id = settings.PAYFAST_MERCHANT_ID
     merchant_key = settings.PAYFAST_MERCHANT_KEY
-    return_url = '{}/payment-success'.format(settings.PAYFAST_URL_BASE)
-    notify_url = '{}/payment-success'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}/payment-cancel'.format(settings.PAYFAST_URL_BASE)
+    return_url = '{}/payment/success'.format(settings.PAYFAST_URL_BASE)
+    notify_url = '{}/payment/notify'.format(settings.PAYFAST_URL_BASE)
+    cancel_url = '{}/payment/cancel'.format(settings.PAYFAST_URL_BASE)
     order_id = str(uuid4()).split('-')[4]
 
     package = SubscriptionPackage.objects.get(uniqueId=planId)
@@ -2354,7 +2354,7 @@ def payfast_payment(request, planId):
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(request.user.profile, lang)
+    lang = check_user_lang(user_profile, lang)
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
@@ -2381,7 +2381,8 @@ def payfast_payment(request, planId):
         # "billing_date": "",
         "recurring_amount": recurring_amount,
         "frequency": "3",
-        "cycles": "0"
+        "cycles": "0",
+        "custom_str1": user_profile.uniqueId,
     }
 
     def generateSignature(dataArray, passPhrase = ''):
@@ -2405,7 +2406,7 @@ def payfast_payment(request, planId):
 
     context['signature'] = signature
 
-    context['user_id'] = request.user.profile.uniqueId
+    context['user_id'] = user_profile.uniqueId
     context['order_id'] = order_id
     context['merchant_id'] = merchant_id
     context['merchant_key'] = merchant_key
@@ -2416,6 +2417,7 @@ def payfast_payment(request, planId):
     context['recurring_amount'] = recurring_amount
     context['item_name'] = item_name
     context['item_descr'] = item_descr
+    context['plan_id'] = planId
     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
     return render(request, 'dashboard/process-plan-payment.html', context)
