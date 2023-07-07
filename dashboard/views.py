@@ -2481,22 +2481,19 @@ def payment_cancel(request):
     return redirect('billing')
 
 
-
-def payment_success(request, uniqueId):
+def payment_success(request, uniqueId, planId, orderId):
     context = {}
-    print(uniqueId)
-    user_uid = uniqueId.split('-')[0]
-    plan_uid = uniqueId.split('-')[1]
-    order_id = uniqueId.split('-')[2]
+    order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
+    print(order_ref)
 
     try:
-        package = SubscriptionPackage.objects.get(uniqueId=plan_uid)
+        package = SubscriptionPackage.objects.get(uniqueId=planId)
 
         try:
-            profile = Profile.objects.get(uniqueId=user_uid)
+            profile = Profile.objects.get(uniqueId=planId)
             profile.subscribed = True
             profile.subscription_type = package.item_name
-            profile.subscription_reference = uniqueId
+            profile.subscription_reference = order_ref
             profile.save()
             return HttpResponse('SUCCESS')
         except:

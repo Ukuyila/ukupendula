@@ -99,7 +99,7 @@ urlpatterns = [
 
     # ajax URLs
     path('paypal-payment-success', views.paypal_payment_success, name='paypal-payment-success'),
-    path('payment-success/<str:uniqueId>', views.payment_success, name='payment-success'),
+    path('payment-success/<str:uniqueId>/<str:planId>/<str:orderId>/', views.payment_success, name='payment-success'),
     path('payment-cancel', views.payment_cancel, name='payment-cancel'),
 
     #memory pages 
