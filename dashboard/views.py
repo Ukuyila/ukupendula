@@ -2635,14 +2635,14 @@ def team_manager(request):
         else:
             edit_org = Team.objects.get(uniqueId=user_profile.user_team)
 
-            if edit_org.team_principal == request.user.profile.uniqueId:
-                edit_org.business_name=biz_name
-                edit_org.business_size=business_size
-                edit_org.industry=industry
-                edit_org.business_email=biz_email
-                edit_org.business_description=biz_description
-                edit_org.business_address=biz_address
-                edit_org.save()
+            # if edit_org.team_principal == request.user.profile.uniqueId:
+            edit_org.business_name=biz_name
+            edit_org.business_size=business_size
+            edit_org.industry=industry
+            edit_org.business_email=biz_email
+            edit_org.business_description=biz_description
+            edit_org.business_address=biz_address
+            edit_org.save()
 
     return render(request, 'dashboard/team-manager.html', context)
 
