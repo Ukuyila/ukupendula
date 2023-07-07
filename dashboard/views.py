@@ -2348,7 +2348,7 @@ def payfast_payment(request, planId):
 
     recurring_amount = package.package_price
     amount = "%.2f" % int(recurring_amount)
-    item_name = package.package_name
+    item_name = "{} {}".format(settings.APP_NAME, package.package_name)
     item_descr = "{} Package".format(package.package_name)
 
     m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
