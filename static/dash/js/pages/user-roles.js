@@ -23,6 +23,7 @@ $(document).ready(function(){
       data: {
         role_id: role_id,
         role_perm_id: role_perm_id,
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
       },
       beforeSend: function () {
         edit_role_btn.html('Loading&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
