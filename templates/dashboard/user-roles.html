@@ -232,7 +232,7 @@
             <div class="form-group">
               <label for="role-permission" class="control-label mb-10">Permission Level <span class="text-danger">*</span></label>
               
-              <select type="text" class="form-control " id="role-permission" name="role-permission">
+              <select class="form-control " id="role-permission" name="role-permission">
                 {% for permission in permission_levels %}
                 <option value="{{permission.uniqueId}}" >{{permission.permission_name}}</option>
                 {% endfor %}
