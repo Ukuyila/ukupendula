@@ -37,6 +37,8 @@
                   <th>Edit User</th>
                   <th>Remove User</th>
                   <th></th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="">
@@ -83,9 +85,11 @@
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
+                  <td hidden>{{user_role.uniqueId}}</td>
+                  <td hidden>{{user_role.permission.uniqueId}}</td>
                   <td>
                     {% if user.profile.uniqueId == this_user_team.team_principal %}
-                    <a href="#" type="button" class="text-center"><i class="icon icon-pencil"></i></a>&nbsp;
+                    <a href="javascript:void(0);" type="button" class="text-center"><i class="icon icon-pencil edit-role"></i></a>&nbsp;
                     {% if not user_role.role_name == 'Team Manager' %}
                     <a href="javascript:void(0);"  type="button" onclick="window.location.href='{% url 'delete-user-role' this_user_team.uniqueId user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                     {% endif %}
@@ -194,7 +198,7 @@
             <div class="form-group row">
               <div class=" col-6"></div>
               <div class=" col-6 pull-right">
-                <button type="submit" class="btn btn-primary  pull-right">Save</button>
+                <button type="submit" class="btn btn-primary pull-right">Save</button>
               </div>
             </div>
 
@@ -205,6 +209,104 @@
     </div>
   </div>
 
+  <div class="modal fade" id="edit_user_role" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="client-modal-title">Edit New Role</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <h5 class="form-label" >Role details</h5>
+            </div>
+            <div class="form-group">
+              <label for="role-permission" class="control-label mb-10">Permission Level <span class="text-danger">*</span></label>
+              
+              <select type="text" class="form-control select2" id="role-permission" name="role-permission">
+                {% for permission in permission_levels %}
+                <option value="{{permission.uniqueId}}" id="{{permission.uniqueId}}" >{{permission.permission_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="role-name" class="control-label mb-10">Role Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="role-name" maxlength="250" required>
+            </div>
+
+            <div class="form-group">
+              <label for="abbreviation" class="control-label mb-10">Abbreviation <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="role-abbr" maxlength="250" required>
+            </div>
+
+            <div class="form-group">
+              <h5 class="mb-4 font-weight-semibold" >Content Permission</h5>
+            </div>
+
+            <div class="form-group">
+              <div class="custom-controls-stacked">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="role-can-write" checked >
+                  <span class="custom-control-label">Can Write Content</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="role-can-edit" >
+                  <span class="custom-control-label">Can Edit Content</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="role-can-delete" >
+                  <span class="custom-control-label">Can Remove Content</span>
+                </label>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h5 class="mb-4 font-weight-semibold" >Settings Permission</h5>
+            </div>
+
+            <div class="form-group">
+              <div class="custom-controls-stacked">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="can-invite" >
+                  <span class="custom-control-label">Can Invite User</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="can-edit-team" >
+                  <span class="custom-control-label">Can Edit User</span>
+                </label>
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="can-delete-team" >
+                  <span class="custom-control-label">Can Delete User</span>
+                </label>
+
+              </div>
+            </div>
+
+            <div class="form-group mt-5">
+              <blockquote>
+                <p><span class="text-danger">*</span><i> Denotes required field.</i></p>
+              </blockquote>
+            </div>
+
+            <div class="form-group row">
+              <div class=" col-6"></div>
+              <div class=" col-6 pull-right">
+                <input type="checkbox" class="custom-control-input" id="edit-role-id" >
+                <button type="submit" id="edit-role-btn" class="btn btn-primary pull-right">Save</button>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+      </form>
+    </div>
+  </div>
 
 {% endblock %}
 
@@ -213,4 +315,5 @@
 		<script src="{% static 'dash/plugins/datatable/jquery.dataTables.min.js' %}"></script>
 		<script src="{% static 'dash/plugins/datatable/dataTables.bootstrap.js' %}"></script>
 		<script src="{% static 'dash/js/datatable.js' %}"></script>
+		<script src="{% static 'dash/js/pages/user-roles.js' %}"></script>
 {% endblock %} 

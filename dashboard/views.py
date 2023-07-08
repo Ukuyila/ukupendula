@@ -3768,4 +3768,33 @@ def delete_user_role(request, team_uid, uniqueId):
     
     return redirect('user-roles')
 
+
+@login_required
+def get_role_details(request):
+    resp_data = {}
+
+    if request.method == 'POST':
+        role_id = request.POST['role_id']
+
+        user_role = UserRole.objects.get(uniqueId=role_id)
+
+        resp_data = {
+            'result': 'success',
+            'message': 'Role found successfully',
+            'role_perm_name': user_role.permission.permission_name,
+            'abbreviation': user_role.abbreviation,
+            'can_write': user_role.can_write,
+            'can_edit': user_role.can_edit,
+            'can_delete': user_role.can_delete,
+            'can_create_team': user_role.can_create_team,
+            'can_edit_team': user_role.can_edit_team,
+            'can_delete_team': user_role.can_delete_team
+        }
+    else:
+        resp_data = {
+            'result': 'error',
+            'message': 'User role could not be found!',
+        }
+
+    return JsonResponse(json.dumps(resp_data), content_type="application/json",safe=False)
 #
