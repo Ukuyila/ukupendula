@@ -108,6 +108,8 @@ $(document).ready(function(){
 
     var role_team_id = $("#role-team-id").val()
 
+    console.log('edit-user-role/' + role_team_id + '/' + role_edit_id + '/')
+
     $.ajax({
       type: 'POST',
       url: 'edit-user-role/' + role_team_id + '/' + role_edit_id + '/',
