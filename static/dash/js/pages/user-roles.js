@@ -108,6 +108,8 @@ $(document).ready(function(){
 
     var role_team_id = $("#role-team-id").val()
 
+    console.log('edit-user-role/' + role_team_id + '/' + role_edit_id + '/')
+
     $.ajax({
       type: 'POST',
       url: 'edit-user-role/' + role_team_id + '/' + role_edit_id + '/',
@@ -129,6 +131,7 @@ $(document).ready(function(){
       },
       success: function (resp) {
         $("#bg-spinner").fadeOut("slow");
+        edit_role_btn.html('Save').prop("disabled", false)
         if ( resp.includes('success') ) {
           edit_success_alert.html(resp)
           edit_success_alert.prop('hidden', false)
