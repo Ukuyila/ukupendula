@@ -45,6 +45,7 @@
               </thead>
               <tbody class="">
               {% for user_role in user_roles %}
+                
                 <tr>
                   <td hidden>{{user_role.date_created|date:"Y-m-d"}} {{user_role.date_created|date:"H:i"}}</td>
                   <td>
@@ -53,49 +54,49 @@
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input disabled type="checkbox" class="custom-control-input" name="role-can-write" {% if user_role.can_write %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-write" {% if user_role.can_write %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="role-can-edit" {% if user_role.can_edit %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-edit" {% if user_role.can_edit %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="role-can-delete" {% if user_role.can_delete %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-delete" {% if user_role.can_delete %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="role-can-create-team" {% if user_role.can_create_team %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-create-team" {% if user_role.can_create_team %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="role-can-edit-team" {% if user_role.can_edit_team %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-edit-team" {% if user_role.can_edit_team %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td>
                     <label class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" name="role-can-delete-team" {% if user_role.can_delete_team %} checked {% endif %}>
+                      <input {% if user_role.role_name == 'Team Manager' %} disabled {% endif %} type="checkbox" class="custom-control-input" name="role-can-delete-team" {% if user_role.can_delete_team %} checked {% endif %}>
                       <span class="custom-control-label"></span>
                     </label>
                   </td>
                   <td hidden>{{user_role.uniqueId}}</td>
                   <td hidden>{{user_role.permission.uniqueId}}</td>
                   <td>
-                    {% if user.profile.uniqueId == this_user_team.team_principal %}
+                    
+                    {% if not user_role.role_name == 'Team Manager' and user.profile.uniqueId == this_user_team.team_principal %}
                     <a href="javascript:void(0);" type="button" class="text-center"><i class="icon icon-pencil edit-role"></i></a>&nbsp;
-                    {% if not user_role.role_name == 'Team Manager' %}
                     <a href="javascript:void(0);"  type="button" onclick="window.location.href='{% url 'delete-user-role' this_user_team.uniqueId user_role.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                     {% endif %}
-                    {% endif %}
+                    
                   </td>
                   
                 </tr>
