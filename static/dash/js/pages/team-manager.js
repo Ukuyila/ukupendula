@@ -5,7 +5,7 @@ $(document).ready(function(){
   let success_alert = $('#success-alert')
   $('.alert').prop('hidden', true)
 
-  $("#member-modal-form").on('submit', function (event){
+  $("#member-modal-form").on('submit', function (event) {
     
     if (event.isDefaultPrevented()) {
       error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Please fill in all required form fields?')

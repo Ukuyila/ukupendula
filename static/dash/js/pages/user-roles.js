@@ -65,11 +65,73 @@ $(document).ready(function(){
           error_alert.html(`<strong>` + responses['result'] + `</strong>
           <hr class="message-inner-separator">
           <p>` + responses['message'] + `</p>`)
-          
+
           error_alert.prop('disabled', true)
         }
       }
     })
   })
+
+  $('#edit-role-form').on('submit', function(event) {
+		if(event.isDefaultPrevented()) {
+			// handle the invalid form
+			edit_error_alert.html("Please fill in all the fields?").prop('hidden', false)
+		}
+		else {
+			event.preventDefault();
+			submit_edit_role()
+		}
+	})
+
+  function submit_edit_role() {
+    let edit_error_alert = $('#edit-error-alert')
+    let edit_success_alert = $('#edit-success-alert')
+    $('.alert').prop('hidden', true)
+
+    var role_form = $('#edit-role-form')[0]
+
+    var edit_role_btn = $("#edit-role-btn")
+    edit_role_btn.prop("disabled", true)
+
+    edit_error_alert.prop('hidden', true)
+    edit_success_alert.prop('hidden', true)
+
+    $.ajax({
+      type: 'POST',
+      url: 'edit-role',
+      data: {
+        role_name: $("#role-name").val(),
+        role_permission: $('#role-permission').val(),
+        role_abbr: $('#role-abbr').val(),
+        role_can_write: $('#role-can-write').val(),
+        role_can_edit: $('#role-can-edit').val(),
+        role_can_delete: $('#role-can-delete').val(),
+        can_invite: $('#can-invite').val(),
+        can_edit_team: $('#can-edit-team').val(),
+        can_delete_team: $('#can-delete-team').val(),
+
+        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+      },
+      beforeSend: function () {
+        edit_role_btn.html('Saving&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
+      },
+      success: function (resp) {
+        if ( resp.includes('success') ) {
+          edit_success_alert.html(resp)
+          edit_success_alert.prop('hidden', false)
+
+          role_form.reset()
+          $('#edit_member_modal').modal('hide')
+          setTimeout(() => {
+            window.location.href="user-roles"
+          }, 3000)
+        }
+        else {
+          edit_error_alert.html(resp).prop('hidden', false)
+        }
+      }
+    })
+
+  }
 
 })
