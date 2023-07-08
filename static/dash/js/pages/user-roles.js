@@ -37,7 +37,7 @@ $(document).ready(function(){
 
         if ( responses['result'] == 'success' ) {
 
-          console.log(responses)
+          console.log(role_perm_id)
         
           $('#role-permission option')
             .removeAttr('selected')
