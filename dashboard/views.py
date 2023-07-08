@@ -3769,7 +3769,7 @@ def delete_user_role(request, team_uid, uniqueId):
     return redirect('user-roles')
 
 
-# @login_required
+@login_required
 def get_role_details(request):
     resp_data = {}
 
