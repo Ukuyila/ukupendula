@@ -3770,8 +3770,13 @@ def edit_user_roles(request, team_uid, uniqueId):
                 user_role.can_create_team = request.POST['can_invite']
                 user_role.can_edit_team = request.POST['can_edit_team']
                 user_role.can_delete_team = request.POST['can_delete_team']
+                user_role.save()
 
                 resp = "Role updated successfully"
+            else:
+                resp = "Not allowed, Post method not found!" 
+        else:
+           resp = "Not allowed, You have no permission to make this change!" 
     except:
         resp = "Something went wrong, please try again!"
     
