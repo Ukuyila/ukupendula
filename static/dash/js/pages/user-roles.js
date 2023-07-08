@@ -45,7 +45,7 @@ $(document).ready(function(){
             .filter('[value=' + role_perm_id + ']')
             .prop('selected', true);
 
-          $("#role-permission").val(responses['role_perm_name'])
+          // $("#role-permission").val(responses['role_perm_name'])
 
           $("#role-name").val(responses['role_name'])
           $("#role-abbr").val(responses['abbreviation'])
