@@ -59,6 +59,7 @@ $(document).ready(function(){
 
           setTimeout(() => {
             edit_role_btn.html('Save').prop('disabled', true)
+            $("#bg-spinner").fadeOut("slow");
             $('#edit_user_role').modal('toggle')
           }, 2000);
 
