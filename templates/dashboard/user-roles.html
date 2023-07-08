@@ -234,7 +234,7 @@
               
               <select type="text" class="form-control select2" id="role-permission" name="role-permission">
                 {% for permission in permission_levels %}
-                <option value="{{permission.uniqueId}}" id="{{permission.uniqueId}}" >{{permission.permission_name}}</option>
+                <option value="{{permission.uniqueId}}" >{{permission.permission_name}}</option>
                 {% endfor %}
               </select>
             </div>
