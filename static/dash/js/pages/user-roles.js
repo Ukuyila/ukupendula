@@ -35,6 +35,7 @@ $(document).ready(function(){
       success: function (resp) {
         let responses = JSON.parse(resp)
 
+        console.log(responses)
         if ( responses['result'] == 'success' ) {
 
           console.log(role_perm_id)
