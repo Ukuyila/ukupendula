@@ -31,6 +31,8 @@ $(document).ready(function(){
         let responses = JSON.parse(resp)
         console.log(responses)
         $("#role-permission").val()
+
+        $('#edit_user_role').modal('toggle')
       }
     })
   })
