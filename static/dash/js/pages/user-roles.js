@@ -38,7 +38,7 @@ $(document).ready(function(){
         console.log(responses)
         if ( responses['result'] == 'success' ) {
 
-          console.log(role_perm_id)
+          // console.log(role_perm_id)
         
           $('#role-permission option')
             .removeAttr('selected')
@@ -50,6 +50,9 @@ $(document).ready(function(){
           $("#role-name").val(responses['role_name'])
           $("#role-abbr").val(responses['abbreviation'])
 
+          $("#edit-role-id").val(role_id)
+          $("#role-team-id").val(responses['role_team_id'])
+
           if (responses['can_write']) {$("#role-can-write").prop('checked', true)} else {$("#role-can-write").prop('checked', false)}
           if (responses['can_edit']) {$("#role-can-edit").prop('checked', true)} else {$("#role-can-edit").prop('checked', false)}
           if (responses['can_delete']) {$("#role-can-delete").prop('checked', true)} else {$("#role-can-delete").prop('checked', false)}
@@ -59,7 +62,7 @@ $(document).ready(function(){
           if (responses['can_delete_team']) {$("#can-delete-team").prop('checked', true)} else {$("#can-delete-team").prop('checked', false)}
 
           setTimeout(() => {
-            edit_role_btn.html('Save').prop('disabled', true)
+            edit_role_btn.html('Save').prop('disabled', false)
             $("#bg-spinner").fadeOut("slow");
             $('#edit_user_role').modal('toggle')
           }, 2000);
@@ -100,19 +103,23 @@ $(document).ready(function(){
     edit_error_alert.prop('hidden', true)
     edit_success_alert.prop('hidden', true)
 
+    role_edit_id = $("#edit-role-id").val()
+
+    role_team_id = $("#role-team-id").val()
+
     $.ajax({
       type: 'POST',
-      url: 'edit-role',
+      url: 'edit-user-role/' + role_team_id + '/' + role_edit_id + '/',
       data: {
         role_name: $("#role-name").val(),
         role_permission: $('#role-permission').val(),
         role_abbr: $('#role-abbr').val(),
-        role_can_write: $('#role-can-write').val(),
-        role_can_edit: $('#role-can-edit').val(),
-        role_can_delete: $('#role-can-delete').val(),
-        can_invite: $('#can-invite').val(),
-        can_edit_team: $('#can-edit-team').val(),
-        can_delete_team: $('#can-delete-team').val(),
+        role_can_write: $('#role-can-write').val() == 'on' ? true : false,
+        role_can_edit: $('#role-can-edit').val() == 'on' ? true : false,
+        role_can_delete: $('#role-can-delete').val() == 'on' ? true : false,
+        can_invite: $('#can-invite').val() == 'on' ? true : false,
+        can_edit_team: $('#can-edit-team').val() == 'on' ? true : false,
+        can_delete_team: $('#can-delete-team').val() == 'on' ? true : false,
 
         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
       },

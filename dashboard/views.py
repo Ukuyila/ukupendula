@@ -3753,6 +3753,32 @@ def user_roles(request):
 
 
 @login_required
+def edit_user_roles(request, team_uid, uniqueId):
+    resp = ''
+    try:
+        user_role = UserRole.objects.get(uniqueId=uniqueId)
+
+        if team_uid == request.user.profile.user_team:
+            # assign users to the closest role
+            if request.method == 'POST':
+                user_role.role_name = request.POST['role_name']
+                user_role.permission = request.POST['role_permission']
+                user_role.abbreviation = request.POST['role_abbr']
+                user_role.can_write = request.POST['role_can_write']
+                user_role.can_edit = request.POST['role_can_edit']
+                user_role.can_delete = request.POST['role_can_delete']
+                user_role.can_create_team = request.POST['can_invite']
+                user_role.can_edit_team = request.POST['can_edit_team']
+                user_role.can_delete_team = request.POST['can_delete_team']
+
+                resp = "Role updated successfully"
+    except:
+        resp = "Something went wrong, please try again!"
+    
+    return HttpResponse(resp)
+ 
+
+@login_required
 def delete_user_role(request, team_uid, uniqueId):
 
     try:
@@ -3782,6 +3808,7 @@ def get_role_details(request):
             'result': 'success',
             'message': 'Role found successfully',
             'role_name': user_role.role_name,
+            'role_team_id': user_role.user_team,
             'role_perm_name': user_role.permission.permission_name,
             'abbreviation': user_role.abbreviation,
             'can_write': user_role.can_write,

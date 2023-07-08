@@ -117,5 +117,6 @@ urlpatterns = [
 
     # user roles
     path('user-roles', views.user_roles, name='user-roles'),
-    path('delete-user-role/<str:team_uid>/<str:uniqueId>', views.delete_user_role, name='delete-user-role'),
+    path('edit-user-role/<str:team_uid>/<str:uniqueId>/', views.edit_user_roles, name='edit-user-role'),
+    path('delete-user-role/<str:team_uid>/<str:uniqueId>/', views.delete_user_role, name='delete-user-role'),
 ]
