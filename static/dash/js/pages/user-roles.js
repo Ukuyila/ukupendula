@@ -7,6 +7,7 @@ $(document).ready(function(){
 
   $('body').on('click', '.edit-role', function () {
     $('#edit-role-id').prop('hidden', true)
+    $("#role-team-id").prop('hidden', true)
     
     var edit_role_btn = $("#edit-role-btn")
     edit_role_btn.prop("disabled", true)
@@ -103,9 +104,9 @@ $(document).ready(function(){
     edit_error_alert.prop('hidden', true)
     edit_success_alert.prop('hidden', true)
 
-    role_edit_id = $("#edit-role-id").val()
+    var role_edit_id = $("#edit-role-id").val()
 
-    role_team_id = $("#role-team-id").val()
+    var role_team_id = $("#role-team-id").val()
 
     $.ajax({
       type: 'POST',
