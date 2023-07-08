@@ -3781,6 +3781,7 @@ def get_role_details(request):
         resp_data = {
             'result': 'success',
             'message': 'Role found successfully',
+            'role_name': user_role.role_name,
             'role_perm_name': user_role.permission.permission_name,
             'abbreviation': user_role.abbreviation,
             'can_write': user_role.can_write,
