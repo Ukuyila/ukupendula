@@ -36,6 +36,8 @@ $(document).ready(function(){
         let responses = JSON.parse(resp)
 
         if ( responses['result'] == 'success' ) {
+
+          console.log(responses)
         
           $('#role-permission option')
             .removeAttr('selected')
