@@ -107,3 +107,16 @@
   }
   
 }
+
+.table td:first-child, .table th:first-child {
+  border-right: none;
+}
+.table td:last-child, .table th:last-child {
+  border-left: none;
+}
+
+.table td:not(:first-child):not(:last-child),
+.table th:not(:first-child):not(:last-child) {
+  border-right: none;
+  border-left: none;
+}
