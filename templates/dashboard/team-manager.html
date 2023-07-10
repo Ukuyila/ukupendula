@@ -263,10 +263,10 @@
                   <td>{{invite.user.first_name}} {{invite.user.last_name}}</td>
                   <td>{{invite.user.email}}</td>
                   <td>
-                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'resend-member' team_uid invite.uniqueId %}'" class="text-center btn btn-sm btn-primary">Resend</a>
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'resend-member' team_uid invite.user.uniqueId %}'" class="text-center btn btn-sm btn-primary">Resend</a>
                   </td>
                   <td>
-                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-invite' team_uid invite.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-invite' team_uid invite.user.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                   </td>
                   
                 </tr>
