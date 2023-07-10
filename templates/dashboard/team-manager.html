@@ -260,7 +260,7 @@
               <tbody class="table-border-bottom-0">
               {% for invite in member_invites %}
                 <tr>
-                  <td>{{invite.user.first_name}} {{invite.last_name}}</td>
+                  <td>{{invite.user.first_name}} {{invite.user.last_name}}</td>
                   <td>{{invite.user.email}}</td>
                   <td>
                     <a href="javascript:void(0);" onclick="window.location.href='{% url 'resend-member' team_uid invite.uniqueId %}'" class="text-center btn btn-sm btn-primary">Resend</a>
