@@ -2580,6 +2580,10 @@ def team_manager(request):
         for team_member in find_team_members:
             if team_member.is_verified:
                 total_members +=1
+                team_member.subscribed=user_profile.subscribed
+                team_member.subscription_type=user_profile.subscription_type
+                team_member.subscription_reference=user_profile.subscription_reference
+                team_member.save()
                 team_members.append(team_member)
             else:
                 total_invites +=1
@@ -2729,6 +2733,8 @@ def edit_team_member(request):
 @login_required
 def add_team_member(request):
 
+    u_profile = request.user.profile
+
     if request.method == 'POST':
         
         first_name = request.POST['first_name']
@@ -2753,16 +2759,20 @@ def add_team_member(request):
         time.sleep(2)
 
         # get user team
-        user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
+        user_team = Team.objects.get(uniqueId=u_profile.user_team)
 
-        user_profile = Profile.objects.get(user=new_member)
-        user_profile.user_team=user_team.uniqueId
-        user_profile.save()
+        nu_profile = Profile.objects.get(user=new_member)
+        # New user inherites principal credentials
+        nu_profile.user_team=user_team.uniqueId
+        nu_profile.subscribed=u_profile.subscribed
+        nu_profile.subscription_type=u_profile.subscription_type
+        nu_profile.subscription_reference=u_profile.subscription_reference
+        nu_profile.save()
 
         # uuid_code = uuid4()
         # v_code = str(uuid_code)[:32]
 
-        user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=user_profile)
+        user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=nu_profile)
         user_settings.save()
 
         # success = 'Member added successfully'
