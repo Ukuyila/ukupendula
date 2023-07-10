@@ -173,7 +173,7 @@
                   <th>Count</th>
                   <th>Location</th>
                   <th hidden>Last Seen</th>
-                  <th hidden>Role</th>
+                  <th >Role</th>
                   <th hidden></th>
                   <th hidden></th>
                   <th hidden></th>
@@ -253,6 +253,7 @@
                   <th >Name</th>
                   <th>Email</th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
@@ -260,6 +261,9 @@
                 <tr>
                   <td>{{invite.first_name}} {{invite.last_name}}</td>
                   <td>{{invite.invite_email}}</td>
+                  <td>
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-invite' team_uid invite.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
+                  </td>
                   <td>
                     <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-invite' team_uid invite.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
                   </td>

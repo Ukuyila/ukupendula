@@ -2580,19 +2580,17 @@ def team_manager(request):
         find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
 
         for team_member in find_team_members:
-            total_members +=1
-            team_members.append(team_member)
+            if team_member.is_verified:
+                total_members +=1
+                team_members.append(team_member)
+            else:
+                total_invites +=1
+                member_invites.append(team_member)
 
-        # if request.method == 'GET':
-        #     invite_form = MemberInviteForm(instance=request.user.profile, user=request.user)
 
-        #     context['invite_form'] = invite_form
-
-            # return render(request, 'dashboard/team-manager.html', context)
-
-    my_invites = MemberInvite.objects.filter(invited_by=request.user.profile.uniqueId, inviter_team=request.user.profile.user_team, invite_accepted=False)
-    for member_inv in my_invites:
-        member_invites.append(member_inv)
+    # my_invites = MemberInvite.objects.filter(invited_by=request.user.profile.uniqueId, inviter_team=request.user.profile.user_team, invite_accepted=False)
+    # for member_inv in my_invites:
+    #     member_invites.append(member_inv)
 
     u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
     for role in u_roles:
