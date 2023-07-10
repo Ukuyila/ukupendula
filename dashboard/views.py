@@ -2596,10 +2596,10 @@ def team_manager(request):
         for team_member in find_team_members:
             if team_member.is_verified:
                 total_members +=1
-                team_member.subscribed=user_profile.subscribed
-                team_member.subscription_type=user_profile.subscription_type
-                team_member.subscription_reference=user_profile.subscription_reference
-                team_member.save()
+                # team_member.subscribed=user_profile.subscribed
+                # team_member.subscription_type=user_profile.subscription_type
+                # team_member.subscription_reference=user_profile.subscription_reference
+                # team_member.save()
                 team_members.append(team_member)
             else:
                 total_invites +=1
@@ -2673,7 +2673,7 @@ def activateEmail(request, user, user_team, password1=''):
 
     headers = {'Reply-To': settings.EMAIL_REPLY_TO}
     
-    email = EmailMessage(mail_subject, message, to=[user.email], headers=headers)
+    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=settings.EMAIL_REPLY_TO)
     email.content_subtype = 'html'
     if email.send():
         msg = f'Member successfully added to team, please tell them go to their email <b>{user.email}</b> inbox and click on \
