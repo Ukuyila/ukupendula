@@ -2645,7 +2645,7 @@ def team_manager(request):
     return render(request, 'dashboard/team-manager.html', context)
 
 
-def activateEmail(request, user, password1, user_team):
+def activateEmail(request, user, user_team, password1=''):
     mail_subject = "Activate your user account."
     message = render_to_string("authorisation/email-verification.html", {
         'user': user.username,
@@ -2774,31 +2774,37 @@ def add_team_member(request):
 
         # success = 'Member added successfully'
 
-        success = activateEmail(request, new_member, password1, user_team)
+        success = activateEmail(request, new_member, user_team, password1)
 
         # uuidb64 = urlsafe_base64_encode(v_code)
 
         # if email_notify:
         #     # send invite email
-        #     api_url = settings.MAILER_API_URL
-        #     mailer_api_key = settings.MAILER_API_KEY
 
-        #     url = '{}/mailer-api/'.format(api_url)
-
-        #     api_business_id = settings.API_KEY_OWNER
-
-        #     headers = {'content-type': 'application/json'}
-
-        #     data = {'r': 'inv-user-welcome', 'api-key': mailer_api_key, 'api-b-code': api_business_id, 'uniqueId': user_profile.uniqueId, 'uuid': uuidb64, 'mailto': urlsafe_base64_encode(user_email), 'fname': first_name, 'lname': last_name, 'password':password1, 'team_name': user_team.business_name}
-
-        #     response = requests.post(url, params=data)
-        #     # result = json.loads(response.text.decode('utf-8'))
-        #     time.sleep(2)
-        #     success = response.text
         print(success)
         
         return HttpResponse(success)
         # return redirect('team-manager')
+
+
+@login_required
+def resend_team_invite(request, orgUniqueId, uniqueId):
+    if orgUniqueId == request.user.profile.user_team:
+        try:
+            # get user team
+            user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
+            member_p = Profile.objects.get(uniqueId=uniqueId)
+            success = activateEmail(request, member_p.user, user_team)
+
+            messages.success(request, success)
+
+            # print(success)
+        except:
+            messages.error(request, "Action not allowed, this user does not belong to your team!")
+    else:
+        messages.error(request, "Action not allowed, you do not have permission to access this team!")
+
+    return redirect('team-manager')
 
 
 @login_required
