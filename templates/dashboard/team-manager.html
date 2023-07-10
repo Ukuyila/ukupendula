@@ -235,7 +235,8 @@
         </div>
       </div>
       
-      <div hidden style="display:none;" class="card">
+      {% if member_invites|length > 0 %}
+      <div class="card">
         <div class="card-header">
           <h3 class="card-title">My Invites</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_invites}} invites</span>
           <div class="card-options">
@@ -245,7 +246,7 @@
           </div>
         </div>
         <div class="card-body">
-          {% if member_invites|length > 0 %}
+          
           <div class="table-responsive mb-0 ">
             <table class="table table-hover table-striped " style="width:100%">
               <thead>
@@ -273,12 +274,15 @@
               </tbody>
             </table>
           </div>
-          {% else %}
-          <div><h5>You have no team to display here yet, <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">start inviting</button></h5></div>
-          {% endif %}
+          
         </div>
       </div>
 
+      {% else %}
+      <div class="card">
+        <div><h5>You have no team to display here yet, <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invite_new_member">start inviting</button></h5></div>
+      </div>
+      {% endif %}
     </div>
 
   </div>

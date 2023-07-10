@@ -2574,9 +2574,7 @@ def team_manager(request):
     if user_profile.user_team is not None:
 
         this_user_team = Team.objects.get(uniqueId=user_profile.user_team)
-
         context['this_user_team'] = this_user_team
-    
         find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
 
         for team_member in find_team_members:
@@ -2586,11 +2584,6 @@ def team_manager(request):
             else:
                 total_invites +=1
                 member_invites.append(team_member)
-
-
-    # my_invites = MemberInvite.objects.filter(invited_by=request.user.profile.uniqueId, inviter_team=request.user.profile.user_team, invite_accepted=False)
-    # for member_inv in my_invites:
-    #     member_invites.append(member_inv)
 
     u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
     for role in u_roles:
