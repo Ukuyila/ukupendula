@@ -74,7 +74,7 @@ def emailVerification(request, user, password1, user_team):
     
     headers = {'Reply-To': settings.EMAIL_REPLY_TO}
     
-    email = EmailMessage(mail_subject, message, to=[user.email], headers=headers)
+    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=settings.EMAIL_REPLY_TO)
     email.content_subtype = 'html'
     if email.send():
         msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
