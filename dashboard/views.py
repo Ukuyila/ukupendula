@@ -2486,7 +2486,6 @@ def payment_success(request, uniqueId, planId, orderId):
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     print(order_ref)
 
-
     try:
         package = SubscriptionPackage.objects.get(uniqueId=planId)
         package_name = package.package_name.lower()
@@ -2497,7 +2496,24 @@ def payment_success(request, uniqueId, planId, orderId):
             profile.subscription_type = package_name
             profile.subscription_reference = order_ref
             profile.save()
-            return HttpResponse('SUCCESS')
+
+            # update the team
+            try:
+                this_user_team = Team.objects.get(uniqueId=profile.user_team)
+                
+                find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
+
+                for team_member in find_team_members:
+                    if team_member.is_verified:
+                        team_member.subscribed=profile.subscribed
+                        team_member.subscription_type=profile.subscription_type
+                        team_member.subscription_reference=profile.subscription_reference
+                        team_member.save()
+
+                return HttpResponse('SUCCESS')
+            except:
+                
+                return HttpResponse('SUCCESS')
         except:
             return HttpResponse('FAIL: 001')
     except:
