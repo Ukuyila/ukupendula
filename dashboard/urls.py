@@ -16,6 +16,7 @@ urlpatterns = [
     path('team-manager', views.team_manager, name='team-manager'),
     path('add-new-member', views.add_team_member, name='add-new-member'),
     path('edit-member', views.edit_team_member, name='edit-member'),
+    path('resend-member/<str:orgUniqueId>/<str:uniqueId>/', views.resend_team_invite, name='resend-member'),
     path('delete-member/<str:orgUniqueId>/<str:uniqueId>/', views.delete_member, name='delete-member'),
     path('delete-invite/<str:userUid>/<str:uniqueId>/', views.delete_invite, name='delete-invite'),
 
