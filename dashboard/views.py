@@ -93,9 +93,9 @@ def home(request):
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
-        # log user out and give solution to remove device
+        # redirect user out and give solution to remove device
         messages.error(request, "You have maximum devices logged in on your profile!")
-        return redirect('login')
+        return redirect('device-manager')
         # print(check_device_reg)
         # pass
     else:
