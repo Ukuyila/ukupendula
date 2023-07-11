@@ -16,54 +16,39 @@
                   <div class="card">
                     <h5 class="card-header">{{item_name}}</h5>
                     <div class="card-body">
-                      <div class="mb-3 col-12 mb-0">
+                      <h5 class="card-title">R{{amount}} per month</h5>
+                      {% comment %} <p class="card-text">Generate 40 000* Words</p> {% endcomment %}
 
-                        <div class="row mb-5">
-                          <div class="col-md-6 col-lg-6 mb-3">
-                            <div class="card text-center alert alert-info">
-                              <div class="card-header">{{item_name}}</div>
-                              <div class="card-body">
-                                <h5 class="card-title">R{{amount}} per month</h5>
-                                {% comment %} <p class="card-text">Generate 40 000* Words</p> {% endcomment %}
+                      <form action="{{action_url}}" method="post">
+                        
+                        <input type="hidden" name="merchant_id" value="{{merchant_id}}">
+                        <input type="hidden" name="merchant_key" value="{{merchant_key}}">
 
-                                <form action="{{action_url}}" method="post">
-                                  
-                                  <input type="hidden" name="merchant_id" value="{{merchant_id}}">
-                                  <input type="hidden" name="merchant_key" value="{{merchant_key}}">
+                        <input type="hidden" name="return_url" value="{{return_url}}">
+                        <input type="hidden" name="cancel_url" value="{{cancel_url}}">
+                        <input type="hidden" name="notify_url" value="{{notify_url}}">
+                        
+                        <!-- customer -->
+                        <input type="hidden" name="name_first" value="{{user.first_name}}">
+                        <input type="hidden" name="name_last" value="{{user.last_name}}">
+                        <input type="hidden" name="email_address" value="{{user.email}}">
 
-                                  <input type="hidden" name="return_url" value="{{return_url}}">
-                                  <input type="hidden" name="cancel_url" value="{{cancel_url}}">
-                                  <input type="hidden" name="notify_url" value="{{notify_url}}">
-                                  
-                                  <!-- customer -->
-                                  <input type="hidden" name="name_first" value="{{user.first_name}}">
-                                  <input type="hidden" name="name_last" value="{{user.last_name}}">
-                                  <input type="hidden" name="email_address" value="{{user.email}}">
+                        <input type="hidden" name="m_payment_id" value="{{m_payment_id}}">
+                        <input type="hidden" name="amount" value="{{amount}}">
+                        <input type="hidden" name="item_name" value="{{item_name}}">
+                        <input type="hidden" name="item_description" value="{{item_descr}}">
 
-                                  <input type="hidden" name="m_payment_id" value="{{m_payment_id}}">
-                                  <input type="hidden" name="amount" value="{{amount}}">
-                                  <input type="hidden" name="item_name" value="{{item_name}}">
-                                  <input type="hidden" name="item_description" value="{{item_descr}}">
-
-                                  <!-- subscription -->
-                                  <input type="hidden" name="subscription_type" value="1">
-                                  <!-- <input type="hidden" name="billing_date" value=""> -->
-                                  <input type="hidden" name="recurring_amount" value="{{recurring_amount}}">
-                                  <input type="hidden" name="frequency" value="3">
-                                  <input type="hidden" name="cycles" value="0">
-                                  
-                                  <input type="hidden" name="signature" value="{{signature}}">
-                                  
-                                  <input type="submit" class="btn btn-lg btn-danger" value="Pay Now">
-                               </form>
-                              </div>
-                              <div class="card-footer text-muted">Pay with PayFast</div>
-                            </div>
-                          </div>
-
-                      </div>
-
-
+                        <!-- subscription -->
+                        <input type="hidden" name="subscription_type" value="1">
+                        <!-- <input type="hidden" name="billing_date" value=""> -->
+                        <input type="hidden" name="recurring_amount" value="{{recurring_amount}}">
+                        <input type="hidden" name="frequency" value="3">
+                        <input type="hidden" name="cycles" value="0">
+                        
+                        <input type="hidden" name="signature" value="{{signature}}">
+                        
+                        <input type="submit" class="btn btn-lg btn-danger" value="Pay Now">
+                      </form>
                     </div>
                   </div>
                 </div>
