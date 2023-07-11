@@ -30,43 +30,17 @@
           </ul>
           {% if user.profile.subscription_type|title == package.package_name %}
           <div class="text-center m-4">
-            <a disabled href="javascript:void(0)" class="btn btn-primary btn-block">Current Package</a>
+            <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
           </div>
           {% else %}
           <div class="text-center m-4">
-            <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Buy Now</a>
+            <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Subscribe Now</a>
           </div>
           {% endif %}
         </div>
       </div>
     </div>
 
-
-    <div class="col-xs-12 col-md-6 col-xl-3 mt-2">
-      <div class="panel price panel-color card overflow-hidden">
-        <div class="ribbon ribbon-top-left text-success"><span class="bg-success">{{ package.package_name }}</span></div>
-        <div class="panel-body text-center">
-          <p class="display-5 mb-0">R{{ package.package_price }}</p>
-        </div>
-        <ul class="list-group list-group-flush text-center">
-          {% with package.package_description|split:"<\br>" as package_descr %}
-            {% for descr in package_descr %}
-            <li class="list-group-item">{{ descr }}</li>
-            {% endfor %}
-          {% endwith %}
-        </ul>
-        
-        {% if user.profile.subscription_type|title == package.package_name %}
-        <div class="panel-footer text-center border-top-0">
-          <a class="btn btn-default " type="button" disabled href="javascript:void(0)">Current Package</a>
-        </div>
-        {% else %}
-        <div class="panel-footer text-center border-top-0">
-          <a class="btn btn-success" href="{% url 'pay-now' package.uniqueId %}">Purchase Now</a>
-        </div>
-        {% endif %}
-      </div>
-    </div>
     {% endfor %}
   </div>
 </div>
