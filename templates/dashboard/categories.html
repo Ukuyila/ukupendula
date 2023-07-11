@@ -46,7 +46,7 @@
                       <a href="{% url 'edit-category' category.uniqueId %}">{{category.category_name}}</a>
                     </h6>
                   </td>
-                  <td class="text-primary me-1">{{category.client.client_name}}</td>
+                  <td class="me-1">{{category.client.client_name}}</td>
                   <td>
                     {% if category.is_active %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'cate-status' 'deactivate' category.uniqueId %}'" class="badge badge-success">Active</a>
