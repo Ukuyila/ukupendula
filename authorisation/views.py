@@ -70,6 +70,7 @@ def emailVerification(request, user, password1, user_team):
         'password': password1,
         'user_team': user_team.business_name,
         'email': user.email,
+        'reply_to': settings.EMAIL_REPLY_TO,
     })
     
     headers = {'Reply-To': settings.EMAIL_REPLY_TO}
