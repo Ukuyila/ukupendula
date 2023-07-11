@@ -20,7 +20,8 @@
       <div class="card overflow-hidden">
         <div class="text-center pricing pricing1">
           <div class="card-category bg-primary">{{ package.package_name }}</div>
-          <div class="display-3 my-4"><strong>R{{ package.package_price }} /</strong> month</div>
+          <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
+          {% comment %} <div class="display-3 my-4"><strong>R{{ package.package_price }} /</strong> month</div> {% endcomment %}
           <ul class="list-unstyled leading-loose">
             {% with package.package_description|split:"<\br>" as package_descr %}
               {% for descr in package_descr %}
