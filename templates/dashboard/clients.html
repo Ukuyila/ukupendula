@@ -38,9 +38,7 @@
               <tbody class="table-border-bottom-0">
               {% for client in client_list %}
                 <tr>
-                  <td class="text-primary me-1">
-                    <a >{{client.client_name}}</a>
-                  </td>
+                  <td class=" me-1"><a >{{client.client_name}}</a></td>
                   <td>
                     {% if client.is_active %}
                     <a href="javascript:void(0);" onclick="return window.location.href='{% url 'client-status' 'deactivate' client.uniqueId %}'"  class="badge badge-success">Active</a>

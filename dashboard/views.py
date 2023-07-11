@@ -1865,7 +1865,7 @@ def summarize_blog(request, uniqueId):
     context = {}
     user_profile = request.user.profile
     tone_of_voices = []
-    current_page = 'Content Summarizer'
+    current_page = 'Content Summariser'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(user_profile)
 
@@ -2008,7 +2008,7 @@ def summarize_content(request, uniqueId=""):
     context = {}
     user_profile = request.user.profile
     tone_of_voices = []
-    current_page = 'Content Summarizer'
+    current_page = 'Content Summariser'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(user_profile)
 
@@ -3271,7 +3271,7 @@ def memory_summarizer(request):
 
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    current_page = 'Summarizer Memory'
+    current_page = 'Summariser Memory'
     context['current_page'] = current_page
 
     return render(request, 'dashboard/summarizer-memory.html', context)
