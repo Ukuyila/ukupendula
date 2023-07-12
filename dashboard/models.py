@@ -426,7 +426,7 @@ class BlogSocialPost(models.Model):
 
 
 class Paragraph(models.Model):
-    paragraph_topic = models.CharField(max_length=255)
+    paragraph_topic = models.CharField(max_length=550)
     tone_of_voice = models.CharField(max_length=255)
     paragraph = models.TextField(null=True, blank=True)
 
