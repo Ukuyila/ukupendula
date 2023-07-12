@@ -458,7 +458,7 @@ class Paragraph(models.Model):
 
 
 class Sentence(models.Model):
-    old_sentence = models.CharField(max_length=200)
+    old_sentence = models.CharField(max_length=255)
     tone_of_voice = models.CharField(null=True, blank=True, max_length=160)
     new_sentence = models.TextField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
