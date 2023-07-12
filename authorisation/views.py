@@ -88,7 +88,7 @@ def emailVerification(request, user, password1, user_team):
 
 @anonymous_required
 def register(request):
-    populate_defaults()
+    # populate_defaults()
 
     if request.method == 'POST':
 
