@@ -1287,7 +1287,6 @@ def paragraph_writer(request, uniqueId=''):
     return render(request, 'dashboard/paragraph-writer.html', context)
 
 
-
 @login_required
 def delete_paragraph(request, uniqueId):
 
@@ -1904,9 +1903,14 @@ def summarize_blog(request, uniqueId):
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
         for blog_sect in gen_sections:
-            this_blog_sections.append(blog_sect.body)
+            saved_blog = SavedBlogEdit.objects.create(
+                title=this_blog.title,
+                body=blog_sect.body,
+                blog=this_blog,
+            )
+            saved_blog.save()
+            this_blog_sections.append(saved_blog.body)
 
-    
     blogs = Blog.objects.filter(profile=user_profile)
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
@@ -2122,7 +2126,6 @@ def delete_summary(request, uniqueId):
 
     try:
         content = ContentSummary.objects.get(uniqueId=uniqueId)
-
         if content.profile == request.user.profile:
             content.deleted=True
             content.save()
