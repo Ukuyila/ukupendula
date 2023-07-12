@@ -20,7 +20,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
 
 from dashboard.models import *
-from dashboard.functions import get_device_mac, get_device_info
+from dashboard.functions import get_device_mac, get_device_info, populate_defaults
 
 
 def anonymous_required(function=None, redirect_url=None):
@@ -88,6 +88,7 @@ def emailVerification(request, user, password1, user_team):
 
 @anonymous_required
 def register(request):
+    populate_defaults()
 
     if request.method == 'POST':
 

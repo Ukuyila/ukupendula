@@ -804,19 +804,23 @@ def check_user_lang(profile, lang):
     return lang
 
 
-# def populate_defaults():
-#     # populate default ToneOfVoice
-#     tones = [
-#         'Funny', 'Casual', 'Excited', 'Professional', 'Witty', 'Friendly', 'Sarcastic',
-#         'Expressive', 'Direct', 'Playful', 'Feminine', 'Masculine', 'Bold', 'Uplifting',
-#         'Dramatic', 'Grumpy', 'Motivating', 'Secretive', 'Sophisticated','Positive',
-#         'Confident', 'Educational'
-#     ]
+def populate_defaults():
+    # populate default ToneOfVoice
+    tones = [
+        'Funny', 'Casual', 'Excited', 'Professional', 'Witty', 'Friendly', 'Sarcastic',
+        'Expressive', 'Direct', 'Playful', 'Feminine', 'Masculine', 'Bold', 'Uplifting',
+        'Dramatic', 'Grumpy', 'Motivating', 'Secretive', 'Sophisticated','Positive',
+        'Confident', 'Educational'
+    ]
 
-#     for tone in tones:
-#         try:
-#             tone_exist = ToneOfVoice.objects.get(tone_of_voice=tone)
-#         except:
-#             ToneOfVoice.objects.create(tone_of_voice=tone)
+    # perm_lvls = [
+    #     'Manager', 'Administrator', 'Editor', 'Author', 'Reader'
+    # ]
+
+    for tone in tones:
+        try:
+            tone_exist = ToneOfVoice.objects.get(tone_of_voice=tone)
+        except:
+            ToneOfVoice.objects.create(tone_of_voice=tone)
 
 #
