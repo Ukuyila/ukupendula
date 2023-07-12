@@ -2676,7 +2676,7 @@ def activateEmail(request, user, user_team, password1=''):
 
     headers = {'Reply-To': settings.EMAIL_REPLY_TO}
     
-    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=settings.EMAIL_REPLY_TO)
+    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO])
     email.content_subtype = 'html'
     if email.send():
         msg = f'Member successfully added to team, please tell them go to their email <b>{user.email}</b> inbox and click on \
