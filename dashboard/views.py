@@ -79,10 +79,10 @@ def home(request):
 
     # gravatar
     g_user_email = request.user.email
-    url = get_gravatar_url(g_user_email, size=150)
-    gravatar_exists = has_gravatar(g_user_email)
-    profile_url = get_gravatar_profile_url(g_user_email)
-    email_hash = calculate_gravatar_hash(g_user_email)
+    # url = get_gravatar_url(g_user_email, size=150)
+    # gravatar_exists = has_gravatar(g_user_email)
+    # profile_url = get_gravatar_profile_url(g_user_email)
+    # email_hash = calculate_gravatar_hash(g_user_email)
 
     # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
     if User.first_name is None:

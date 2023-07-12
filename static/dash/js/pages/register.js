@@ -27,5 +27,27 @@ $(document).ready(function(){
     }
   })
 
+  $("body").on('click', '.toggle-password1', function() {
+    $(this).toggleClass("bx bx-hide bx bx-show");
+    var input = $("#password1");
+    if (input.attr("type") === "password") {
+      input.attr("type", "text");
+    } else {
+      input.attr("type", "password");
+    }
+
+  });
+
+  $("body").on('click', '.toggle-password2', function() {
+    $(this).toggleClass("bx bx-hide bx bx-show");
+    var input = $("#password2");
+    if (input.attr("type") === "password") {
+      input.attr("type", "text");
+    } else {
+      input.attr("type", "password");
+    }
+
+  });
+
 
 })
