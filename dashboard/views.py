@@ -1889,7 +1889,6 @@ def summarize_blog(request, uniqueId):
 
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
-
         blog_title = this_blog.title
 
     except:
@@ -1903,20 +1902,23 @@ def summarize_blog(request, uniqueId):
                 this_blog_sections.append(blog_sect.body)
                 blog_title = blog_sect.title
 
-        print(' SavedBlogEdit exists: {}'.format(blog_title))
+        print('SavedBlogEdit exists: {}'.format(blog_title))
 
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
         for blog_sect in gen_sections:
-            saved_blog = SavedBlogEdit.objects.create(
-                title=this_blog.title,
-                body=blog_sect.body,
-                blog=this_blog,
-            )
-            saved_blog.save()
-            this_blog_sections.append(saved_blog.body)
+            blog_body = blog_sect.body
+            this_blog_sections.append(blog_body)
 
-        print(' SavedBlogEdit not exists: {}'.format(this_blog.title))
+        saved_blog = SavedBlogEdit.objects.create(
+            title=this_blog.title,
+            body=this_blog_sections,
+            blog=this_blog,
+        )
+        saved_blog.save()
+        this_blog_sections.append(saved_blog.body)
+
+        print('SavedBlogEdit not exists: {}'.format(this_blog.title))
 
     blogs = Blog.objects.filter(profile=user_profile)
     for blog in blogs:
