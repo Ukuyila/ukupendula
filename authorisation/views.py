@@ -61,7 +61,7 @@ def login(request):
 
 def emailVerification(request, user, password1, user_team):
     mail_subject = "Activate your user account."
-    message = render_to_string("authorisation/email-verification.html", {
+    message = render_to_string("dashboard/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
