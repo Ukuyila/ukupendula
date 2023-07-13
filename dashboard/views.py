@@ -1898,10 +1898,11 @@ def summarize_blog(request, uniqueId):
     
     try:
         saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
-        if saved_blog_sects.exists:
+        if saved_blog_sects.exists():
             for blog_sect in saved_blog_sects:
-                this_blog_sections.append(blog_sect.body)
                 blog_title = blog_sect.title
+
+                this_blog_sections.append(blog_sect.body)
 
             print('SavedBlogEdit exists: {}'.format(blog_title))
 
@@ -1911,9 +1912,11 @@ def summarize_blog(request, uniqueId):
             this_blog_body = blog_sect.body
             blog_sections.append(this_blog_body)
 
+        blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
+
         saved_blog = SavedBlogEdit.objects.create(
             title=this_blog.title,
-            body=blog_sections,
+            body=blog_body_sect,
             blog=this_blog,
         )
         saved_blog.save()
