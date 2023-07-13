@@ -2719,7 +2719,7 @@ def team_manager(request):
 
 def activateEmail(request, user, user_team, password1=''):
     mail_subject = "Activate your user account."
-    message = render_to_string("authorisation/email-verification.html", {
+    message = render_to_string("dashboard/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
