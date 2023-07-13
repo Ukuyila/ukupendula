@@ -869,38 +869,73 @@ def edit_gen_blog(request, uniqueId):
         return redirect('blog-topic')
     
     blog_sections = []
-    got_b_body = False
-    s_blog_body = ''
-    s_blog_title = ''
+    # got_b_body = False
+    # s_blog_body = ''
+    # s_blog_title = ''
 
-    saved_blogs = SavedBlogEdit.objects.all()
-    for s_blog in saved_blogs:
-        if s_blog.blog == blog:
-            got_b_body = True
-            s_blog_title = s_blog.title
-            s_blog_body = s_blog.body
-            saved_blog = s_blog
-            break
+    try:
+        saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
+        if saved_blog_sects.exists():
+            for blog_sect in saved_blog_sects:
+                blog_title = blog_sect.title
 
-    if got_b_body == True:
-        blog_body = s_blog_body
-        blog_title = s_blog_title
+                blog_sections.append(blog_sect.body)
+        else:
+            saved_blog = SavedBlogEdit.objects.create(
+                title=blog.title,
+                body=blog_body_sect,
+                blog=blog,
+            )
+            saved_blog.save()
+            blog_sections.append(saved_blog.body)
 
-    else:
-        blog_sects = BlogSection.objects.filter(blog=blog)
+    except:
+        gen_sections = BlogSection.objects.filter(blog=blog)
+        for blog_sect in gen_sections:
+            this_blog_body = blog_sect.body
+            blog_sections.append(this_blog_body)
 
-        for blog_sect in blog_sects:
-            blog_sections.append(blog_sect.body)
-            blog_title = blog_sect.title
-
-        blog_body = "\n".join(blog_sections)
+        blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
 
         saved_blog = SavedBlogEdit.objects.create(
             title=blog.title,
-            body=blog_body,
+            body=blog_body_sect,
             blog=blog,
         )
         saved_blog.save()
+        blog_sections.append(saved_blog.body)
+
+    # saved_blogs = SavedBlogEdit.objects.all()
+    # for s_blog in saved_blogs:
+    #     if s_blog.blog == blog:
+    #         got_b_body = True
+    #         s_blog_title = s_blog.title
+    #         s_blog_body = s_blog.body
+    #         saved_blog = s_blog
+    #         break
+
+    # if got_b_body == True:
+    #     blog_body = s_blog_body
+    #     blog_title = s_blog_title
+
+    # else:
+    #     blog_sects = BlogSection.objects.filter(blog=blog)
+
+    #     for blog_sect in blog_sects:
+    #         blog_title = blog_sect.title
+    #         blog_sections.append(blog_sect.body)
+
+    #     blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+
+    #     saved_blog = SavedBlogEdit.objects.create(
+    #         title=blog.title,
+    #         body=blog_body,
+    #         blog=blog,
+    #     )
+    #     saved_blog.save()
+    #     blog_sections.append(saved_blog.body)
+
+    blog_body = "\n".join(blog_sections).replace('<br>', '\n')
 
     context['blog'] = blog
     context['blog_title'] = blog_title
@@ -1936,7 +1971,6 @@ def summarize_blog(request, uniqueId):
 
     # blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
     blog_body = "\n".join(this_blog_sections)
-    print('blog_body: {}'.format(blog_body))
 
     for client in team_clients:
         if client.team == user_profile.user_team:
