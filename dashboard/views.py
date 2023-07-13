@@ -877,9 +877,10 @@ def edit_gen_blog(request, uniqueId):
         saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
         if saved_blog_sects.exists():
             for blog_sect in saved_blog_sects:
+                blog_sections.append(blog_sect.body)
+
                 blog_title = blog_sect.title
 
-                blog_sections.append(blog_sect.body)
         else:
             saved_blog = SavedBlogEdit.objects.create(
                 title=blog.title,
@@ -888,6 +889,8 @@ def edit_gen_blog(request, uniqueId):
             )
             saved_blog.save()
             blog_sections.append(saved_blog.body)
+
+            blog_title = saved_blog.title
 
     except:
         gen_sections = BlogSection.objects.filter(blog=blog)
@@ -903,6 +906,7 @@ def edit_gen_blog(request, uniqueId):
             blog=blog,
         )
         saved_blog.save()
+        blog_title = saved_blog.title
         blog_sections.append(saved_blog.body)
 
     # saved_blogs = SavedBlogEdit.objects.all()
@@ -937,11 +941,13 @@ def edit_gen_blog(request, uniqueId):
 
     s_blog_body = "\n".join(blog_sections).replace('<br>', '\n')
 
+    s_blog_title = blog_title
+
     context['blog'] = blog
-    context['blog_title'] = blog_title
+    context['blog_title'] = s_blog_title
     context['blog_audience'] = blog.audience
     context['uniqueId'] = uniqueId
-    context['saved_blog'] = saved_blog
+    # context['saved_blog'] = saved_blog
     context['blog_body'] = s_blog_body
     context['blog_cate'] = blog.category
 
