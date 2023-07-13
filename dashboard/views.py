@@ -1890,6 +1890,8 @@ def summarize_blog(request, uniqueId):
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
 
+        blog_title = this_blog.title
+
     except:
         messages.error(request, "Blog not found!")
         return redirect('blog-memory')
@@ -1900,16 +1902,9 @@ def summarize_blog(request, uniqueId):
             for blog_sect in saved_blog_sects:
                 this_blog_sections.append(blog_sect.body)
                 blog_title = blog_sect.title
-                print(' SavedBlogEdit exists: {}'.format(blog_title))
-        else:
-            saved_blog = SavedBlogEdit.objects.create(
-                title=this_blog.title,
-                body=blog_sect.body,
-                blog=this_blog,
-            )
-            saved_blog.save()
-            this_blog_sections.append(saved_blog.body)
-            print('Created new SavedBlogEdit')
+
+        print(' SavedBlogEdit exists: {}'.format(blog_title))
+
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
         for blog_sect in gen_sections:
