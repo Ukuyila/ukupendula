@@ -870,7 +870,7 @@ def edit_gen_blog(request, uniqueId):
     
     blog_sections = []
     # got_b_body = False
-    # s_blog_body = ''
+    s_blog_body = ''
     # s_blog_title = ''
 
     try:
@@ -935,14 +935,14 @@ def edit_gen_blog(request, uniqueId):
     #     saved_blog.save()
     #     blog_sections.append(saved_blog.body)
 
-    blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+    s_blog_body = "\n".join(blog_sections).replace('<br>', '\n')
 
     context['blog'] = blog
     context['blog_title'] = blog_title
     context['blog_audience'] = blog.audience
     context['uniqueId'] = uniqueId
     context['saved_blog'] = saved_blog
-    context['blog_body'] = blog_body
+    context['blog_body'] = s_blog_body
     context['blog_cate'] = blog.category
 
     if request.method == 'POST':
