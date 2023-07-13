@@ -874,12 +874,11 @@ def edit_gen_blog(request, uniqueId):
     s_blog_title = ''
 
     try:
-        saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
-        if saved_blog_sects.exists():
-            for blog_sect in saved_blog_sects:
-                blog_sections.append(blog_sect.body)
-
-                blog_title = blog_sect.title
+        saved_blog_sect = SavedBlogEdit.objects.get(blog=blog)
+        if saved_blog_sect is not None:
+        #     for blog_sect in saved_blog_sects:
+            blog_sections.append(saved_blog_sect.body)
+            blog_title = saved_blog_sect.title
 
         else:
             saved_blog = SavedBlogEdit.objects.create(
@@ -957,10 +956,10 @@ def edit_gen_blog(request, uniqueId):
         generated_blog_edit = request.POST['generated-blog']
         gen_blog_category = request.POST['category']
 
-        saved_blog.title = blog_title
-        saved_blog.body = generated_blog_edit
-        saved_blog.category = gen_blog_category
-        saved_blog.save()
+        saved_blog_sect.title = blog_title
+        saved_blog_sect.body = generated_blog_edit
+        saved_blog_sect.category = gen_blog_category
+        saved_blog_sect.save()
 
         return redirect('edit-gen-blog', uniqueId)
 
