@@ -939,7 +939,8 @@ def edit_gen_blog(request, uniqueId):
     #     saved_blog.save()
     #     blog_sections.append(saved_blog.body)
 
-    s_blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+    # s_blog_body = "\n".join(blog_sections).replace('<br>', '\n')
+    s_blog_body = "\n".join(blog_sections)
 
     s_blog_title = blog_title
 
