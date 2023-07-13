@@ -1884,6 +1884,7 @@ def summarize_blog(request, uniqueId):
     blog_posts = []
     this_blog_sections = []
     blog_body = ''
+    blog_sections = []
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -1907,12 +1908,12 @@ def summarize_blog(request, uniqueId):
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
         for blog_sect in gen_sections:
-            blog_body = blog_sect.body
-            this_blog_sections.append(blog_body)
+            this_blog_body = blog_sect.body
+            blog_sections.append(this_blog_body)
 
         saved_blog = SavedBlogEdit.objects.create(
             title=this_blog.title,
-            body=this_blog_sections,
+            body=blog_sections,
             blog=this_blog,
         )
         saved_blog.save()
