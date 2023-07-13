@@ -56,7 +56,7 @@ def home(request):
     empty_blogs = []
     complete_blogs = []
 
-    max_devices_allow = 5
+    max_devices_allow = 15
 
     today_date = datetime.datetime.now()
 
