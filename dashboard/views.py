@@ -1934,7 +1934,8 @@ def summarize_blog(request, uniqueId):
         if sections.exists():
             blog_posts.append(blog)
 
-    blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
+    # blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
+    blog_body = "\n".join(this_blog_sections)
 
     for client in team_clients:
         if client.team == user_profile.user_team:
