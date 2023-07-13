@@ -1905,6 +1905,15 @@ def summarize_blog(request, uniqueId):
                 this_blog_sections.append(blog_sect.body)
 
             print('SavedBlogEdit exists: {}'.format(blog_title))
+        else:
+            saved_blog = SavedBlogEdit.objects.create(
+                title=this_blog.title,
+                body=blog_body_sect,
+                blog=this_blog,
+            )
+            saved_blog.save()
+            this_blog_sections.append(saved_blog.body)
+            print('SavedBlogEdit saved: {}'.format(blog_title))
 
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
