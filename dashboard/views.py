@@ -51,6 +51,7 @@ def home(request):
     context = {}
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
 
     empty_blogs = []
     complete_blogs = []
@@ -108,21 +109,22 @@ def home(request):
     blogs = Blog.objects.filter(profile=user_profile)
 
     for blog in blogs:
-        sections = BlogSection.objects.filter(blog=blog)
-        if sections.exists():
-            # calculate blog words
-            blog_words = 0
-            for section in sections:
+        if not blog.deleted and blog.profile.user_team == user_team_id:
+            sections = BlogSection.objects.filter(blog=blog)
+            if sections.exists():
+                # calculate blog words
+                blog_words = 0
+                for section in sections:
 
-                blog_words += int(section.word_count)
+                    blog_words += int(section.word_count)
 
-                # month_word_count += int(section.word_count)
-            if blog.word_count is None or int(blog.word_count) == 0:
-                blog.word_count = str(blog_words)
-                blog.save()
-            complete_blogs.append(blog)
-        elif not sections.exists():
-            empty_blogs.append(blog)
+                    # month_word_count += int(section.word_count)
+                if blog.word_count is None or int(blog.word_count) == 0:
+                    blog.word_count = str(blog_words)
+                    blog.save()
+                complete_blogs.append(blog)
+            elif not sections.exists():
+                empty_blogs.append(blog)
 
     blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month), user_profile)
     lm_blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month-1), user_profile)
@@ -3011,7 +3013,6 @@ def memory_blogs(request, status):
     client_list = []
 
     user_profile = request.user.profile
-
     user_team_id = user_profile.user_team
 
     lang = settings.LANGUAGE_CODE
@@ -3086,6 +3087,9 @@ def memory_social_post(request):
     s_posts = []
     my_blogs = []
 
+    user_profile = request.user.profile
+    user_team_id = user_profile.user_team
+
     # Get total blogs
     blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
     for blog in blogs:
@@ -3095,7 +3099,7 @@ def memory_social_post(request):
     # get social posts
     soc_posts = BlogSocialPost.objects.filter(deleted=False)
     for post in soc_posts:
-        if post.blog.profile == request.user.profile:
+        if not post.deleted and post.blog.profile.user_team == user_team_id:
             s_posts.append(post)
 
     context['s_posts'] = s_posts
@@ -3133,6 +3137,7 @@ def memory_paragraph(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -3159,10 +3164,10 @@ def memory_paragraph(request):
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
-    paragraphs = Paragraph.objects.filter(profile=request.user.profile).order_by('last_updated')
+    paragraphs = Paragraph.objects.filter(profile=user_profile).order_by('last_updated')
 
     for summary in paragraphs:
-        if not summary.deleted:
+        if not summary.deleted and summary.profile.user_team == user_team_id:
             saved_paragraphs.append(summary)
 
     context['saved_paragraphs'] = saved_paragraphs
@@ -3188,6 +3193,7 @@ def memory_sentence(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3216,7 +3222,7 @@ def memory_sentence(request):
     sentences = Sentence.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for sentence in sentences:
-        if not sentence.deleted:
+        if not sentence.deleted and sentence.profile.user_team == user_team_id:
             saved_sentence.append(sentence)
 
     context['saved_sentence'] = saved_sentence
@@ -3242,6 +3248,7 @@ def memory_title(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -3271,7 +3278,7 @@ def memory_title(request):
     article_titles = ArticleTitle.objects.filter(profile=request.user.profile).order_by('last_updated')
 
     for title in article_titles:
-        if not title.deleted:
+        if not title.deleted and title.profile.user_team == user_team_id:
             saved_title.append(title)
 
     context['saved_title'] = saved_title
@@ -3298,6 +3305,7 @@ def memory_summarizer(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id=user_profile.user_team
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3324,10 +3332,10 @@ def memory_summarizer(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    summaries = ContentSummary.objects.filter(profile=request.user.profile).order_by('last_updated')
+    summaries = ContentSummary.objects.filter(profile=user_profile).order_by('last_updated')
 
     for summary in summaries:
-        if not summary.deleted:
+        if not summary.deleted and summary.profile.user_team == user_team_id:
             saved_summaries.append(summary)
 
     context['saved_summaries'] = saved_summaries
@@ -3355,6 +3363,7 @@ def memory_page_copy(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3369,10 +3378,10 @@ def memory_page_copy(request):
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
-        if client.team == user_profile.user_team:
+        if client.team == user_team_id:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    team_categories = ClientCategory.objects.filter(team=user_team_id)
 
     for category in team_categories:
         cate_list.append(category)
@@ -3381,10 +3390,10 @@ def memory_page_copy(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    page_copies = LandingPageCopy.objects.filter(profile=request.user.profile).order_by('last_updated')
+    page_copies = LandingPageCopy.objects.filter(profile=user_profile).order_by('last_updated')
 
     for page_copy in page_copies:
-        if not page_copy.deleted:
+        if not page_copy.deleted and page_copy.profile.user_team == user_team_id:
             saved_page_copies.append(page_copy)
 
     context['saved_page_copies'] = saved_page_copies
@@ -3407,6 +3416,7 @@ def memory_meta_descr(request):
     client_list = []
 
     user_profile = request.user.profile
+    user_team_id = user_profile.user_team
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3421,10 +3431,10 @@ def memory_meta_descr(request):
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
-        if client.team == user_profile.user_team:
+        if client.team == user_team_id:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    team_categories = ClientCategory.objects.filter(team=user_team_id)
 
     for category in team_categories:
         cate_list.append(category)
@@ -3433,15 +3443,15 @@ def memory_meta_descr(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    meta_descriptions = MetaDescription.objects.filter(profile=request.user.profile).order_by('last_updated')
+    meta_descriptions = MetaDescription.objects.filter(profile=user_profile).order_by('last_updated')
 
     for meta_description in meta_descriptions:
-        if not meta_description.deleted:
+        if not meta_description.deleted and meta_description.profile.user_team == user_team_id:
             saved_meta_descriptions.append(meta_description)
 
     context['saved_meta_descriptions'] = saved_meta_descriptions
 
-    context['allowance'] = check_count_allowance(request.user.profile)
+    context['allowance'] = check_count_allowance(user_profile)
 
     current_page = 'Meta Description Memory'
     context['current_page'] = current_page
