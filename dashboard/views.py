@@ -1903,8 +1903,6 @@ def summarize_blog(request, uniqueId):
                 blog_title = blog_sect.title
 
                 this_blog_sections.append(blog_sect.body)
-
-            print('SavedBlogEdit exists: {}'.format(blog_title))
         else:
             saved_blog = SavedBlogEdit.objects.create(
                 title=this_blog.title,
@@ -1913,7 +1911,6 @@ def summarize_blog(request, uniqueId):
             )
             saved_blog.save()
             this_blog_sections.append(saved_blog.body)
-            print('SavedBlogEdit saved: {}'.format(blog_title))
 
     except:
         gen_sections = BlogSection.objects.filter(blog=this_blog)
@@ -1931,8 +1928,6 @@ def summarize_blog(request, uniqueId):
         saved_blog.save()
         this_blog_sections.append(saved_blog.body)
 
-        print('SavedBlogEdit not exists: {}'.format(this_blog.title))
-
     blogs = Blog.objects.filter(profile=user_profile)
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
@@ -1940,8 +1935,6 @@ def summarize_blog(request, uniqueId):
             blog_posts.append(blog)
 
     blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
-
-    print('blog_body: {}'.format(blog_body))
 
     for client in team_clients:
         if client.team == user_profile.user_team:
