@@ -1936,6 +1936,7 @@ def summarize_blog(request, uniqueId):
 
     # blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
     blog_body = "\n".join(this_blog_sections)
+    print('blog_body: {}'.format(blog_body))
 
     for client in team_clients:
         if client.team == user_profile.user_team:
