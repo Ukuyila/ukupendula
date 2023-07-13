@@ -3012,6 +3012,8 @@ def memory_blogs(request, status):
 
     user_profile = request.user.profile
 
+    user_team_id = user_profile.user_team
+
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -3026,10 +3028,10 @@ def memory_blogs(request, status):
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
-        if client.team == user_profile.user_team:
+        if client.team == user_team_id:
             client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    team_categories = ClientCategory.objects.filter(team=user_team_id)
 
     for category in team_categories:
         cate_list.append(category)
@@ -3039,11 +3041,13 @@ def memory_blogs(request, status):
 
     context['blogs_status'] = status
 
+    user_team = Team.objects.get(uniqueId=user_team_id)
+
     # Get total blogs
-    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
+    blogs = Blog.objects.all().order_by('last_updated')
 
     for blog in blogs:
-        if not blog.deleted:
+        if not blog.deleted and blog.profile.user_team == user_team_id:
             sections = BlogSection.objects.filter(blog=blog)
             saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
