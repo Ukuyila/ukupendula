@@ -182,7 +182,7 @@ def register(request):
         # begin email verification
         email = emailVerification(request, user, password1, new_user_team)
 
-        messages.info(request, email)
+        # messages.info(request, email)
         return redirect('login')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
