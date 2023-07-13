@@ -871,7 +871,7 @@ def edit_gen_blog(request, uniqueId):
     blog_sections = []
     # got_b_body = False
     s_blog_body = ''
-    # s_blog_title = ''
+    s_blog_title = ''
 
     try:
         saved_blog_sects = SavedBlogEdit.objects.filter(blog=blog)
