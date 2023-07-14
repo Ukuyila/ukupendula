@@ -648,7 +648,7 @@ class SubscriptionPackage(models.Model):
     package_name = models.CharField(max_length=200)
     package_price = models.CharField(max_length=100, blank=True, null=True)
     package_max_word = models.CharField(max_length=100, blank=True, null=True) # 0 is for unlimited
-    package_max_device = models.CharField(max_length=100, blank=True, null=True) # 0 is for unlimited
+    package_max_device = models.CharField(max_length=11, blank=True, null=True) # 0 is for unlimited
     package_status = models.BooleanField(default=True)
     package_description = models.TextField(null=True, blank=True)
 
