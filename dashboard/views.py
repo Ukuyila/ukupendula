@@ -2910,11 +2910,11 @@ def device_manager(request):
 
     current_page = 'Device Manager'
     total_devices = 0
-    max_devices = 10
+    # max_devices = 10
 
     user_profile = request.user.profile
     user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_profile.user_team)
-    # max_devices = int(user_sub_pack.package_max_device)
+    max_devices = int(user_sub_pack.package_max_device)
 
     context['current_page'] = current_page
     reg_devices = []
