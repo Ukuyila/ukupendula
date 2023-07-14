@@ -2744,37 +2744,6 @@ def activateEmail(request, user, user_team, password1=''):
         msg = f'Problem sending email to {user.email}, check if you typed it correctly.'
 
     return msg
-# def activateEmail(request, user, password1, user_team):
-
-#     # Using PHPMailer API
-#     user_profile = Profile.objects.get(user=user)
-#     api_url = settings.MAILER_API_URL
-#     mailer_api_key = settings.MAILER_API_KEY
-
-#     url = '{}/mailer-api/'.format(api_url)
-
-#     api_business_id = settings.API_KEY_OWNER
-
-#     headers = {'content-type': 'application/json'}
-
-#     data = {
-#         'r': 'inv-user-welcome',
-#         'api-key': mailer_api_key,
-#         'api-b-code': api_business_id,
-#         'uniqueId': user_profile.uniqueId,
-#         'uuid': urlsafe_base64_encode(force_bytes(user.pk)),
-#         'token': account_activation_token.make_token(user),
-#         'mailto': user.email,
-#         'name': user.first_name + user.last_name,
-#         'password':password1,
-#         'team_name': user_team.business_name}
-
-#     response = requests.post(url, params=data)
-#     # result = json.loads(response.text.decode('utf-8'))
-#     time.sleep(2)
-#     success = response.text
-#     print(success)
-#     return response.text
 
 
 @login_required
@@ -2804,9 +2773,9 @@ def edit_team_member(request):
             user_set.user_role=user_role
             user_set.save()
 
-            resp = "Member details updated successfully!"            
+            resp = f"Member details updated successfully!"            
         except:
-            resp = 'User could not be found!'
+            resp = f'User could not be found!'
 
     return HttpResponse(resp)
 
@@ -2825,6 +2794,10 @@ def add_team_member(request):
         email_notify = False if request.POST.get('email_notify', False) == 'off' else True
         user_language = request.POST['user_language']
         user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
+
+        if not validateEmail(user_email):
+            messages.error(request, "Email address invalid!")
+            return redirect('team-manager')
 
         if not password1 == password2:
             messages.error(request, "Passwords do not match!")
@@ -2849,25 +2822,12 @@ def add_team_member(request):
         nu_profile.subscription_reference=u_profile.subscription_reference
         nu_profile.save()
 
-        # uuid_code = uuid4()
-        # v_code = str(uuid_code)[:32]
-
         user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=nu_profile)
         user_settings.save()
 
-        # success = 'Member added successfully'
-
         success = activateEmail(request, new_member, user_team, password1)
-
-        # uuidb64 = urlsafe_base64_encode(v_code)
-
-        # if email_notify:
-        #     # send invite email
-
-        print(success)
         
         return HttpResponse(success)
-        # return redirect('team-manager')
 
 
 @login_required
@@ -2880,8 +2840,6 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
             success = activateEmail(request, member_p.user, user_team)
 
             messages.success(request, success)
-
-            # print(success)
         except:
             messages.error(request, "Action not allowed, this user does not belong to your team!")
     else:
@@ -2893,13 +2851,13 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
 @login_required
 def delete_member(request, orgUniqueId, uniqueId):
     get_this_org = Team.objects.get(uniqueId=orgUniqueId)
+    user_profile = request.user.profile
 
     try:
-        if request.user.profile.user_team == orgUniqueId:
+        if user_profile.user_team == orgUniqueId:
 
             member = Profile.objects.get(uniqueId=uniqueId)
-            
-            if member.profile.uniqueId == request.user.profile.uniqueId:
+            if member.profile.uniqueId == user_profile.uniqueId:
                 # member.delete()
                 messages.error(request, "Action not allowed, you cannot remove yourself from this team!")
                 return redirect('team-manager')
@@ -2932,7 +2890,6 @@ def delete_invite(request, userUid, uniqueId):
 
     try:
         if request.user.profile.uniqueId == userUid:
-
             invite = MemberInvite.objects.get(uniqueId=uniqueId)
             invite.delete()
 
@@ -2953,15 +2910,19 @@ def device_manager(request):
 
     current_page = 'Device Manager'
     total_devices = 0
-    max_devices = 5
+
+    user_profile = request.user.profile
+    user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_profile.user_team)
+    max_devices = int(user_sub_pack.package_max_device)
+
     context['current_page'] = current_page
     reg_devices = []
-    user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
+    user_reg_devices = RegisteredDevice.objects.filter(profile=user_profile)
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(request.user.profile, lang)
+    lang = check_user_lang(user_profile, lang)
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
