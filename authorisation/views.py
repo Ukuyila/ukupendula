@@ -20,7 +20,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage, send_mail
 
 from dashboard.models import *
-from dashboard.functions import get_device_mac, get_device_info, populate_defaults
+from dashboard.functions import get_device_mac, get_device_info, populate_defaults, validateEmail
 
 
 def anonymous_required(function=None, redirect_url=None):
@@ -96,6 +96,10 @@ def register(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         spam_filter = request.POST['spam_filter']
+
+        if not validateEmail(email):
+            messages.error(request, "Email address invalid!")
+            return redirect('register')
 
         if not spam_filter == '9' or spam_filter.upper() == 'NINE':
             messages.error(request, "Our robot is not friendly to other robots, You failed the spam filter!")

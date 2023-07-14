@@ -2,6 +2,8 @@ import datetime
 import os
 import openai
 from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import uuid
 import socket
 import requests
@@ -822,5 +824,14 @@ def populate_defaults():
             tone_exist = ToneOfVoice.objects.get(tone_of_voice=tone)
         except:
             ToneOfVoice.objects.create(tone_of_voice=tone)
+
+
+def validateEmail( email ):
+
+    try:
+        validate_email( email )
+        return True
+    except ValidationError:
+        return False
 
 #
