@@ -1392,12 +1392,14 @@ def improve_content(request):
                                 'contentId': s_content.uniqueId,
                                 'contentBody': s_content.content_body_new,
                             }
+                            break
                         
                         else:
                             response_data = {
                                 'result': 'error',
                                 'message': 'API response not found, please try again'
                             }
+                            break
 
                     else:
                         # we might need to delete all abandoned calls
