@@ -123,14 +123,14 @@ $(document).ready(function(){
           success: function (raw_data) {
             let data = JSON.parse(raw_data)
 
-            console.log(data['message'])
+            console.log(data['contentBody'])
 
             if ( data.includes('success') ) {
               success_alert.html(data['message'])
               success_alert.prop('hidden', false)
 
               setTimeout(() => {
-                window.location.href="content-improver-response/"+data['contentId']
+                generated_text.html(data['contentBody'])
               }, 3000)
             }
             else {
