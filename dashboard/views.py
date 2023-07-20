@@ -1459,7 +1459,7 @@ def content_improver(request, uniqueId=''):
     else:
         pass
 
-    return render('dashboard/content-improver.html')
+    return render(request, 'dashboard/content-improver.html', context)
 
 
 @login_required
