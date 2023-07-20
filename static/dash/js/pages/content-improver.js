@@ -129,6 +129,7 @@ $(document).ready(function(){
           },
           success: function (data) {
             $("#bg-spinner").fadeOut("slow")
+            generate_button.html('Generate content')
             console.log(data['result'])
             console.log(data['message'])
             // let json_data = JSON.parse(data)
