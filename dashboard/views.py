@@ -1326,90 +1326,90 @@ def improve_content(request):
 
     response_data = {}
 
-    try:
+    # try:
 
-        if request.method == 'POST':
-            content_topic = request.POST['content_title']
-            old_content = request.POST['content_body_old']
-            content_cate = request.POST['content_category']
-            content_keywords = request.POST['keywords']
-            max_words = int(request.POST['max_words'])
+    if request.method == 'POST':
+        content_topic = request.POST['content_title']
+        old_content = request.POST['content_body_old']
+        content_cate = request.POST['content_category']
+        content_keywords = request.POST['keywords']
+        max_words = int(request.POST['max_words'])
 
-            response_data = {
-                'content_topic':content_topic,
-                'old_content':old_content,
-                'content_cate':content_cate,
-                'content_keywords':content_keywords,
-                'max_words':max_words
+        response_data = {
+            'content_topic':content_topic,
+            'old_content':old_content,
+            'content_cate':content_cate,
+            'content_keywords':content_keywords,
+            'max_words':max_words
 
-            }
+        }
 
-            if len(content_topic) > 300 and max_words > 2000:
-                messages.error(request, "The engine could not generate content from the given prompt, please try again!")
-                return redirect('content-improver')
-            else:
-                tone_of_voice = request.POST['tone_of_voice']
-                if len(old_content) > 3 and len(old_content) < 2001:
-                    # generator starts here
-                    api_call_code = str(uuid4()).split('-')[4]
+        if len(content_topic) > 300 and max_words > 2000:
+            messages.error(request, "The engine could not generate content from the given prompt, please try again!")
+            return redirect('content-improver')
+        else:
+            tone_of_voice = request.POST['tone_of_voice']
+            if len(old_content) > 3 and len(old_content) < 2001:
+                # generator starts here
+                api_call_code = str(uuid4()).split('-')[4]
 
+                # api_requests = check_api_requests()
+
+                add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
+
+                n = 1
+                # runs until n < 50,just to avoid the infinite loop.
+                # this will execute the check_api_requests() func in every 5 seconds.
+                while n < 50:
                     # api_requests = check_api_requests()
+                    time.sleep(5)
+                    if api_call_process(api_call_code, add_to_list):
 
-                    add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
+                        gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
 
-                    n = 1
-                    # runs until n < 50,just to avoid the infinite loop.
-                    # this will execute the check_api_requests() func in every 5 seconds.
-                    while n < 50:
-                        # api_requests = check_api_requests()
-                        time.sleep(5)
-                        if api_call_process(api_call_code, add_to_list):
+                        if len(gen_content) > 0:
 
-                            gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+                            # create database record
+                            s_content = ContentImprover.objects.create(
+                                content_title=content_topic,
+                                tone_of_voice=tone_of_voice,
+                                content_body_old=old_content,
+                                content_keywords=content_keywords,
+                                content_body_new=content_cate,
+                                profile=request.user.profile,
+                                category=content_cate,
+                            )
+                            s_content.save()
 
-                            if len(gen_content) > 0:
+                            add_to_list.is_done=True
+                            add_to_list.save()
 
-                                # create database record
-                                s_content = ContentImprover.objects.create(
-                                    content_title=content_topic,
-                                    tone_of_voice=tone_of_voice,
-                                    content_body_old=old_content,
-                                    content_keywords=content_keywords,
-                                    content_body_new=content_cate,
-                                    profile=request.user.profile,
-                                    category=content_cate,
-                                )
-                                s_content.save()
+                            context['content_uniqueId'] = s_content.uniqueId
 
-                                add_to_list.is_done=True
-                                add_to_list.save()
-
-                                context['content_uniqueId'] = s_content.uniqueId
-
-                                response_data = {
-                                    'result': 'success',
-                                    'message': 'Content successfully generated',
-                                    'contentId': s_content.uniqueId,
-                                    'contentBody': s_content.content_body_new,
-                                }
-                            
-                            else:
-                                response_data = {
-                                    'result': 'error',
-                                    'message': 'API response not found, please try again'
-                                }
-
+                            response_data = {
+                                'result': 'success',
+                                'message': 'Content successfully generated',
+                                'contentId': s_content.uniqueId,
+                                'contentBody': s_content.content_body_new,
+                            }
+                        
                         else:
-                            # we might need to delete all abandoned calls
-                            pass
-                        n += 1
-                else:
-                    response_data = {
-                        'result': 'error',
-                        'message': 'Content body is supposed to be between 100 and 2000 chars long!'
-                    }
+                            response_data = {
+                                'result': 'error',
+                                'message': 'API response not found, please try again'
+                            }
 
-    except:
+                    else:
+                        # we might need to delete all abandoned calls
+                        pass
+                    n += 1
+            else:
+                response_data = {
+                    'result': 'error',
+                    'message': 'Content body is supposed to be between 100 and 2000 chars long!'
+                }
+
+    else:
         response_data = {
             'result': 'error',
             'message': 'Something went terribly wrong here'

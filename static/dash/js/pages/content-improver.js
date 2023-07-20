@@ -128,7 +128,7 @@ $(document).ready(function(){
             success_alert.prop('hidden', true).html('')
           },
           success: function (data) {
-            console.log(data)
+            console.log(data['result'])
             console.log(data['contentBody'])
             // let json_data = JSON.parse(data)
 
