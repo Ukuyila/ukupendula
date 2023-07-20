@@ -129,7 +129,7 @@ $(document).ready(function(){
           },
           success: function (data) {
             console.log(data['result'])
-            console.log(data['contentBody'])
+            console.log(data['message'])
             // let json_data = JSON.parse(data)
 
             // console.log(json_data['contentBody'])
