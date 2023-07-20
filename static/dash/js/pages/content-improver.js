@@ -138,9 +138,11 @@ $(document).ready(function(){
             if ( data['result'] === 'success' ) {
               success_alert.html(data['message'])
               success_alert.prop('hidden', false)
-              console.log(data['contentBody'])
+              // console.log(data['contentBody'])
 
-              startTyping(data['contentBody'], 50)
+              // startTyping(data['contentBody'], 50)
+
+              generated_text.html(data['contentBody'])
 
               // setTimeout(() => {
                 
