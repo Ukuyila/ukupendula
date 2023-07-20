@@ -145,11 +145,13 @@ $(document).ready(function(){
               setTimeout(() => {
                 
                 var i=0;
-                var txt = data['contentBody']
+                var txt = data['contentBody'];
+                var speed = 50
 
                 typeWriter()
 
                 function typeWriter() {
+                  console.log(txt.length)
                   if (i < txt.length) {
                     document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
                     i++;
