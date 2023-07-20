@@ -1335,71 +1335,79 @@ def improve_content(request):
             content_keywords = request.POST['keywords']
             max_words = int(request.POST['max_words'])
 
-            if len(content_topic) > 300 and max_words > 2000:
-                messages.error(request, "The engine could not generate content from the given prompt, please try again!")
-                return redirect('content-improver')
-            else:
-                tone_of_voice = request.POST['tone_of_voice']
-                if len(old_content) > 3 and len(old_content) < 2001:
-                    # generator starts here
-                    api_call_code = str(uuid4()).split('-')[4]
+            response_data = {
+                'content_topic':content_topic,
+                'old_content':old_content,
+                'content_cate':content_cate,
+                'content_keywords':content_keywords,
+                'max_words':max_words
 
-                    # api_requests = check_api_requests()
+            }
 
-                    add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
+            # if len(content_topic) > 300 and max_words > 2000:
+            #     messages.error(request, "The engine could not generate content from the given prompt, please try again!")
+            #     return redirect('content-improver')
+            # else:
+            #     tone_of_voice = request.POST['tone_of_voice']
+            #     if len(old_content) > 3 and len(old_content) < 2001:
+            #         # generator starts here
+            #         api_call_code = str(uuid4()).split('-')[4]
 
-                    n = 1
-                    # runs until n < 50,just to avoid the infinite loop.
-                    # this will execute the check_api_requests() func in every 5 seconds.
-                    while n < 50:
-                        # api_requests = check_api_requests()
-                        time.sleep(5)
-                        if api_call_process(api_call_code, add_to_list):
+            #         # api_requests = check_api_requests()
 
-                            gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+            #         add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
 
-                            if len(gen_content) > 0:
+            #         n = 1
+            #         # runs until n < 50,just to avoid the infinite loop.
+            #         # this will execute the check_api_requests() func in every 5 seconds.
+            #         while n < 50:
+            #             # api_requests = check_api_requests()
+            #             time.sleep(5)
+            #             if api_call_process(api_call_code, add_to_list):
 
-                                # create database record
-                                s_content = ContentImprover.objects.create(
-                                    content_title=content_topic,
-                                    tone_of_voice=tone_of_voice,
-                                    content_body_old=old_content,
-                                    content_keywords=content_keywords,
-                                    content_body_new=content_cate,
-                                    profile=request.user.profile,
-                                    category=content_cate,
-                                )
-                                s_content.save()
+            #                 gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
 
-                                add_to_list.is_done=True
-                                add_to_list.save()
+            #                 if len(gen_content) > 0:
 
-                                context['content_uniqueId'] = s_content.uniqueId
+            #                     # create database record
+            #                     s_content = ContentImprover.objects.create(
+            #                         content_title=content_topic,
+            #                         tone_of_voice=tone_of_voice,
+            #                         content_body_old=old_content,
+            #                         content_keywords=content_keywords,
+            #                         content_body_new=content_cate,
+            #                         profile=request.user.profile,
+            #                         category=content_cate,
+            #                     )
+            #                     s_content.save()
 
-                                response_data = {
-                                    'result': 'success',
-                                    'message': 'Content successfully generated',
-                                    'contentId': s_content.uniqueId,
-                                    'contentBody': s_content.content_body_new,
-                                }
+            #                     add_to_list.is_done=True
+            #                     add_to_list.save()
+
+            #                     context['content_uniqueId'] = s_content.uniqueId
+
+            #                     response_data = {
+            #                         'result': 'success',
+            #                         'message': 'Content successfully generated',
+            #                         'contentId': s_content.uniqueId,
+            #                         'contentBody': s_content.content_body_new,
+            #                     }
                             
-                            else:
-                                response_data = {
-                                    'result': 'error',
-                                    'message': 'API response not found, please try again'
-                                }
+            #                 else:
+            #                     response_data = {
+            #                         'result': 'error',
+            #                         'message': 'API response not found, please try again'
+            #                     }
 
-                        else:
-                            # we might need to delete all abandoned calls
-                            pass
-                        n += 1
-                else:
-                    response_data = {
-                        'result': 'error',
-                        'message': 'Content body is supposed to be between 100 and 2000 chars long!'
-                    }
-
+            #             else:
+            #                 # we might need to delete all abandoned calls
+            #                 pass
+            #             n += 1
+            #     else:
+            #         response_data = {
+            #             'result': 'error',
+            #             'message': 'Content body is supposed to be between 100 and 2000 chars long!'
+            #         }
 
     except:
         response_data = {
@@ -1407,7 +1415,7 @@ def improve_content(request):
             'message': 'Something went terribly wrong here'
         }
     
-    return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
+    return JsonResponse(response_data, content_type="application/json",safe=False)
 
 
 @login_required
