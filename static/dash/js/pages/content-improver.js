@@ -140,26 +140,26 @@ $(document).ready(function(){
               success_alert.prop('hidden', false)
               console.log(data['contentBody'])
 
-              // startTyping(data['contentBody'], 50)
+              startTyping(data['contentBody'], 50)
 
-              setTimeout(() => {
+              // setTimeout(() => {
                 
-                var i=0;
-                var txt = data['contentBody'];
-                var speed = 50
+              //   var i=0;
+              //   var txt = data['contentBody'];
+              //   var speed = 50
 
-                typeWriter()
+              //   typeWriter()
 
-                function typeWriter() {
-                  console.log(txt.length)
-                  if (i < txt.length) {
-                    document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
-                    i++;
-                    setTimeout(typeWriter(), speed);
-                  }
-                }
-                // generated_text.html(data['contentBody'])
-              }, 500)
+              //   function typeWriter() {
+              //     console.log(txt.length)
+              //     if (i < txt.length) {
+              //       document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+              //       i++;
+              //       setTimeout(typeWriter(), speed);
+              //     }
+              //   }
+              //   // generated_text.html(data['contentBody'])
+              // }, 500)
             }
             else {
               error_alert.html(data['message']).prop('hidden', false)

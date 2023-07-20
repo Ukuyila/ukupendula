@@ -56,6 +56,7 @@ function startTyping(txt, speed=10) {
   typeWriter()
 
   function typeWriter() {
+    console.log(txt.length)
     if (i < txt.length) {
       document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
       i++;
