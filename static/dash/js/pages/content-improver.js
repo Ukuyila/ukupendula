@@ -140,13 +140,24 @@ $(document).ready(function(){
               success_alert.prop('hidden', false)
               console.log(data['contentBody'])
 
-              startTyping(data['contentBody'], 50)
+              // startTyping(data['contentBody'], 50)
 
-              // setTimeout(() => {
+              setTimeout(() => {
                 
-              //   startTyping(data['contentBody'], 50)
-              //   // generated_text.html(data['contentBody'])
-              // }, 500)
+                var i=0;
+                var txt = data['contentBody']
+
+                typeWriter()
+
+                function typeWriter() {
+                  if (i < txt.length) {
+                    document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter(), speed);
+                  }
+                }
+                // generated_text.html(data['contentBody'])
+              }, 500)
             }
             else {
               error_alert.html(data['message']).prop('hidden', false)

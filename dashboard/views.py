@@ -1390,7 +1390,7 @@ def improve_content(request):
                                 'result': 'success',
                                 'message': 'Content successfully generated',
                                 'contentId': s_content.uniqueId,
-                                'contentBody': s_content.content_body_new.replace('<br>', '\n'),
+                                'contentBody': s_content.content_body_new,
                             }
                             break
                         
