@@ -220,6 +220,12 @@
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow  app-selector py-0">
 													<ul class="drop-icon-wrap p-2">
 														<li>
+															<a href="{% url 'clients' %}" class="drop-icon-item">
+																<i class="icon icon-user-follow text-dark"></i>
+																<span class="block">Clients</span>
+															</a>
+														</li>
+														<li>
 															<a href="{% url 'categories' %}" class="drop-icon-item">
 																<i class="icon icon-folder-alt text-dark"></i>
 																<span class="block">Categories</span>
@@ -399,15 +405,39 @@
 								</li>
 
                 <li 
-                {% if 'Content Summary Generator' in current_page %}
+                {% if 'Page Copy' in current_page %}
                  class="is-expanded"
                 {% endif %}
-              >
+              	>
 									<a href="{% url 'landing-page-copy' %}" class="slide-item
                   {% if 'Page Copy' in current_page %}
                   active
                   {% endif %}
                 ">Landing Page Copy</a>
+								</li>
+
+								<li 
+                {% if 'Social Media Post' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              	>
+									<a href="{% url 'landing-page-copy' %}" class="slide-item
+                  {% if 'Social Media Post' in current_page %}
+                  active
+                  {% endif %}
+                ">Social Media Post</a>
+								</li>
+
+								<li 
+                {% if 'Content Improver' in current_page %}
+                 class="is-expanded"
+                {% endif %}
+              >
+									<a href="{% url 'content-improver' %}" class="slide-item
+                  {% if 'Content Improver' in current_page %}
+                  active
+                  {% endif %}
+                ">Content Improver</a>
 								</li>
 
 							</ul>

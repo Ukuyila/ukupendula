@@ -49,8 +49,10 @@ urlpatterns = [
     path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
     path('edit-blog/<str:uniqueId>/', views.edit_gen_blog, name='edit-gen-blog'),
 
+    path('social-media/<str:postType>/', views.gen_social_post, name='social-media-post'),
+
     path('blog-social-media/<str:postType>/<str:uniqueId>/', views.gen_social_from_blog, name='gen-blog-social-media'),
-    # path('social-media/<str:postType>/', views.gen_social_post, name='social-media'),
+
     path('view-social-media/<str:postType>/<str:uniqueId>/', views.view_social_post, name='view-social-media'),
     path('del-social-media/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
 
@@ -92,6 +94,10 @@ urlpatterns = [
     path('content-summarizer/<str:uniqueId>/', views.summarize_content, name='content-summarizer-response'),
     path('generate-blog-summary/<str:uniqueId>/', views.summarize_blog, name='generate-blog-summary'),
     path('delete-summary/<str:uniqueId>/', views.delete_summary, name='delete-summary'),
+
+    # content improver
+    path('content-improver', views.content_improver, name='content-improver'),
+    path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
 
     # content landing page copy urls
     path('landing-page-copy', views.landing_page_copy, name='landing-page-copy'),

@@ -1031,6 +1031,107 @@ def view_social_post(request, postType, uniqueId):
 
 
 @login_required
+def generate_social_media(request):
+    context = {}
+    
+    if request.method == "POST":
+
+        post_title = request.POST['post_title']
+        post_keywords = request.POST['keywords']
+        post_audience = request.POST['audience']
+        post_category = request.POST['category']
+        post_type = request.POST['post_type']
+        max_char = request.POST['max_char']
+
+        tone_of_voice = request.POST['tone_of_voice']
+        api_call_code = str(uuid4()).split('-')[4]
+
+        add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+
+        n = 1
+        # runs until n < 50,just to avoid the infinite loop.
+        # this will execute the check_api_requests() func in every 5 seconds.
+        while n < 50:
+            # api_requests = check_api_requests()
+            time.sleep(5)
+            if api_call_process(api_call_code, add_to_list):
+                # generate social post options
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, post_title, max_char, request.user.profile, False)
+
+                # create database record
+                new_post = SocialPost.objects.create(
+                    title=post_title,
+                    post_type=post_type,
+                    tone_of_voice=tone_of_voice,
+                    keywords=post_keywords,
+                    audience=post_audience,
+                    post=social_post,
+                    category=post_category,
+                )
+                new_post.save()
+
+                add_to_list.is_done=True
+                add_to_list.save()
+                
+                context['new_post'] = new_post
+
+                return redirect('view-social-media', post_type, new_post.uniqueId)
+
+            else:
+                # we might need to delete all abandoned calls
+                pass
+            n += 1
+
+
+@login_required
+def gen_social_post(request, postType):
+    context = {}
+    user_profile = request.user.profile
+    current_page = 'Generated Social Post From Blog'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    
+    post_type = postType.replace('_', ' ').title()
+
+    if postType == "twitter":
+        max_char = 280
+    elif postType == "instagram":
+        max_char = 2200
+    elif postType == "linkedin":
+        max_char = 3000
+    elif postType == "facebook":
+        max_char = 10000
+    else:
+        max_char = 280
+
+    tone_of_voices = []
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    context['post_type_title'] = post_type
+    context['post_type'] = postType
+
+    return render(request, 'dashboard/social-media-post.html', context)
+
+
+@login_required
 def gen_social_from_blog(request, postType, uniqueId):
     context = {}
     user_profile = request.user.profile
@@ -1215,6 +1316,150 @@ def view_generated_blog(request, slug):
     context['blog_sects'] = blog_sects
 
     return render(request, 'dashboard/view-generated-blog.html', context)
+
+
+@login_required
+def improve_content(request):
+    context = {}
+    min_words = 200
+    max_words = 300
+
+    response_data = {}
+
+    try:
+
+        if request.method == 'POST':
+            content_topic = request.POST['content_topic']
+            old_content = request.POST['old_content']
+            content_cate = request.POST['category']
+            content_keywords = request.POST['keywords']
+            max_words = int(request.POST['max_words'])
+
+            if len(content_topic) > 300:
+                messages.error(request, "The engine could not generate content from the given prompt, please try again!")
+                return redirect('content-improver')
+            else:
+                tone_of_voice = request.POST['tone_of_voice']
+                if len(old_content) > 3 and len(old_content) < 2001:
+                    # generator starts here
+                    api_call_code = str(uuid4()).split('-')[4]
+
+                    # api_requests = check_api_requests()
+
+                    add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
+
+                    n = 1
+                    # runs until n < 50,just to avoid the infinite loop.
+                    # this will execute the check_api_requests() func in every 5 seconds.
+                    while n < 50:
+                        # api_requests = check_api_requests()
+                        time.sleep(5)
+                        if api_call_process(api_call_code, add_to_list):
+
+                            gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+
+                            if len(gen_content) > 0:
+
+                                # create database record
+                                s_content = ContentImprover.objects.create(
+                                    content_title=content_topic,
+                                    tone_of_voice=tone_of_voice,
+                                    content_body_old=old_content,
+                                    content_keywords=content_keywords,
+                                    content_body_new=content_cate,
+                                    profile=request.user.profile,
+                                    category=content_cate,
+                                )
+                                s_content.save()
+
+                                add_to_list.is_done=True
+                                add_to_list.save()
+
+                                context['content_uniqueId'] = s_content.uniqueId
+
+                                response_data = {
+                                    'result': 'success',
+                                    'message': 'Content successfully generated',
+                                    'contentId': s_content.uniqueId,
+                                }
+                            
+                            else:
+                                response_data = {
+                                    'result': 'error',
+                                    'message': 'API response not found, please try again'
+                                }
+
+                        else:
+                            # we might need to delete all abandoned calls
+                            pass
+                        n += 1
+                else:
+                    response_data = {
+                        'result': 'error',
+                        'message': 'Content body is supposed to be between 100 and 2000 chars long!'
+                    }
+
+
+    except:
+        response_data = {
+            'result': 'error',
+            'message': 'Something went terribly wrong here'
+        }
+    
+    return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
+
+
+@login_required
+def content_improver(request, uniqueId=''):
+
+    context = {}
+    user_profile = request.user.profile
+    tone_of_voices = []
+    current_page = 'Content Improver'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    cate_list = []
+    client_list = []
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    if len(uniqueId) > 0:
+        # search database for paragraph with this slug
+        content = ContentImprover.objects.get(uniqueId=uniqueId)
+
+        context['content'] = content
+    else:
+        pass
+
+    return render('dashboard/content-improver.html')
 
 
 @login_required

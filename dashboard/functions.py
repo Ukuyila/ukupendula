@@ -164,6 +164,43 @@ def generate_blog_section_details(blog_topic, section_topic, audience, keywords,
         return ''
     
 
+def gen_improve_content(old_content, min_words, max_words, content_keywords, tone_of_voice, profile):
+    lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Improve this content with a lenght between {} and {} words in {}, using given keywords and tone of voice:\nContent: {}\Keywords: {}\nTone of voice: {}\n\n".format(min_words, max_words, lang, old_content, content_keywords, tone_of_voice),
+        temperature=1,
+        max_tokens=1000,
+        top_p=1,
+        best_of=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    
+    if 'choices' in response:
+        if len(response['choices']) > 0:
+            res = response['choices'][0]['text']
+            if not res == '':
+                cleaned_res = res.replace('\n', '<br>')
+                if profile.monthly_count:
+                    prof_count = int(profile.monthly_count)
+                else:
+                    prof_count = 0
+
+                prof_count += len(cleaned_res.split(' '))
+
+                profile.monthly_count = str(prof_count)
+                profile.save()
+                return cleaned_res
+            else:
+                return ''
+        else:
+            return ''
+    else:
+        return ''
+    
+
 def generate_paragraph(paragraph_topic, tone_of_voice, profile):
     lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
 
@@ -202,12 +239,14 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
         return ''
 
 
-def generate_social_post(post_type, keywords, audience, tone_of_voice, blog_body, max_char, profile):
+def generate_social_post(post_type, keywords, audience, tone_of_voice, prompt_text, max_char, profile, for_blog=True):
     lang = 'English (GB)' if check_user_lang(profile, 'en-gb') == 'en-gb' else 'English (US)'
+
+    ptt = 'article' if for_blog else 'topic'
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Write a {} post in {} with a maximum of {} characters from this article using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\nArticle:\n{}\n\n*".format(post_type, lang, max_char, keywords,tone_of_voice, audience, blog_body),
+        prompt="Write a {} post in {} with a maximum of {} characters on this {} using these keywords, tone of voice and target audience:\nKeywords: {}\nTone of Voice: {}\nTarget Audience: {}\n{}:\n{}\n\n*".format(post_type, lang, max_char, ptt, keywords, tone_of_voice, audience, ptt.title(), prompt_text),
         temperature=1,
         max_tokens=256,
         top_p=1,
