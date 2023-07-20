@@ -140,7 +140,8 @@ $(document).ready(function(){
               console.log(data['contentBody'])
 
               setTimeout(() => {
-                typeWriter(0, data['contentBody'], 10)
+                
+                startTyping(data['contentBody'], 10)
                 // generated_text.html(data['contentBody'])
               }, 2000)
             }
@@ -153,5 +154,19 @@ $(document).ready(function(){
       }
     }
   })
+
+  function startTyping(txt, speed = 10) {
+
+    typeWriter()
+
+    function typeWriter() {
+      if (i < txt.length) {
+        document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+        i++;
+        setTimeout(typeWriter(), speed);
+      }
+    }
+  }
+
 
 });

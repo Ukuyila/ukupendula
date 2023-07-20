@@ -50,10 +50,10 @@ function copyToClipboard(element) {
   alert('Text copied successfully!')
 }
 
-function typeWriter(i, txt, speed=10) {
-  if (i < txt.length) {
-    document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
-    i++;
-    setTimeout(typeWriter, speed);
-  }
-}
+// function typeWriter() {
+//   if (i < txt.length) {
+//     document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+//     i++;
+//     setTimeout(typeWriter(), speed);
+//   }
+// }
