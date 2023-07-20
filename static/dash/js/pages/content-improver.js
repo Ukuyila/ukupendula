@@ -114,8 +114,8 @@ $(document).ready(function(){
           csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
 
         }
-        console.log(form_data)
-        debugger;
+        // console.log(form_data)
+        // debugger;
         // ajax
         $.ajax({
           type: 'POST',
@@ -129,6 +129,7 @@ $(document).ready(function(){
           },
           success: function (data) {
             console.log(data)
+            console.log(data['contentBody'])
             // let json_data = JSON.parse(data)
 
             // console.log(json_data['contentBody'])
