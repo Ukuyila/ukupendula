@@ -241,8 +241,9 @@
 
 														{% if user.profile.subscription_type == 'teams' %}
 														<li>
-															<a class="drop-icon-item" href="{% url 'team-manager' %}">
-																<i class="icon icon-people"></i> Team
+															<a href="{% url 'team-manager' %}" class="drop-icon-item">
+																<i class="icon icon-people"></i>
+																<span class="block">Team</span>
 															</a>
 														</li>
 														<li>
@@ -253,8 +254,9 @@
 														</li>
 														{% endif %}
 														<li>
-															<a class="drop-icon-item" href="{% url 'device-manager' %}">
-																<i class="icon icon-screen-desktop"></i> Devices
+															<a href="{% url 'device-manager' %}" class="drop-icon-item">
+																<i class="icon icon-screen-desktop"></i>
+																<span class="block">Devices</span>
 															</a>
 														</li>
 

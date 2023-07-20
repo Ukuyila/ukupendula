@@ -97,6 +97,7 @@ urlpatterns = [
 
     # content improver
     path('content-improver', views.content_improver, name='content-improver'),
+    path('improve-content', views.improve_content, name='improve-content'),
     path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
 
     # content landing page copy urls
