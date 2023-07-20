@@ -156,6 +156,7 @@ $(document).ready(function(){
   })
 
   function startTyping(txt, speed = 10) {
+    i=0;
 
     typeWriter()
 
