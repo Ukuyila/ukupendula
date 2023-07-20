@@ -125,22 +125,23 @@ $(document).ready(function(){
             success_alert.prop('hidden', true).html('')
           },
           success: function (data) {
-            let json_data = JSON.parse(data)
+            console.log(data)
+            // let json_data = JSON.parse(data)
 
-            console.log(json_data['contentBody'])
+            // console.log(json_data['contentBody'])
 
-            if ( json_data.includes('success') ) {
-              success_alert.html(json_data['message'])
-              success_alert.prop('hidden', false)
+            // if ( json_data.includes('success') ) {
+            //   success_alert.html(json_data['message'])
+            //   success_alert.prop('hidden', false)
 
-              setTimeout(() => {
-                generated_text.html(json_data['contentBody'])
-              }, 3000)
-            }
-            else {
-              error_alert.html(json_data['message']).prop('hidden', false)
-              $("#bg-spinner").fadeOut("slow")
-            }
+            //   setTimeout(() => {
+            //     generated_text.html(json_data['contentBody'])
+            //   }, 3000)
+            // }
+            // else {
+            //   error_alert.html(json_data['message']).prop('hidden', false)
+            //   $("#bg-spinner").fadeOut("slow")
+            // }
           }
         })
       }
