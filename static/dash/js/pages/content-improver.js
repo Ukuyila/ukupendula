@@ -139,7 +139,7 @@ $(document).ready(function(){
               // console.log(data['contentBody'])
 
               setTimeout(() => {
-                typeWriter(i, data['contentBody'], speed=10)
+                typeWriter(0, data['contentBody'], 10)
                 // generated_text.html(data['contentBody'])
               }, 2000)
             }
