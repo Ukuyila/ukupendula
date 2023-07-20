@@ -70,8 +70,8 @@
                                                   <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" maxlength="250" />
                                               </div>
                                               <div class="mb-3">
-                                                <div class="d-flex align-items-center justify-content-between"><label for="max_words" class=" ">Max Words</label> <small class="text-muted">Min: 300 - Max: 1500 Words</small></div>
-                                                <input type="number" class="form-control" id="max_words" name="max_words" placeholder="1500"  max="1500" />
+                                                <div class="d-flex align-items-center justify-content-between"><label for="max_words" class=" ">Max Words</label> <small class="text-muted">Min: 300 - Max: 2000 Words</small></div>
+                                                <input type="number" class="form-control" id="max_words" name="max_words" value="2000"  max="2000" />
                                                 </div>
                                                 
                                                 <div class="mb-3">
@@ -91,7 +91,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="content_body_old" class=" ">Your Text</label><span class="ocb_counter text-muted">0/2000</span></div>
-                                                  <textarea type="text" rows="10" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="2000" required>{{content.content_body_old|safe}}</textarea>
+                                                  <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="2000" required>{{content.content_body_old|safe}}</textarea>
                                               </div>
                                                 
                                                 <div class="mb-3">

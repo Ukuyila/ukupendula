@@ -61,7 +61,7 @@ $(document).ready(function(){
   let success_alert = $('#success-alert')
   $('.alert').prop('hidden', true)
 
-  var content_title = ('#content_title')
+  var content_title = $('#content_title')
   var content_body_old = $('#content_body_old')
   var keywords = $('#keywords')
   var generate_button = $('#btn-generate')
@@ -75,6 +75,7 @@ $(document).ready(function(){
       success_alert.prop('hidden', true).html('')
       error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Please fill in all required form fields?')
       error_alert.prop('hidden', false)
+      $("#bg-spinner").fadeOut("slow");
 
     }
     else {
@@ -87,17 +88,20 @@ $(document).ready(function(){
 
         error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Content title is supposed to be between 5 and 300 chars long!')
         error_alert.prop('hidden', false)
+        $("#bg-spinner").fadeOut("slow");
       }
       else if ( content_body_old.val().length < 100 || content_body_old.val().length > 2000 ) {
 
         error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Content body is supposed to be between 100 and 2000 chars long!')
         error_alert.prop('hidden', false)
+        $("#bg-spinner").fadeOut("slow");
         
       }
       else if ( keywords.val().length > maxKwLength ) {
 
         error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Keywords field is supposed to be max 255 chars long!')
         error_alert.prop('hidden', false)
+        $("#bg-spinner").fadeOut("slow");
       }
       else {
         // ajax
@@ -120,21 +124,22 @@ $(document).ready(function(){
             error_alert.prop('hidden', true).html('')
             success_alert.prop('hidden', true).html('')
           },
-          success: function (raw_data) {
-            let data = JSON.parse(raw_data)
+          success: function (data) {
+            let json_data = JSON.parse(data)
 
-            console.log(data['contentBody'])
+            console.log(json_data['contentBody'])
 
-            if ( data.includes('success') ) {
-              success_alert.html(data['message'])
+            if ( json_data.includes('success') ) {
+              success_alert.html(json_data['message'])
               success_alert.prop('hidden', false)
 
               setTimeout(() => {
-                generated_text.html(data['contentBody'])
+                generated_text.html(json_data['contentBody'])
               }, 3000)
             }
             else {
-              error_alert.html(data['message']).prop('hidden', false)
+              error_alert.html(json_data['message']).prop('hidden', false)
+              $("#bg-spinner").fadeOut("slow")
             }
           }
         })

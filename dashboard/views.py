@@ -1335,7 +1335,7 @@ def improve_content(request):
             content_keywords = request.POST['keywords']
             max_words = int(request.POST['max_words'])
 
-            if len(content_topic) > 300:
+            if len(content_topic) > 300 and max_words > 2000:
                 messages.error(request, "The engine could not generate content from the given prompt, please try again!")
                 return redirect('content-improver')
             else:
