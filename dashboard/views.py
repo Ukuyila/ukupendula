@@ -1365,7 +1365,7 @@ def improve_content(request):
                     time.sleep(5)
                     if api_call_process(api_call_code, add_to_list):
 
-                        gen_content = gen_improve_content(content_topic, old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+                        gen_content = gen_improve_content(old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
 
                         if len(gen_content) > 0:
 
