@@ -123,6 +123,7 @@ $(document).ready(function(){
           data: form_data,
           beforeSend: function () {
             generate_button.html('Generating&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
+            generate_button.prop('disabled', true)
             // $('.prompt-input').prop(disabled)
             error_alert.prop('hidden', true).html('')
             success_alert.prop('hidden', true).html('')
@@ -154,20 +155,5 @@ $(document).ready(function(){
       }
     }
   })
-
-  function startTyping(txt, speed = 10) {
-    i=0;
-
-    typeWriter()
-
-    function typeWriter() {
-      if (i < txt.length) {
-        document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
-        i++;
-        setTimeout(typeWriter(), speed);
-      }
-    }
-  }
-
 
 });

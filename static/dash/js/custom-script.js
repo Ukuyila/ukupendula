@@ -50,10 +50,16 @@ function copyToClipboard(element) {
   alert('Text copied successfully!')
 }
 
-// function typeWriter() {
-//   if (i < txt.length) {
-//     document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
-//     i++;
-//     setTimeout(typeWriter(), speed);
-//   }
-// }
+function startTyping(txt, speed=10) {
+  var i=0;
+
+  typeWriter()
+
+  function typeWriter() {
+    if (i < txt.length) {
+      document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+      i++;
+      setTimeout(typeWriter(), speed);
+    }
+  }
+}
