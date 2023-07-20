@@ -104,20 +104,22 @@ $(document).ready(function(){
         $("#bg-spinner").fadeOut("slow");
       }
       else {
+        form_data = {
+          content_title: content_title.val(),
+          content_body_old: content_body_old.val(),
+          content_category: $('#category').val(),
+          tone_of_voice: $('#tone_of_voice').val(),
+          max_words: $('#max_words').val(),
+          keywords: $('#keywords').val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+
+        }
+        console.log(form_data)
         // ajax
         $.ajax({
           type: 'POST',
           url: 'improve-content',
-          data: {
-            content_title: content_title.val(),
-            content_body_old: content_body_old.val(),
-            content_category: $('#category').val(),
-            tone_of_voice: $('#tone_of_voice').val(),
-            max_words: $('#max_words').val(),
-            keywords: $('#keywords').val(),
-            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-
-          },
+          data: data,
           beforeSend: function () {
             generate_button.html('Generating&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
             // $('.prompt-input').prop(disabled)
