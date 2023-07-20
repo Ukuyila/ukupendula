@@ -1375,7 +1375,7 @@ def improve_content(request):
                                 tone_of_voice=tone_of_voice,
                                 content_body_old=old_content,
                                 content_keywords=content_keywords,
-                                content_body_new=content_cate,
+                                content_body_new=gen_content,
                                 profile=request.user.profile,
                                 category=content_cate,
                             )
