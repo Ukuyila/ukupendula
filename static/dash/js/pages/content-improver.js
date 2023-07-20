@@ -140,11 +140,13 @@ $(document).ready(function(){
               success_alert.prop('hidden', false)
               console.log(data['contentBody'])
 
-              setTimeout(() => {
+              startTyping(data['contentBody'], 50)
+
+              // setTimeout(() => {
                 
-                startTyping(data['contentBody'], 10)
-                // generated_text.html(data['contentBody'])
-              }, 2000)
+              //   startTyping(data['contentBody'], 50)
+              //   // generated_text.html(data['contentBody'])
+              // }, 500)
             }
             else {
               error_alert.html(data['message']).prop('hidden', false)
