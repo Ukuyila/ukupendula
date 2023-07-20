@@ -104,7 +104,7 @@ $(document).ready(function(){
         $("#bg-spinner").fadeOut("slow");
       }
       else {
-        form_data = {
+        let form_data = {
           content_title: content_title.val(),
           content_body_old: content_body_old.val(),
           content_category: $('#category').val(),
@@ -115,6 +115,7 @@ $(document).ready(function(){
 
         }
         console.log(form_data)
+        debugger;
         // ajax
         $.ajax({
           type: 'POST',
