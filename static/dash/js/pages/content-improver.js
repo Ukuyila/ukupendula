@@ -128,27 +128,29 @@ $(document).ready(function(){
             success_alert.prop('hidden', true).html('')
           },
           success: function (data) {
+            $("#bg-spinner").fadeOut("slow")
             console.log(data['result'])
             console.log(data['message'])
             // let json_data = JSON.parse(data)
 
-            // console.log(json_data['contentBody'])
+            if ( data['result'] === 'success' ) {
+              success_alert.html(data['message'])
+              success_alert.prop('hidden', false)
+              // console.log(data['contentBody'])
 
-            // if ( json_data.includes('success') ) {
-            //   success_alert.html(json_data['message'])
-            //   success_alert.prop('hidden', false)
-
-            //   setTimeout(() => {
-            //     generated_text.html(json_data['contentBody'])
-            //   }, 3000)
-            // }
-            // else {
-            //   error_alert.html(json_data['message']).prop('hidden', false)
-            //   $("#bg-spinner").fadeOut("slow")
-            // }
+              setTimeout(() => {
+                typeWriter(i, data['contentBody'], speed=10)
+                // generated_text.html(data['contentBody'])
+              }, 2000)
+            }
+            else {
+              error_alert.html(data['message']).prop('hidden', false)
+              
+            }
           }
         })
       }
     }
   })
+
 });
