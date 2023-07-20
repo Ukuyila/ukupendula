@@ -120,7 +120,7 @@ $(document).ready(function(){
         $.ajax({
           type: 'POST',
           url: 'improve-content',
-          data: data,
+          data: form_data,
           beforeSend: function () {
             generate_button.html('Generating&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
             // $('.prompt-input').prop(disabled)
