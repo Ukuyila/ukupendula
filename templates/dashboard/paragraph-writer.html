@@ -96,8 +96,10 @@
                                             <h5 class="mb-0">AI Generated Response</h5>
                                             <div class="float-end">
                                                 <div class="btn-group ">
-                                                    <button onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'" class="btn btn-outline-primary" 
-                                                    {% if paragraph is None %} hidden {% endif %}>Download</button>
+                                                    <button class="btn btn-primary" 
+                                                    {% if paragraph is None %}
+                                                    disabled onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'"
+                                                    {% endif %}>Download</button>
                                                 </div>
                                             </div>
                                         </div>
