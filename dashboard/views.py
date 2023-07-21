@@ -4106,7 +4106,7 @@ def download_content_file(request, content_type, uniqueId):
     if content_type == 'blog_writer':
 
         blog_body = ''
-        blog_sections = {}
+        blog_sections = []
         try:
             blog = Blog.objects.get(uniqueId=uniqueId)
         except:
