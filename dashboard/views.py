@@ -4101,11 +4101,31 @@ def edit_user_roles(request, team_uid, uniqueId):
 
 
 def download_content_file(request, content_type, uniqueId):
+    cont_text = ''
+
+    if content_type == 'blog_writer':
+
+        blog_body = ''
+        blog_sections = {}
+        try:
+            blog = Blog.objects.get(uniqueId=uniqueId)
+        except:
+            messages.error(request, "Something went wrong with your request, please try again!")
+            return redirect('blog-topic')
+
+        # fetch created blog sections
+        blog_sects = BlogSection.objects.filter(blog=blog)
+        for sect in blog_sects:
+            blog_sections.append(sect.body)
+
+        blog_body = "\n".join(blog_sections)
+
+        cont_text = blog_body
 
     filen = "writesome_{}_{}.txt".format(content_type, uniqueId)
     # to write to your file
     file_name = open(filen, "w+")
-    file_name.write('some text here')
+    file_name.write(cont_text)
     file_name.close()
 
     # to read the content of it
@@ -4113,7 +4133,7 @@ def download_content_file(request, content_type, uniqueId):
     response = HttpResponse(read_file.read(), content_type="text/plain,charset=utf8")
     read_file.close()
 
-    response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format('file_name')
+    response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(filen)
     return response
  
 
