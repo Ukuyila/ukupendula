@@ -4129,7 +4129,7 @@ def download_content_file(request, content_type, uniqueId):
 
             blog_body = "\n".join(blog_sections)
 
-        cont_text = blog_body
+        cont_text = blog_body.replace('<br>', '\n')
 
     filen = "writesome_{}_{}".format(content_type, uniqueId)
     # to write to your file
