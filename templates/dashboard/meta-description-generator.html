@@ -98,6 +98,13 @@
                                         <h5 class="mb-0">AI Generated Response</h5>
                                         <div class="float-end">
                                             <div class="btn-group ">
+                                                {% if post_blog is not None %}
+                                                <div class="btn-group " >
+                                                    <a type="button" href="{% url 'view-generated-blog' post_blog.slug %}" class="btn btn-default">Back</a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="btn-group ">
                                                 <button class="btn btn-primary" 
                                                 {% if meta_descr.uniqueId %}
                                                  onclick="return window.location.href='{% url 'download-content' 'meta_writer' meta_descr.uniqueId %}'"
@@ -105,26 +112,6 @@
                                                 disabled
                                                 {% endif %}>Download</button>
                                             </div>
-                                            {% comment %} 
-                                            <div class="btn-group ">
-                                                {% if post_blog is not None %}
-                                                <div class="btn-group " >
-                                                    <a type="button" href="{% url 'view-generated-blog' post_blog.slug %}" class="btn btn-default">Back</a>
-                                                </div>
-                                                
-                                                <div class="btn-group">
-                                                    <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
-                                                    Tools
-                                                    <i class="fa fa-angle-down "></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'generate-blog-meta' post_blog.uniqueId %}">Create Meta</a></li>
-                                                        <li><a href="{% url 'generate-blog-summary' post_blog.uniqueId %}">Summarize Blog</a></li>
-                                                        <li><a href="{% url 'generate-blog-meta' post_blog.uniqueId %}">Rewrite Title</a></li>
-                                                    </ul>
-                                                </div>
-                                                {% endif %}
-                                            </div> {% endcomment %}
                                         </div>
                                         
                                     </div>
@@ -140,7 +127,7 @@
 													<div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
 										
 														<div class="card-body text-dark">
-															<div class="ideas">
+															<div style="height: 35vh;" class="ideas">
 																{{meta_description|safe}}
 															</div>
 														</div>

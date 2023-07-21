@@ -96,9 +96,22 @@
                                   <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-left">
                                         <h5 class="mb-0">AI Generated Response</h5>
-                                        <div class="btn-group float-end">
-                                            <!-- <button class="btn btn-outline-primary">View</button> -->
-                                            <!-- <button class="btn btn-primary">Download</button> -->
+                                        <div class="float-end">
+                                            <div class="btn-group ">
+                                                {% if post_blog is not None %}
+                                                <div class="btn-group " >
+                                                    <a type="button" href="{% url 'view-generated-blog' post_blog.slug %}" class="btn btn-default">Back</a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="btn-group ">
+                                                <button class="btn btn-primary" 
+                                                {% if copy_content.uniqueId %}
+                                                 onclick="return window.location.href='{% url 'download-content' 'copy_writer' copy_content.uniqueId %}'"
+                                                {% else %}
+                                                disabled
+                                                {% endif %}>Download</button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
