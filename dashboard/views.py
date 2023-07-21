@@ -4139,7 +4139,13 @@ def download_content_file(request, content_type, uniqueId):
         sentence = Sentence.objects.get(uniqueId=uniqueId)
         cont_text = sentence.new_sentence
 
-    filen = "writesome_{}_{}".format(content_type, uniqueId)
+    elif content_type == 'meta_writer':
+        meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
+        cont_text = meta_descr.meta_description
+
+    uuid_str = str(uuid4()).split('-')[3]
+
+    filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
     file_name = open("{}.txt".format(filen), "w+")
     file_name.write(cont_text)
