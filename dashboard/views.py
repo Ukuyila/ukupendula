@@ -4131,6 +4131,14 @@ def download_content_file(request, content_type, uniqueId):
 
         cont_text = blog_body.replace('<br>', '\n')
 
+    elif content_type == 'paragraph_writer':
+        paragraph = Paragraph.objects.get(uniqueId=uniqueId)
+        cont_text = paragraph.paragraph
+
+    elif content_type == 'sentence_writer':
+        sentence = Sentence.objects.get(uniqueId=uniqueId)
+        cont_text = sentence.new_sentence
+
     filen = "writesome_{}_{}".format(content_type, uniqueId)
     # to write to your file
     file_name = open("{}.txt".format(filen), "w+")
