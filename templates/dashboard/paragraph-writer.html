@@ -97,8 +97,10 @@
                                             <div class="float-end">
                                                 <div class="btn-group ">
                                                     <button class="btn btn-primary" 
-                                                    {% if paragraph is None %}
-                                                    disabled onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'"
+                                                    {% if paragraph.uniqueId %}
+                                                     onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'"
+                                                    {% else %}
+                                                    disabled
                                                     {% endif %}>Download</button>
                                                 </div>
                                             </div>
