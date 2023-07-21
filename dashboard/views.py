@@ -1674,7 +1674,7 @@ def sentence_writer(request, uniqueId=''):
             context['sentence_uniqueId'] = sentence_obj.uniqueId
             context['sentence_cate'] = sentence_obj.category
 
-        # context['paragraph'] = sentence
+            context['sentence_obj'] = sentence_obj
     else:
         pass
 
