@@ -4131,9 +4131,9 @@ def download_content_file(request, content_type, uniqueId):
 
         cont_text = blog_body
 
-    filen = "writesome_{}_{}.txt".format(content_type, uniqueId)
+    filen = "writesome_{}_{}".format(content_type, uniqueId)
     # to write to your file
-    file_name = open(filen, "w+")
+    file_name = open("{}.txt".format(filen), "w+")
     file_name.write(cont_text)
     file_name.close()
 
