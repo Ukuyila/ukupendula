@@ -98,7 +98,7 @@ urlpatterns = [
     # content improver
     path('content-improver', views.content_improver, name='content-improver'),
     path('improve-content', views.improve_content, name='improve-content'),
-    path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
+    path('content-improver/<str:uniqueId>/', views.content_improver, name='blog-content-improver'),
 
     # content landing page copy urls
     path('landing-page-copy', views.landing_page_copy, name='landing-page-copy'),
@@ -127,4 +127,6 @@ urlpatterns = [
     path('user-roles', views.user_roles, name='user-roles'),
     path('edit-user-role/<str:team_uid>/<str:uniqueId>/', views.edit_user_roles, name='edit-user-role'),
     path('delete-user-role/<str:team_uid>/<str:uniqueId>/', views.delete_user_role, name='delete-user-role'),
+
+    path('download-content/<str:content_type>/<str:uniqueId>/', views.download_content_file, name='download-content'),
 ]

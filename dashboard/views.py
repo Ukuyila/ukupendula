@@ -4098,6 +4098,23 @@ def edit_user_roles(request, team_uid, uniqueId):
         resp = "Something went wrong, please try again!"
     
     return HttpResponse(resp)
+
+
+def download_content_file(request, content_type, uniqueId):
+
+    filen = "writesome_{}_{}.txt".format(content_type, uniqueId)
+    # to write to your file
+    file_name = open(filen, "w+")
+    file_name.write('some text here')
+    file_name.close()
+
+    # to read the content of it
+    read_file = open(filen, "r")
+    response = HttpResponse(read_file.read(), content_type="text/plain,charset=utf8")
+    read_file.close()
+
+    response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format('file_name')
+    return response
  
 
 @login_required

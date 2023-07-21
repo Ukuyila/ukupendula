@@ -131,37 +131,15 @@ $(document).ready(function(){
           success: function (data) {
             $("#bg-spinner").fadeOut("slow")
             generate_button.html('Generate content')
-            console.log(data['result'])
-            console.log(data['message'])
-            // let json_data = JSON.parse(data)
 
             if ( data['result'] === 'success' ) {
               success_alert.html(data['message'])
               success_alert.prop('hidden', false)
-              // console.log(data['contentBody'])
 
-              // startTyping(data['contentBody'], 50)
-
-              generated_text.html(data['contentBody'])
-
-              // setTimeout(() => {
+              setTimeout(() => {
                 
-              //   var i=0;
-              //   var txt = data['contentBody'];
-              //   var speed = 50
-
-              //   typeWriter()
-
-              //   function typeWriter() {
-              //     console.log(txt.length)
-              //     if (i < txt.length) {
-              //       document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
-              //       i++;
-              //       setTimeout(typeWriter(), speed);
-              //     }
-              //   }
-              //   // generated_text.html(data['contentBody'])
-              // }, 500)
+                generated_text.html(data['contentBody'])
+              }, 1500)
             }
             else {
               error_alert.html(data['message']).prop('hidden', false)
