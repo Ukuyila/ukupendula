@@ -4138,7 +4138,7 @@ def download_content_file(request, content_type, uniqueId):
     file_name.close()
 
     # to read the content of it
-    read_file = open(filen, "r")
+    read_file = open("{}.txt".format(filen), "r")
     response = HttpResponse(read_file.read(), content_type="text/plain,charset=utf8")
     read_file.close()
 
