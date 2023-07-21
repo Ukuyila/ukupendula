@@ -16,12 +16,12 @@
                                 <div class="btn-group " >
                                     <a type="button" href="{% url 'view-generated-blog' blog.slug %}" class="btn btn-default">Back</a>
                                 </div>
-                                <h4>AI Generated Response</h4>
+                                {% comment %} <h4>AI Generated Response</h4> {% endcomment %}
                             </div>
                             <div class="float-end">
                                 
                                 <div class="btn-group ">
-                                    <button onclick="return window.location.href='{% url 'download-content' 'blog_writer' blog.uniqueId %}'" class="btn btn-outline-primary" >Download</button>
+                                    <button onclick="return window.location.href='{% url 'download-content' 'edit_blog' blog.uniqueId %}'" class="btn btn-outline-primary" >Download</button>
                                 </div>
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">

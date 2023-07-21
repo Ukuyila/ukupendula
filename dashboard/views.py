@@ -4103,7 +4103,7 @@ def edit_user_roles(request, team_uid, uniqueId):
 def download_content_file(request, content_type, uniqueId):
     cont_text = ''
 
-    if content_type == 'blog_writer':
+    if 'blog' in content_type:
 
         blog_body = ''
         blog_sections = []
@@ -4112,13 +4112,22 @@ def download_content_file(request, content_type, uniqueId):
         except:
             messages.error(request, "Something went wrong with your request, please try again!")
             return redirect('blog-topic')
+        
+        if content_type == 'blog_writer':
+            # fetch created blog sections
+            blog_sects = BlogSection.objects.filter(blog=blog)
+            for sect in blog_sects:
+                blog_sections.append(sect.body)
 
-        # fetch created blog sections
-        blog_sects = BlogSection.objects.filter(blog=blog)
-        for sect in blog_sects:
-            blog_sections.append(sect.body)
+            blog_body = "\n".join(blog_sections)
 
-        blog_body = "\n".join(blog_sections)
+        elif content_type == 'edit_blog':
+            # fetch edited blog sections
+            blog_sects = SavedBlogEdit.objects.filter(blog=blog)
+            for sect in blog_sects:
+                blog_sections.append(sect.body)
+
+            blog_body = "\n".join(blog_sections)
 
         cont_text = blog_body
 
