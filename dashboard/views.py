@@ -1084,7 +1084,7 @@ def generate_social_media(request):
 
 
 @login_required
-def gen_social_post(request, postType):
+def gen_social_post(request, postType, uniqueId=''):
     context = {}
     user_profile = request.user.profile
     current_page = 'Generate Social Post'
@@ -1101,9 +1101,9 @@ def gen_social_post(request, postType):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
-
     
     post_type = postType.replace('_', ' ').title()
+    prompt_text = ''
 
     if postType == "twitter":
         max_char = 280
@@ -1127,6 +1127,73 @@ def gen_social_post(request, postType):
 
     context['post_type_title'] = post_type
     context['post_type'] = postType
+    context['prompt_text'] = prompt_text
+
+    if len(uniqueId) > 0:
+
+        try:
+            this_soc_post = SocialPost.objects.get(uniqueId=uniqueId)
+            
+            context['this_soc_post'] = this_soc_post
+            context['post_type_title'] = this_soc_post.post_type
+            context['post_type'] = this_soc_post.post_type
+            context['prompt_text'] = this_soc_post.post_idea
+        except:
+            pass
+
+    # context['post_title'] = this_blog.title
+    # context['post_audience'] = this_blog.audience
+    # context['post_keywords'] = this_blog.keywords
+    # context['post_tone'] = this_blog.tone_of_voice
+    # context['category'] = this_blog.category
+
+    if request.method == "POST":
+
+        post_title = request.POST['post_title']
+        prompt_text = request.POST['prompt_text']
+        post_keywords = request.POST['keywords']
+        post_audience = request.POST['audience']
+        category_id = request.POST['audience']
+
+        tone_of_voice = request.POST['tone_of_voice']
+        api_call_code = str(uuid4()).split('-')[4]
+
+        add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+
+        n = 1
+        # runs until n < 50,just to avoid the infinite loop.
+        # this will execute the check_api_requests() func in every 5 seconds.
+        while n < 50:
+            # api_requests = check_api_requests()
+            time.sleep(5)
+            if api_call_process(api_call_code, add_to_list):
+                # generate social post options
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, request.user.profile, False)
+
+                # create database record
+                new_post = SocialPost.objects.create(
+                    title=post_title,
+                    post_type=postType,
+                    tone_of_voice=tone_of_voice,
+                    keywords=post_keywords,
+                    audience=post_audience,
+                    post_idea=prompt_text,
+                    post=social_post,
+                    category=category_id,
+                )
+                new_post.save()
+
+                add_to_list.is_done=True
+                add_to_list.save()
+                
+                context['new_post'] = new_post
+
+                return redirect('view-social-media', postType, new_post.uniqueId)
+
+            else:
+                # we might need to delete all abandoned calls
+                pass
+            n += 1
 
     return render(request, 'dashboard/social-media-post.html', context)
 
@@ -1264,7 +1331,7 @@ def gen_social_from_blog(request, postType, uniqueId):
                 pass
             n += 1
 
-    return render(request, 'dashboard/social-media-post.html', context)
+    return render(request, 'dashboard/blog-social-post.html', context)
 
 
 @login_required
