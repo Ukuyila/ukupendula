@@ -1227,7 +1227,7 @@ def gen_social_post(request, postType, uniqueId=''):
                 
                 context['new_post'] = new_post
 
-                return redirect('view-social-media', postType, new_post.uniqueId)
+                return redirect('view-social-media', soc_post_type, new_post.uniqueId)
 
             else:
                 # we might need to delete all abandoned calls
