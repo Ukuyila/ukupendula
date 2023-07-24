@@ -1054,6 +1054,8 @@ def generate_social_media(request):
         post_type = request.POST['soc_post_type']
         max_char = request.POST['max_char']
 
+        print('post_category: {}'.format(post_category))
+
         tone_of_voice = request.POST['tone_of_voice']
         api_call_code = str(uuid4()).split('-')[4]
 
