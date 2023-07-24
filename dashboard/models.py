@@ -450,7 +450,7 @@ class SocialPlatform(models.Model):
         if self.uniqueId is None:
             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.title, self.uniqueId))
+        self.slug = slugify('{} {}'.format(self.platform, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
 
         super(SocialPlatform, self).save(*args, **kwargs)
