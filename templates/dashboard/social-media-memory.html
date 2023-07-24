@@ -83,13 +83,15 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Page Copies
                   </a>
+
                   <a href="{% url 'social-post-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
-                  {% if current_page == 'Social Media Memory' %}
+                  {% if 'Social Media' in current_page %}
                   active text-white
                   {% endif %}
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Social Media Posts
                   </a>
+
                   <a href="{% url 'content-improver-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
                   {% if current_page == 'Content Improver Memory' %}
                   active text-white
@@ -114,8 +116,8 @@
                             <i class="fa fa-angle-down "></i>
                           </a>
                           <ul class="dropdown-menu">
+                            <li><a href="{% url 'social-memory' 'social' %}"> Social Media Posts</a></li>
                             <li><a href="{% url 'social-post-memory' %}"> Blog Social Posts</a></li>
-                            <li><a href="{% url 'social-memory' 'social' %}"> Social Posts</a></li>
                           </ul>
                         </div>
                       </div>

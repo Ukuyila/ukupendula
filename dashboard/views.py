@@ -3508,7 +3508,7 @@ def memory_social_post(request, socType='blog'):
 
     if socType == 'blog':
         
-        current_page = 'Blog Social Posts'
+        current_page = 'Blog Social Media Posts'
 
         # Get total blogs
         blogs = Blog.objects.filter(profile=user_profile).order_by('last_updated')
