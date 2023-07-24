@@ -1153,6 +1153,8 @@ def gen_social_post(request, postType, uniqueId=''):
             context['post_type_title'] = this_soc_post.post_type
             context['post_type'] = this_soc_post.post_type
             context['prompt_text'] = this_soc_post.post_idea
+            
+            context['content_type'] = 'social_{}'.format(this_soc_post.post_type)
         except:
             pass
 
@@ -4282,6 +4284,14 @@ def download_content_file(request, content_type, uniqueId):
             blog_body = "\n".join(blog_sections)
 
         cont_text = blog_body.replace('<br>', '\n')
+
+        
+    elif 'social' in content_type:
+        soc_type = content_type.split('')
+
+        # if soc_type == ''
+        soc_post = SocialPost.objects.get(uniqueId=uniqueId)
+        cont_text = soc_post.post
 
     elif content_type == 'paragraph_writer':
         paragraph = Paragraph.objects.get(uniqueId=uniqueId)

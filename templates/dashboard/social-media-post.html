@@ -136,6 +136,16 @@
                                   <div class="card">
                                       <div class="card-header d-flex justify-content-between align-items-left">
                                           <h5 class="mb-0">AI Generated Response</h5>
+                                          <div class="float-end">
+                                            <div class="btn-group ">
+                                                <button class="btn btn-primary" 
+                                                {% if this_soc_post.uniqueId %}
+                                                 onclick="return window.location.href='{% url 'download-content' content_type this_soc_post.uniqueId %}'"
+                                                {% else %}
+                                                disabled
+                                                {% endif %}>Download</button>
+                                            </div>
+                                        </div>
                                       </div>
                                       <div class="card-body">
                                           <div class="row">
