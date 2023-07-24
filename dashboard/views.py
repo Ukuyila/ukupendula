@@ -1182,7 +1182,7 @@ def gen_social_post(request, postType, uniqueId=''):
         tone_of_voice = request.POST['tone_of_voice']
         api_call_code = str(uuid4()).split('-')[4]
 
-        add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
+        add_to_list = add_to_api_requests('generate_social_post', api_call_code, user_profile)
 
         n = 1
         # runs until n < 50,just to avoid the infinite loop.
@@ -1192,7 +1192,7 @@ def gen_social_post(request, postType, uniqueId=''):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, request.user.profile, False)
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, user_profile, False)
 
                 # create database record
                 new_post = SocialPost.objects.create(
@@ -4364,9 +4364,6 @@ def download_content_file(request, content_type, uniqueId):
                 blog_sections.append(sect.body)
 
             blog_body = "\n".join(blog_sections)
-
-        cont_text = blog_body.replace('<br>', '\n')
-
         
     elif 'social' in content_type:
         soc_type = content_type.split('_')
@@ -4394,6 +4391,10 @@ def download_content_file(request, content_type, uniqueId):
     elif content_type == 'content_improver':
         impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
         cont_text = impr_cont.content_body_new
+
+    cont_text = blog_body.replace('<br>', '\n')
+
+    print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
 
