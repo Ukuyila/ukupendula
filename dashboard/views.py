@@ -1472,7 +1472,6 @@ def content_improver(request, uniqueId=''):
 
     return render(request, 'dashboard/content-improver.html', context)
 
-
 @login_required
 def paragraph_writer(request, uniqueId=''):
     context = {}
@@ -3678,6 +3677,58 @@ def memory_meta_descr(request):
 
 
 @login_required
+def memory_content_improver(request):
+    context = {}
+    saved_content = []
+
+    cate_list = []
+    client_list = []
+
+    user_profile = request.user.profile
+    user_team_id = user_profile.user_team
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_team_id:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_team_id)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    # Get total summaries
+    improved_content = ContentImprover.objects.filter(profile=user_profile).order_by('last_updated')
+
+    for content in improved_content:
+        if not content.deleted and content.profile.user_team == user_team_id:
+            saved_content.append(content)
+
+    context['saved_content'] = saved_content
+
+    context['allowance'] = check_count_allowance(user_profile)
+
+    current_page = 'Content Improver Memory'
+    context['current_page'] = current_page
+
+    return render(request, 'dashboard/content-improver-memory.html', context)
+
+
+@login_required
 def categories(request):
     context = {}
 
@@ -4142,6 +4193,14 @@ def download_content_file(request, content_type, uniqueId):
     elif content_type == 'meta_writer':
         meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
         cont_text = meta_descr.meta_description
+
+    elif content_type == 'copy_writer':
+        gen_copy = LandingPageCopy.objects.get(uniqueId=uniqueId)
+        cont_text = gen_copy.page_copy
+
+    elif content_type == 'content_improver':
+        impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
+        cont_text = impr_cont.content_body_new
 
     uuid_str = str(uuid4()).split('-')[3]
 

@@ -19,7 +19,7 @@
               <div class="card-body p-0 border">
                 <div class="list-group list-group-transparent mb-0 mail-inbox">
                   <div class="mt-4 mb-4 ms-4 me-4 text-center">
-                    <a href="{% url 'content-summarizer' %}" class="btn btn-primary btn-lg btn-block">Generate New</a>
+                    <a href="{% url 'landing-page-copy' %}" class="btn btn-primary btn-lg btn-block">Generate New</a>
                   </div>
 
                   <a href="{% url 'blog-memory' 'complete' %}" class="list-group-item list-group-item-action d-flex align-items-center
@@ -105,28 +105,29 @@
               <div class="">
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
-
+                    
                     <div class="table-responsive mb-0 ">
-                      <table id="memoryTable" class="table table-hover table-striped" style="width:100%">
+                      <table id="blogMemoryTable" class="table table-hover table-striped table-bordered" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:40%">Summary Title</th>
-                            <th>Category</th>
-                            <th>Tone</th>
+                            <th style="width:40%">Title</th>
+                            <th>Content</th>
                             <th>Datetime</th>
                             <th></th>
                             
                           </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                        {% for summary in saved_summaries %}
+                        {% for content in saved_content %}
                           <tr>
                             <td >
-                              <h6 class="mb-0"><a >{% if summary.summary_title|length > 0 %}
-                                {{ summary.summary_title|truncatechars:80 }}
+                              <h6 class="mb-0">
+                                <a >{% if content.content_title|length > 0 %}
+                                {{ content.content_title|truncatechars:80 }}
                                 {% else %}
-                                {{ summary.slug|truncatechars:80 }}
-                                {% endif %}</a></h6>
+                                {{ content.content_body_new|truncatechars:80 }}
+                                {% endif %}</a>
+                              </h6>
                               
                             </td>
                             <td>
@@ -135,7 +136,7 @@
                                 {% for category in cate_list %}
                                   {% if category.client == client %}
                                     
-                                    {% if category.uniqueId == summary.category %}
+                                    {% if category.uniqueId == content.category %}
                                     {{ client.client_name }}{{' - '}}{{ category.category_name }}
                                     {% endif %}
                                     
@@ -143,10 +144,9 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td><small class="text-primary me-1">{{ summary.tone_of_voice }}</small></td>
-                            <td>{{ summary.date_created|date:"Y-m-d" }}</td>
+                            <td>{{content.date_created|date:"Y-m-d"}}</td>
                             <td>
-                              <a href="{% url 'content-summarizer-response' summary.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a> <a href="{% url 'delete-summary' summary.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'landing-page-copy-response' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-copy' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

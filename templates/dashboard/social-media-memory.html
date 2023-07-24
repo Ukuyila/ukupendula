@@ -90,6 +90,13 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Social Media Posts
                   </a>
+                  <a href="{% url 'content-improver-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Content Improver Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Content Improver
+                  </a>
                 </div>
               </div>
 

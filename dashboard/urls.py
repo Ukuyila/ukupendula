@@ -122,6 +122,7 @@ urlpatterns = [
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),
     path('social-post-memory', views.memory_social_post, name='social-post-memory'),
+    path('content-improver-memory', views.memory_content_improver, name='content-improver-memory'),
 
     # user roles
     path('user-roles', views.user_roles, name='user-roles'),
