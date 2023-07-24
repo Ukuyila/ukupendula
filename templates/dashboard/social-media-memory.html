@@ -160,7 +160,7 @@
                             <td>{{ post.date_created|date:"Y-m-d" }} {{post.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="{% url 'delete-social-media' socType post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'delete-social-media' soc_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
