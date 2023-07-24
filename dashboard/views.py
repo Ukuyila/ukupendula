@@ -3446,7 +3446,7 @@ def memory_blogs(request, status):
 
 
 @login_required
-def memory_social_post(request):
+def memory_social_post(request, socType='blog'):
     context = {}
 
     s_posts = []
@@ -3455,20 +3455,31 @@ def memory_social_post(request):
     user_profile = request.user.profile
     user_team_id = user_profile.user_team
 
-    # Get total blogs
-    blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
-    for blog in blogs:
-        if not blog.deleted:
-            my_blogs.append(blog)
+    if socType == 'blog':
 
-    # get social posts
-    soc_posts = BlogSocialPost.objects.filter(deleted=False)
-    for post in soc_posts:
-        if not post.deleted and post.blog.profile.user_team == user_team_id:
-            s_posts.append(post)
+        # Get total blogs
+        blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
+        for blog in blogs:
+            if not blog.deleted:
+                my_blogs.append(blog)
 
+        # get social posts
+        soc_posts = BlogSocialPost.objects.filter(deleted=False)
+        for post in soc_posts:
+            if not post.deleted and post.blog.profile.user_team == user_team_id:
+                s_posts.append(post)
+
+        context['my_blogs'] = my_blogs
+
+    else:
+        # get social posts
+        soc_posts = SocialPost.objects.filter(deleted=False)
+        for post in soc_posts:
+            if not post.deleted and post.blog.profile.user_team == user_team_id:
+                s_posts.append(post)
+
+    context['soc_type'] = socType
     context['s_posts'] = s_posts
-    context['my_blogs'] = my_blogs
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'

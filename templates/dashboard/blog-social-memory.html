@@ -105,27 +105,7 @@
               <div class="">
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
-                    <div class="mail-option">
-                      <div class="chk-all">
-                        <input type="checkbox" class="mail-checkbox mail-group-checkbox">
-                        <div class="btn-group">
-                          <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn mini all" aria-expanded="false">
-                            Filter
-                            <i class="fa fa-angle-down "></i>
-                          </a>
-                          <ul class="dropdown-menu">
-                            <li><a href="{% url 'social-post-memory' 'blog' %}"> Blog Social Posts</a></li>
-                            <li><a href="{% url 'social-post-memory' 'social' %}"> Social Posts</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div class="btn-group">
-                        <a data-bs-original-title="Refresh" data-bs-placement="top" data-bs-toggle="dropdown" onclick="return window.location.reload();" href="javascript:void(0);" class="btn mini tooltips">
-                          <i class=" fa fa-refresh"></i>
-                        </a>
-                      </div>
 
-                    </div>
                     <div class="table-responsive mb-0 ">
                       <table id="blogMemoryTable" class="table table-hover table-striped" style="width:100%">
                         <thead>
@@ -159,8 +139,8 @@
                             </td>
                             <td>{{ post.date_created|date:"Y-m-d" }} {{post.date_created|time:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="{% url 'delete-social-media' post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'view-blog-social' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
+                              <a href="{% url 'delete-social-media' blog post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

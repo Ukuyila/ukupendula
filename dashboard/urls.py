@@ -55,7 +55,7 @@ urlpatterns = [
     path('blog-social-media/<str:postType>/<str:uniqueId>/', views.gen_social_from_blog, name='gen-blog-social-media'),
     path('view-blog-social/<str:postType>/<str:uniqueId>/', views.view_blog_social_post, name='view-blog-social'),
 
-    path('del-social-media/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
+    path('del-social-media/<str:socType>/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
 
     # Paragraph writer urls
     path('paragraph-writer', views.paragraph_writer, name='paragraph-writer'),
@@ -124,7 +124,7 @@ urlpatterns = [
     path('summarizer-memory', views.memory_summarizer, name='summarizer-memory'),
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),
-    path('social-post-memory', views.memory_social_post, name='social-post-memory'),
+    path('social-post-memory/<str:socType>/', views.memory_social_post, name='social-post-memory'),
     path('content-improver-memory', views.memory_content_improver, name='content-improver-memory'),
 
     # user roles
