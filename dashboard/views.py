@@ -1421,6 +1421,25 @@ def improve_content(request):
 
 
 @login_required
+def delete_impr_content(request, uniqueId):
+    try:
+        content = ContentImprover.objects.get(uniqueId=uniqueId)
+
+        if content.profile == request.user.profile:
+            content.deleted=True
+            content.save()
+
+            messages.info(request, "Item deleted successfully!")
+            return redirect('content-improver-memory')
+        else:
+            messages.error(request, "Access denied!")
+            return redirect('content-improver-memory')
+    except:
+        messages.error(request, "Item not found!")
+        return redirect('content-improver-memory')
+
+
+@login_required
 def content_improver(request, uniqueId=''):
 
     context = {}

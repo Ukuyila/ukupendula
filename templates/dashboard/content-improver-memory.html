@@ -144,9 +144,9 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td>{{content.date_created|date:"Y-m-d"}}</td>
+                            <td>{{content.date_created|date:"Y-m-d"}} {{content.date_created|date:"H:i"}}</td>
                             <td>
-                              <a href="{% url 'landing-page-copy-response' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-copy' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'content-improver-response' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-impr-content' content.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}
