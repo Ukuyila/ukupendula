@@ -1118,6 +1118,21 @@ def gen_social_post(request, postType, uniqueId=''):
 
     tone_of_voices = []
 
+    cate_list = []
+    client_list = []
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
