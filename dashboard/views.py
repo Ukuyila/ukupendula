@@ -1016,6 +1016,13 @@ def view_blog_social_post(request, postType, uniqueId):
         return redirect('gen-blog-social-media', postType, uniqueId)
     
     # post_type = postType.replace('_', ' ').title()
+    soc_types_list = []
+		
+    soc_types = SocialPlatform.objects.filter(is_active=True)
+    for soc_typ in soc_types:
+        soc_types_list.append(soc_typ)
+
+    context['soc_types_list'] = soc_types_list
 
     sel_p_typ = SocialPlatform.objects.get(post_name=postType)
     max_char = sel_p_typ.max_char
@@ -1044,7 +1051,7 @@ def generate_social_media(request):
         post_keywords = request.POST['keywords']
         post_audience = request.POST['audience']
         post_category = request.POST['category']
-        post_type = request.POST['post_type']
+        post_type = request.POST['soc_post_type']
         max_char = request.POST['max_char']
 
         tone_of_voice = request.POST['tone_of_voice']
