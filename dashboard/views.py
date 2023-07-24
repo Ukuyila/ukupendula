@@ -1120,6 +1120,7 @@ def gen_social_post(request, postType, uniqueId=''):
 
     cate_list = []
     client_list = []
+    soc_types_list = []
 
     team_clients = TeamClient.objects.filter(is_active=True)
     for client in team_clients:
@@ -1130,6 +1131,10 @@ def gen_social_post(request, postType, uniqueId=''):
     for category in team_categories:
         cate_list.append(category)
 
+    soc_types = SocialPlatform.objects.filter(is_active=True)
+    for soc_typ in soc_types:
+        soc_types_list.append(soc_typ)
+
     context['cate_list'] = cate_list
     context['client_list'] = client_list
 
@@ -1139,6 +1144,7 @@ def gen_social_post(request, postType, uniqueId=''):
         tone_of_voices.append(tone)
 
     context['tone_of_voices'] = tone_of_voices
+    context['soc_types_list'] = soc_types_list
 
     context['post_type_title'] = post_type
     context['post_type'] = postType
@@ -1167,6 +1173,7 @@ def gen_social_post(request, postType, uniqueId=''):
     if request.method == "POST":
 
         post_title = request.POST['post_title']
+        soc_post_type = request.POST['soc_post_type']
         prompt_text = request.POST['prompt_text']
         post_keywords = request.POST['keywords']
         post_audience = request.POST['audience']
@@ -1190,7 +1197,7 @@ def gen_social_post(request, postType, uniqueId=''):
                 # create database record
                 new_post = SocialPost.objects.create(
                     title=post_title,
-                    post_type=postType,
+                    post_type=soc_post_type,
                     tone_of_voice=tone_of_voice,
                     keywords=post_keywords,
                     audience=post_audience,
@@ -4362,7 +4369,7 @@ def download_content_file(request, content_type, uniqueId):
 
         
     elif 'social' in content_type:
-        soc_type = content_type.split('')
+        soc_type = content_type.split('_')
 
         # if soc_type == ''
         soc_post = SocialPost.objects.get(uniqueId=uniqueId)
