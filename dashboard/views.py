@@ -1193,7 +1193,7 @@ def gen_social_post(request, postType, uniqueId=''):
         prompt_text = request.POST['prompt_text']
         post_keywords = request.POST['keywords']
         post_audience = request.POST['audience']
-        category_id = request.POST['audience']
+        category_id = request.POST['category']
 
         tone_of_voice = request.POST['tone_of_voice']
         api_call_code = str(uuid4()).split('-')[4]
