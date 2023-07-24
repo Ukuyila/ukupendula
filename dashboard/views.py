@@ -1196,6 +1196,7 @@ def gen_social_post(request, postType, uniqueId=''):
                     audience=post_audience,
                     post_idea=prompt_text,
                     post=social_post,
+                    profile=user_profile,
                     category=category_id,
                 )
                 new_post.save()
@@ -3475,7 +3476,7 @@ def memory_social_post(request, socType='blog'):
         # get social posts
         soc_posts = SocialPost.objects.filter(deleted=False)
         for post in soc_posts:
-            if not post.deleted and post.blog.profile.user_team == user_team_id:
+            if not post.deleted and post.profile.user_team == user_team_id:
                 s_posts.append(post)
 
     context['soc_type'] = socType

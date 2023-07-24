@@ -399,8 +399,9 @@ class SocialPost(models.Model):
     deleted = models.BooleanField(default=False)
     word_count = models.CharField(null=True, blank=True, max_length=100)
 
-    # Django related field
     category = models.CharField(null=True, blank=True, max_length=255)
+    # Django related field
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     # Utility Variable
     uniqueId = models.CharField(null=True, blank=True, max_length=100)
