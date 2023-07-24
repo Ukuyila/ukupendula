@@ -3452,14 +3452,43 @@ def memory_social_post(request, socType='blog'):
 
     s_posts = []
     my_blogs = []
+    cate_list = []
+    client_list = []
 
     user_profile = request.user.profile
     user_team_id = user_profile.user_team
 
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+
+    for client in team_clients:
+        if client.team == user_team_id:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_team_id)
+
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
     if socType == 'blog':
+        
+        current_page = 'Blog Social Posts'
 
         # Get total blogs
-        blogs = Blog.objects.filter(profile=request.user.profile).order_by('last_updated')
+        blogs = Blog.objects.filter(profile=user_profile).order_by('last_updated')
         for blog in blogs:
             if not blog.deleted:
                 my_blogs.append(blog)
@@ -3473,6 +3502,7 @@ def memory_social_post(request, socType='blog'):
         context['my_blogs'] = my_blogs
 
     else:
+        current_page = 'Social Media Posts'
         # get social posts
         soc_posts = SocialPost.objects.filter(deleted=False)
         for post in soc_posts:
@@ -3482,20 +3512,8 @@ def memory_social_post(request, socType='blog'):
     context['soc_type'] = socType
     context['s_posts'] = s_posts
 
-    lang = settings.LANGUAGE_CODE
-    flag_avatar = 'dash/images/gb_flag.jpg'
-
-    lang = check_user_lang(request.user.profile, lang)
-
-    if lang == 'en-us':
-        flag_avatar = 'dash/images/us_flag.jpg'
-
-    context['lang'] = lang
-    context['flag_avatar'] = flag_avatar
-
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    current_page = 'Social Media Memory'
     context['current_page'] = current_page
 
     return render(request, 'dashboard/social-media-memory.html', context)

@@ -110,7 +110,7 @@
                         {% comment %} <input type="checkbox" class="mail-checkbox mail-group-checkbox"> {% endcomment %}
                         <div class="btn-group">
                           <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn mini all" aria-expanded="false">
-                            Filter
+                            {{ current_page }}
                             <i class="fa fa-angle-down "></i>
                           </a>
                           <ul class="dropdown-menu">
@@ -131,7 +131,11 @@
                         <thead>
                           <tr>
                             <th>Title</th>
+                            {% if soc_type == 'blog' %}
                             <th style="width:40%">Blog</th>
+                            {% else %}
+                            <th style="width:40%">Category</th>
+                            {% endif %}
                             <th>Datetime</th>
                             <th></th>
                             
@@ -148,6 +152,7 @@
                                 {% endif %}</a></h6>
                                 <small class="text-primary me-1">{{ post.post_type }}</small>
                             </td>
+                            {% if soc_type == 'blog' %}
                             <td>
                               {% for blog in my_blogs %}
 
@@ -157,6 +162,22 @@
                                 
                               {% endfor %}
                             </td>
+                            {% else %}
+                            <td>
+                              {% for client in client_list %}
+                                
+                                {% for category in cate_list %}
+                                  {% if category.client == client %}
+                                    
+                                    {% if category.uniqueId == post.category %}
+                                    {{ client.client_name }}{{' - '}}{{ category.category_name }}
+                                    {% endif %}
+                                    
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                            </td>
+                            {% endif %}
                             <td>{{ post.date_created|date:"Y-m-d" }} {{post.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
