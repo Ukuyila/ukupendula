@@ -1,8 +1,10 @@
 $(document).ready(function(){
   "use strict";
   var maxLength = 250;
+  var topicMaxLength = 300;
 
   $('.title_counter').text($('#post_title').val().length+'/'+maxLength);
+  $('.topic_counter').text($('#prompt_text').val().length+'/'+topicMaxLength);
   $('.audience_counter').text($('#audience').val().length+'/'+maxLength);
   $('.keywords_counter').text($('#keywords').val().length+'/'+maxLength);
   
@@ -13,6 +15,14 @@ $(document).ready(function(){
     var textlen = maxLength - curr_textlen;
 
     $('.title_counter').text(curr_textlen+'/'+maxLength);
+  });
+
+  $('#prompt_text').keyup(function() {
+    var curr_textlen = $(this).val().length;
+
+    var textlen = topicMaxLength - curr_textlen;
+
+    $('.topic_counter').text(curr_textlen+'/'+topicMaxLength);
   });
 
   $('#audience').keyup(function() {
