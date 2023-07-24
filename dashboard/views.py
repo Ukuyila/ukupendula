@@ -1087,7 +1087,7 @@ def generate_social_media(request):
 def gen_social_post(request, postType):
     context = {}
     user_profile = request.user.profile
-    current_page = 'Generated Social Post From Blog'
+    current_page = 'Generate Social Post'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(user_profile)
 
