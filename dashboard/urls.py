@@ -97,8 +97,8 @@ urlpatterns = [
 
     # content improver
     path('content-improver', views.content_improver, name='content-improver'),
-    path('content-improver<str:uniqueId>/', views.content_improver, name='content-improver-response'),
-    path('delete-impr-content<str:uniqueId>/', views.delete_impr_content, name='delete-impr-content'),
+    path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
+    path('delete-impr-content/<str:uniqueId>/', views.delete_impr_content, name='delete-impr-content'),
     path('improve-content', views.improve_content, name='improve-content'),
     path('content-improver/<str:uniqueId>/', views.content_improver, name='blog-content-improver'),
 

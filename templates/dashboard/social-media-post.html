@@ -28,6 +28,7 @@
                                             <div class="mb-0">
                                                 <h4 class="mb-0">{{post_type_title}} Post</h4>
                                             </div>
+                                            {% if post_blog %}
                                             <div class="float-end">
                                                 <div class="btn-group " >
                                                     <a type="button" href="{% url 'edit-gen-blog' post_blog.uniqueId %}" class="btn btn-default">Back</a>
@@ -45,6 +46,23 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            {% else %}
+                                            <div class="float-end">
+                                                
+                                                <div class="btn-group">
+                                                    <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
+                                                        Social Media
+                                                        <i class="fa fa-angle-down "></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'twitter' %}">Create Twitter</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'facebook' %}">Create Facebook</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {% endif %}
                                         </div>
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="POST">
