@@ -1015,13 +1015,17 @@ def view_blog_social_post(request, postType, uniqueId):
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('gen-blog-social-media', postType, uniqueId)
     
-    post_type = postType.replace('_', ' ').title()
+    # post_type = postType.replace('_', ' ').title()
 
-    context['post_type_title'] = post_type
-    context['post_type'] = postType
+    sel_p_typ = SocialPlatform.objects.get(post_name=postType)
+    max_char = sel_p_typ.max_char
+
+    context['post_type_title'] = sel_p_typ.post_name.title()
+    context['post_type'] = sel_p_typ.post_name
     context['social_post'] = post
     context['post_blog'] = post.blog
     context['post_title'] = post.title
+    context['max_char'] = max_char
     context['post_body'] = post.post
     context['post_audience'] = post.audience
     context['post_keywords'] = post.keywords
@@ -1102,19 +1106,22 @@ def gen_social_post(request, postType, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
     
-    post_type = postType.replace('_', ' ').title()
+    # post_type = postType.replace('_', ' ').title()
     prompt_text = ''
 
-    if postType == "twitter":
-        max_char = 280
-    elif postType == "instagram":
-        max_char = 2200
-    elif postType == "linkedin":
-        max_char = 3000
-    elif postType == "facebook":
-        max_char = 10000
-    else:
-        max_char = 280
+    sel_p_typ = SocialPlatform.objects.get(post_name=postType)
+    max_char = sel_p_typ.max_char
+
+    # if postType == "twitter":
+    #     max_char = 280
+    # elif postType == "instagram":
+    #     max_char = 2200
+    # elif postType == "linkedin":
+    #     max_char = 3000
+    # elif postType == "facebook":
+    #     max_char = 10000
+    # else:
+    #     max_char = 280
 
     tone_of_voices = []
 
@@ -1146,8 +1153,8 @@ def gen_social_post(request, postType, uniqueId=''):
     context['tone_of_voices'] = tone_of_voices
     context['soc_types_list'] = soc_types_list
 
-    context['post_type_title'] = post_type
-    context['post_type'] = postType
+    context['post_type_title'] = sel_p_typ.post_name.title()
+    context['post_type'] = sel_p_typ.post_name
     context['prompt_text'] = prompt_text
 
     if len(uniqueId) > 0:
@@ -1192,7 +1199,7 @@ def gen_social_post(request, postType, uniqueId=''):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, user_profile, False)
+                social_post = generate_social_post(soc_post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, user_profile, False)
 
                 # create database record
                 new_post = SocialPost.objects.create(
