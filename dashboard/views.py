@@ -3259,25 +3259,29 @@ def add_team_member(request):
 
 @login_required
 def resend_team_invite(request, orgUniqueId, uniqueId):
-    if orgUniqueId == request.user.profile.user_team:
+    user_profile = request.user.profile.user_team
+    if orgUniqueId == user_profile:
         try:
             # get user team
-            user_team = Team.objects.get(uniqueId=request.user.profile.user_team)
-            member_p = Profile.objects.get(uniqueId=uniqueId)
-            success = activateEmail(request, member_p.user, user_team)
-
-            resp_msg = messages.success(request, success)
-
-            # print(resp_msg)
+            user_team = Team.objects.get(uniqueId=user_profile)
         except:
             resp_msg = "Action not allowed, this user does not belong to your team!"
             messages.error(request, resp_msg)
+
+        member_p = Profile.objects.get(uniqueId=uniqueId)
+        # success = activateEmail(request, member_p.user, user_team)
+
+        resp_msg = member_p.user.email
+
+        messages.success(request, resp_msg)
+
+            # print(resp_msg)
     else:
         resp_msg = "Action not allowed, you do not have permission to access this team!"
         messages.error(request, resp_msg)
     
     print(resp_msg)
-    
+
     return redirect('team-manager')
 
 
