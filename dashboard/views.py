@@ -3267,6 +3267,8 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
             success = activateEmail(request, member_p.user, user_team)
 
             messages.success(request, success)
+
+            print(success)
         except:
             messages.error(request, "Action not allowed, this user does not belong to your team!")
     else:
