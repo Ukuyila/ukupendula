@@ -3271,8 +3271,7 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
         member_p = Profile.objects.get(uniqueId=uniqueId)
         # success = activateEmail(request, member_p.user, user_team)
 
-        resp_msg = member_p.user.email
-
+        resp_msg = '{}-{}'.format(member_p.user.email, user_team)
         messages.success(request, resp_msg)
 
             # print(resp_msg)
