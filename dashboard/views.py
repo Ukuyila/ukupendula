@@ -3264,16 +3264,16 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
         try:
             # get user team
             user_team = Team.objects.get(uniqueId=user_profile)
+
+            member_p = Profile.objects.get(uniqueId=uniqueId)
+            success = activateEmail(request, member_p.user, user_team)
+
+            messages.success(request, success)
         except:
             resp_msg = "Action not allowed, this user does not belong to your team!"
             messages.error(request, resp_msg)
 
-        member_p = Profile.objects.get(uniqueId=uniqueId)
-        # success = activateEmail(request, member_p.user, user_team)
-
-        resp_msg = '{}-{}'.format(member_p.user.email, user_team)
-        messages.success(request, resp_msg)
-
+        # resp_msg = '{}-{}'.format(member_p.user.email, user_team)
             # print(resp_msg)
     else:
         resp_msg = "Action not allowed, you do not have permission to access this team!"

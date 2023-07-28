@@ -1,0 +1,75 @@
+{% extends 'layout/auth.html' %}
+{% load static %}
+
+
+
+{% block body %}
+<!-- /Logo -->
+
+            <div class="login-page-left h-100" style="background-image: url('{% static 'auth/img/left-bg.jpg' %}');">
+              <div class="row">
+                <div class="col-10 col-lg-9 mx-auto">
+                  <div class="logo mb-10">
+                    <a href="index.html">
+                      <img src="{% static 'dash/img/logo/writesome-ai-logo.png' %}" alt="Logo">
+                    </a>
+                  </div>
+                  <h3>Adventure starts here 🚀</h3>
+                  <p>Make your creative writing easy and fun!</p>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-lg-6 align-self-center">
+              <div class="login-register-section">
+                <div class="row">
+                  <div class="col-12 col-sm-10 col-xl-8 col-lg-10 mx-auto">
+                    <h2>Create your Account</h2>
+                    {% comment %} <div class="google-btn mb-20">
+                      <a href="#"><i class="bi bi-google"></i>  Sign up with Google</a>
+                    </div> {% endcomment %}
+                    <div class="text-center">
+                      
+                      {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }}" role="alert">
+                        <strong>{{ message }}</strong>
+                      </div>
+                      {% endfor %}
+
+                      {% comment %} <span class="or-text">or</span> {% endcomment %}
+                    </div>
+
+                    <form action="#" method="POST" autocomplete="off">
+                      {% csrf_token %}
+                      <div class="single-input">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="Email Address">
+                      </div>
+                      <div class="single-input">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password1" name="password1" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+                      </div>
+                      <div class="single-input">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password2" name="password2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+                      </div>
+                      <div class="single-input">
+                        <label for="spam_filter">Spam Filter *</label>
+                        <p>What is greater, 9 or 4?</p>
+                        <input type="text" class="form-control" id="spam_filter" name="spam_filter" autofocus required/>
+                      </div>
+                      <button type="submit" id="register-btn" class="button-1">Sign Up</button>
+                    </form>
+                    <div class="login-register-from-btom text-center mt-15">
+                      <p>Already have an Account? <a href="{% url 'login' %}">Sign In</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'dash/js/pages/register.js' %}"></script>
+{% endblock %}
