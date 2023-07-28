@@ -5,17 +5,18 @@
 
 {% block body %}
 <!-- /Logo -->
-
-            <div class="login-page-left h-100" style="background-image: url('{% static 'auth/img/left-bg.jpg' %}');">
-              <div class="row">
-                <div class="col-10 col-lg-9 mx-auto">
-                  <div class="logo mb-10">
-                    <a href="{% url 'login' %}">
-                      <img src="{% static 'dash/img/logo/writesome-ai-logo-dark.png' %}" alt="Logo">
-                    </a>
+            <div class="col-lg-6">
+              <div class="login-page-left h-100" style="background-image: url('{% static 'auth/img/left-bg.jpg' %}');">
+                <div class="row">
+                  <div class="col-10 col-lg-9 mx-auto">
+                    <div class="logo mb-10">
+                      <a href="{% url 'login' %}">
+                        <img src="{% static 'dash/img/logo/writesome-ai-logo-dark.png' %}" alt="Logo">
+                      </a>
+                    </div>
+                    {% comment %} <h3></h3>
+                    <p class="mt-5">Make your creative writing easy and fun!</p> {% endcomment %}
                   </div>
-                  {% comment %} <h3></h3>
-                  <p class="mt-5">Make your creative writing easy and fun!</p> {% endcomment %}
                 </div>
               </div>
             </div>
