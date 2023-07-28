@@ -1,58 +1,62 @@
-{% extends 'layout/auth.html' %}
+{% extends 'layout/auth-new.html' %}
 {% load static %}
 
 
 
 {% block body %}
 <!-- /Logo -->
-            <div class="card-body bg-light">
-              <h4 class="mb-2">Welcome to back! 👋</h4>
-              <p class="mb-4">Please sign-in to your account and start creating</p>
-
-              <form class="mb-3" action="#" method="POST">
-                {% csrf_token %}
-
-                <div class="form-group">
-                  <label for="email" class="form-label text-dark">Email address</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" autofocus required>
-                </div>
-
-                {% comment %} <div class="form-group">
-                  <label class="form-label text-dark">Password</label>
-                  
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                </div> {% endcomment %}
-
-                <div class="form-group form-password-toggle">
-                  <div class="d-flex justify-content-between">
-                    <label class="form-label" for="password">Password</label>
-                    <a href="{% url 'password-reset' %}">
-                      <small>Forgot Password?</small>
-                    </a>
+            <div class="col-lg-6">
+              <div class="login-page-left h-100" style="background-image: url('{% static 'auth/img/left-bg.jpg' %}');">
+                <div class="row">
+                  <div class="col-10 col-lg-9 mx-auto">
+                    <div class="logo mb-10">
+                      <a href="index.html">
+                        <img src="{% static 'dash/img/logo/writesome-ai-logo.png' %}" alt="Logo">
+                      </a>
+                    </div>
+                    <h3>Welcome back! 👋</h3>
+                    <p>We are glad to see you again! Get access to your account.</p>
                   </div>
-                  <div class="input-group">
-                    <input
-                      type="password"
-                      id="password"
-                      class="form-control"
-                      name="password"
-                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      required
-                    />
-                    <span class=" input-group-addon input-group-text cursor-pointer"><i toggle="#password" class="bx bx-hide  toggle-password "></i></span>
-                  </div>
-                </div> 
-                <div class="form-footer mt-2">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                 </div>
-              </form>
+              </div>
+            </div>
+            <div class="col-lg-6 align-self-center">
+              <div class="login-register-section">
+                <div class="row">
+                  <div class="col-12 col-sm-10 col-xl-8 col-lg-10 mx-auto">
+                    <h2>Sign in to your Account</h2>
+                    {% comment %} <div class="google-btn mb-20">
+                      <a href="#"><i class="bi bi-google"></i>  Sign up with Google</a>
+                    </div> {% endcomment %}
+                    <div class="text-center">
+                      
+                      {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }}" role="alert">
+                        <strong>{{ message }}</strong>
+                      </div>
+                      {% endfor %}
 
-              <p class="text-center">
-                <span>New on our platform?</span>
-                <a class="text-primary" href="{% url 'register' %}">
-                  <span>Create an account</span>
-                </a>
-              </p>
+                      {% comment %} <span class="or-text">or</span> {% endcomment %}
+                    </div>
+                    <form action="#" method="POST" autocomplete="off">
+                      {% csrf_token %}
+                      <div class="single-input">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" placeholder="Email Address" autofocus required>
+                      </div>
+                      <div class="single-input">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" name="password" placeholder="Password" autofocus required>
+                      </div>
+                      <button type="submit" class="button-1">Sign In</button>
+                    </form>
+                    <div class="login-register-from-btom text-center mt-15">
+                      <p>Dont have an Account? <a href="{% url 'register' %}">Sign Up</a></p>
+                      <p class="forget">Loss Your Password ! <a href="{% url 'password-reset' %}">Forgot Password?</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
 {% endblock %}
