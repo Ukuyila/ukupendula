@@ -1502,67 +1502,67 @@ def improve_content(request):
             return redirect('content-improver')
         else:
             tone_of_voice = request.POST['tone_of_voice']
-            if len(old_content) > 3 and len(old_content) < 2001:
-                # generator starts here
-                api_call_code = str(uuid4()).split('-')[4]
+            # if len(old_content) > 3 and len(old_content) < 2001:
+            #     # generator starts here
+            #     api_call_code = str(uuid4()).split('-')[4]
 
-                # api_requests = check_api_requests()
+            #     # api_requests = check_api_requests()
 
-                add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
+            #     add_to_list = add_to_api_requests('gen_improve_content', api_call_code, request.user.profile)
 
-                n = 1
-                # runs until n < 50,just to avoid the infinite loop.
-                # this will execute the check_api_requests() func in every 5 seconds.
-                while n < 50:
-                    # api_requests = check_api_requests()
-                    time.sleep(5)
-                    if api_call_process(api_call_code, add_to_list):
+            #     n = 1
+            #     # runs until n < 50,just to avoid the infinite loop.
+            #     # this will execute the check_api_requests() func in every 5 seconds.
+            #     while n < 50:
+            #         # api_requests = check_api_requests()
+            #         time.sleep(5)
+            #         if api_call_process(api_call_code, add_to_list):
 
-                        gen_content = gen_improve_content(old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+            #             gen_content = gen_improve_content(old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
 
-                        if len(gen_content) > 0:
+            #             if len(gen_content) > 0:
 
-                            # create database record
-                            s_content = ContentImprover.objects.create(
-                                content_title=content_topic,
-                                tone_of_voice=tone_of_voice,
-                                content_body_old=old_content,
-                                content_keywords=content_keywords,
-                                content_body_new=gen_content,
-                                profile=request.user.profile,
-                                category=content_cate,
-                            )
-                            s_content.save()
+            #                 # create database record
+            #                 s_content = ContentImprover.objects.create(
+            #                     content_title=content_topic,
+            #                     tone_of_voice=tone_of_voice,
+            #                     content_body_old=old_content,
+            #                     content_keywords=content_keywords,
+            #                     content_body_new=gen_content,
+            #                     profile=request.user.profile,
+            #                     category=content_cate,
+            #                 )
+            #                 s_content.save()
 
-                            add_to_list.is_done=True
-                            add_to_list.save()
+            #                 add_to_list.is_done=True
+            #                 add_to_list.save()
 
-                            context['content_uniqueId'] = s_content.uniqueId
+            #                 context['content_uniqueId'] = s_content.uniqueId
 
-                            response_data = {
-                                'result': 'success',
-                                'message': 'Content successfully generated',
-                                'contentId': s_content.uniqueId,
-                                'contentBody': s_content.content_body_new,
-                            }
-                            break
+            #                 response_data = {
+            #                     'result': 'success',
+            #                     'message': 'Content successfully generated',
+            #                     'contentId': s_content.uniqueId,
+            #                     'contentBody': s_content.content_body_new,
+            #                 }
+            #                 break
                         
-                        else:
-                            response_data = {
-                                'result': 'error',
-                                'message': 'API response not found, please try again'
-                            }
-                            break
+            #             else:
+            #                 response_data = {
+            #                     'result': 'error',
+            #                     'message': 'API response not found, please try again'
+            #                 }
+            #                 break
 
-                    else:
-                        # we might need to delete all abandoned calls
-                        pass
-                    n += 1
-            else:
-                response_data = {
-                    'result': 'error',
-                    'message': 'Content body is supposed to be between 100 and 2000 chars long!'
-                }
+            #         else:
+            #             # we might need to delete all abandoned calls
+            #             pass
+            #         n += 1
+            # else:
+            #     response_data = {
+            #         'result': 'error',
+            #         'message': 'Content body is supposed to be between 100 and 2000 chars long!'
+            #     }
 
     else:
         response_data = {
@@ -1575,20 +1575,20 @@ def improve_content(request):
 
 @login_required
 def delete_impr_content(request, uniqueId):
-    try:
-        content = ContentImprover.objects.get(uniqueId=uniqueId)
+    # try:
+    #     content = ContentImprover.objects.get(uniqueId=uniqueId)
 
-        if content.profile == request.user.profile:
-            content.deleted=True
-            content.save()
+    #     if content.profile == request.user.profile:
+    #         content.deleted=True
+    #         content.save()
 
-            messages.info(request, "Item deleted successfully!")
-            return redirect('content-improver-memory')
-        else:
-            messages.error(request, "Access denied!")
-            return redirect('content-improver-memory')
-    except:
-        messages.error(request, "Item not found!")
+    #         messages.info(request, "Item deleted successfully!")
+    #         return redirect('content-improver-memory')
+    #     else:
+    #         messages.error(request, "Access denied!")
+    #         return redirect('content-improver-memory')
+    # except:
+    #     messages.error(request, "Item not found!")
         return redirect('content-improver-memory')
 
 
@@ -1634,13 +1634,13 @@ def content_improver(request, uniqueId=''):
 
     context['tone_of_voices'] = tone_of_voices
 
-    if len(uniqueId) > 0:
-        # search database for paragraph with this slug
-        content = ContentImprover.objects.get(uniqueId=uniqueId)
+    # if len(uniqueId) > 0:
+    #     # search database for paragraph with this slug
+    #     content = ContentImprover.objects.get(uniqueId=uniqueId)
 
-        context['content'] = content
-    else:
-        pass
+    #     context['content'] = content
+    # else:
+    #     pass
 
     return render(request, 'dashboard/content-improver.html', context)
 
@@ -2779,47 +2779,47 @@ def billing(request):
     user_sub_type = request.user.profile.subscription_type.title()
 
     # get user current tier
-    user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
+    # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
-    # get packages
-    packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
+    # # get packages
+    # packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
 
-    for pack in packs:
-        packages.append(pack)
+    # for pack in packs:
+    #     packages.append(pack)
 
     context['current_page'] = current_page
     context['month_word_count'] = request.user.profile.monthly_count
-    context['user_curr_tier'] = user_curr_tier
+    # context['user_curr_tier'] = user_curr_tier
     context['sub_packages'] = packages
 
     return render(request, 'dashboard/billing.html', context)
 
 
-def get_single_plan(request, uniqueId, planId):
-    response_data = {}
+# def get_single_plan(request, uniqueId, planId):
+    # response_data = {}
 
-    # validate member
-    try:
-        user_profile = Profile.objects.get(uniqueId=uniqueId)
-        subplan = SubscriptionPackage.objects.get(uniqueId=planId)
+    # # validate member
+    # try:
+    #     user_profile = Profile.objects.get(uniqueId=uniqueId)
+    #     subplan = SubscriptionPackage.objects.get(uniqueId=planId)
 
-        response_data = {
-            'result': 'success',
-            'message': 'plan found successfully',
-            'user_team': user_profile.user_team,
-            'plan_amount': subplan.package_price,
-            'package_name': subplan.package_name,
-            'max_word': subplan.package_max_word
-        }
+    #     response_data = {
+    #         'result': 'success',
+    #         'message': 'plan found successfully',
+    #         'user_team': user_profile.user_team,
+    #         'plan_amount': subplan.package_price,
+    #         'package_name': subplan.package_name,
+    #         'max_word': subplan.package_max_word
+    #     }
 
-    except:
-        response_data = {
-            'result': 'error',
-            'message': 'Some error message'
-        }
+    # except:
+    #     response_data = {
+    #         'result': 'error',
+    #         'message': 'Some error message'
+    #     }
 
-    # return JsonResponse(response_data)
-    return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
+    # # return JsonResponse(response_data)
+    # return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
 
 
 @login_required
@@ -2843,112 +2843,112 @@ def payment_plans(request):
     return render(request, 'dashboard/process-initiator-plan.html', context)
 
 
-@login_required
-def payfast_payment(request, planId):
-    user_profile = request.user.profile
-    context = {}
+# @login_required
+# def payfast_payment(request, planId):
+#     user_profile = request.user.profile
+#     context = {}
 
-    protocol = 'https' if request.is_secure() else 'http'
+#     protocol = 'https' if request.is_secure() else 'http'
 
-    merchant_id = settings.PAYFAST_MERCHANT_ID
-    merchant_key = settings.PAYFAST_MERCHANT_KEY
-    return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
-    notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
-    # cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}://{}/billing'.format(protocol, get_current_site(request).domain)
+#     merchant_id = settings.PAYFAST_MERCHANT_ID
+#     merchant_key = settings.PAYFAST_MERCHANT_KEY
+#     return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
+#     notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
+#     # cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
+#     cancel_url = '{}://{}/billing'.format(protocol, get_current_site(request).domain)
 
-    order_id = str(uuid4()).split('-')[4]
+#     order_id = str(uuid4()).split('-')[4]
 
-    package = SubscriptionPackage.objects.get(uniqueId=planId)
+#     package = SubscriptionPackage.objects.get(uniqueId=planId)
 
-    recurring_amount = package.package_price
-    amount = "%.2f" % int(recurring_amount)
-    item_name = "{} {}".format(settings.APP_NAME, package.package_name)
-    item_descr = "{} Package".format(package.package_name)
+#     recurring_amount = package.package_price
+#     amount = "%.2f" % int(recurring_amount)
+#     item_name = "{} {}".format(settings.APP_NAME, package.package_name)
+#     item_descr = "{} Package".format(package.package_name)
 
-    m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
+#     m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
     
-    current_page = 'Billing | {}'.format(item_name)
-    context['current_page'] = current_page
+#     current_page = 'Billing | {}'.format(item_name)
+#     context['current_page'] = current_page
 
-    lang = settings.LANGUAGE_CODE
-    flag_avatar = 'dash/images/gb_flag.jpg'
+#     lang = settings.LANGUAGE_CODE
+#     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(user_profile, lang)
+#     lang = check_user_lang(user_profile, lang)
 
-    if lang == 'en-us':
-        flag_avatar = 'dash/images/us_flag.jpg'
+#     if lang == 'en-us':
+#         flag_avatar = 'dash/images/us_flag.jpg'
 
-    context['lang'] = lang
-    context['flag_avatar'] = flag_avatar
+#     context['lang'] = lang
+#     context['flag_avatar'] = flag_avatar
 
-    if request.user.first_name is None or request.user.last_name is None:
-        messages.error(request, 'Your profile is not complete, please fill in your details to contiue!')
-        redirect('profile')
+#     if request.user.first_name is None or request.user.last_name is None:
+#         messages.error(request, 'Your profile is not complete, please fill in your details to contiue!')
+#         redirect('profile')
 
-    ws_user_fname = request.user.first_name
-    ws_user_lname = request.user.last_name
+#     ws_user_fname = request.user.first_name
+#     ws_user_lname = request.user.last_name
 
-    pfData = {
-        "merchant_id": merchant_id,
-        "merchant_key": merchant_key,
-        "return_url": return_url,
-        "cancel_url": cancel_url,
-        "notify_url": notify_url,
-        # # Buyer details
-        "name_first": ws_user_fname,
-        "name_last": ws_user_lname,
-        "email_address": request.user.email,
-        "m_payment_id": m_payment_id,
-        "amount": amount,
-        "item_name": item_name,
-        "item_description": item_descr,
-        # # Subscription details
-        "subscription_type": "1",
-        # "billing_date": "",
-        "recurring_amount": recurring_amount,
-        "frequency": "3",
-        "cycles": "0",
-        # "custom_str1": user_profile.uniqueId,
-        # "custom_str2": planId
-    }
+#     pfData = {
+#         "merchant_id": merchant_id,
+#         "merchant_key": merchant_key,
+#         "return_url": return_url,
+#         "cancel_url": cancel_url,
+#         "notify_url": notify_url,
+#         # # Buyer details
+#         "name_first": ws_user_fname,
+#         "name_last": ws_user_lname,
+#         "email_address": request.user.email,
+#         "m_payment_id": m_payment_id,
+#         "amount": amount,
+#         "item_name": item_name,
+#         "item_description": item_descr,
+#         # # Subscription details
+#         "subscription_type": "1",
+#         # "billing_date": "",
+#         "recurring_amount": recurring_amount,
+#         "frequency": "3",
+#         "cycles": "0",
+#         # "custom_str1": user_profile.uniqueId,
+#         # "custom_str2": planId
+#     }
 
-    def generateSignature(dataArray, passPhrase = ''):
-        payload = ""
-        for key in dataArray:
-            # Get all the data from Payfast and prepare parameter string
-            payload += key + "=" + urllib.parse.quote_plus(dataArray[key].replace("+", " ")) + "&"
-        # After looping through, cut the last & or append your passphrase
-        payload = payload[:-1]
-        if passPhrase != '':
-            payload += f"&passphrase={passPhrase}"
-        return hashlib.md5(payload.encode()).hexdigest()
+#     def generateSignature(dataArray, passPhrase = ''):
+#         payload = ""
+#         for key in dataArray:
+#             # Get all the data from Payfast and prepare parameter string
+#             payload += key + "=" + urllib.parse.quote_plus(dataArray[key].replace("+", " ")) + "&"
+#         # After looping through, cut the last & or append your passphrase
+#         payload = payload[:-1]
+#         if passPhrase != '':
+#             payload += f"&passphrase={passPhrase}"
+#         return hashlib.md5(payload.encode()).hexdigest()
 
-    passPhrase = settings.PAYFAST_PASS_PHRASE
-    signature = generateSignature(pfData, passPhrase)
+#     passPhrase = settings.PAYFAST_PASS_PHRASE
+#     signature = generateSignature(pfData, passPhrase)
 
-    # Generate signature (see step 2)
-    # passphase = 'jt7NOE43FZPn';
-    # signature = generateSignature(pfData, passPhrase)
-    # pfData['signature'] = signature
+#     # Generate signature (see step 2)
+#     # passphase = 'jt7NOE43FZPn';
+#     # signature = generateSignature(pfData, passPhrase)
+#     # pfData['signature'] = signature
 
-    context['signature'] = signature
+#     context['signature'] = signature
 
-    # context['user_id'] = user_profile.uniqueId
-    context['m_payment_id'] = m_payment_id
-    context['merchant_id'] = merchant_id
-    context['merchant_key'] = merchant_key
-    context['return_url'] = return_url
-    context['cancel_url'] = cancel_url
-    context['notify_url'] = notify_url
-    context['amount'] = amount
-    context['recurring_amount'] = recurring_amount
-    context['item_name'] = item_name
-    context['item_descr'] = item_descr
-    # context['plan_id'] = planId
-    context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
+#     # context['user_id'] = user_profile.uniqueId
+#     context['m_payment_id'] = m_payment_id
+#     context['merchant_id'] = merchant_id
+#     context['merchant_key'] = merchant_key
+#     context['return_url'] = return_url
+#     context['cancel_url'] = cancel_url
+#     context['notify_url'] = notify_url
+#     context['amount'] = amount
+#     context['recurring_amount'] = recurring_amount
+#     context['item_name'] = item_name
+#     context['item_descr'] = item_descr
+#     # context['plan_id'] = planId
+#     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
-    return render(request, 'dashboard/process-plan-payment.html', context)
+#     return render(request, 'dashboard/process-plan-payment.html', context)
 
 
 @require_POST
@@ -2975,8 +2975,9 @@ def payment_success(request, uniqueId, planId, orderId):
     print(order_ref)
 
     try:
-        package = SubscriptionPackage.objects.get(uniqueId=planId)
-        package_name = package.package_name.lower()
+        # package = SubscriptionPackage.objects.get(uniqueId=planId)
+        # package_name = package.package_name.lower()
+        package_name = 'package_name'
 
         try:
             profile = Profile.objects.get(uniqueId=uniqueId)
@@ -3346,11 +3347,11 @@ def device_manager(request):
 
     current_page = 'Device Manager'
     total_devices = 0
-    # max_devices = 10
+    max_devices = 10
 
     user_profile = request.user.profile
-    user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_profile.user_team)
-    max_devices = int(user_sub_pack.package_max_device)
+    # user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_profile.user_team)
+    # max_devices = int(user_sub_pack.package_max_device)
 
     context['current_page'] = current_page
     reg_devices = []
@@ -3922,13 +3923,13 @@ def memory_content_improver(request):
     context['client_list'] = client_list
 
     # Get total summaries
-    improved_content = ContentImprover.objects.filter(profile=user_profile).order_by('last_updated')
+    # improved_content = ContentImprover.objects.filter(profile=user_profile).order_by('last_updated')
 
-    for content in improved_content:
-        if not content.deleted and content.profile.user_team == user_team_id:
-            saved_content.append(content)
+    # for content in improved_content:
+    #     if not content.deleted and content.profile.user_team == user_team_id:
+    #         saved_content.append(content)
 
-    context['saved_content'] = saved_content
+    # context['saved_content'] = saved_content
 
     context['allowance'] = check_count_allowance(user_profile)
 
@@ -4413,11 +4414,11 @@ def download_content_file(request, content_type, uniqueId):
         gen_copy = LandingPageCopy.objects.get(uniqueId=uniqueId)
         cont_text = gen_copy.page_copy
 
-    elif content_type == 'content_improver':
-        impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
-        cont_text = impr_cont.content_body_new
+    # elif content_type == 'content_improver':
+        # impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
+        # cont_text = impr_cont.content_body_new
 
-    cont_text = blog_body.replace('<br>', '\n')
+    # cont_text = blog_body.replace('<br>', '\n')
 
     print(str(uuid4()))
 

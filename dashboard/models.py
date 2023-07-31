@@ -492,38 +492,38 @@ class BlogSocialPost(models.Model):
         super(BlogSocialPost, self).save(*args, **kwargs)
 
 
-class ContentImprover(models.Model):
-    content_title = models.CharField(max_length=300)
-    tone_of_voice = models.CharField(max_length=255)
-    content_body_old = models.TextField(null=True, blank=True)
-    content_keywords = models.TextField(null=True, blank=True)
-    content_body_new = models.TextField(null=True, blank=True)
+# class ContentImprover(models.Model):
+#     content_title = models.CharField(max_length=300)
+#     tone_of_voice = models.CharField(max_length=255)
+#     content_body_old = models.TextField(null=True, blank=True)
+#     content_keywords = models.TextField(null=True, blank=True)
+#     content_body_new = models.TextField(null=True, blank=True)
 
-    deleted = models.BooleanField(default=False)
+#     deleted = models.BooleanField(default=False)
 
-    # django related field
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     # django related field
+#     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
-    category = models.CharField(null=True, blank=True, max_length=255)
+#     category = models.CharField(null=True, blank=True, max_length=255)
 
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
+#     # Utility Variable
+#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
+#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+#     date_created = models.DateTimeField(blank=True, null=True)
+#     last_updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return '{} {}'.format(self.content_title, self.uniqueId)
+#     def __str__(self):
+#         return '{} {}'.format(self.content_title, self.uniqueId)
 
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
+#     def save(self, *args, **kwargs):
+#         if self.date_created is None:
+#             self.date_created = timezone.localtime(timezone.now())
+#         if self.uniqueId is None:
+#             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.content_title, self.uniqueId))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(ContentImprover, self).save(*args, **kwargs)
+#         self.slug = slugify('{} {}'.format(self.content_title, self.uniqueId))
+#         self.last_updated = timezone.localtime(timezone.now())
+#         super(ContentImprover, self).save(*args, **kwargs)
 
 
 class Paragraph(models.Model):
@@ -745,35 +745,35 @@ class RequestsQueue(models.Model):
         super(RequestsQueue, self).save(*args, **kwargs)
 
 
-class SubscriptionPackage(models.Model):
-    package_name = models.CharField(max_length=200)
-    package_price = models.CharField(max_length=100, blank=True, null=True)
-    package_max_word = models.CharField(max_length=100, blank=True, null=True, default='0') # 0 is for unlimited
-    package_max_device = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
-    package_max_memory = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
-    package_status = models.BooleanField(default=True)
-    package_description = models.TextField(null=True, blank=True)
+# class SubscriptionPackage(models.Model):
+#     package_name = models.CharField(max_length=200)
+#     package_price = models.CharField(max_length=100, blank=True, null=True)
+#     package_max_word = models.CharField(max_length=100, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_max_device = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_max_memory = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_status = models.BooleanField(default=True)
+#     package_description = models.TextField(null=True, blank=True)
 
-    is_active = models.BooleanField(default=False)
+#     is_active = models.BooleanField(default=False)
 
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
+#     # Utility Variable
+#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
+#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+#     date_created = models.DateTimeField(blank=True, null=True)
+#     last_updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return '{} {}'.format(self.package_name, self.uniqueId)
+#     def __str__(self):
+#         return '{} {}'.format(self.package_name, self.uniqueId)
 
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
+#     def save(self, *args, **kwargs):
+#         if self.date_created is None:
+#             self.date_created = timezone.localtime(timezone.now())
+#         if self.uniqueId is None:
+#             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.package_name, self.uniqueId))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(SubscriptionPackage, self).save(*args, **kwargs)
+#         self.slug = slugify('{} {}'.format(self.package_name, self.uniqueId))
+#         self.last_updated = timezone.localtime(timezone.now())
+#         super(SubscriptionPackage, self).save(*args, **kwargs)
 
 
 class ToneOfVoice(models.Model):
