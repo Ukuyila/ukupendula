@@ -2946,7 +2946,7 @@ def payfast_payment(request, planId):
     context['item_name'] = item_name
     context['item_descr'] = item_descr
     # context['plan_id'] = planId
-    context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
+    context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.PAYFAST_SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
     return render(request, 'dashboard/process-plan-payment.html', context)
 
