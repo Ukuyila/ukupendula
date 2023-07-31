@@ -49,10 +49,13 @@ urlpatterns = [
     path('view-blog/<slug:slug>/', views.view_gen_blog, name='view-gen-blog'),
     path('edit-blog/<str:uniqueId>/', views.edit_gen_blog, name='edit-gen-blog'),
 
+    path('social-media/<str:postType>/', views.gen_social_post, name='social-media-post'),
+    path('social-media/<str:postType>/<str:uniqueId>/', views.gen_social_post, name='view-social-media'),
+
     path('blog-social-media/<str:postType>/<str:uniqueId>/', views.gen_social_from_blog, name='gen-blog-social-media'),
-    # path('social-media/<str:postType>/', views.gen_social_post, name='social-media'),
-    path('view-social-media/<str:postType>/<str:uniqueId>/', views.view_social_post, name='view-social-media'),
-    path('del-social-media/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
+    path('view-blog-social/<str:postType>/<str:uniqueId>/', views.view_blog_social_post, name='view-blog-social'),
+
+    path('del-social-media/<str:socType>/<str:uniqueId>/', views.delete_social_post, name='delete-social-media'),
 
     # Paragraph writer urls
     path('paragraph-writer', views.paragraph_writer, name='paragraph-writer'),
@@ -93,6 +96,13 @@ urlpatterns = [
     path('generate-blog-summary/<str:uniqueId>/', views.summarize_blog, name='generate-blog-summary'),
     path('delete-summary/<str:uniqueId>/', views.delete_summary, name='delete-summary'),
 
+    # content improver
+    path('content-improver', views.content_improver, name='content-improver'),
+    path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
+    path('delete-impr-content/<str:uniqueId>/', views.delete_impr_content, name='delete-impr-content'),
+    path('improve-content', views.improve_content, name='improve-content'),
+    path('content-improver/<str:uniqueId>/', views.content_improver, name='blog-content-improver'),
+
     # content landing page copy urls
     path('landing-page-copy', views.landing_page_copy, name='landing-page-copy'),
     path('landing-page-copy/<str:uniqueId>/', views.landing_page_copy, name='landing-page-copy-response'),
@@ -115,9 +125,13 @@ urlpatterns = [
     path('page-copy-memory', views.memory_page_copy, name='page-copy-memory'),
     path('meta-description-memory', views.memory_meta_descr, name='meta-descr-memory'),
     path('social-post-memory', views.memory_social_post, name='social-post-memory'),
+    path('social-post-memory/<str:socType>/', views.memory_social_post, name='social-memory'),
+    path('content-improver-memory', views.memory_content_improver, name='content-improver-memory'),
 
     # user roles
     path('user-roles', views.user_roles, name='user-roles'),
     path('edit-user-role/<str:team_uid>/<str:uniqueId>/', views.edit_user_roles, name='edit-user-role'),
     path('delete-user-role/<str:team_uid>/<str:uniqueId>/', views.delete_user_role, name='delete-user-role'),
+
+    path('download-content/<str:content_type>/<str:uniqueId>/', views.download_content_file, name='download-content'),
 ]

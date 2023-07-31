@@ -83,12 +83,21 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Page Copies
                   </a>
+
                   <a href="{% url 'social-post-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
-                  {% if current_page == 'Social Media Memory' %}
+                  {% if 'Social Media' in current_page %}
                   active text-white
                   {% endif %}
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Social Media Posts
+                  </a>
+
+                  <a href="{% url 'content-improver-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Content Improver Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Content Improver
                   </a>
                 </div>
               </div>
@@ -98,13 +107,38 @@
               <div class="">
                 <div class="card-body p-6 border">
                   <div class="inbox-body">
+                    <div class="mail-option">
+                      <div class="chk-all">
+                        {% comment %} <input type="checkbox" class="mail-checkbox mail-group-checkbox"> {% endcomment %}
+                        <div class="btn-group">
+                          <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn mini all" aria-expanded="false">
+                            {{ current_page }}
+                            <i class="fa fa-angle-down "></i>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="{% url 'social-memory' 'social' %}"> Social Media Posts</a></li>
+                            <li><a href="{% url 'social-post-memory' %}"> Blog Social Posts</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="btn-group">
+                        <a data-bs-original-title="Refresh" data-bs-placement="top" data-bs-toggle="dropdown" onclick="return window.location.reload();" href="javascript:void(0);" class="btn mini tooltips">
+                          <i class=" fa fa-refresh"></i>
+                        </a>
+                      </div>
 
+                    </div>
                     <div class="table-responsive mb-0 ">
                       <table id="blogMemoryTable" class="table table-hover table-striped" style="width:100%">
                         <thead>
                           <tr>
                             <th>Title</th>
+                            {% if soc_type == 'blog' %}
                             <th style="width:40%">Blog</th>
+                            {% else %}
+                            <th >Type</th>
+                            <th style="width:20%">Category</th>
+                            {% endif %}
                             <th>Datetime</th>
                             <th></th>
                             
@@ -119,8 +153,9 @@
                                 {% else %}
                                 {{ post.slug|truncatechars:80 }}
                                 {% endif %}</a></h6>
-                                <small class="text-primary me-1">{{ post.post_type }}</small>
+                                {% comment %} <small class="text-primary me-1">{{ post.post_type }}</small> {% endcomment %}
                             </td>
+                            {% if soc_type == 'blog' %}
                             <td>
                               {% for blog in my_blogs %}
 
@@ -130,10 +165,29 @@
                                 
                               {% endfor %}
                             </td>
+                            {% else %}
+                            <td>
+                              {{ post.post_type|title }}
+                            </td>
+                            <td>
+                              {% for client in client_list %}
+                                
+                                {% for category in cate_list %}
+                                  {% if category.client == client %}
+                                    
+                                    {% if category.uniqueId == post.category %}
+                                    {{ client.client_name }}{{' - '}}{{ category.category_name }}
+                                    {% endif %}
+                                    
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                            </td>
+                            {% endif %}
                             <td>{{ post.date_created|date:"Y-m-d" }} {{post.date_created|time:"H:i"}}</td>
                             <td>
                               <a href="{% url 'view-social-media' post.post_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>
-                              <a href="{% url 'delete-social-media' post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
+                              <a href="{% url 'delete-social-media' soc_type post.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

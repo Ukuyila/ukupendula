@@ -1,0 +1,62 @@
+{% extends 'layout/auth.html' %}
+{% load static %}
+
+
+
+{% block body %}
+<!-- /Logo -->
+            <div class="card-body bg-light">
+              <h4 class="mb-2">Welcome to back! 👋</h4>
+              <p class="mb-4">Please sign-in to your account and start creating</p>
+
+              <form class="mb-3" action="#" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                  <label for="email" class="form-label text-dark">Email address</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" autofocus required>
+                </div>
+
+                {% comment %} <div class="form-group">
+                  <label class="form-label text-dark">Password</label>
+                  
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div> {% endcomment %}
+
+                <div class="form-group form-password-toggle">
+                  <div class="d-flex justify-content-between">
+                    <label class="form-label" for="password">Password</label>
+                    <a href="{% url 'password-reset' %}">
+                      <small>Forgot Password?</small>
+                    </a>
+                  </div>
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      id="password"
+                      class="form-control"
+                      name="password"
+                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                      required
+                    />
+                    <span class=" input-group-addon input-group-text cursor-pointer"><i toggle="#password" class="bx bx-hide  toggle-password "></i></span>
+                  </div>
+                </div> 
+                <div class="form-footer mt-2">
+                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                </div>
+              </form>
+
+              <p class="text-center">
+                <span>New on our platform?</span>
+                <a class="text-primary" href="{% url 'register' %}">
+                  <span>Create an account</span>
+                </a>
+              </p>
+            </div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'dash/js/pages/login.js' %}"></script>
+{% endblock %}

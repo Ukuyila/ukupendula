@@ -9,6 +9,15 @@ from .models import *
 
 
 class ProfileForm(forms.ModelForm):
+    email = forms.CharField(
+                required=True,
+                label='Email',
+                widget=forms.TextInput(
+                    attrs={'class': 'form-control mb-3',
+                            'placeholder': 'Enter first name',
+                            'disabled': 'true',
+                            })
+                )
     first_name = forms.CharField(
                     required=True,
                     label='First Name',
@@ -80,6 +89,10 @@ class ProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            Row(
+                Column(Field('email', value=self.user.email), css_class='form-group col-md-6'),
+                css_class='row'
+            ),
             Row(
                 Column(Field('first_name', value=self.user.first_name), css_class='form-group col-md-6'),
                 Column(Field('last_name', value=self.user.last_name), css_class='form-group col-md-6'),

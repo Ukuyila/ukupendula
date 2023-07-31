@@ -49,3 +49,18 @@ function copyToClipboard(element) {
   $temp.remove();
   alert('Text copied successfully!')
 }
+
+function startTyping(txt, speed=10) {
+  var i=0;
+
+  typeWriter()
+
+  function typeWriter() {
+    console.log(txt.length)
+    if (i < txt.length) {
+      document.getElementById("ai-response-text").innerHTML += txt.charAt(i);
+      i++;
+      setTimeout(typeWriter(), speed);
+    }
+  }
+}

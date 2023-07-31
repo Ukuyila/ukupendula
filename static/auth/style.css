@@ -1,0 +1,580 @@
+/*
+Template Name: bforum - Multistep Form & Login, Registration Form Template
+Description: bforum - Multistep Form & Login, Registration Form, Commin Soon HTML5 Template
+Author: CodexUnicTheme
+Version: 1.0
+*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Roboto+Slab:wght@300;400;500;600;700;800;900&display=swap');
+:root {
+  --body-color: #444;
+  --main-color: #1e1b39;
+  --primary-color: #5f3afc;
+  --headding-color: #0B2B3C;
+  --section-bg: #dadfe4;
+  --btn-color2: #ED2C41;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    color: var(--body-color);
+    font-family: 'Poppins', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+}
+a,
+button {
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -ms-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+}
+*::-moz-selection {
+    background: var(--primary-color);
+    color: #fff;
+    text-shadow: none;
+}
+::-moz-selection {
+    background: var(--primary-color);
+    color: #fff;
+    text-shadow: none;
+}
+::selection {
+    background: var(--primary-color);
+    color: #fff;
+    text-shadow: none;
+}
+h1,h2,h3,h4,h5,h6,p{
+    margin:0;
+    padding: 0;
+}
+h1,h1,h2,h3,h4,h5,h6{
+    color: var(--headding-color);
+    font-weight: 700;
+    font-family: 'Roboto Slab', serif;
+}
+ul{
+    margin:0;
+    padding: 0;
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    transition: .4s;
+    -webkit-transition: all .4s ease-in-out;
+}
+a:hover{
+    text-decoration: none;
+    color: var(--primary-color);
+}
+button:focus{
+    outline: none;
+}
+input:focus{
+    outline: none;
+}
+textarea:focus{
+    outline: none;
+}
+p{
+    color: var(--main-color);
+    line-height: 26px;
+}
+img{
+    max-width:100%;
+}
+.section-bg{
+    background-color: var(--section-bg);
+}
+.section-padding{
+    padding: 100px 0px;
+}
+.section-padding-2{
+    padding-top: 100px;
+    padding-bottom: 70px;
+}
+.section-padding-80{
+    padding: 80px 0px;
+}
+.section-padding-70{
+    padding: 70px 0px;
+}
+.section-padding-50{
+    padding: 50px 0px;
+}
+.text-right{
+    text-align: right;
+}
+
+.single-input input.error {
+    border-color: #ff2c2c5e;
+}
+.single-input label.error {
+    font-size: 14px;
+    color: #ff2626;
+    text-transform: capitalize;
+    font-weight: 400;
+}
+.single-input label#email-error{
+    font-size: 14px;
+    color: #ff2626;
+    text-transform: capitalize;
+    font-weight: 400;
+}
+.single-input-radio span, .single-input-checkbox span {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+}
+.single-radio, .single-checkbox{
+    margin-bottom: 20px;
+}
+.single-radio input[type="radio"] {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+}
+.single-radio label {
+    position: relative;
+    background: #f9f9f9;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    letter-spacing: 1px;
+    padding-left: 40px;
+}
+.single-radio label:after {
+    content: "";
+    clear: both;
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 16px;
+    left: 15px;
+    border-radius: 50%;
+    border: 1px solid #c6c6c6;
+    transition: all .3s ease;
+    padding-left: 2px;
+}
+.single-radio input[type="radio"]:checked + label{
+    border-color: var(--primary-color);
+}
+.single-radio input[type="radio"]:checked + label:after {
+    content: "\F633";
+    font-family: "bootstrap-icons";
+    font-size: 14px;
+    color: var(--main-color);
+    border-color: var(--primary-color);
+}
+.file-upload-type h4 {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.file-upload-type span {
+    display: block;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+.file-upload-type-full {
+    position: relative;
+}
+.file-upload-type-full label {
+    position: absolute;
+    top: 10.5px;
+    left: 17.5px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 13px;
+    text-align: center;
+    padding: 7px 21.5px;
+    cursor: pointer;
+}
+.file-upload-type-full input {
+    position: relative;
+    background: #f9f9f9;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    letter-spacing: 1px;
+    padding-left: 40px;
+}
+.single-select select {
+    position: relative;
+    background: #f9f9f9;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    letter-spacing: 1px;
+}
+.single-select select:focus{
+    border-color: var(--primary-color);
+}
+.single-input label {
+    margin-bottom: 10px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--headding-color);
+}
+.single-select label{
+    margin-bottom: 10px;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--headding-color);
+}
+.single-input-checkbox span {
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.single-checkbox {
+    width: 100%;
+    position: relative;
+}
+.single-checkbox  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    opacity: 0;
+}
+.single-checkbox label {
+    position: relative;
+    background: #f9f9f9;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    letter-spacing: 1px;
+    padding-left: 40px;
+}
+.single-checkbox label:before {
+    content: "";
+    clear: both;
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 16px;
+    left: 15px;
+    border-radius: 50%;
+    border: 1px solid #c6c6c6;
+    transition: all .3s ease;
+    padding-left: 2px;
+}
+
+.single-checkbox input:checked + label:before {
+    content: "\F633";
+    font-family: "bootstrap-icons";
+    font-size: 14px;
+    color: var(--main-color);
+    border-color: var(--primary-color);
+}
+.single-checkbox input:checked + label {
+    border-color: var(--primary-color);
+}
+.single-textarea-field label {
+    margin-bottom: 10px;
+    display: inline-block;
+    font-weight: 700;
+    line-height: 1;
+    font-size: 15px;
+    color: var(--headding-color);
+}
+.single-textarea-field textarea {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    height: 140px;
+}
+.single-textarea-field textarea:focus{
+    border-color: var(--primary-color);
+}
+.single-select .nice-select {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid #d9dde1;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 17px 20px;
+    transition: all .3s ease;
+    color: var(--main-color);
+    line-height: 1;
+    height: 55px;
+}
+.single-select .nice-select ul.list {
+    width: 100%;
+    border-radius: 0px;
+}
+.single-select .nice-select:focus{
+    border-color: var(--primary-color);
+}
+.single-select .nice-select:after {
+    height: 10px;
+    top: 46%;
+    width: 10px;
+}
+.from-header-info h2 {
+    font-size: 30px;
+    text-transform: capitalize;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.from-header-info p {
+    font-size: 16px;
+    line-height: 30px;
+    color: #666;
+}
+.single-radio-s2 {
+    position: relative;
+}
+.single-radio-s2 input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+}
+.single-radio-s2{
+    height: 100%;
+}
+.single-radio-s2  label {
+    width: 100%;
+    background: #fff;
+    border: 2px solid #d9dde1;
+    border-radius: 5px;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    cursor: pointer;
+}
+.single-radio-s2 label img {
+    width: 50px;
+    float: left;
+    margin-right: 20px;
+}
+.single-radio-s2 label:before {
+    content: "";
+    clear: both;
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    border-radius: 50%;
+    border: 1px solid #c6c6c6;
+    transition: all .3s ease;
+    padding-left: 2px;
+    right: 10px;
+}
+.single-radio-s2 input:checked + label:before {
+    content: "\F633";
+    font-family: "bootstrap-icons";
+    font-size: 14px;
+    color: #fff;
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    line-height: 1.2;
+}
+.single-radio-s2 input:checked + label {
+    border-color: var(--primary-color);
+}
+.single-radio-s2 label span {
+    font-size: 18px;
+    overflow: hidden;
+    font-weight: 700;
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+.login-page-left p {
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-block;
+    color: #fff;
+    margin-top: 20px;
+}
+.login-register-section {
+    background: #fff;
+    padding: 50px 60px;
+}
+.login-register-section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.google-btn a {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    background: #4749ff38;
+    border-radius: 5px;
+    color: var(--headding-color);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 40px;
+    line-height: 25px;
+}
+.google-btn a i {
+    color: #E8594E;
+    margin-right: 6px;
+}
+span.or-text {
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+    font-size: 15px;
+}
+.single-input {
+    margin-bottom: 20px;
+}
+.single-input input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    box-shadow: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 15px 20px;
+    transition: all .3s ease;
+    color: #696E76;
+    height: 60px;
+    background: #E8E9EA;
+}
+.single-input input:focus {
+    border-color: var(--primary-color);
+}
+button.button-1 {
+    height: 60px;
+    width: 100%;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 5px;
+    background: var(--primary-color);
+    color: #fff;
+    line-height: 30px;
+    transition: all .4s ease;
+}
+button.button-1:hover {
+    box-shadow: 0px 6px 4px #5f3afc36;
+}
+.login-register-from-btom p {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.login-register-from-btom p a{
+    color: var(--primary-color);
+}
+.login-register-from-btom p a:hover{
+    text-decoration: underline;
+}
+.login-page-left {
+    padding: 40px 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+.login-page-left::after {
+    content: "";
+    clear: both;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0537d4;
+    z-index: -1;
+}
+.login-page-left .logo {
+    position: absolute;
+    top: 20%;
+}
+.login-page-left h3 {
+    color: #fff;
+    font-size: 40px;
+    text-transform: capitalize;
+    font-weight: 700;
+    line-height: 1.2;
+}
+@media (max-width: 991px){
+    .login-page-left .logo {
+        position: relative;
+        margin-bottom: 40px;
+        top: 0;
+    }
+}
+@media (max-width: 576px){
+    .login-page-left h3 {
+        font-size: 35px;
+    }
+    .google-btn a {
+        font-size: 15px;
+        padding: 15px 10px;
+    }
+}
+@media (max-width: 420px){
+    .login-register-section {
+        padding: 50px 30px;
+    }
+}

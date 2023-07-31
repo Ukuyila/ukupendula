@@ -90,6 +90,13 @@
                   ">
                     <span class="icon me-3"><i class="fe fe-database"></i></span>Social Media Posts
                   </a>
+                  <a href="{% url 'content-improver-memory' %}" class="list-group-item list-group-item-action d-flex align-items-center
+                  {% if current_page == 'Content Improver Memory' %}
+                  active text-white
+                  {% endif %}
+                  ">
+                    <span class="icon me-3"><i class="fe fe-database"></i></span>Content Improver
+                  </a>
                 </div>
               </div>
 
@@ -137,7 +144,7 @@
                                 {% endfor %}
                               {% endfor %}
                             </td>
-                            <td>{{saved_page_copy.date_created|date:"Y-m-d"}}</td>
+                            <td>{{saved_page_copy.date_created|date:"Y-m-d"}}  {{saved_page_copy.date_created|date:"H:i"}}</td>
                             <td>
                               <a href="{% url 'landing-page-copy-response' saved_page_copy.uniqueId %}" type="button" class="btn btn-xs btn-outline-primary"><i class="icon icon-eye"></i></a>&nbsp;<a href="{% url 'delete-copy' saved_page_copy.uniqueId %}" type="button" class="btn btn-xs btn-outline-danger"><i class="icon icon-trash"></i></a>
                             </td>
