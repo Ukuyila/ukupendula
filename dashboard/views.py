@@ -3008,33 +3008,33 @@ def payment_success(request, uniqueId, planId, orderId):
         return HttpResponse('FAIL: 002')
 
 
-# @login_required
-# def paypal_payment_success(request):
+@login_required
+def paypal_payment_success(request):
 
-#     if request.POST['subscriptionType'] == 'starter':
-#         try:
-#             profile = Profile.objects.get(uniqueId=request.POST['userId'])
-#             profile.subscribed = True
-#             profile.subscription_type = request.POST['subscriptionType']
-#             profile.subscription_reference = request.POST['subscriptionId']
-#             profile.save()
-#             return JsonResponse({'result': 'SUCCESS'})
-#         except:
-#             return JsonResponse({'result': 'FAIL'})
+    if request.POST['subscriptionType'] == 'starter':
+        try:
+            profile = Profile.objects.get(uniqueId=request.POST['userId'])
+            profile.subscribed = True
+            profile.subscription_type = request.POST['subscriptionType']
+            profile.subscription_reference = request.POST['subscriptionId']
+            profile.save()
+            return JsonResponse({'result': 'SUCCESS'})
+        except:
+            return JsonResponse({'result': 'FAIL'})
     
-#     elif request.POST['subscriptionType'] == 'professional':
-#         try:
-#             profile = Profile.objects.get(uniqueId=request.POST['userId'])
-#             profile.subscribed = True
-#             profile.subscription_type = request.POST['subscriptionType']
-#             profile.subscription_reference = request.POST['subscriptionId']
-#             profile.save()
-#             return JsonResponse({'result': 'SUCCESS'})
-#         except:
-#             return JsonResponse({'result': 'FAIL'})
+    elif request.POST['subscriptionType'] == 'professional':
+        try:
+            profile = Profile.objects.get(uniqueId=request.POST['userId'])
+            profile.subscribed = True
+            profile.subscription_type = request.POST['subscriptionType']
+            profile.subscription_reference = request.POST['subscriptionId']
+            profile.save()
+            return JsonResponse({'result': 'SUCCESS'})
+        except:
+            return JsonResponse({'result': 'FAIL'})
 
-#     else:
-#         return JsonResponse({'result': 'FAIL'})
+    else:
+        return JsonResponse({'result': 'FAIL'})
 
 
 @login_required
