@@ -23,10 +23,10 @@ urlpatterns = [
     # billing
     path('billing', views.billing, name='billing'),
     path('dea248f7-dcfa-4edb-b012-3ad3ca07ead6', views.webhook, name='webhook'),
-    # path('subscription-plan/<str:uniqueId>/<str:planId>/', views.get_single_plan, name='subscription-plan'),
+    path('subscription-plan/<str:uniqueId>/<str:planId>/', views.get_single_plan, name='subscription-plan'),
 
     path('payment-plans', views.payment_plans, name='payment-plans'),
-    # path('pay-now/<str:planId>/', views.payfast_payment, name='pay-now'),
+    path('pay-now/<str:planId>/', views.payfast_payment, name='pay-now'),
     # path('process-initiator-plan', views.process_initiator_plan, name='process-initiator-plan'),
 
     # home page url paths
