@@ -492,38 +492,38 @@ class BlogSocialPost(models.Model):
         super(BlogSocialPost, self).save(*args, **kwargs)
 
 
-class ContentImprover(models.Model):
-    content_title = models.CharField(max_length=300)
-    tone_of_voice = models.CharField(max_length=255)
-    content_body_old = models.TextField(null=True, blank=True)
-    content_keywords = models.TextField(null=True, blank=True)
-    content_body_new = models.TextField(null=True, blank=True)
+# class ContentImprover(models.Model):
+#     content_title = models.CharField(max_length=300)
+#     tone_of_voice = models.CharField(max_length=255)
+#     content_body_old = models.TextField(null=True, blank=True)
+#     content_keywords = models.TextField(null=True, blank=True)
+#     content_body_new = models.TextField(null=True, blank=True)
 
-    deleted = models.BooleanField(default=False)
+#     deleted = models.BooleanField(default=False)
 
-    # django related field
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     # django related field
+#     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
-    category = models.CharField(null=True, blank=True, max_length=255)
+#     category = models.CharField(null=True, blank=True, max_length=255)
 
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
+#     # Utility Variable
+#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
+#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+#     date_created = models.DateTimeField(blank=True, null=True)
+#     last_updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return '{} {}'.format(self.content_title, self.uniqueId)
+#     def __str__(self):
+#         return '{} {}'.format(self.content_title, self.uniqueId)
 
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
+#     def save(self, *args, **kwargs):
+#         if self.date_created is None:
+#             self.date_created = timezone.localtime(timezone.now())
+#         if self.uniqueId is None:
+#             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.content_title, self.uniqueId))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(ContentImprover, self).save(*args, **kwargs)
+#         self.slug = slugify('{} {}'.format(self.content_title, self.uniqueId))
+#         self.last_updated = timezone.localtime(timezone.now())
+#         super(ContentImprover, self).save(*args, **kwargs)
 
 
 class Paragraph(models.Model):
