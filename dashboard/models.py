@@ -745,35 +745,35 @@ class RequestsQueue(models.Model):
         super(RequestsQueue, self).save(*args, **kwargs)
 
 
-class SubscriptionPackage(models.Model):
-    package_name = models.CharField(max_length=200)
-    package_price = models.CharField(max_length=100, blank=True, null=True)
-    package_max_word = models.CharField(max_length=100, blank=True, null=True, default='0') # 0 is for unlimited
-    package_max_device = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
-    package_max_memory = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
-    package_status = models.BooleanField(default=True)
-    package_description = models.TextField(null=True, blank=True)
+# class SubscriptionPackage(models.Model):
+#     package_name = models.CharField(max_length=200)
+#     package_price = models.CharField(max_length=100, blank=True, null=True)
+#     package_max_word = models.CharField(max_length=100, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_max_device = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_max_memory = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
+#     package_status = models.BooleanField(default=True)
+#     package_description = models.TextField(null=True, blank=True)
 
-    is_active = models.BooleanField(default=False)
+#     is_active = models.BooleanField(default=False)
 
-    # Utility Variable
-    uniqueId = models.CharField(null=True, blank=True, max_length=100)
-    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
-    date_created = models.DateTimeField(blank=True, null=True)
-    last_updated = models.DateTimeField(blank=True, null=True)
+#     # Utility Variable
+#     uniqueId = models.CharField(null=True, blank=True, max_length=100)
+#     slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+#     date_created = models.DateTimeField(blank=True, null=True)
+#     last_updated = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return '{} {}'.format(self.package_name, self.uniqueId)
+#     def __str__(self):
+#         return '{} {}'.format(self.package_name, self.uniqueId)
 
-    def save(self, *args, **kwargs):
-        if self.date_created is None:
-            self.date_created = timezone.localtime(timezone.now())
-        if self.uniqueId is None:
-            self.uniqueId = str(uuid4()).split('-')[4]
+#     def save(self, *args, **kwargs):
+#         if self.date_created is None:
+#             self.date_created = timezone.localtime(timezone.now())
+#         if self.uniqueId is None:
+#             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.package_name, self.uniqueId))
-        self.last_updated = timezone.localtime(timezone.now())
-        super(SubscriptionPackage, self).save(*args, **kwargs)
+#         self.slug = slugify('{} {}'.format(self.package_name, self.uniqueId))
+#         self.last_updated = timezone.localtime(timezone.now())
+#         super(SubscriptionPackage, self).save(*args, **kwargs)
 
 
 class ToneOfVoice(models.Model):
