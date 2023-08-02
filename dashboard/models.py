@@ -161,6 +161,40 @@ class UserSetting(models.Model):
         super(UserSetting, self).save(*args, **kwargs)
 
 
+class SubscriptionTranasction(models.Model):
+    subscription_reference = models.CharField(null=True, blank=True, max_length=500)
+    user_profile_uid = models.CharField(null=True, blank=True, max_length=100)
+    payment_method = models.CharField(null=True, blank=True, max_length=100)
+
+    has_team = models.BooleanField(default=False)
+    user_team = models.CharField(null=True, blank=True, max_length=100)
+
+    is_active = models.BooleanField(default=True)
+    date_activated = models.DateTimeField(blank=True, null=True)
+    date_expiry = models.DateTimeField(blank=True, null=True)
+
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.subscription_reference, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_activated is None:
+            self.date_activated = timezone.localtime(timezone.now())
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.subscription_reference, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(SubscriptionTranasction, self).save(*args, **kwargs)
+
+
 class RegisteredDevice(models.Model):
     device_name = models.CharField(max_length=255)
     ip_address = models.CharField(max_length=255)
