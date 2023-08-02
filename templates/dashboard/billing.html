@@ -22,13 +22,13 @@
           <div class="tab-pane active" id="tab-1">
             <div class="row">
               {% for package in sub_packages %}
-                {% if 'Yearly' in package.package_name %}
+                {% if 'Yearly' in package.package_name and package.package_name == 'Free' %}
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
-                      <div class="display-3 my-4 h5">Billed Annually</div>
+                      <div><small class="text-muted">Billed Annually</small></div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
                           {% for descr in package_descr %}
@@ -57,13 +57,13 @@
           <div class="tab-pane" id="tab-2">
             <div class="row">
               {% for package in sub_packages %}
-                {% if not 'Yearly' in package.package_name %}
+                {% if not 'Yearly' in package.package_name and package.package_name == 'Free' %}
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
-                      <div class="display-3 my-4 h5">Billed Monthly</div>
+                      <div class=""><small class="text-muted">Billed Monthly</small></div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
                           {% for descr in package_descr %}
