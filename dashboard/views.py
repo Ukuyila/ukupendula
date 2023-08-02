@@ -3269,6 +3269,10 @@ def payfast_payment(request, planId):
         messages.error(request, 'Your profile is not complete, please fill in your details to contiue!')
         redirect('profile')
 
+    subscri_frequency = "3"
+    if 'Yearly' in package.package_name:
+        subscri_frequency = "6"
+
     ws_user_fname = request.user.first_name
     ws_user_lname = request.user.last_name
 
@@ -3290,7 +3294,7 @@ def payfast_payment(request, planId):
         "subscription_type": "1",
         # "billing_date": "",
         "recurring_amount": recurring_amount,
-        "frequency": "3",
+        "frequency": subscri_frequency,
         "cycles": "0",
         # "custom_str1": user_profile.uniqueId,
         # "custom_str2": planId
