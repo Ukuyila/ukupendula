@@ -3330,6 +3330,7 @@ def payfast_payment(request, planId):
     context['notify_url'] = notify_url
     context['amount'] = amount
     context['recurring_amount'] = recurring_amount
+    context['subscri_frequency'] = subscri_frequency
     context['item_name'] = item_name
     context['item_descr'] = item_descr
     # context['plan_id'] = planId
