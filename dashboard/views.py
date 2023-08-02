@@ -50,7 +50,11 @@ def split(value, key):
 def home(request):
     context = {}
 
-    user_profile = request.user.profile
+    try:
+        user_profile = request.user.profile
+    except:
+        user_profile = Profile.objects.create(user=request.user)
+
     user_team_id = user_profile.user_team
 
     empty_blogs = []

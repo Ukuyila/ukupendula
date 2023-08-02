@@ -49,15 +49,19 @@ def login(request):
         if user:
             user_profile = user.profile.uniqueId
             print('Profile UniqueId: {}'.format(user_profile))
-            return
+            return True
             # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
-            # if user.is_active:
+            # if not user.profile.is_verified:
+            #     messages.error(request, "Your email is not verified, please check your inbox for verification link!")
+            #     return redirect('login')
+            # elif not user.is_active:
+            #     messages.error(request, "Your account is not active, please contact support if yo!")
+            #     return redirect('login')
+            # else:
             #     # login user and redirect
             #     auth.login(request, user)
             #     return redirect('dashboard')
-            # else:
-            #     messages.error(request, "Your email is not verified, please check your inbox for verification link!")
-            #     return redirect('login')
+
 
         else:
             # post error message
@@ -121,7 +125,7 @@ def register(request):
             messages.error(request, "User email address {} already exists, please use a different email address!".format(email))
             return redirect('register')
 
-        user = User.objects.create_user(email=email, username=email, password=password1)
+        user = User.objects.create_user(email=email, username=email, password=password1, is_active=False)
         user.save()
 
         time.sleep(2)
@@ -139,6 +143,7 @@ def register(request):
         new_user_team.save()
         time.sleep(2)
 
+        profile.is_verified = False
         profile.user_team = new_user_team.uniqueId
         profile.save()
 
