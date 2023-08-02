@@ -47,21 +47,20 @@ def login(request):
         user = auth.authenticate(username=email, password=password)
 
         if user:
-            user_profile = user.profile.uniqueId
+            user_profile = user.is_active
             print('Profile UniqueId: {}'.format(user_profile))
-            return True
-            # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
-            # if not user.profile.is_verified:
-            #     messages.error(request, "Your email is not verified, please check your inbox for verification link!")
-            #     return redirect('login')
-            # elif not user.is_active:
-            #     messages.error(request, "Your account is not active, please contact support if yo!")
-            #     return redirect('login')
-            # else:
-            #     # login user and redirect
-            #     auth.login(request, user)
-            #     return redirect('dashboard')
 
+            # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
+            if not user.profile.is_verified:
+                messages.error(request, "Your email is not verified, please check your inbox for verification link!")
+                return redirect('login')
+            elif not user.is_active:
+                messages.error(request, "Your account is not active, please contact support if yo!")
+                return redirect('login')
+            else:
+                # login user and redirect
+                auth.login(request, user)
+                return redirect('dashboard')
 
         else:
             # post error message
@@ -199,7 +198,7 @@ def register(request):
         # begin email verification
         email = emailVerification(request, user, password1, new_user_team)
 
-        # messages.info(request, email)
+        messages.info(request, email)
         return redirect('login')
 
         # DIRECT LOGIN IF EMAIL IS VERIFIED
