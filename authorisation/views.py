@@ -47,9 +47,17 @@ def login(request):
         user = auth.authenticate(username=email, password=password)
 
         if user:
-            # login user and redirect
-            auth.login(request, user)
-            return redirect('dashboard')
+            user_profile = user.profile.uniqueId
+            print('Profile UniqueId: {}'.format(user_profile))
+            return
+            # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
+            # if user.is_active:
+            #     # login user and redirect
+            #     auth.login(request, user)
+            #     return redirect('dashboard')
+            # else:
+            #     messages.error(request, "Your email is not verified, please check your inbox for verification link!")
+            #     return redirect('login')
 
         else:
             # post error message

@@ -457,6 +457,22 @@ def generate_landing_page_copy(company_name, company_purpose, page_sections, pro
             return ''
     else:
         return ''
+    
+
+def check_count_memories(profile):
+    pass
+
+
+def max_devices(profile):
+    max_devices = 1
+    if profile.subscribed:
+        profile_package = profile.subscription_reference.split('-')[1]
+        user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
+
+        max_devices = user_package.package_max_device
+
+    else:
+        return max_devices
 
 
 def check_count_allowance(profile):
@@ -470,7 +486,6 @@ def check_count_allowance(profile):
                     return True
                 else:
                     return False
-
             else:
                 return True
         elif sub_type == 'initiator':

@@ -56,8 +56,6 @@ def home(request):
     empty_blogs = []
     complete_blogs = []
 
-    max_devices_allow = 15
-
     today_date = datetime.datetime.now()
 
     remove_api_requests(user_profile)
@@ -86,10 +84,11 @@ def home(request):
     # email_hash = calculate_gravatar_hash(g_user_email)
 
     # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
-    if User.first_name is None:
-        messages.error(request, "Your profile is not complete, please fill all the details!")
-        return redirect('profile')
+    if not user_profile.is_verified:
+        messages.error(request, "Your email is not verified, please check your inbox for verification link!")
+        return redirect('login')
     
+    max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
@@ -220,6 +219,23 @@ def edit_settings(request):
     user_profile = request.user.profile
     user_settings = UserSetting.objects.get(profile=user_profile)
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     if request.method == 'POST':
 
         user_settings.lang = request.POST['user_lang']
@@ -265,8 +281,22 @@ def profile(request):
 
     user_settings = UserSetting.objects.get(profile=user_profile)
 
-    # user_website = user_settings.website_link
-    # user_website = user_settings.website_link
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
@@ -325,6 +355,23 @@ def blog_topic(request):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -430,6 +477,23 @@ def blog_sections(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     if 'blog_topics' in request.session:
         pass
     else:
@@ -532,8 +596,24 @@ def use_blog_topic(request, blog_topic):
     print('Blog topic: '.format(blog_topic))
     context = {}
 
-    
     user_profile = request.user.profile
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     current_page = 'Use Blog Sections Generator'
     context['current_page'] = current_page
@@ -634,6 +714,23 @@ def create_blog_from_topic(request, uniqueId):
 
     user_profile = request.user.profile
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     current_page = 'Use Blog Sections Generator'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
@@ -725,6 +822,7 @@ def save_section_head(request, uniqueId, section_head):
 
 @login_required
 def view_gen_blog(request, slug):
+
     user_profile = request.user.profile
     context = {}
     current_page = 'Blog Generator'
@@ -741,6 +839,23 @@ def view_gen_blog(request, slug):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     min_words = 300
 
@@ -832,9 +947,6 @@ def edit_gen_blog(request, uniqueId):
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(request.user.profile)
 
-    # context['parent_page'] = parent_page
-    # context['parent_page_url'] = 'view-generated-blog'
-
     cate_list = []
     client_list = []
 
@@ -851,6 +963,23 @@ def edit_gen_blog(request, uniqueId):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -989,6 +1118,23 @@ def view_blog_social_post(request, postType, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     blog_posts = []
     tone_of_voices = []
 
@@ -1044,6 +1190,24 @@ def view_blog_social_post(request, postType, uniqueId):
 @login_required
 def generate_social_media(request):
     context = {}
+    user_profile = request.user.profile
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
     
     if request.method == "POST":
 
@@ -1114,6 +1278,23 @@ def gen_social_post(request, postType, uniqueId=''):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
     
     # post_type = postType.replace('_', ' ').title()
     prompt_text = ''
@@ -1303,6 +1484,23 @@ def gen_social_from_blog(request, postType, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     try:
         this_blog = Blog.objects.get(uniqueId=uniqueId)
         created_post = True
@@ -1456,6 +1654,23 @@ def view_generated_blog(request, slug):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     try:
         blog = Blog.objects.get(slug=slug)
     except:
@@ -1476,10 +1691,25 @@ def improve_content(request):
     context = {}
     min_words = 200
     max_words = 300
-
+    user_profile = request.user.profile
     response_data = {}
 
-    # try:
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     if request.method == 'POST':
         content_topic = request.POST['content_title']
@@ -1613,6 +1843,23 @@ def content_improver(request, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     cate_list = []
     client_list = []
 
@@ -1668,6 +1915,23 @@ def paragraph_writer(request, uniqueId=''):
     client_list = []
     user_profile = request.user.profile
     team_clients = TeamClient.objects.filter(is_active=True)
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     for client in team_clients:
         if client.team == user_profile.user_team:
@@ -1796,6 +2060,23 @@ def sentence_writer(request, uniqueId=''):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     cate_list = []
     client_list = []
@@ -1948,7 +2229,22 @@ def article_title_writer(request, uniqueId=''):
     cate_list = []
     client_list = []
 
-    user_profile = request.user.profile
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2096,7 +2392,22 @@ def generate_blog_meta(request, uniqueId):
     cate_list = []
     client_list = []
 
-    user_profile = request.user.profile
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -2217,6 +2528,23 @@ def meta_description_writer(request, uniqueId=''):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     cate_list = []
     client_list = []
@@ -2348,6 +2676,23 @@ def summarize_blog(request, uniqueId):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     cate_list = []
     client_list = []
@@ -2512,6 +2857,23 @@ def summarize_content(request, uniqueId=""):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
     cate_list = []
     client_list = []
 
@@ -2646,6 +3008,23 @@ def landing_page_copy(request, uniqueId=""):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request, "You have maximum devices logged in on your profile!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
     cate_list = []
     client_list = []
