@@ -3454,7 +3454,7 @@ def team_manager(request):
     context['flag_avatar'] = flag_avatar
     context['user_settings'] = user_settings
 
-    if not user_profile.subscription_type == 'teams':
+    if not 'teams' in user_profile.subscription_type:
         messages.error(request, "You subscription packages does not have access to this feature!")
         return redirect('billing')
 
@@ -3732,7 +3732,16 @@ def device_manager(request):
     # max_devices = 10
 
     user_profile = request.user.profile
-    user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_profile.user_team)
+    # find if user is on premium package
+    if user_profile.subscription_type == 'free':
+        user_sub_pack = SubscriptionPackage.objects.get(uniqueId=settings.FREE_SUBSCR_PACKAGE)
+    else:
+    # find user package from package ref
+        user_package_ref = user_profile.subscription_reference
+        user_subscrip_pakg = user_package_ref.split('-')[1]
+
+        user_sub_pack = SubscriptionPackage.objects.get(uniqueId=user_subscrip_pakg)
+
     max_devices = int(user_sub_pack.package_max_device)
 
     context['current_page'] = current_page
@@ -4652,7 +4661,7 @@ def user_roles(request):
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
 
-    if not user_profile.subscription_type == 'teams':
+    if not 'teams' in user_profile.subscription_type:
         messages.error(request, "You subscription packages does not have access to this feature!")
         return redirect('billing')
 
