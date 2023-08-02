@@ -88,7 +88,7 @@ def emailVerification(request, user, password1, user_team):
     
     email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO])
     email.content_subtype = 'html'
-    email.attach_alternative(message, 'text/html')
+
     if email.send():
         msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
                 received activation link to confirm and complete the registration. Note: If not found check spam folder.'
