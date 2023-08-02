@@ -12,6 +12,8 @@ class Profile(models.Model):
         ('free', 'Free'),
         ('initiator', 'Initiator'),
         ('teams', 'Teams'),
+        ('initiator-yearly', 'Initiator Yearly'),
+        ('teams-yearly', 'Teams Yearly'),
     ]
     # Standard Variables
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -749,6 +751,7 @@ class SubscriptionPackage(models.Model):
     package_name = models.CharField(max_length=200)
     package_price = models.CharField(max_length=100, blank=True, null=True)
     package_max_word = models.CharField(max_length=100, blank=True, null=True, default='0') # 0 is for unlimited
+    package_max_team = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
     package_max_device = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
     package_max_memory = models.CharField(max_length=12, blank=True, null=True, default='0') # 0 is for unlimited
     package_status = models.BooleanField(default=True)

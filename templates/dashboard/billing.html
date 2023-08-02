@@ -5,6 +5,97 @@
 
 {% block body %}
 
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body items-gallery">
+      <div class="items-blog-tab text-center">
+        <h2 class="">Availabe Subscription Plans</h2>
+        <div class="items-blog-tab-heading row">
+          <div class="col-12">
+            <ul class="nav items-blog-tab-menu">
+              <li class=""><a href="#tab-1" class="active show" data-bs-toggle="tab">Annually</a></li>
+              <li><a href="#tab-2" data-bs-toggle="tab" class="">Monthly</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab-1">
+            <div class="row">
+              {% for package in sub_packages %}
+                {% if 'yearly' in package.package_name %}
+                <div class="col-sm-12 col-lg-4">
+                  <div class="card overflow-hidden">
+                    <div class="text-center pricing pricing1">
+                      <div class="card-category bg-primary">{{ package.package_name }}</div>
+                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
+                      <div class="display-3 my-4">Billed Annually</div>
+                      <ul class="list-unstyled leading-loose">
+                        {% with package.package_description|split:"</br>" as package_descr %}
+                          {% for descr in package_descr %}
+                          <li class="list-group-item">{{ descr }}</li>
+                          {% endfor %}
+                        {% endwith %}
+                      </ul>
+                      {% if user.profile.subscription_type|title == package.package_name %}
+                      <div class="text-center m-4">
+                        <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
+                      </div>
+                      {% else %}
+                      <div class="text-center m-4">
+                        <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Subscribe Now</a>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+          
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="tab-pane" id="tab-2">
+            <div class="row">
+              {% for package in sub_packages %}
+                {% if not 'yearly' in package.package_name %}
+                <div class="col-sm-12 col-lg-4">
+                  <div class="card overflow-hidden">
+                    <div class="text-center pricing pricing1">
+                      <div class="card-category bg-primary">{{ package.package_name }}</div>
+                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
+                      <div class="display-3 my-4">Billed Monthly</div>
+                      <ul class="list-unstyled leading-loose">
+                        {% with package.package_description|split:"</br>" as package_descr %}
+                          {% for descr in package_descr %}
+                          <li class="list-group-item">{{ descr }}</li>
+                          {% endfor %}
+                        {% endwith %}
+                      </ul>
+                      {% if user.profile.subscription_type|title == package.package_name %}
+                      <div class="text-center m-4">
+                        <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
+                      </div>
+                      {% else %}
+                      <div class="text-center m-4">
+                        <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Subscribe Now</a>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+          
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="row">
   <div class="col-sm-12">
 
