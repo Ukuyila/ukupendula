@@ -22,13 +22,13 @@
           <div class="tab-pane active" id="tab-1">
             <div class="row">
               {% for package in sub_packages %}
-                {% if 'yearly' in package.package_name %}
+                {% if 'Yearly' in package.package_name %}
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
-                      <div class="display-3 my-4">Billed Annually</div>
+                      <div class="display-3 my-4 h5">Billed Annually</div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
                           {% for descr in package_descr %}
@@ -57,13 +57,13 @@
           <div class="tab-pane" id="tab-2">
             <div class="row">
               {% for package in sub_packages %}
-                {% if not 'yearly' in package.package_name %}
+                {% if not 'Yearly' in package.package_name %}
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
-                      <div class="display-3 my-4">Billed Monthly</div>
+                      <div class="display-3 my-4 h5">Billed Monthly</div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
                           {% for descr in package_descr %}
@@ -90,52 +90,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-
-
-<div class="row">
-  <div class="col-sm-12">
-
-    <div class="card">
-      <h5 class="card-header">Availabe Subscription Plans </h5>
-
-    </div>
-  </div>
-  <div class="row">
-    {% for package in sub_packages %}
-
-    <div class="col-sm-12 col-lg-4">
-      <div class="card overflow-hidden">
-        <div class="text-center pricing pricing1">
-          <div class="card-category bg-primary">{{ package.package_name }}</div>
-          <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
-          {% comment %} <div class="display-3 my-4"><strong>R{{ package.package_price }} /</strong> month</div> {% endcomment %}
-          <ul class="list-unstyled leading-loose">
-            {% with package.package_description|split:"</br>" as package_descr %}
-              {% for descr in package_descr %}
-              <li class="list-group-item">{{ descr }}</li>
-              {% endfor %}
-            {% endwith %}
-          </ul>
-          {% if user.profile.subscription_type|title == package.package_name %}
-          <div class="text-center m-4">
-            <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
-          </div>
-          {% else %}
-          <div class="text-center m-4">
-            <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Subscribe Now</a>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-    {% endfor %}
-    <div class="col-md-12">
-      <p>* <a href="#!">Fair usage policy</a></p>
     </div>
   </div>
 </div>
