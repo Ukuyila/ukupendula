@@ -20,9 +20,13 @@
           <h3 class="card-title">Categories</h3>
           <div class="card-options">
             {% if client_list|length > 0 %}
+            <div class="btn-group">
             <button type="button" data-bs-toggle="modal" data-bs-target="#addNewCategory" class="btn btn-primary btn-sm mr-10">Add Category</button>
+            </div>
             {% endif %}
+            <div class="btn-group">
             <button onclick="return window.location.href='{% url 'clients' %}'" type="button" class="btn btn-outline-primary btn-sm">Clients</button>
+          </div>
           </div>
         </div>
         <div class="card-body">
