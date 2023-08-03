@@ -3358,32 +3358,36 @@ def payment_cancel(request):
 
 
 def payment_success(request, uniqueId, planId, orderId):
-    context = {}
-    order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
-    print(order_ref)
+	context = {}
+	order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
+	print(order_ref)
+    
+	try:
+		package = SubscriptionPackage.objects.get(uniqueId=planId)
+		package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
 
-    try:
-        package = SubscriptionPackage.objects.get(uniqueId=planId)
-        package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
+		try:
+			profile = Profile.objects.get(uniqueId=uniqueId)
+			profile.subscribed = True
+			profile.subscription_type = package_name
+			profile.subscription_reference = order_ref
+			profile.save()
 
-        try:
-            profile = Profile.objects.get(uniqueId=uniqueId)
-            profile.subscribed = True
-            profile.subscription_type = package_name
-            profile.subscription_reference = order_ref
-            profile.save()
+			date_activated = timezone.localtime(timezone.now())
 
-            date_activated = timezone.localtime(timezone.now())
-            date_expiry = date_activated + datetime.timedelta(days=10)
+			date_expiry = date_activated + datetime.timedelta(days=30)
+			if 'yearly' in package_name:
+				date_expiry = date_activated + datetime.timedelta(days=365)
+			print('date_expiry: {}'.format(date_expiry))
 
-            has_team = False
-            user_team = ''
-            if 'team' in package.package_name.lower():
-                has_team = True
-                try:
-                    this_user_team = Team.objects.get(uniqueId=profile.user_team)
-                except:
-                    this_user_team = Team.objects.create(
+			has_team = False
+			user_team = ''
+			if 'team' in package.package_name.lower():
+				has_team = True
+				try:
+					this_user_team = Team.objects.get(uniqueId=profile.user_team)
+				except:
+					this_user_team = Team.objects.create(
                         business_name='',
                         business_size='5',
                         industry='',
@@ -3393,14 +3397,14 @@ def payment_success(request, uniqueId, planId, orderId):
                         business_status=True,
                         team_principal=profile.uniqueId,
                     )
-                    this_user_team.save()
+					this_user_team.save()
 
-                    profile.user_team=this_user_team.uniqueId
+					profile.user_team=this_user_team.uniqueId
 
-                user_team = this_user_team.uniqueId
+				user_team = this_user_team.uniqueId
 
             # insert SubscriptionTranasction
-            sub_transact = SubscriptionTranasction.objects.create(
+			sub_transact = SubscriptionTranasction.objects.create(
                 subscription_reference=order_ref,
                 user_profile_uid=uniqueId,
                 has_team=has_team,
@@ -3409,29 +3413,29 @@ def payment_success(request, uniqueId, planId, orderId):
                 date_expiry=date_expiry,
 
             )
-            sub_transact.save()
+			sub_transact.save()
 
             # update the team
-            try:
-                this_user_team = Team.objects.get(uniqueId=profile.user_team)
+			try:
+				this_user_team = Team.objects.get(uniqueId=profile.user_team)
                 
-                find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
+				find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
 
-                for team_member in find_team_members:
-                    if team_member.is_verified and team_member.is_active and team_member.user.is_active:
-                        team_member.subscribed=profile.subscribed
-                        team_member.subscription_type=profile.subscription_type
-                        team_member.subscription_reference=profile.subscription_reference
-                        team_member.save()
+				for team_member in find_team_members:
+					if team_member.is_verified and team_member.is_active and team_member.user.is_active:
+						team_member.subscribed=profile.subscribed
+						team_member.subscription_type=profile.subscription_type
+						team_member.subscription_reference=profile.subscription_reference
+						team_member.save()
 
-                return HttpResponse('SUCCESS')
-            except:
+				return HttpResponse('SUCCESS')
+			except:
                 
-                return HttpResponse('SUCCESS')
-        except:
-            return HttpResponse('FAIL: 001')
-    except:
-        return HttpResponse('FAIL: 002')
+				return HttpResponse('SUCCESS')
+		except:
+			return HttpResponse('FAIL: 001')
+	except:
+		return HttpResponse('FAIL: 002')
 
 
 @login_required

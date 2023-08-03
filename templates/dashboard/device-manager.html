@@ -48,9 +48,9 @@
                     {% endif %}
                   </td>
                   <td>
-                    {% if not reg_device.uniqueId == user.profile.current_device %}
+                    {% comment %} {% if not reg_device.uniqueId == user.profile.current_device %} {% endcomment %}
                     <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-device' reg_device.uniqueId %}'" class="text-center"><i class="icon icon-trash"></i></a>
-                    {% endif %}
+                    {% comment %} {% endif %} {% endcomment %}
                   </td>
                   
                 </tr>
