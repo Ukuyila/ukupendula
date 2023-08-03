@@ -3272,7 +3272,7 @@ def payfast_payment(request, planId):
     subscri_frequency = "3"
     if 'Yearly' in package.package_name:
         subscri_frequency = "6"
-        recurr_amount = int(recurring_amount*12)
+        recurr_amount = int(recurring_amount)*12
         amount = "%.2f" % int(recurr_amount)
         print(recurr_amount)
 
