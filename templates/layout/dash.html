@@ -498,6 +498,11 @@
                 <li class="breadcrumb-item active" aria-current="page">{{current_page}}</li>
               </ol>
             </div>
+						{% for message in messages %}
+						<div class="alert alert-{{ message.tags }}" role="alert">
+							<strong>{{ message }}</strong>
+						</div>
+						{% endfor %}
             
             {% block body %}
             {% endblock %}
