@@ -684,13 +684,13 @@ def datetime_difference(date_a, date_b):
     return diff.total_seconds()
 
 def device_registration(request, max_devices_allow):
-
+    user_profile = request.user.profile
     cnt_devices = 0
     device_info = get_device_info(request)
     # DEVICE REGISTRATION
     # check if device already exists
     try:
-        get_device_by_mac = RegisteredDevice.objects.get(mac_address=device_info['mac_address'])
+        get_device_by_mac = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
         return get_device_by_mac.uniqueId
 
     except:
