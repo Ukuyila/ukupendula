@@ -3270,11 +3270,12 @@ def payfast_payment(request, planId):
         redirect('profile')
 
     subscri_frequency = "3"
+    sub_period = 'month'
     if 'Yearly' in package.package_name:
         subscri_frequency = "6"
         recurring_amount = str(int(recurring_amount)*12)
         amount = "%.2f" % int(recurring_amount)
-        # print(recurr_amount)
+        sub_period = 'Year'
 
     ws_user_fname = request.user.first_name
     ws_user_lname = request.user.last_name
@@ -3336,6 +3337,7 @@ def payfast_payment(request, planId):
     context['subscri_frequency'] = subscri_frequency
     context['item_name'] = item_name
     context['item_descr'] = item_descr
+    context['sub_period'] = sub_period
     # context['plan_id'] = planId
     context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.PAYFAST_SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
