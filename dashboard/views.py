@@ -3238,7 +3238,7 @@ def payfast_payment(request, planId):
     return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
     notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
     # cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
-    cancel_url = '{}://{}/billing'.format(protocol, get_current_site(request).domain)
+    cancel_url = '{}://{}/dash/billing'.format(protocol, get_current_site(request).domain)
 
     order_id = str(uuid4()).split('-')[4]
 
