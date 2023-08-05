@@ -112,8 +112,8 @@
                                             <div class="float-end">
                                                 <div class="btn-group ">
                                                     <button class="btn btn-primary" 
-                                                    {% if copy_content.uniqueId %}
-                                                     onclick="return window.location.href='{% url 'download-content' 'content_improver' copy_content.uniqueId %}'"
+                                                    {% if content.uniqueId %}
+                                                     onclick="return window.location.href='{% url 'download-content' 'content_improver' content.uniqueId %}'"
                                                     {% else %}
                                                     disabled
                                                     {% endif %}>Download</button>
@@ -130,7 +130,7 @@
                                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                             <div class="card-body text-dark">
                                                                 <div class="ideas" id="ai-response-text">
-                                                                    {{content.content_body_new}}
+                                                                    {{content_body_new}}
                                                                 </div>
                                                             </div>
                                                         </div>
