@@ -1731,12 +1731,12 @@ def improve_content(request):
 
         }
 
-        if len(content_topic) > 300 and max_words > 2000:
+        if len(content_topic) > 300 and max_words > 14000:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
             return redirect('content-improver')
         else:
             tone_of_voice = request.POST['tone_of_voice']
-            if len(old_content) > 3 and len(old_content) < 2001:
+            if len(old_content) > 3 and len(old_content) < 14001:
                 # generator starts here
                 api_call_code = str(uuid4()).split('-')[4]
 
@@ -1890,6 +1890,7 @@ def content_improver(request, uniqueId=''):
         content = ContentImprover.objects.get(uniqueId=uniqueId)
 
         context['content'] = content
+        context['content_body_new'] = content.content_body_new.replace('<br>', '\n')
     else:
         pass
 
