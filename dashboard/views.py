@@ -2713,7 +2713,7 @@ def summarize_blog(request, blogUniqueId, uniqueId=''):
 
 	except:
 		messages.error(request, "Blog not found!")
-		return redirect('blog-memory')
+		return redirect('blog-memory', 'incomplete')
     
 	try:
 		saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
@@ -2841,11 +2841,11 @@ def summarize_blog(request, blogUniqueId, uniqueId=''):
 
 						context['content_data_uniqueId'] = s_content_data.uniqueId
 
-						return redirect('blog-summarizer-response', s_content_data.uniqueId, blogUniqueId)
+						return redirect('blog-summarizer-response', blogUniqueId, s_content_data.uniqueId)
             
 					else:
 						messages.error(request, "The engine could not understand your command, please try again!")
-						return redirect('generate-blog-summary', uniqueId)
+						return redirect('generate-blog-summary', blogUniqueId)
 				else:
                     # we might need to delete all abandoned calls
 					pass
