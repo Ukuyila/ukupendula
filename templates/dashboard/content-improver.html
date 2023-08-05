@@ -39,7 +39,7 @@
                                                 <div class="mb-3">
                                                     <label for="category" class=" ">Category</label>
                                                     <div class="row gutters-xs">
-														<div class="col">
+																											<div class="col">
                                                             <select type="text" class="form-control prompt-input select2" id="category" name="category">
                                                                 {% for client in client_list %}
                                                                 <optgroup label="{{client.client_name}}">
@@ -90,8 +90,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
-                                                  <div class="d-flex align-items-center justify-content-between"><label for="content_body_old" class=" ">Your Text</label><span class="ocb_counter text-muted">0/2000</span></div>
-                                                  <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="2000" required>{{content.content_body_old|safe}}</textarea>
+                                                  <div class="d-flex align-items-center justify-content-between"><label for="content_body_old" class=" ">Your Text</label><span class="ocb_counter text-muted">0/14000</span></div>
+                                                  <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="14000" required>{{content.content_body_old|safe}}</textarea>
                                               </div>
                                                 
                                                 <div class="mb-3">

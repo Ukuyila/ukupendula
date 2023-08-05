@@ -3,7 +3,7 @@ $(document).ready(function(){
 
   const maxLength = 300;
   const maxKwLength = 250;
-  const maxOcpLength = 2000;
+  const maxOcpLength = 14000;
 
   $('.title_counter').text($('#content_title').val().length+'/'+maxLength);
   $('.ocb_counter').text($('#content_body_old').val().length+'/'+maxOcpLength);
@@ -90,7 +90,7 @@ $(document).ready(function(){
         error_alert.prop('hidden', false)
         $("#bg-spinner").fadeOut("slow");
       }
-      else if ( content_body_old.val().length < 100 || content_body_old.val().length > 2000 ) {
+      else if ( content_body_old.val().length < 100 || content_body_old.val().length > 14000 ) {
 
         error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Content body is supposed to be between 100 and 2000 chars long!')
         error_alert.prop('hidden', false)
