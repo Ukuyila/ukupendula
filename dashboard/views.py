@@ -2662,183 +2662,196 @@ def delete_meta_descr(request, uniqueId):
     
 
 @login_required
-def summarize_blog(request, uniqueId):
-    context = {}
-    user_profile = request.user.profile
-    tone_of_voices = []
-    current_page = 'Content Summariser'
-    context['current_page'] = current_page
-    context['allowance'] = check_count_allowance(user_profile)
+def summarize_blog(request, blogUniqueId, uniqueId=''):
+	context = {}
+	user_profile = request.user.profile
+	tone_of_voices = []
+	current_page = 'Content Summariser'
+	context['current_page'] = current_page
+	context['allowance'] = check_count_allowance(user_profile)
 
-    lang = settings.LANGUAGE_CODE
-    flag_avatar = 'dash/images/gb_flag.jpg'
+	lang = settings.LANGUAGE_CODE
+	flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(user_profile, lang)
+	lang = check_user_lang(user_profile, lang)
 
-    if lang == 'en-us':
-        flag_avatar = 'dash/images/us_flag.jpg'
+	if lang == 'en-us':
+		flag_avatar = 'dash/images/us_flag.jpg'
 
-    context['lang'] = lang
-    context['flag_avatar'] = flag_avatar
+	context['lang'] = lang
+	context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
-    max_devices_allow = max_devices(user_profile)
+	remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+	max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
-    device_reg = device_registration(request, max_devices_allow)
+	device_reg = device_registration(request, max_devices_allow)
 
-    if device_reg == 'error: max device':
+	if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
-        return redirect('device-manager')
+		messages.error(request, "You have maximum devices logged in on your profile!")
+		return redirect('device-manager')
         # print(check_device_reg)
         # pass
-    else:
-        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
-        profile.current_device = device_reg
-        profile.current_ip = remote_addr
-        profile.save()
+	else:
+		profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+		profile.current_device = device_reg
+		profile.current_ip = remote_addr
+		profile.save()
 
-    cate_list = []
-    client_list = []
-    blog_posts = []
-    this_blog_sections = []
-    blog_body = ''
-    blog_sections = []
+	cate_list = []
+	client_list = []
+	blog_posts = []
+	this_blog_sections = []
+	blog_body = ''
+	blog_sections = []
 
-    team_clients = TeamClient.objects.filter(is_active=True)
+	team_clients = TeamClient.objects.filter(is_active=True)
 
-    try:
-        this_blog = Blog.objects.get(uniqueId=uniqueId)
-        blog_title = this_blog.title
+	try:
+		this_blog = Blog.objects.get(uniqueId=blogUniqueId)
+		blog_title = this_blog.title
 
-    except:
-        messages.error(request, "Blog not found!")
-        return redirect('blog-memory')
+	except:
+		messages.error(request, "Blog not found!")
+		return redirect('blog-memory')
     
-    try:
-        saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
-        if saved_blog_sects.exists():
-            for blog_sect in saved_blog_sects:
-                blog_title = blog_sect.title
+	try:
+		saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
+		if saved_blog_sects.exists():
+			for blog_sect in saved_blog_sects:
+				blog_title = blog_sect.title
 
-                this_blog_sections.append(blog_sect.body)
-        else:
-            saved_blog = SavedBlogEdit.objects.create(
+				this_blog_sections.append(blog_sect.body)
+		else:
+			saved_blog = SavedBlogEdit.objects.create(
                 title=this_blog.title,
                 body=blog_body_sect,
                 blog=this_blog,
             )
-            saved_blog.save()
-            this_blog_sections.append(saved_blog.body)
+			saved_blog.save()
+			this_blog_sections.append(saved_blog.body)
 
-    except:
-        gen_sections = BlogSection.objects.filter(blog=this_blog)
-        for blog_sect in gen_sections:
-            this_blog_body = blog_sect.body
-            blog_sections.append(this_blog_body)
+	except:
+		gen_sections = BlogSection.objects.filter(blog=this_blog)
+		for blog_sect in gen_sections:
+			this_blog_body = blog_sect.body
+			blog_sections.append(this_blog_body)
 
-        blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
+		blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
 
-        saved_blog = SavedBlogEdit.objects.create(
+		saved_blog = SavedBlogEdit.objects.create(
             title=this_blog.title,
             body=blog_body_sect,
             blog=this_blog,
         )
-        saved_blog.save()
-        this_blog_sections.append(saved_blog.body)
+		saved_blog.save()
+		this_blog_sections.append(saved_blog.body)
 
-    blogs = Blog.objects.filter(profile=user_profile)
-    for blog in blogs:
-        sections = BlogSection.objects.filter(blog=blog)
-        if sections.exists():
-            blog_posts.append(blog)
+	blogs = Blog.objects.filter(profile=user_profile)
+	for blog in blogs:
+		sections = BlogSection.objects.filter(blog=blog)
+		if sections.exists():
+			blog_posts.append(blog)
 
     # blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
-    blog_body = "\n".join(this_blog_sections)
+	blog_body = "\n".join(this_blog_sections)
 
-    for client in team_clients:
-        if client.team == user_profile.user_team:
-            client_list.append(client)
+	for client in team_clients:
+		if client.team == user_profile.user_team:
+			client_list.append(client)
 
-    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+	team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
 
-    for category in team_categories:
-        cate_list.append(category)
+	for category in team_categories:
+		cate_list.append(category)
 
-    context['cate_list'] = cate_list
-    context['client_list'] = client_list
+	context['cate_list'] = cate_list
+	context['client_list'] = client_list
 
-    tones = ToneOfVoice.objects.filter(tone_status=True)
+	tones = ToneOfVoice.objects.filter(tone_status=True)
 
-    for tone in tones:
-        tone_of_voices.append(tone)
+	for tone in tones:
+		tone_of_voices.append(tone)
 
-    context['blog_posts'] = blog_posts
-    context['tone_of_voices'] = tone_of_voices
+	context['blog_posts'] = blog_posts
+	context['tone_of_voices'] = tone_of_voices
 
-    context['post_blog'] = this_blog
-    context['summary_title'] = this_blog.title
-    context['this_summary_cate'] = this_blog.category
-    context['tone_of_voice'] = this_blog.tone_of_voice
+	context['post_blog'] = this_blog
+	context['summary_title'] = this_blog.title
+	context['this_summary_cate'] = this_blog.category
+	context['tone_of_voice'] = this_blog.tone_of_voice
 
-    context['long_content'] = blog_body
+	context['long_content'] = blog_body
+    
+	if len(uniqueId) > 0:
+		# search database for meta descriptions with this slug
+		content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
 
-    if request.method == 'POST':
-        long_content = request.POST['long_content']
-        summary_title = request.POST['summary_title']
-        tone_of_voice = request.POST['tone_of_voice']
-        summary_cate = request.POST['category']
-        request.session['long_content'] = long_content
+		context['content_summary'] = content_summary
+		context['summary_title'] = content_summary.summary_title
+		context['this_summary_cate'] = content_summary.category
+		context['tone_of_voice'] = content_summary.tone_of_voice
+		context['long_content'] = content_summary.long_content
+		context['summarized_content'] = content_summary.summarized
+	else:
+		pass
 
-        if len(long_content) > 14000:
-            messages.error(request, "The engine could not generate content for your prompt, please try again!")
-            return redirect('meta-description-generator')
-        else:
+	if request.method == 'POST':
+		long_content = request.POST['long_content']
+		summary_title = request.POST['summary_title']
+		tone_of_voice = request.POST['tone_of_voice']
+		summary_cate = request.POST['category']
+		request.session['long_content'] = long_content
+
+		if len(long_content) > 14000:
+			messages.error(request, "The engine could not generate content for your prompt, please try again!")
+			return redirect('meta-description-generator')
+		else:
             
-            api_call_code = str(uuid4()).split('-')[4]
+			api_call_code = str(uuid4()).split('-')[4]
 
-            add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
+			add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
 
-            n = 1
+			n = 1
             # runs until n < 50,just to avoid the infinite loop.
             # this will execute the check_api_requests() func in every 5 seconds.
-            while n < 50:
+			while n < 50:
                 # api_requests = check_api_requests()
-                time.sleep(5)
-                if api_call_process(api_call_code, add_to_list):
+				time.sleep(5)
+				if api_call_process(api_call_code, add_to_list):
 
-                    content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
+					content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
 
-                    if len(content_summary) > 0:
+					if len(content_summary) > 0:
 
                         # create database record
-                        s_content_data = ContentSummary.objects.create(
+						s_content_data = ContentSummary.objects.create(
                             long_content=long_content,
                             summary_title=summary_title,
                             tone_of_voice=tone_of_voice,
                             summarized=content_summary,
                             profile=request.user.profile,
                             category=summary_cate,
-                            blog_id=uniqueId,
+                            blog_id=blogUniqueId,
                         )
-                        s_content_data.save()
+						s_content_data.save()
 
-                        add_to_list.is_done=True
-                        add_to_list.save()
+						add_to_list.is_done=True
+						add_to_list.save()
 
-                        context['content_data_uniqueId'] = s_content_data.uniqueId
+						context['content_data_uniqueId'] = s_content_data.uniqueId
 
-                        return redirect('content-summarizer-response', s_content_data.uniqueId)
+						return redirect('blog-summarizer-response', s_content_data.uniqueId, blogUniqueId)
             
-                    else:
-                        messages.error(request, "The engine could not understand your command, please try again!")
-                        return redirect('generate-blog-summary', uniqueId)
-                else:
+					else:
+						messages.error(request, "The engine could not understand your command, please try again!")
+						return redirect('generate-blog-summary', uniqueId)
+				else:
                     # we might need to delete all abandoned calls
-                    pass
-                n += 1
+					pass
+				n += 1
 
-    return render(request, 'dashboard/content-summarizer.html', context)
+	return render(request, 'dashboard/content-summarizer.html', context)
 
 
 @login_required
