@@ -93,7 +93,7 @@ urlpatterns = [
     # content summarizer urls
     path('content-summarizer', views.summarize_content, name='content-summarizer'),
     path('content-summarizer/<str:uniqueId>/', views.summarize_content, name='content-summarizer-response'),
-    path('generate-blog-summary/<str:uniqueId>/', views.summarize_blog, name='generate-blog-summary'),
+    path('generate-blog-summary/<str:blogUniqueId>/', views.summarize_blog, name='generate-blog-summary'),
     path('blog-summarizer/<str:blogUniqueId>/<str:uniqueId>/', views.summarize_blog, name='blog-summarizer-response'),
     path('delete-summary/<str:uniqueId>/', views.delete_summary, name='delete-summary'),
 
