@@ -3902,8 +3902,13 @@ def memory_blogs(request, status):
     # Get total blogs
     blogs = Blog.objects.all().order_by('last_updated')
 
+    # check memory limit
+    user_momery_limit = package_memory_limit(profile=user_profile)
+
+    cnt_memry = 1
+
     for blog in blogs:
-        if not blog.deleted and blog.profile.user_team == user_team_id:
+        if not blog.deleted and blog.profile.user_team == user_team_id and int(user_momery_limit) > 0:
             sections = BlogSection.objects.filter(blog=blog)
             saved_sections = SavedBlogEdit.objects.filter(blog=blog)
 
@@ -3922,6 +3927,11 @@ def memory_blogs(request, status):
                 complete_blogs.append(blog)
             else:
                 empty_blogs.append(blog)
+            # if limit is reached break loop
+            if user_momery_limit == cnt_memry:
+                break
+            
+        cnt_memry+=1
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs

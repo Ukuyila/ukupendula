@@ -114,7 +114,15 @@ def generate_full_blog(blog_topic, section_heads, audience, keywords, tone, min_
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -153,7 +161,15 @@ def generate_blog_section_details(blog_topic, section_topic, audience, keywords,
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -190,8 +206,17 @@ def gen_improve_content(old_content, min_words, max_words, content_keywords, ton
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
+
                 return cleaned_res
             else:
                 return ''
@@ -228,7 +253,15 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -267,7 +300,15 @@ def generate_social_post(post_type, keywords, audience, tone_of_voice, prompt_te
 
             prof_count += len(cleaned_res.split(' '))
 
+            if profile.monthly_memory_count:
+                prof_mmry_count = int(profile.monthly_memory_count)
+            else:
+                prof_mmry_count = 0
+
+            prof_mmry_count + 1
+
             profile.monthly_count = str(prof_count)
+            profile.monthly_memory_count = str(prof_mmry_count)
             profile.save()
             return cleaned_res
         else:
@@ -302,7 +343,15 @@ def rewrite_sentence(old_sentence, tone_of_voice, profile):
 
             prof_count += len(cleaned_res.split(' '))
 
+            if profile.monthly_memory_count:
+                prof_mmry_count = int(profile.monthly_memory_count)
+            else:
+                prof_mmry_count = 0
+
+            prof_mmry_count + 1
+
             profile.monthly_count = str(prof_count)
+            profile.monthly_memory_count = str(prof_mmry_count)
             profile.save()
             return cleaned_res
         else:
@@ -337,7 +386,15 @@ def rewriter_article_title(old_title, tone_of_voice, profile):
 
             prof_count += len(cleaned_res.split(' '))
 
+            if profile.monthly_memory_count:
+                prof_mmry_count = int(profile.monthly_memory_count)
+            else:
+                prof_mmry_count = 0
+
+            prof_mmry_count + 1
+
             profile.monthly_count = str(prof_count)
+            profile.monthly_memory_count = str(prof_mmry_count)
             profile.save()
             return cleaned_res
         else:
@@ -373,7 +430,15 @@ def generate_meta_description(article_title, tone_of_voice, profile):
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -410,7 +475,15 @@ def write_content_summary(article_title, tone_of_voice, profile):
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -448,7 +521,15 @@ def generate_landing_page_copy(company_name, company_purpose, page_sections, pro
 
                 prof_count += len(cleaned_res.split(' '))
 
+                if profile.monthly_memory_count:
+                    prof_mmry_count = int(profile.monthly_memory_count)
+                else:
+                    prof_mmry_count = 0
+
+                prof_mmry_count + 1
+
                 profile.monthly_count = str(prof_count)
+                profile.monthly_memory_count = str(prof_mmry_count)
                 profile.save()
                 return cleaned_res
             else:
@@ -460,7 +541,24 @@ def generate_landing_page_copy(company_name, company_purpose, page_sections, pro
     
 
 def check_count_memories(profile):
-    pass
+    memory_cnt = 0
+    if profile.monthly_memory_count:
+        memory_cnt = int(profile.monthly_memory_count)
+
+    return memory_cnt
+
+
+def package_memory_limit(profile):
+    # zero means NONE
+    max_memory = 0
+    num_of_gen = 10
+    if profile.subscribed:
+        profile_package = profile.subscription_reference.split('-')[1]
+        user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
+        # divide by the number of content generators
+        max_memory = round(int(user_package.package_max_memory)/num_of_gen)
+    
+    return max_memory
 
 
 def max_devices(profile):
@@ -469,10 +567,9 @@ def max_devices(profile):
         profile_package = profile.subscription_reference.split('-')[1]
         user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
 
-        max_devices = user_package.package_max_device
+        max_devices = int(user_package.package_max_device)
 
-    else:
-        return max_devices
+    return max_devices
 
 
 def check_count_allowance(profile):
@@ -885,9 +982,17 @@ def populate_defaults():
         'Confident', 'Educational'
     ]
 
-    # perm_lvls = [
-    #     'Manager', 'Administrator', 'Editor', 'Author', 'Reader'
-    # ]
+    perm_lvls = [
+        'Manager', 'Administrator', 'Editor', 'Assistant', 'Author', 'Reader'
+    ]
+
+    for perm in perm_lvls:
+        try:
+            perm_exist = PermissionLevel.objects.get(permission_name=perm)
+            if perm_exist:
+                pass
+        except:
+            PermissionLevel.objects.create(permission_name=perm)
 
     for tone in tones:
         try:
