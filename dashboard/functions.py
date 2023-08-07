@@ -725,7 +725,7 @@ def device_registration(request, max_devices_allow):
                 logged_device.is_logged_in = True
                 logged_device.save()
 
-                print('logged_device: {}'.format(logged_device.uniqueId))
+                print('mac_address: {}'.format(device_info['mac_address']))
 
                 return logged_device.uniqueId
 
