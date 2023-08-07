@@ -691,6 +691,7 @@ def device_registration(request, max_devices_allow):
     # check if device already exists
     try:
         get_device_by_mac = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
+        print('logged_device: {}'.format(get_device_by_mac.uniqueId))
         return get_device_by_mac.uniqueId
 
     except:
@@ -723,6 +724,8 @@ def device_registration(request, max_devices_allow):
                 logged_device.agent_os=device_info['agent_os']
                 logged_device.is_logged_in = True
                 logged_device.save()
+
+                print('logged_device: {}'.format(logged_device.uniqueId))
 
                 return logged_device.uniqueId
 
