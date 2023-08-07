@@ -689,7 +689,7 @@ def device_registration(request, max_devices_allow):
     device_info = get_device_info(request)
     # DEVICE REGISTRATION
     # check if device already exists
-    print('mac_address: {}'.format(device_info['mac_address']))
+    print('mac_address: {}'.format(device_info))
     try:
         get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
 
@@ -702,7 +702,6 @@ def device_registration(request, max_devices_allow):
             return get_user_curr_device.uniqueId
 
     except:
-
         # search if the user has other devices in the profile
         user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
 
