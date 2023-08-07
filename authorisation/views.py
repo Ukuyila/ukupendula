@@ -45,10 +45,10 @@ def login(request):
         password = request.POST['password']
 
         user = auth.authenticate(username=email, password=password)
-
+        print('user_auth: {}'.format(user))
         if user:
             user_profile = user.is_active
-            print('Profile UniqueId: {}'.format(user_profile))
+            
 
             # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
             if not user.profile.is_verified:
@@ -61,7 +61,6 @@ def login(request):
                 # login user and redirect
                 auth.login(request, user)
                 return redirect('dashboard')
-
         else:
             # post error message
             messages.error(request, "User email and password does not match any profile!")
