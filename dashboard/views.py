@@ -98,7 +98,7 @@ def home(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -230,7 +230,7 @@ def edit_settings(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -292,7 +292,7 @@ def profile(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -367,7 +367,7 @@ def blog_topic(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -488,7 +488,7 @@ def blog_sections(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -609,7 +609,7 @@ def use_blog_topic(request, blog_topic):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -725,7 +725,7 @@ def create_blog_from_topic(request, uniqueId):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -851,7 +851,7 @@ def view_gen_blog(request, slug):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -975,7 +975,7 @@ def edit_gen_blog(request, uniqueId):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1129,7 +1129,7 @@ def view_blog_social_post(request, postType, uniqueId):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1203,7 +1203,7 @@ def generate_social_media(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1290,7 +1290,7 @@ def gen_social_post(request, postType, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1498,7 +1498,7 @@ def gen_social_from_blog(request, postType, uniqueId):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1668,7 +1668,7 @@ def view_generated_blog(request, slug):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1708,7 +1708,7 @@ def improve_content(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1857,7 +1857,7 @@ def content_improver(request, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1931,7 +1931,7 @@ def paragraph_writer(request, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2076,7 +2076,7 @@ def sentence_writer(request, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2244,7 +2244,7 @@ def article_title_writer(request, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2407,7 +2407,7 @@ def generate_blog_meta(request, uniqueId):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2544,7 +2544,7 @@ def meta_description_writer(request, uniqueId=''):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2692,7 +2692,7 @@ def summarize_blog(request, blogUniqueId, uniqueId=''):
 
 	if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-		messages.error(request, "You have maximum devices logged in on your profile!")
+		messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
 		return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2885,7 +2885,7 @@ def summarize_content(request, uniqueId=""):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -3037,7 +3037,7 @@ def landing_page_copy(request, uniqueId=""):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
