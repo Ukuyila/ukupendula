@@ -125,7 +125,7 @@ def register(request):
             return redirect('register')
 
         if not spam_filter == '9' or spam_filter.upper() == 'NINE':
-            messages.error(request, "Our robot is not friendly to other robots, You failed the spam filter!")
+            messages.error(request, "Our robot is not friendly to other robots, you failed the spam test!")
             return redirect('register')
 
         if not password1 == password2:
@@ -133,7 +133,7 @@ def register(request):
             return redirect('register')
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, "User email address {} already exists, please use a different email address!".format(email))
+            messages.error(request, "User email address {} already in use, please use a different email address!".format(email))
             return redirect('register')
 
         user = User.objects.create_user(email=email, username=email, password=password1, is_active=False)
