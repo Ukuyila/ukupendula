@@ -690,13 +690,16 @@ def device_registration(request, max_devices_allow):
     # DEVICE REGISTRATION
     # check if device already exists
     # try:
-    #     get_device_by_mac = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
-    #     print('logged_device: {}'.format(get_device_by_mac.uniqueId))
-    #     return get_device_by_mac.uniqueId
+    get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
+
+    # user current device MAC matched the registered device
+    if get_user_curr_device.mac_address == device_info['mac_address']:
+        get_user_curr_device.date_created = timezone.localtime(timezone.now())
+        return get_user_curr_device.uniqueId
 
     # except:
 
-    # check user registered devices
+    # search if the user has other devices in the profile
     user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
 
     for user_device in user_reg_devices:
@@ -714,7 +717,7 @@ def device_registration(request, max_devices_allow):
             cnt_devices += 1
 
         # check if user has this device registered already
-        if user_device.mac_address == device_info['mac_address'] and user_device.uniqueId == user_profile.current_device:
+        if user_device.mac_address == device_info['mac_address']:
             # update user current_device and ip_address on profile
             # Login user
             logged_device = RegisteredDevice.objects.get(profile=request.user.profile, mac_address=user_device.mac_address)
