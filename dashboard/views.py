@@ -1347,6 +1347,8 @@ def gen_social_post(request, postType, uniqueId=''):
     context['tone_of_voices'] = tone_of_voices
     context['soc_types_list'] = soc_types_list
 
+    print('soc_types_list: {}'.format(soc_types_list))
+
     context['post_type_title'] = sel_p_typ.post_name.title()
     context['post_type'] = sel_p_typ.post_name
     context['prompt_text'] = prompt_text
@@ -4634,7 +4636,7 @@ def edit_category(request, uniqueId):
     if request.method == 'POST':
         category_name = request.POST['new-cate-name']
         cate_descr = request.POST['cate-description']
-        cate_descr = request.POST['cate-description']
+        # cate_descr = request.POST['cate-description']
 
         client_id = request.POST['client']
 
@@ -4848,6 +4850,8 @@ def download_content_file(request, content_type, uniqueId):
 
             blog_body = "\n".join(blog_sections)
         
+        cont_text = blog_body.replace('<br>', '\n')
+        
     elif 'social' in content_type:
         soc_type = content_type.split('_')
 
@@ -4873,11 +4877,9 @@ def download_content_file(request, content_type, uniqueId):
 
     elif content_type == 'content_improver':
         impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
-        cont_text = impr_cont.content_body_new
+        cont_text = impr_cont.content_body_new.replace('<br>', '\n')
 
-    cont_text = blog_body.replace('<br>', '\n')
-
-    print(str(uuid4()))
+    # print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
 

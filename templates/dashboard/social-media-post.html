@@ -26,7 +26,7 @@
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             
                                             <div class="mb-0">
-                                                <h4 class="mb-0">{{ post_type_title|title }} Post</h4>
+                                                <h5 class="mb-0">{{ post_type_title|title }} Post</h5>
                                             </div>
                                             {% if post_blog %}
                                             <div class="float-end">
@@ -39,10 +39,11 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">Create LinkedIn</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Create Twitter</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Create Instagram</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' post_blog.uniqueId %}">Create Facebook</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'thread' post_blog.uniqueId %}">Create Thread Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">Create LinkedIn Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Create Twitter Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Create Instagram Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'facebook' post_blog.uniqueId %}">Create Facebook Post</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -55,10 +56,11 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'twitter' %}">Create Twitter</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'facebook' %}">Create Facebook</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'thread' %}">Create Thread Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'twitter' %}">Create Twitter Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'facebook' %}">Create Facebook Post</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -93,7 +95,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="soc_post_type" class=" ">Post Type</label>
+                                                    <label for="soc_post_type" class=" ">Platform</label>
                                                     <select type="text" class="form-control " id="soc_post_type" name="soc_post_type">
 
                                                     {% for soc_post_type in soc_types_list %}
