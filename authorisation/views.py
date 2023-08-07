@@ -47,8 +47,7 @@ def login(request):
         user = auth.authenticate(username=email, password=password)
         print('user_auth: {}'.format(user))
         if user:
-            user_profile = user.is_active
-            
+            # user_profile = user.is_active
 
             # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
             if not user.profile.is_verified:
