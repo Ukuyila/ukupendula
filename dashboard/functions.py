@@ -573,42 +573,57 @@ def max_devices(profile):
 
 
 def check_count_allowance(profile):
+
+    # max_devices = 1
     if profile.subscribed:
+        profile_package = profile.subscription_reference.split('-')[1]
+        user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
 
-        sub_type = profile.subscription_type
-        if sub_type == 'free':
-            max_limit = 5000
-            if profile.monthly_count:
-                if int(profile.monthly_count) < max_limit:
-                    return True
-                else:
-                    return False
-            else:
-                return True
-        elif sub_type == 'initiator':
-            max_limit = 40000
-            if profile.monthly_count:
-                if int(profile.monthly_count) < max_limit:
-                    return True
-                else:
-                    return False
-
-            else:
-                return True
-        elif sub_type == 'teams':
-            return True
-        else:
-            return False
-    else:
-        max_limit = 5000
+        max_limit = user_package.package_max_word
         if profile.monthly_count:
             if int(profile.monthly_count) < max_limit:
                 return True
             else:
                 return False
-
         else:
             return True
+
+    # if profile.subscribed:
+
+    #     sub_type = profile.subscription_type
+    #     if sub_type == 'free':
+    #         max_limit = 5000
+    #         if profile.monthly_count:
+    #             if int(profile.monthly_count) < max_limit:
+    #                 return True
+    #             else:
+    #                 return False
+    #         else:
+    #             return True
+    #     elif sub_type == 'initiator':
+    #         max_limit = 40000
+    #         if profile.monthly_count:
+    #             if int(profile.monthly_count) < max_limit:
+    #                 return True
+    #             else:
+    #                 return False
+
+    #         else:
+    #             return True
+    #     elif sub_type == 'teams':
+    #         return True
+    #     else:
+    #         return False
+    # else:
+    #     max_limit = 5000
+    #     if profile.monthly_count:
+    #         if int(profile.monthly_count) < max_limit:
+    #             return True
+    #         else:
+    #             return False
+
+    #     else:
+    #         return True
 
 
 def get_blog_word_cnt(q_year, q_month, profile):
