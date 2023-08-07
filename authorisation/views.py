@@ -44,25 +44,32 @@ def login(request):
         email = request.POST['email'].replace(' ', '').lower()
         password = request.POST['password']
 
-        user = auth.authenticate(username=email, password=password)
-        print('user_auth: {}'.format(user))
-        if user:
-            # user_profile = user.is_active
+        user_c_actv = User.objects.get(email=email)
+        if user_c_actv.is_active:
 
-            # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
-            if not user.profile.is_verified:
-                messages.error(request, "Your email is not verified, please check your inbox for verification link!")
-                return redirect('login')
-            elif not user.is_active:
-                messages.error(request, "Your account is not active, please contact support if yo!")
-                return redirect('login')
+            user = auth.authenticate(username=email, password=password)
+            # print('user_auth: {}'.format(user))
+            if user:
+                # user_profile = user.is_active
+
+                # DIRECT TO PROFILE IF EMAIL IS VERIFIED AND USER DETAILS ARE NOT FILLED OUT
+                if not user.profile.is_verified:
+                    messages.error(request, "Your email is not verified, please check your inbox for verification link!")
+                    return redirect('login')
+                elif not user.is_active:
+                    messages.error(request, "Your account is not active, please contact support if yo!")
+                    return redirect('login')
+                else:
+                    # login user and redirect
+                    auth.login(request, user)
+                    return redirect('dashboard')
             else:
-                # login user and redirect
-                auth.login(request, user)
-                return redirect('dashboard')
+                # post error message
+                messages.error(request, "User email and password does not match any profile!")
+                return redirect('login')
         else:
             # post error message
-            messages.error(request, "User email and password does not match any profile!")
+            messages.error(request, "Email not verified please check your inbox and verify email!")
             return redirect('login')
 
     return render(request, 'authorisation/login.html', {})
