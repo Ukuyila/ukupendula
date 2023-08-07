@@ -885,9 +885,17 @@ def populate_defaults():
         'Confident', 'Educational'
     ]
 
-    # perm_lvls = [
-    #     'Manager', 'Administrator', 'Editor', 'Author', 'Reader'
-    # ]
+    perm_lvls = [
+        'Manager', 'Administrator', 'Editor', 'Assistant', 'Author', 'Reader'
+    ]
+
+    for perm in perm_lvls:
+        try:
+            perm_exist = PermissionLevel.objects.get(permission_name=perm)
+            if perm_exist:
+                pass
+        except:
+            PermissionLevel.objects.create(permission_name=perm)
 
     for tone in tones:
         try:
