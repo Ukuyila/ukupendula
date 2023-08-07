@@ -1335,6 +1335,7 @@ def gen_social_post(request, postType, uniqueId=''):
     soc_types = SocialPlatform.objects.filter(is_active=True)
     for soc_typ in soc_types:
         soc_types_list.append(soc_typ)
+        print('soc_typ: {}'.format(soc_typ))
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
