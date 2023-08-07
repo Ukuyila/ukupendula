@@ -30,6 +30,7 @@ class Profile(models.Model):
 
     # subscription helpers
     monthly_count = models.CharField(null=True, blank=True, max_length=100)
+    monthly_memory_count = models.CharField(null=True, blank=True, max_length=100)
     subscribed = models.BooleanField(default=False)
     subscription_type = models.CharField(choices=SUBSCRIPTION_OPTIONS, default='free', max_length=100)
     subscription_reference = models.CharField(null=True, blank=True, max_length=500)
