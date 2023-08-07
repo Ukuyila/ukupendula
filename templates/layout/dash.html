@@ -500,7 +500,7 @@
             </div>
 						{% for message in messages %}
 						<div class="alert alert-{{ message.tags }}" role="alert">
-							{% if 'upgrade' in message %}
+							{% if 'You have maximum devices logged in on your profile' in message %}
 							<strong>You have maximum devices logged in on your profile, please delete one to be able to use current device or <a href="{% url 'billing' %}">upgrade</a>!</strong>
 							
 							{% else %}

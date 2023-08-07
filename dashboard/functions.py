@@ -689,16 +689,16 @@ def device_registration(request, max_devices_allow):
     device_info = get_device_info(request)
     # DEVICE REGISTRATION
     # check if device already exists
-    print('mac_address: {}'.format(device_info))
+    print('device_name: {}'.format(device_info['device_name']))
 
     try:
         get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
-        print('get_user_curr_device: {}'.format(get_user_curr_device.mac_address))
+        print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
 
         # user current device MAC matched the registered device
-        if get_user_curr_device.mac_address == device_info['mac_address']:
+        if get_user_curr_device.device_name == device_info['device_name']:
             get_user_curr_device.date_created = timezone.localtime(timezone.now())
-            print('get_user_curr_device: {}'.format(get_user_curr_device.mac_address))
+            print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
             return get_user_curr_device.uniqueId
 
     except:
@@ -720,7 +720,7 @@ def device_registration(request, max_devices_allow):
                 cnt_devices += 1
 
             # check if user has this device registered already
-            if user_device.mac_address == device_info['mac_address']:
+            if user_device.device_name == device_info['device_name']:
                 # update user current_device and ip_address on profile
                 # Login user
                 logged_device = RegisteredDevice.objects.get(profile=request.user.profile, mac_address=user_device.mac_address)
@@ -731,7 +731,7 @@ def device_registration(request, max_devices_allow):
                 logged_device.is_logged_in = True
                 logged_device.save()
 
-                print('mac_address: {}'.format(device_info['mac_address']))
+                print('device_name: {}'.format(device_info['device_name']))
 
                 return logged_device.uniqueId
             
