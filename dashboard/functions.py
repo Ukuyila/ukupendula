@@ -692,6 +692,8 @@ def device_registration(request, max_devices_allow):
     # try:
     get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
 
+    print('get_user_curr_device: {}'.format(get_user_curr_device.mac_address))
+
     # user current device MAC matched the registered device
     if get_user_curr_device.mac_address == device_info['mac_address']:
         get_user_curr_device.date_created = timezone.localtime(timezone.now())
