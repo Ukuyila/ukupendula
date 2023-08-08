@@ -579,7 +579,8 @@ def check_count_allowance(profile):
         profile_package = profile.subscription_reference.split('-')[1]
         user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
 
-        max_limit = user_package.package_max_word
+        max_limit = int(user_package.package_max_word)
+        print('max_limit: {}'.format(max_limit))
         if profile.monthly_count:
             if int(profile.monthly_count) < max_limit:
                 return True
