@@ -3606,6 +3606,7 @@ def activateEmail(request, user, user_team, password1=''):
         'user_team': user_team.business_name,
         'email': user.email,
         'reply_to': settings.EMAIL_REPLY_TO,
+        'type_of_action': 'email verification',
     })
 
     headers = {"Message-ID": str(uuid4())}
