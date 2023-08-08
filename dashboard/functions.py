@@ -781,8 +781,6 @@ def get_device_info(request):
     agent_browser = '{} {}'.format(agent.browser.family, agent.browser.version_string)
     agent_os = '{} {}'.format(agent.os.family, agent.os.version_string)
 
-    print('request_user_agent: {}'.format(request.user_agent))
-
     agent_type = 'unknown'
     if agent.is_mobile:
         agent_type = 'mobile'
@@ -815,73 +813,78 @@ def device_registration(request, max_devices_allow):
     # DEVICE REGISTRATION
     # check if device already exists
     # print('device_name: {}'.format(device_info['device_info']))
-    for key, value in device_info.items():
-        print('{} => {}'.format(key, value))
-    
+    # for key, value in device_info.items():
+    #     print('{} => {}'.format(key, value))
     try:
-        get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
-        print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
-
-        # user current device MAC matched the registered device
-        if get_user_curr_device.device_name == device_info['device_name']:
-            get_user_curr_device.date_created = timezone.localtime(timezone.now())
-            print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
-            return get_user_curr_device.uniqueId
-
+        get_user_device = RegisteredDevice.objects.get(ip_address=device_info['ip_address'],agent_os=device_info['agent_os'],mac_address=device_info['mac_address'],profile=user_profile)
+        get_user_device.date_created = timezone.localtime(timezone.now())
+        # print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
+        return get_user_device.uniqueId
     except:
-        # search if the user has other devices in the profile
-        user_reg_devices = RegisteredDevice.objects.filter(profile=request.user.profile)
+        try:
+            get_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
+            # print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
 
-        for user_device in user_reg_devices:
+            # user current device INFO matched the registered device
+            if get_curr_device.ip_address == device_info['ip_address'] and get_curr_device.agent_os == device_info['agent_os'] and get_curr_device.mac_address == device_info['mac_address']:
+                get_curr_device.date_created = timezone.localtime(timezone.now())
+                # print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
+                return get_curr_device.uniqueId
 
-            # First we obtain de timezone info of last updated datatime variable
-            tz_info = user_device.last_updated.tzinfo
+        except:
+            # search if the user has other devices in the profile
+            user_reg_devices = RegisteredDevice.objects.filter(profile=user_profile)
 
-            current_date = datetime.datetime.now(tz_info)
-            
-            # check last seen
-            if (datetime_difference(user_device.last_updated, current_date) * 60 * 60) > 7:
-                # and if last seen is more than 7 hours delete device
-                RegisteredDevice.objects.get(uniqueId=user_device.uniqueId).delete()
+            for user_device in user_reg_devices:
+
+                # First we obtain de timezone info of last updated datatime variable
+                tz_info = user_device.last_updated.tzinfo
+
+                current_date = datetime.datetime.now(tz_info)
+                
+                # check last seen
+                if (datetime_difference(user_device.last_updated, current_date) * 60 * 60) > 7:
+                    # and if last seen is more than 7 hours delete device
+                    RegisteredDevice.objects.get(uniqueId=user_device.uniqueId).delete()
+                else:
+                    cnt_devices += 1
+
+                # check if user has this device registered already
+                if user_device.ip_address == device_info['ip_address'] and user_device.agent_os == device_info['agent_os'] and user_device.mac_address == device_info['mac_address']:
+                    # update user current_device and ip_address on profile
+                    # Login user
+                    logged_device = RegisteredDevice.objects.get(profile=user_profile, mac_address=user_device.mac_address)
+                    logged_device.device_name = device_info['device_name']
+                    logged_device.ip_address = device_info['ip_address']
+                    logged_device.agent_browser = device_info['agent_browser']
+                    logged_device.agent_os=device_info['agent_os']
+                    logged_device.is_logged_in = True
+                    logged_device.save()
+
+                    print('device_name: {}'.format(device_info['device_name']))
+
+                    return logged_device.uniqueId
+                
+            # if user has maxed logged in devices
+            if cnt_devices >= max_devices_allow:
+                # display error and ask for user to login using one of registered device and remove
+                # post error message
+                return 'error: max device'
+
             else:
-                cnt_devices += 1
-
-            # check if user has this device registered already
-            if user_device.device_name == device_info['device_name']:
-                # update user current_device and ip_address on profile
-                # Login user
-                logged_device = RegisteredDevice.objects.get(profile=request.user.profile, mac_address=user_device.mac_address)
-                logged_device.device_name = device_info['device_name']
-                logged_device.ip_address = device_info['ip_address']
-                logged_device.agent_browser = device_info['agent_browser']
-                logged_device.agent_os=device_info['agent_os']
-                logged_device.is_logged_in = True
+                # if user has no device registered or user still has space for another device, register this device in database
+                logged_device = RegisteredDevice.objects.create(
+                    device_name=device_info['device_name'],
+                    ip_address=device_info['ip_address'],
+                    mac_address=device_info['mac_address'],
+                    agent_browser=device_info['agent_browser'],
+                    agent_os=device_info['agent_os'],
+                    agent_type=device_info['agent_type'],
+                    profile=request.user.profile,
+                )
                 logged_device.save()
 
-                print('device_name: {}'.format(device_info['device_name']))
-
                 return logged_device.uniqueId
-            
-        # if user has maxed logged in devices
-        if cnt_devices >= max_devices_allow:
-            # display error and ask for user to login using one of registered device and remove
-            # post error message
-            return 'error: max device'
-
-        else:
-            # if user has no device registered or user still has space for another device, register this device in database
-            logged_device = RegisteredDevice.objects.create(
-                device_name=device_info['device_name'],
-                ip_address=device_info['ip_address'],
-                mac_address=device_info['mac_address'],
-                agent_browser=device_info['agent_browser'],
-                agent_os=device_info['agent_os'],
-                agent_type=device_info['agent_type'],
-                profile=request.user.profile,
-            )
-            logged_device.save()
-
-            return logged_device.uniqueId
     
 
 def save_section_head(blog_unique_id, section_head):
