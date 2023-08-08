@@ -95,9 +95,9 @@ def emailVerification(request, user, password1, user_team):
         'type_of_action': 'email verification',
     })
     
-    headers = {'Reply-To': settings.EMAIL_REPLY_TO}
+    headers = {"Message-ID": str(uuid4())}
     
-    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO])
+    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     email.content_subtype = 'html'
 
     if email.send():
