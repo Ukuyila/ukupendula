@@ -757,6 +757,15 @@ def get_device_mac():
     return device_mac
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 def get_device_info(request):
 
     # hostname = socket.gethostname()
@@ -765,7 +774,8 @@ def get_device_info(request):
     # NOTE: this device name is giving us the virtual machine name when in development
     device_name = platform.node()
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    # remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
 
     agent = request.user_agent
     agent_browser = '{} {}'.format(agent.browser.family, agent.browser.version_string)
