@@ -781,6 +781,8 @@ def get_device_info(request):
     agent_browser = '{} {}'.format(agent.browser.family, agent.browser.version_string)
     agent_os = '{} {}'.format(agent.os.family, agent.os.version_string)
 
+    print('request_user_agent: {}'.format(request.user_agent))
+
     agent_type = 'unknown'
     if agent.is_mobile:
         agent_type = 'mobile'
