@@ -802,7 +802,7 @@ def device_registration(request, max_devices_allow):
     device_info = get_device_info(request)
     # DEVICE REGISTRATION
     # check if device already exists
-    for device in device_info:
+    for key, device in device_info.items():
         print('device_name: {}'.format(device))
     
     try:
