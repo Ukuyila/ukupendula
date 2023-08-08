@@ -802,8 +802,7 @@ def device_registration(request, max_devices_allow):
     device_info = get_device_info(request)
     # DEVICE REGISTRATION
     # check if device already exists
-    print('device_name: {}'.format(device_info['device_name']))
-
+    print('device_name: {}'.format(device_info))
     try:
         get_user_curr_device = RegisteredDevice.objects.get(uniqueId=user_profile.current_device)
         print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
