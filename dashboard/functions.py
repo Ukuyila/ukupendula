@@ -818,7 +818,7 @@ def device_registration(request, max_devices_allow):
     try:
         get_user_device = RegisteredDevice.objects.get(ip_address=device_info['ip_address'],agent_os=device_info['agent_os'],mac_address=device_info['mac_address'],profile=user_profile)
         get_user_device.date_created = timezone.localtime(timezone.now())
-        # print('get_curr_device_name: {}'.format(get_user_curr_device.device_name))
+        print('get_curr_device_os: {}'.format(device_info['agent_os']))
         return get_user_device.uniqueId
     except:
         try:
