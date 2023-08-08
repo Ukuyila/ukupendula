@@ -615,16 +615,16 @@ def check_count_allowance(profile):
     #         return True
     #     else:
     #         return False
-    # else:
-    #     max_limit = 5000
-    #     if profile.monthly_count:
-    #         if int(profile.monthly_count) < max_limit:
-    #             return True
-    #         else:
-    #             return False
+    else:
+        max_limit = 5000
+        if profile.monthly_count:
+            if int(profile.monthly_count) < max_limit:
+                return True
+            else:
+                return False
 
-    #     else:
-    #         return True
+        else:
+            return True
 
 
 def get_blog_word_cnt(q_year, q_month, profile):
