@@ -278,12 +278,12 @@ def activate(request, uidb64, token):
         profile.is_verified = True
         profile.save()
 
-        add_notice = UserNotification.objects.create(
-            notice_type='registration',
-            notification='Welcome to {}, let us start creating together!'.format(settings.APP_NAME),
-            profile=profile
-        )
-        add_notice.save()
+        # add_notice = UserNotification.objects.create(
+        #     notice_type='registration',
+        #     notification='Welcome to {}, let us start creating together!'.format(settings.APP_NAME),
+        #     profile=profile
+        # )
+        # add_notice.save()
 
         date_activated = timezone.localtime(timezone.now())
 

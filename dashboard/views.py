@@ -125,7 +125,7 @@ def home(request):
                 empty_blogs.append(blog)
 
     try:
-        lst_subscr_trans = SubscriptionTransaction.objects.filter(profile=profile, is_active=True).order_by(
+        lst_subscr_trans = SubscriptionTranasction.objects.filter(profile=profile, is_active=True).order_by(
             'date_created')[:1]
         lst_subscr_exp = lst_subscr_trans.date_created
 
@@ -3468,8 +3468,8 @@ def payment_success(request, uniqueId, planId, orderId):
 
                 user_team = this_user_team.uniqueId
 
-            # insert SubscriptionTransaction
-            sub_transact = SubscriptionTransaction.objects.create(
+            # insert SubscriptionTranasction
+            sub_transact = SubscriptionTranasction.objects.create(
                 subscription_reference=order_ref,
                 user_profile_uid=uniqueId,
                 has_team=has_team,
