@@ -1,4 +1,5 @@
 from base64 import urlsafe_b64encode
+import datetime
 import time
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -276,6 +277,33 @@ def activate(request, uidb64, token):
         profile.is_active = True
         profile.is_verified = True
         profile.save()
+
+        add_notice = UserNotification.objects.create(
+            notice_type='registration',
+            notification='Welcome to {}, let us start creating together!'.format(settings.APP_NAME),
+            profile=profile
+        )
+        add_notice.save()
+
+        date_activated = timezone.localtime(timezone.now())
+
+        order_id = str(uuid4()).split('-')[4]
+        free_plan_id = settings.FREE_SUBSCR_PACKAGE
+        user_team = profile.user_team
+        date_expiry = date_activated + datetime.timedelta(days=30)
+
+        order_ref = '{}-{}-{}'.format(profile.uniqueId, free_plan_id, order_id)
+
+        # insert SubscriptionTransaction
+        sub_transact = SubscriptionTransaction.objects.create(
+            subscription_reference=order_ref,
+            user_profile_uid=profile.uniqueId,
+            has_team=False,
+            user_team=user_team,
+            date_activated=date_activated,
+            date_expiry=date_expiry,
+        )
+        sub_transact.save()
 
         messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect('login')

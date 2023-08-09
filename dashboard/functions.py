@@ -627,6 +627,25 @@ def check_count_allowance(profile):
             return True
 
 
+def datetime_difference(d1, d2, outp_type = 'null'):
+    d1 = datetime.strptime(d1, "%Y-%m-%d %H:%M:%S")
+    d2 = datetime.strptime(d2, "%Y-%m-%d %H:%M:%S")
+    date = (d2 - d1)
+    if outp_type == 'day':
+        ret_date = abs(date.day)
+    elif outp_type == 'hour':
+        ret_date = abs(date.hour)
+    elif outp_type == 'minute':
+        ret_date = abs(date.minute)
+    elif outp_type == 'second':
+        ret_date = abs(date.second)
+    elif outp_type == 'microsecond':
+        ret_date = abs(date.microsecond)
+    else:
+        ret_date = abs(date)
+    return ret_date
+    
+
 def get_blog_word_cnt(q_year, q_month, profile):
     blog_word_cnt = 0
 
@@ -745,8 +764,12 @@ def round_to_multiple(number, multiple, direction='nearest'):
         return multiple * round(number / multiple)
 
 
-def get_subscription_details(profile):
-    sub_id = profile.subscription_reference
+def user_notices(profile):
+    notifications = []
+    user_notices = UserNotification.objects.filter(profile=profile).order_by('date_created')
+    for notice in user_notices:
+        notifications.append(notice)
+    return notifications
 
 
 def get_device_mac():

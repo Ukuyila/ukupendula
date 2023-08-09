@@ -3,7 +3,7 @@ import hashlib
 import time
 import urllib.parse
 
-#payfast imports
+# payfast imports
 import requests
 import urllib.parse
 import socket
@@ -40,8 +40,7 @@ from django.template.defaulttags import register
 
 
 @register.filter(name='split')
-def split(value, key): 
- 
+def split(value, key):
     value.split("key")
     return value.split(key)
 
@@ -59,12 +58,13 @@ def home(request):
 
     empty_blogs = []
     complete_blogs = []
+    user_notices = user_notices(profile=profile)
 
     today_date = datetime.datetime.now()
 
     remove_api_requests(user_profile)
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -87,14 +87,15 @@ def home(request):
     if not user_profile.is_verified:
         messages.error(request, "Your email is not verified, please check your inbox for verification link!")
         return redirect('login')
-    
+
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -114,7 +115,6 @@ def home(request):
                 # calculate blog words
                 blog_words = 0
                 for section in sections:
-
                     blog_words += int(section.word_count)
 
                     # month_word_count += int(section.word_count)
@@ -125,23 +125,39 @@ def home(request):
             elif not sections.exists():
                 empty_blogs.append(blog)
 
+    try:
+        lst_subscr_trans = SubscriptionTransaction.objects.filter(profile=profile, is_active=True).order_by(
+            'date_created')[:1]
+        lst_subscr_exp = lst_subscr_trans.date_created
+
+        days_between = datetime_difference(today_date, lst_subscr_exp, 'second')
+        if int(days_between) < 0:
+            # reset monthly limits
+            profile.monthly_count = '0'
+            profile.monthly_memory_count = '0'
+            profile.save()
+
+    except:
+        # lst_subscr_exp = timezone.localtime(timezone.now())
+        pass
+
     blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_blog_word_cnt = get_blog_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     para_word_cnt = get_para_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_para_word_cnt = get_para_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_para_word_cnt = get_para_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     sentence_word_cnt = get_sentence_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_sentence_word_cnt = get_sentence_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_sentence_word_cnt = get_sentence_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     meta_word_cnt = get_meta_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_meta_word_cnt = get_meta_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_meta_word_cnt = get_meta_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     summarizer_word_cnt = get_summarizer_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_summarizer_word_cnt = get_summarizer_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_summarizer_word_cnt = get_summarizer_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     landing_copy_word_cnt = get_land_copy_word_cnt(str(q_year), str(q_month), user_profile)
-    lm_landing_copy_word_cnt = get_land_copy_word_cnt(str(q_year), str(q_month-1), user_profile)
+    lm_landing_copy_word_cnt = get_land_copy_word_cnt(str(q_year), str(q_month - 1), user_profile)
 
     context['month_word_count'] = user_profile.monthly_count
     context['blog_word_cnt'] = blog_word_cnt
@@ -198,12 +214,14 @@ def home(request):
 
     context['clm_para_word_cnt'] = para_word_cnt
     context['clm_sentence_word_cnt'] = sentence_word_cnt
-    
+
     context['num_blogs'] = len(complete_blogs)
-    context['count_reset'] = '01 June 2023'  # update later
+
+    context['count_reset'] = lst_subscr_trans.date_expiry  # update later
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
+    context['user_notices'] = user_notices
 
     context['allowance'] = check_count_allowance(user_profile)
 
@@ -215,18 +233,18 @@ def home(request):
 
 @login_required
 def edit_settings(request):
-
     user_profile = request.user.profile
     user_settings = UserSetting.objects.get(profile=user_profile)
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -281,14 +299,15 @@ def profile(request):
 
     user_settings = UserSetting.objects.get(profile=user_profile)
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -356,14 +375,15 @@ def blog_topic(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -437,8 +457,8 @@ def blog_topic(request):
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
                     blog_topics = generate_blog_topic_ideas(user_profile, blog_idea, audience, keywords)
-                
-                    add_to_list.is_done=True
+
+                    add_to_list.is_done = True
                     add_to_list.save()
                     if len(blog_topics) > 0:
 
@@ -450,7 +470,7 @@ def blog_topic(request):
                 else:
                     # we might need to delete all abandoned calls
                     pass
-                
+
                 n += 1
 
     return render(request, 'dashboard/blog-topic.html', context)
@@ -477,14 +497,15 @@ def blog_sections(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -500,7 +521,8 @@ def blog_sections(request):
         messages.error(request, "You have to create blog topic first!")
         return redirect('blog-topic')
 
-    context = {'current_page': current_page, 'allowance': check_count_allowance(request.user.profile), 'blog_topics': request.session['blog_topics']}
+    context = {'current_page': current_page, 'allowance': check_count_allowance(request.user.profile),
+               'blog_topics': request.session['blog_topics']}
 
     return render(request, 'dashboard/blog-sections.html', context)
 
@@ -519,14 +541,14 @@ def delete_blog_topic(request, uniqueId):
     except:
         messages.error(request, "Blog not found!")
         return redirect('blog-memory', 'incomplete')
-    
+
 
 @login_required
 def delete_blog(request, uniqueId):
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
         if blog.profile == request.user.profile:
-            blog.deleted=True
+            blog.deleted = True
             blog.save()
             messages.info(request, "Blog deleted successfully!")
             return redirect('blog-memory', 'complete')
@@ -536,7 +558,7 @@ def delete_blog(request, uniqueId):
     except:
         messages.error(request, "Blog not found!")
         return redirect('blog-memory', 'complete')
-    
+
 
 @login_required
 def delete_saved_blog(request, uniqueId):
@@ -547,7 +569,6 @@ def delete_saved_blog(request, uniqueId):
             saved_blogs = SavedBlogEdit.objects.all()
             for s_blog in saved_blogs:
                 if s_blog.blog == blog:
-
                     s_blog.delete()
 
             messages.info(request, "Blog deleted successfully!")
@@ -562,7 +583,6 @@ def delete_saved_blog(request, uniqueId):
 
 @login_required
 def save_blog_topic(request, blog_topic):
-
     remove_api_requests(request.user.profile)
 
     if 'blog_idea' in request.session and 'keywords' in request.session and 'audience' in request.session and 'blog_topics' in request.session:
@@ -591,21 +611,21 @@ def save_blog_topic(request, blog_topic):
 # This generates blog from session topic
 @login_required
 def use_blog_topic(request, blog_topic):
-
     blog_topic = requests.utils.unquote(blog_topic)
     print('Blog topic: '.format(blog_topic))
     context = {}
 
     user_profile = request.user.profile
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -676,9 +696,11 @@ def use_blog_topic(request, blog_topic):
                 # api_requests = check_api_requests()
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
-                    blog_section_heads = generate_blog_section_headings(user_profile, blog_topic, request.session['audience'], request.session['keywords'])
-                    
-                    add_to_list.is_done=True
+                    blog_section_heads = generate_blog_section_headings(user_profile, blog_topic,
+                                                                        request.session['audience'],
+                                                                        request.session['keywords'])
+
+                    add_to_list.is_done = True
                     add_to_list.save()
                     break
                 else:
@@ -706,7 +728,7 @@ def use_blog_topic(request, blog_topic):
 
     return render(request, 'dashboard/select-blog-sections.html', context)
 
-    
+
 # this generates blog from saved topic
 @login_required
 def create_blog_from_topic(request, uniqueId):
@@ -714,14 +736,15 @@ def create_blog_from_topic(request, uniqueId):
 
     user_profile = request.user.profile
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -760,9 +783,10 @@ def create_blog_from_topic(request, uniqueId):
             # api_requests = check_api_requests()
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
-                blog_section_heads = generate_blog_section_headings(user_profile, blog.title, blog.audience, blog.keywords)
-                
-                add_to_list.is_done=True
+                blog_section_heads = generate_blog_section_headings(user_profile, blog.title, blog.audience,
+                                                                    blog.keywords)
+
+                add_to_list.is_done = True
                 add_to_list.save()
                 time.sleep(5)
                 break
@@ -822,7 +846,6 @@ def save_section_head(request, uniqueId, section_head):
 
 @login_required
 def view_gen_blog(request, slug):
-
     user_profile = request.user.profile
     context = {}
     current_page = 'Blog Generator'
@@ -840,14 +863,15 @@ def view_gen_blog(request, slug):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -877,7 +901,7 @@ def view_gen_blog(request, slug):
             for val in request.session['selectd_sections']:
                 if not 'csrfmiddlewaretoken' in val:
                     # prev_blog = ''
-                    
+
                     # convert selectd_sections list to a prog string
                     if section_heads:
                         section_heads = section_heads + '\n'
@@ -893,7 +917,9 @@ def view_gen_blog(request, slug):
                         # api_requests = check_api_requests()
                         time.sleep(5)
                         if api_call_process(api_call_code, add_to_list):
-                            gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords, blog.tone_of_voice, min_words, blog.max_words, request.user.profile)
+                            gen_section = generate_full_blog(blog.title, section_heads, blog.audience, blog.keywords,
+                                                             blog.tone_of_voice, min_words, blog.max_words,
+                                                             request.user.profile)
 
                             # create database record
                             blog_sect = BlogSection.objects.create(
@@ -903,7 +929,7 @@ def view_gen_blog(request, slug):
                             )
                             blog_sect.save()
 
-                            add_to_list.is_done=True
+                            add_to_list.is_done = True
                             add_to_list.save()
 
                             # fetch created blog sections
@@ -927,7 +953,7 @@ def view_gen_blog(request, slug):
                             context['blog_sects'] = blog_sects
 
                             return redirect('view-generated-blog', slug=blog.slug)
-                        
+
                         else:
                             # we might need to delete all abandoned calls
                             pass
@@ -964,14 +990,15 @@ def edit_gen_blog(request, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -998,7 +1025,7 @@ def edit_gen_blog(request, uniqueId):
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
-    
+
     blog_sections = []
     # got_b_body = False
     s_blog_body = ''
@@ -1007,7 +1034,7 @@ def edit_gen_blog(request, uniqueId):
     try:
         saved_blog_sect = SavedBlogEdit.objects.get(blog=blog)
         if saved_blog_sect is not None:
-        #     for blog_sect in saved_blog_sects:
+            #     for blog_sect in saved_blog_sects:
             blog_sections.append(saved_blog_sect.body)
             blog_title = saved_blog_sect.title
 
@@ -1118,14 +1145,15 @@ def view_blog_social_post(request, postType, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1144,7 +1172,7 @@ def view_blog_social_post(request, postType, uniqueId):
         tone_of_voices.append(tone)
 
     context['tone_of_voices'] = tone_of_voices
-    
+
     blogs = Blog.objects.filter(profile=request.user.profile)
 
     for blog in blogs:
@@ -1160,10 +1188,10 @@ def view_blog_social_post(request, postType, uniqueId):
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('gen-blog-social-media', postType, uniqueId)
-    
+
     # post_type = postType.replace('_', ' ').title()
     soc_types_list = []
-		
+
     soc_types = SocialPlatform.objects.filter(is_active=True)
     for soc_typ in soc_types:
         soc_types_list.append(soc_typ)
@@ -1183,7 +1211,7 @@ def view_blog_social_post(request, postType, uniqueId):
     context['post_audience'] = post.audience
     context['post_keywords'] = post.keywords
     context['post_tone'] = post.tone_of_voice
-    
+
     return render(request, 'dashboard/social-media-post.html', context)
 
 
@@ -1192,14 +1220,15 @@ def generate_social_media(request):
     context = {}
     user_profile = request.user.profile
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1208,7 +1237,7 @@ def generate_social_media(request):
         profile.current_device = device_reg
         profile.current_ip = remote_addr
         profile.save()
-    
+
     if request.method == "POST":
 
         post_title = request.POST['post_title']
@@ -1233,7 +1262,8 @@ def generate_social_media(request):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, post_title, max_char, request.user.profile, False)
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, post_title,
+                                                   max_char, request.user.profile, False)
 
                 # create database record
                 new_post = SocialPost.objects.create(
@@ -1247,9 +1277,9 @@ def generate_social_media(request):
                 )
                 new_post.save()
 
-                add_to_list.is_done=True
+                add_to_list.is_done = True
                 add_to_list.save()
-                
+
                 context['new_post'] = new_post
 
                 return redirect('view-social-media', post_type, new_post.uniqueId)
@@ -1279,14 +1309,15 @@ def gen_social_post(request, postType, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1295,7 +1326,7 @@ def gen_social_post(request, postType, uniqueId=''):
         profile.current_device = device_reg
         profile.current_ip = remote_addr
         profile.save()
-    
+
     # post_type = postType.replace('_', ' ').title()
     prompt_text = ''
 
@@ -1354,12 +1385,12 @@ def gen_social_post(request, postType, uniqueId=''):
 
         try:
             this_soc_post = SocialPost.objects.get(uniqueId=uniqueId)
-            
+
             context['this_soc_post'] = this_soc_post
             context['post_type_title'] = this_soc_post.post_type
             context['post_type'] = this_soc_post.post_type
             context['prompt_text'] = this_soc_post.post_idea
-            
+
             context['content_type'] = 'social_{}'.format(this_soc_post.post_type)
         except:
             pass
@@ -1392,7 +1423,8 @@ def gen_social_post(request, postType, uniqueId=''):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(soc_post_type, post_keywords, post_audience, tone_of_voice, prompt_text, max_char, user_profile, False)
+                social_post = generate_social_post(soc_post_type, post_keywords, post_audience, tone_of_voice,
+                                                   prompt_text, max_char, user_profile, False)
 
                 # create database record
                 new_post = SocialPost.objects.create(
@@ -1408,9 +1440,9 @@ def gen_social_post(request, postType, uniqueId=''):
                 )
                 new_post.save()
 
-                add_to_list.is_done=True
+                add_to_list.is_done = True
                 add_to_list.save()
-                
+
                 context['new_post'] = new_post
 
                 return redirect('view-social-media', soc_post_type, new_post.uniqueId)
@@ -1452,7 +1484,7 @@ def gen_social_post(request, postType, uniqueId=''):
 
 #     context['tone_of_voices'] = tone_of_voices
 
-    
+
 #     post_type = postType.replace('_', ' ').title()
 
 #     context['post_type_title'] = post_type
@@ -1464,7 +1496,7 @@ def gen_social_post(request, postType, uniqueId=''):
 #     context['post_audience'] = post.audience
 #     context['post_keywords'] = post.keywords
 #     context['post_tone'] = post.tone_of_voice
-    
+
 #     return render(request, 'dashboard/social-media-post.html', context)
 
 
@@ -1487,14 +1519,15 @@ def gen_social_from_blog(request, postType, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1510,7 +1543,7 @@ def gen_social_from_blog(request, postType, uniqueId):
     except:
         messages.error(request, "Something went wrong with your request, please try again!")
         return redirect('blog-topic')
-    
+
     post_type = postType.replace('_', ' ').title()
 
     if postType == "twitter":
@@ -1533,14 +1566,14 @@ def gen_social_from_blog(request, postType, uniqueId):
         tone_of_voices.append(tone)
 
     context['tone_of_voices'] = tone_of_voices
-    
+
     blogs = Blog.objects.filter(profile=request.user.profile)
 
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
             blog_posts.append(blog)
-    
+
     blog_sections = []
 
     context['blog_posts'] = blog_posts
@@ -1592,7 +1625,8 @@ def gen_social_from_blog(request, postType, uniqueId):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 # generate social post options
-                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, blog_body, max_char, request.user.profile)
+                social_post = generate_social_post(post_type, post_keywords, post_audience, tone_of_voice, blog_body,
+                                                   max_char, request.user.profile)
 
                 # create database record
                 new_post = BlogSocialPost.objects.create(
@@ -1606,9 +1640,9 @@ def gen_social_from_blog(request, postType, uniqueId):
                 )
                 new_post.save()
 
-                add_to_list.is_done=True
+                add_to_list.is_done = True
                 add_to_list.save()
-                
+
                 context['new_post'] = new_post
 
                 return redirect('view-blog-social', postType, new_post.uniqueId)
@@ -1626,7 +1660,7 @@ def delete_social_post(request, uniqueId):
     try:
         post = BlogSocialPost.objects.get(uniqueId=uniqueId)
         if post.blog.profile == request.user.profile:
-            post.deleted=True
+            post.deleted = True
             post.save()
             messages.info(request, "Social media post deleted successfully!")
             return redirect('social-post-memory')
@@ -1645,7 +1679,7 @@ def view_generated_blog(request, slug):
     current_page = 'Blog Generator'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(user_profile)
-    
+
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -1657,14 +1691,15 @@ def view_generated_blog(request, slug):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1697,14 +1732,15 @@ def improve_content(request):
     user_profile = request.user.profile
     response_data = {}
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1722,11 +1758,11 @@ def improve_content(request):
         max_words = int(request.POST['max_words'])
 
         response_data = {
-            'content_topic':content_topic,
-            'old_content':old_content,
-            'content_cate':content_cate,
-            'content_keywords':content_keywords,
-            'max_words':max_words
+            'content_topic': content_topic,
+            'old_content': old_content,
+            'content_cate': content_cate,
+            'content_keywords': content_keywords,
+            'max_words': max_words
 
         }
 
@@ -1751,7 +1787,8 @@ def improve_content(request):
                     time.sleep(5)
                     if api_call_process(api_call_code, add_to_list):
 
-                        gen_content = gen_improve_content(old_content, min_words, max_words, content_keywords, tone_of_voice, request.user.profile)
+                        gen_content = gen_improve_content(old_content, min_words, max_words, content_keywords,
+                                                          tone_of_voice, request.user.profile)
 
                         if len(gen_content) > 0:
 
@@ -1767,7 +1804,7 @@ def improve_content(request):
                             )
                             s_content.save()
 
-                            add_to_list.is_done=True
+                            add_to_list.is_done = True
                             add_to_list.save()
 
                             context['content_uniqueId'] = s_content.uniqueId
@@ -1779,7 +1816,7 @@ def improve_content(request):
                                 'contentBody': s_content.content_body_new,
                             }
                             break
-                        
+
                         else:
                             response_data = {
                                 'result': 'error',
@@ -1802,8 +1839,8 @@ def improve_content(request):
             'result': 'error',
             'message': 'Something went terribly wrong here'
         }
-    
-    return JsonResponse(response_data, content_type="application/json",safe=False)
+
+    return JsonResponse(response_data, content_type="application/json", safe=False)
 
 
 @login_required
@@ -1812,7 +1849,7 @@ def delete_impr_content(request, uniqueId):
         content = ContentImprover.objects.get(uniqueId=uniqueId)
 
         if content.profile == request.user.profile:
-            content.deleted=True
+            content.deleted = True
             content.save()
 
             messages.info(request, "Item deleted successfully!")
@@ -1827,7 +1864,6 @@ def delete_impr_content(request, uniqueId):
 
 @login_required
 def content_improver(request, uniqueId=''):
-
     context = {}
     user_profile = request.user.profile
     tone_of_voices = []
@@ -1846,14 +1882,15 @@ def content_improver(request, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -1895,6 +1932,7 @@ def content_improver(request, uniqueId=''):
 
     return render(request, 'dashboard/content-improver.html', context)
 
+
 @login_required
 def paragraph_writer(request, uniqueId=''):
     context = {}
@@ -1920,14 +1958,15 @@ def paragraph_writer(request, uniqueId=''):
     user_profile = request.user.profile
     team_clients = TeamClient.objects.filter(is_active=True)
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2006,13 +2045,13 @@ def paragraph_writer(request, uniqueId=''):
                         )
                         s_paragraph.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['paragraph_uniqueId'] = s_paragraph.uniqueId
 
                         return redirect('paragraph-writer-response', uniqueId=s_paragraph.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('paragraph-writer')
@@ -2027,12 +2066,11 @@ def paragraph_writer(request, uniqueId=''):
 
 @login_required
 def delete_paragraph(request, uniqueId):
-
     try:
         content = Paragraph.objects.get(uniqueId=uniqueId)
 
         if content.profile == request.user.profile:
-            content.deleted=True
+            content.deleted = True
             content.save()
 
             messages.info(request, "Item deleted successfully!")
@@ -2065,14 +2103,15 @@ def sentence_writer(request, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2123,7 +2162,6 @@ def sentence_writer(request, uniqueId=''):
             return []
 
         if len(sentence) > 0:
-            
             context['sentences'] = sentence_opts
             context['old_sentence'] = sentence_obj.old_sentence
             context['tone_of_voice'] = sentence_obj.tone_of_voice
@@ -2170,17 +2208,17 @@ def sentence_writer(request, uniqueId=''):
                         )
                         s_sentence.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['sentence_slug'] = s_sentence.uniqueId
 
                         return redirect('sentence-writer-response', uniqueId=s_sentence.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('sentence-writer')
-                
+
                 else:
                     # we might need to delete all abandoned calls
                     pass
@@ -2197,7 +2235,7 @@ def delete_sentence(request, uniqueId):
         sentence = Sentence.objects.get(uniqueId=uniqueId)
 
         if sentence.profile == request.user.profile:
-            sentence.deleted=True
+            sentence.deleted = True
             sentence.save()
 
             messages.info(request, "Sentence deleted successfully!")
@@ -2208,7 +2246,7 @@ def delete_sentence(request, uniqueId):
     except:
         messages.error(request, "Sentence not found!")
         return redirect('sentence-memory')
-    
+
 
 @login_required
 def article_title_writer(request, uniqueId=''):
@@ -2233,14 +2271,15 @@ def article_title_writer(request, uniqueId=''):
     cate_list = []
     client_list = []
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2285,7 +2324,6 @@ def article_title_writer(request, uniqueId=''):
             return []
 
         if len(title) > 0:
-
             context['title_opts'] = title_opts
             context['old_title'] = title_obj.old_title
             context['tone_of_voice'] = title_obj.tone_of_voice
@@ -2332,17 +2370,17 @@ def article_title_writer(request, uniqueId=''):
                         )
                         s_title.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['title_slug'] = s_title.uniqueId
 
                         return redirect('title-writer-response', uniqueId=s_title.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('title-writer')
-                
+
                 else:
                     # we might need to delete all abandoned calls
                     pass
@@ -2353,12 +2391,11 @@ def article_title_writer(request, uniqueId=''):
 
 @login_required
 def delete_title(request, uniqueId):
-
     try:
         title = ArticleTitle.objects.get(uniqueId=uniqueId)
 
         if title.profile == request.user.profile:
-            title.deleted=True
+            title.deleted = True
             title.save()
 
             messages.info(request, "Title deleted successfully!")
@@ -2369,7 +2406,7 @@ def delete_title(request, uniqueId):
     except:
         messages.error(request, "Title not found!")
         return redirect('title-memory')
-    
+
 
 @login_required
 def generate_blog_meta(request, uniqueId):
@@ -2396,14 +2433,15 @@ def generate_blog_meta(request, uniqueId):
     cate_list = []
     client_list = []
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2426,7 +2464,7 @@ def generate_blog_meta(request, uniqueId):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
-        
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -2440,14 +2478,14 @@ def generate_blog_meta(request, uniqueId):
     except:
         messages.error(request, "Blog not found!")
         return redirect('blog-memory')
-    
+
     blogs = Blog.objects.filter(profile=user_profile)
 
     for blog in blogs:
         sections = BlogSection.objects.filter(blog=blog)
         if sections.exists():
             blog_posts.append(blog)
-    
+
     blog_sections = []
 
     context['blog_posts'] = blog_posts
@@ -2495,13 +2533,13 @@ def generate_blog_meta(request, uniqueId):
                         )
                         s_meta_descr.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['meta_descr_uniqueId'] = s_meta_descr.uniqueId
 
                         return redirect('meta-description-generator-response', s_meta_descr.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('generate-blog-meta', uniqueId)
@@ -2516,12 +2554,12 @@ def generate_blog_meta(request, uniqueId):
 @login_required
 def meta_description_writer(request, uniqueId=''):
     context = {}
-    user_profile = request.user.profile    
+    user_profile = request.user.profile
     tone_of_voices = []
     current_page = 'Meta Description Generator'
     context['current_page'] = current_page
     context['allowance'] = check_count_allowance(user_profile)
-    
+
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -2533,14 +2571,15 @@ def meta_description_writer(request, uniqueId=''):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2566,7 +2605,7 @@ def meta_description_writer(request, uniqueId=''):
 
     context['cate_list'] = cate_list
     context['client_list'] = client_list
-        
+
     tones = ToneOfVoice.objects.filter(tone_status=True)
 
     for tone in tones:
@@ -2623,13 +2662,13 @@ def meta_description_writer(request, uniqueId=''):
                         )
                         s_meta_descr.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['meta_descr_uniqueId'] = s_meta_descr.uniqueId
 
                         return redirect('meta-description-generator-response', uniqueId=s_meta_descr.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('meta-description-generator')
@@ -2643,12 +2682,11 @@ def meta_description_writer(request, uniqueId=''):
 
 @login_required
 def delete_meta_descr(request, uniqueId):
-
     try:
         meta_descr = MetaDescription.objects.get(uniqueId=uniqueId)
 
         if meta_descr.profile == request.user.profile:
-            meta_descr.deleted=True
+            meta_descr.deleted = True
             meta_descr.save()
 
             messages.info(request, "Item deleted successfully!")
@@ -2659,173 +2697,174 @@ def delete_meta_descr(request, uniqueId):
     except:
         messages.error(request, "Item not found!")
         return redirect('meta-descr-memory')
-    
+
 
 @login_required
 def summarize_blog(request, blogUniqueId, uniqueId=''):
-	context = {}
-	user_profile = request.user.profile
-	tone_of_voices = []
-	current_page = 'Content Summariser'
-	context['current_page'] = current_page
-	context['allowance'] = check_count_allowance(user_profile)
+    context = {}
+    user_profile = request.user.profile
+    tone_of_voices = []
+    current_page = 'Content Summariser'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(user_profile)
 
-	lang = settings.LANGUAGE_CODE
-	flag_avatar = 'dash/images/gb_flag.jpg'
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
 
-	lang = check_user_lang(user_profile, lang)
+    lang = check_user_lang(user_profile, lang)
 
-	if lang == 'en-us':
-		flag_avatar = 'dash/images/us_flag.jpg'
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
 
-	context['lang'] = lang
-	context['flag_avatar'] = flag_avatar
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
 
-	remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
-	max_devices_allow = max_devices(user_profile)
+    remote_addr = get_client_ip(request)
+    max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
-	device_reg = device_registration(request, max_devices_allow)
+    device_reg = device_registration(request, max_devices_allow)
 
-	if device_reg == 'error: max device':
+    if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-		messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
-		return redirect('device-manager')
-        # print(check_device_reg)
-        # pass
-	else:
-		profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
-		profile.current_device = device_reg
-		profile.current_ip = remote_addr
-		profile.save()
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        return redirect('device-manager')
+    # print(check_device_reg)
+    # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
 
-	cate_list = []
-	client_list = []
-	blog_posts = []
-	this_blog_sections = []
-	blog_body = ''
-	blog_sections = []
+    cate_list = []
+    client_list = []
+    blog_posts = []
+    this_blog_sections = []
+    blog_body = ''
+    blog_sections = []
 
-	team_clients = TeamClient.objects.filter(is_active=True)
+    team_clients = TeamClient.objects.filter(is_active=True)
 
-	try:
-		this_blog = Blog.objects.get(uniqueId=blogUniqueId)
-		blog_title = this_blog.title
+    try:
+        this_blog = Blog.objects.get(uniqueId=blogUniqueId)
+        blog_title = this_blog.title
 
-	except:
-		messages.error(request, "Blog not found!")
-		return redirect('blog-memory', 'incomplete')
-    
-	try:
-		saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
-		if saved_blog_sects.exists():
-			for blog_sect in saved_blog_sects:
-				blog_title = blog_sect.title
+    except:
+        messages.error(request, "Blog not found!")
+        return redirect('blog-memory', 'incomplete')
 
-				this_blog_sections.append(blog_sect.body)
-		else:
-			saved_blog = SavedBlogEdit.objects.create(
+    try:
+        saved_blog_sects = SavedBlogEdit.objects.filter(blog=this_blog)
+        if saved_blog_sects.exists():
+            for blog_sect in saved_blog_sects:
+                blog_title = blog_sect.title
+
+                this_blog_sections.append(blog_sect.body)
+        else:
+            saved_blog = SavedBlogEdit.objects.create(
                 title=this_blog.title,
                 body=blog_body_sect,
                 blog=this_blog,
             )
-			saved_blog.save()
-			this_blog_sections.append(saved_blog.body)
+            saved_blog.save()
+            this_blog_sections.append(saved_blog.body)
 
-	except:
-		gen_sections = BlogSection.objects.filter(blog=this_blog)
-		for blog_sect in gen_sections:
-			this_blog_body = blog_sect.body
-			blog_sections.append(this_blog_body)
+    except:
+        gen_sections = BlogSection.objects.filter(blog=this_blog)
+        for blog_sect in gen_sections:
+            this_blog_body = blog_sect.body
+            blog_sections.append(this_blog_body)
 
-		blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
+        blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
 
-		saved_blog = SavedBlogEdit.objects.create(
+        saved_blog = SavedBlogEdit.objects.create(
             title=this_blog.title,
             body=blog_body_sect,
             blog=this_blog,
         )
-		saved_blog.save()
-		this_blog_sections.append(saved_blog.body)
+        saved_blog.save()
+        this_blog_sections.append(saved_blog.body)
 
-	blogs = Blog.objects.filter(profile=user_profile)
-	for blog in blogs:
-		sections = BlogSection.objects.filter(blog=blog)
-		if sections.exists():
-			blog_posts.append(blog)
+    blogs = Blog.objects.filter(profile=user_profile)
+    for blog in blogs:
+        sections = BlogSection.objects.filter(blog=blog)
+        if sections.exists():
+            blog_posts.append(blog)
 
     # blog_body = "\n".join(this_blog_sections).replace('<br>', '\n')
-	blog_body = "\n".join(this_blog_sections)
+    blog_body = "\n".join(this_blog_sections)
 
-	for client in team_clients:
-		if client.team == user_profile.user_team:
-			client_list.append(client)
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
 
-	team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
 
-	for category in team_categories:
-		cate_list.append(category)
+    for category in team_categories:
+        cate_list.append(category)
 
-	context['cate_list'] = cate_list
-	context['client_list'] = client_list
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
 
-	tones = ToneOfVoice.objects.filter(tone_status=True)
+    tones = ToneOfVoice.objects.filter(tone_status=True)
 
-	for tone in tones:
-		tone_of_voices.append(tone)
+    for tone in tones:
+        tone_of_voices.append(tone)
 
-	context['blog_posts'] = blog_posts
-	context['tone_of_voices'] = tone_of_voices
+    context['blog_posts'] = blog_posts
+    context['tone_of_voices'] = tone_of_voices
 
-	context['post_blog'] = this_blog
-	context['summary_title'] = this_blog.title
-	context['this_summary_cate'] = this_blog.category
-	context['tone_of_voice'] = this_blog.tone_of_voice
+    context['post_blog'] = this_blog
+    context['summary_title'] = this_blog.title
+    context['this_summary_cate'] = this_blog.category
+    context['tone_of_voice'] = this_blog.tone_of_voice
 
-	context['long_content'] = blog_body
-    
-	if len(uniqueId) > 0:
-		# search database for meta descriptions with this slug
-		content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
+    context['long_content'] = blog_body
 
-		context['content_summary'] = content_summary
-		context['summary_title'] = content_summary.summary_title
-		context['this_summary_cate'] = content_summary.category
-		context['tone_of_voice'] = content_summary.tone_of_voice
-		context['long_content'] = content_summary.long_content
-		context['summarized_content'] = content_summary.summarized
-	else:
-		pass
+    if len(uniqueId) > 0:
+        # search database for meta descriptions with this slug
+        content_summary = ContentSummary.objects.get(uniqueId=uniqueId)
 
-	if request.method == 'POST':
-		long_content = request.POST['long_content']
-		summary_title = request.POST['summary_title']
-		tone_of_voice = request.POST['tone_of_voice']
-		summary_cate = request.POST['category']
-		request.session['long_content'] = long_content
+        context['content_summary'] = content_summary
+        context['summary_title'] = content_summary.summary_title
+        context['this_summary_cate'] = content_summary.category
+        context['tone_of_voice'] = content_summary.tone_of_voice
+        context['long_content'] = content_summary.long_content
+        context['summarized_content'] = content_summary.summarized
+    else:
+        pass
 
-		if len(long_content) > 14000:
-			messages.error(request, "The engine could not generate content for your prompt, please try again!")
-			return redirect('meta-description-generator')
-		else:
-            
-			api_call_code = str(uuid4()).split('-')[4]
+    if request.method == 'POST':
+        long_content = request.POST['long_content']
+        summary_title = request.POST['summary_title']
+        tone_of_voice = request.POST['tone_of_voice']
+        summary_cate = request.POST['category']
+        request.session['long_content'] = long_content
 
-			add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
+        if len(long_content) > 14000:
+            messages.error(request, "The engine could not generate content for your prompt, please try again!")
+            return redirect('meta-description-generator')
+        else:
 
-			n = 1
+            api_call_code = str(uuid4()).split('-')[4]
+
+            add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
+
+            n = 1
             # runs until n < 50,just to avoid the infinite loop.
             # this will execute the check_api_requests() func in every 5 seconds.
-			while n < 50:
+            while n < 50:
                 # api_requests = check_api_requests()
-				time.sleep(5)
-				if api_call_process(api_call_code, add_to_list):
+                time.sleep(5)
+                if api_call_process(api_call_code, add_to_list):
 
-					content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
+                    content_summary = write_content_summary(long_content, tone_of_voice, request.user.profile)
 
-					if len(content_summary) > 0:
+                    if len(content_summary) > 0:
 
                         # create database record
-						s_content_data = ContentSummary.objects.create(
+                        s_content_data = ContentSummary.objects.create(
                             long_content=long_content,
                             summary_title=summary_title,
                             tone_of_voice=tone_of_voice,
@@ -2834,24 +2873,24 @@ def summarize_blog(request, blogUniqueId, uniqueId=''):
                             category=summary_cate,
                             blog_id=blogUniqueId,
                         )
-						s_content_data.save()
+                        s_content_data.save()
 
-						add_to_list.is_done=True
-						add_to_list.save()
+                        add_to_list.is_done = True
+                        add_to_list.save()
 
-						context['content_data_uniqueId'] = s_content_data.uniqueId
+                        context['content_data_uniqueId'] = s_content_data.uniqueId
 
-						return redirect('blog-summarizer-response', blogUniqueId, s_content_data.uniqueId)
-            
-					else:
-						messages.error(request, "The engine could not understand your command, please try again!")
-						return redirect('generate-blog-summary', blogUniqueId)
-				else:
+                        return redirect('blog-summarizer-response', blogUniqueId, s_content_data.uniqueId)
+
+                    else:
+                        messages.error(request, "The engine could not understand your command, please try again!")
+                        return redirect('generate-blog-summary', blogUniqueId)
+                else:
                     # we might need to delete all abandoned calls
-					pass
-				n += 1
+                    pass
+                n += 1
 
-	return render(request, 'dashboard/content-summarizer.html', context)
+    return render(request, 'dashboard/content-summarizer.html', context)
 
 
 @login_required
@@ -2874,14 +2913,15 @@ def summarize_content(request, uniqueId=""):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -2940,7 +2980,7 @@ def summarize_content(request, uniqueId=""):
             messages.error(request, "The engine could not generate content for your prompt, please try again!")
             return redirect('meta-description-generator')
         else:
-            
+
             api_call_code = str(uuid4()).split('-')[4]
 
             add_to_list = add_to_api_requests('write_content_summary', api_call_code, request.user.profile)
@@ -2968,13 +3008,13 @@ def summarize_content(request, uniqueId=""):
                         )
                         s_content_data.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['content_data_uniqueId'] = s_content_data.uniqueId
 
                         return redirect('content-summarizer-response', uniqueId=s_content_data.uniqueId)
-            
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('content-summarizer')
@@ -2988,11 +3028,10 @@ def summarize_content(request, uniqueId=""):
 
 @login_required
 def delete_summary(request, uniqueId):
-
     try:
         content = ContentSummary.objects.get(uniqueId=uniqueId)
         if content.profile == request.user.profile:
-            content.deleted=True
+            content.deleted = True
             content.save()
 
             messages.info(request, "Item deleted successfully!")
@@ -3026,14 +3065,15 @@ def landing_page_copy(request, uniqueId=""):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    remote_addr = requests.get('https://checkip.amazonaws.com').text.strip()
+    remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
     device_reg = device_registration(request, max_devices_allow)
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -3065,7 +3105,7 @@ def landing_page_copy(request, uniqueId=""):
     if len(uniqueId) > 0:
         # search database for landing copy
         copy_content = LandingPageCopy.objects.get(uniqueId=uniqueId)
-        copy_content.page_copy=copy_content.page_copy.replace('\n', '<br>')
+        copy_content.page_copy = copy_content.page_copy.replace('\n', '<br>')
         copy_content.save()
 
         context['copy_content'] = copy_content
@@ -3080,14 +3120,14 @@ def landing_page_copy(request, uniqueId=""):
         # request.session['company_name'] = company_name
 
         company_purpose = request.POST['company_purpose']
-        page_sections = request.POST['page_sections'] 
+        page_sections = request.POST['page_sections']
         # request.session['company_purpose'] = company_purpose
 
         if len(company_name) > 200 or len(company_purpose) > 200:
             messages.error(request, "The engine could not understand your command, please try again!")
             return redirect('landing-page-copy')
         else:
-            
+
             api_call_code = str(uuid4()).split('-')[4]
 
             add_to_list = add_to_api_requests('generate_landing_page_copy', api_call_code, request.user.profile)
@@ -3100,7 +3140,8 @@ def landing_page_copy(request, uniqueId=""):
                 time.sleep(5)
                 if api_call_process(api_call_code, add_to_list):
 
-                    gen_page_copy = generate_landing_page_copy(company_name, company_purpose, page_sections, request.user.profile)
+                    gen_page_copy = generate_landing_page_copy(company_name, company_purpose, page_sections,
+                                                               request.user.profile)
 
                     if len(gen_page_copy) > 0:
 
@@ -3116,13 +3157,13 @@ def landing_page_copy(request, uniqueId=""):
                         )
                         s_content_data.save()
 
-                        add_to_list.is_done=True
+                        add_to_list.is_done = True
                         add_to_list.save()
 
                         context['content_data_uniqueId'] = s_content_data.uniqueId
 
                         return redirect('landing-page-copy-response', uniqueId=s_content_data.uniqueId)
-                    
+
                     else:
                         messages.error(request, "The engine could not understand your command, please try again!")
                         return redirect('landing-page-copy')
@@ -3136,12 +3177,11 @@ def landing_page_copy(request, uniqueId=""):
 
 @login_required
 def delete_page_copy(request, uniqueId):
-
     try:
         content = LandingPageCopy.objects.get(uniqueId=uniqueId)
 
         if content.profile == request.user.profile:
-            content.deleted=True
+            content.deleted = True
             content.save()
 
             messages.info(request, "Item deleted successfully!")
@@ -3215,13 +3255,13 @@ def get_single_plan(request, uniqueId, planId):
         }
 
     # return JsonResponse(response_data)
-    return JsonResponse(json.dumps(response_data), content_type="application/json",safe=False)
+    return JsonResponse(json.dumps(response_data), content_type="application/json", safe=False)
 
 
 @login_required
 def payment_plans(request):
     context = {}
-    
+
     current_page = 'Payment Plans'
     context['current_page'] = current_page
 
@@ -3263,7 +3303,7 @@ def payfast_payment(request, planId):
     item_descr = "{} Package".format(package.package_name)
 
     m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
-    
+
     current_page = 'Billing | {}'.format(item_name)
     context['current_page'] = current_page
 
@@ -3286,7 +3326,7 @@ def payfast_payment(request, planId):
     sub_period = 'month'
     if 'Yearly' in package.package_name:
         subscri_frequency = "6"
-        recurring_amount = str(int(recurring_amount)*12)
+        recurring_amount = str(int(recurring_amount) * 12)
         amount = "%.2f" % int(recurring_amount)
         sub_period = 'Year'
 
@@ -3317,7 +3357,7 @@ def payfast_payment(request, planId):
         # "custom_str2": planId
     }
 
-    def generateSignature(dataArray, passPhrase = ''):
+    def generateSignature(dataArray, passPhrase=''):
         payload = ""
         for key in dataArray:
             # Get all the data from Payfast and prepare parameter string
@@ -3352,7 +3392,8 @@ def payfast_payment(request, planId):
     context['item_descr'] = item_descr
     context['sub_period'] = sub_period
     # context['plan_id'] = planId
-    context['action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.PAYFAST_SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
+    context[
+        'action_url'] = 'https://sandbox.payfast.co.za/eng/process' if settings.PAYFAST_SANDBOX_MODE else 'https://www.payfast.co.za/eng/process'
 
     return render(request, 'dashboard/process-plan-payment.html', context)
 
@@ -3363,8 +3404,8 @@ def webhook(request):
     # verify that the request is from PayPal
 
     # check the type of webhook event
-    #1. subscription created
-    #2. subscription got cancelled
+    # 1. subscription created
+    # 2. subscription got cancelled
 
     # process the event
     return redirect('billing')
@@ -3376,36 +3417,38 @@ def payment_cancel(request):
 
 
 def payment_success(request, uniqueId, planId, orderId):
-	context = {}
-	order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
-	print(order_ref)
-    
-	try:
-		package = SubscriptionPackage.objects.get(uniqueId=planId)
-		package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
+    context = {}
+    order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
+    # print(order_ref)
 
-		try:
-			profile = Profile.objects.get(uniqueId=uniqueId)
-			profile.subscribed = True
-			profile.subscription_type = package_name
-			profile.subscription_reference = order_ref
-			profile.save()
+    try:
+        package = SubscriptionPackage.objects.get(uniqueId=planId)
+        package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
 
-			date_activated = timezone.localtime(timezone.now())
+        try:
+            profile = Profile.objects.get(uniqueId=uniqueId)
+            profile.monthly_count = '0'
+            profile.monthly_memory_count = '0'
+            profile.subscribed = True
+            profile.subscription_type = package_name
+            profile.subscription_reference = order_ref
+            profile.save()
 
-			date_expiry = date_activated + datetime.timedelta(days=30)
-			if 'yearly' in package_name:
-				date_expiry = date_activated + datetime.timedelta(days=365)
-			print('date_expiry: {}'.format(date_expiry))
+            date_activated = timezone.localtime(timezone.now())
 
-			has_team = False
-			user_team = ''
-			if 'team' in package.package_name.lower():
-				has_team = True
-				try:
-					this_user_team = Team.objects.get(uniqueId=profile.user_team)
-				except:
-					this_user_team = Team.objects.create(
+            date_expiry = date_activated + datetime.timedelta(days=30)
+            if 'yearly' in package_name:
+                date_expiry = date_activated + datetime.timedelta(days=365)
+            print('date_expiry: {}'.format(date_expiry))
+
+            has_team = False
+            user_team = ''
+            if 'team' in package.package_name.lower():
+                has_team = True
+                try:
+                    this_user_team = Team.objects.get(uniqueId=profile.user_team)
+                except:
+                    this_user_team = Team.objects.create(
                         business_name='',
                         business_size='5',
                         industry='',
@@ -3415,14 +3458,14 @@ def payment_success(request, uniqueId, planId, orderId):
                         business_status=True,
                         team_principal=profile.uniqueId,
                     )
-					this_user_team.save()
+                    this_user_team.save()
 
-					profile.user_team=this_user_team.uniqueId
+                    profile.user_team = this_user_team.uniqueId
 
-				user_team = this_user_team.uniqueId
+                user_team = this_user_team.uniqueId
 
-            # insert SubscriptionTranasction
-			sub_transact = SubscriptionTranasction.objects.create(
+            # insert SubscriptionTransaction
+            sub_transact = SubscriptionTransaction.objects.create(
                 subscription_reference=order_ref,
                 user_profile_uid=uniqueId,
                 has_team=has_team,
@@ -3431,34 +3474,33 @@ def payment_success(request, uniqueId, planId, orderId):
                 date_expiry=date_expiry,
 
             )
-			sub_transact.save()
+            sub_transact.save()
 
             # update the team
-			try:
-				this_user_team = Team.objects.get(uniqueId=profile.user_team)
-                
-				find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
+            try:
+                this_user_team = Team.objects.get(uniqueId=profile.user_team)
 
-				for team_member in find_team_members:
-					if team_member.is_verified and team_member.is_active and team_member.user.is_active:
-						team_member.subscribed=profile.subscribed
-						team_member.subscription_type=profile.subscription_type
-						team_member.subscription_reference=profile.subscription_reference
-						team_member.save()
+                find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
 
-				return HttpResponse('SUCCESS')
-			except:
-                
-				return HttpResponse('SUCCESS')
-		except:
-			return HttpResponse('FAIL: 001')
-	except:
-		return HttpResponse('FAIL: 002')
+                for team_member in find_team_members:
+                    if team_member.is_verified and team_member.is_active and team_member.user.is_active:
+                        team_member.subscribed = profile.subscribed
+                        team_member.subscription_type = profile.subscription_type
+                        team_member.subscription_reference = profile.subscription_reference
+                        team_member.save()
+
+                return HttpResponse('SUCCESS')
+            except:
+
+                return HttpResponse('SUCCESS')
+        except:
+            return HttpResponse('FAIL: 001')
+    except:
+        return HttpResponse('FAIL: 002')
 
 
 @login_required
 def paypal_payment_success(request):
-
     if request.POST['subscriptionType'] == 'starter':
         try:
             profile = Profile.objects.get(uniqueId=request.POST['userId'])
@@ -3469,7 +3511,7 @@ def paypal_payment_success(request):
             return JsonResponse({'result': 'SUCCESS'})
         except:
             return JsonResponse({'result': 'FAIL'})
-    
+
     elif request.POST['subscriptionType'] == 'professional':
         try:
             profile = Profile.objects.get(uniqueId=request.POST['userId'])
@@ -3487,7 +3529,6 @@ def paypal_payment_success(request):
 
 @login_required
 def team_manager(request):
-
     context = {}
 
     current_page = "Team Manager"
@@ -3531,14 +3572,14 @@ def team_manager(request):
 
         for team_member in find_team_members:
             if team_member.is_verified:
-                total_members +=1
+                total_members += 1
                 # team_member.subscribed=user_profile.subscribed
                 # team_member.subscription_type=user_profile.subscription_type
                 # team_member.subscription_reference=user_profile.subscription_reference
                 # team_member.save()
                 team_members.append(team_member)
             else:
-                total_invites +=1
+                total_invites += 1
                 member_invites.append(team_member)
 
     u_roles = UserRole.objects.filter(is_active=True).order_by('date_created')
@@ -3583,12 +3624,12 @@ def team_manager(request):
             edit_org = Team.objects.get(uniqueId=user_profile.user_team)
 
             if edit_org.team_principal == request.user.profile.uniqueId:
-                edit_org.business_name=biz_name
-                edit_org.business_size=business_size
-                edit_org.industry=industry
-                edit_org.business_email=biz_email
-                edit_org.business_description=biz_description
-                edit_org.business_address=biz_address
+                edit_org.business_name = biz_name
+                edit_org.business_size = business_size
+                edit_org.industry = industry
+                edit_org.business_email = biz_email
+                edit_org.business_description = biz_description
+                edit_org.business_address = biz_address
                 edit_org.save()
 
     return render(request, 'dashboard/team-manager.html', context)
@@ -3610,7 +3651,7 @@ def activateEmail(request, user, user_team, password1=''):
     })
 
     headers = {"Message-ID": str(uuid4())}
-    
+
     email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     email.content_subtype = 'html'
     if email.send():
@@ -3624,14 +3665,13 @@ def activateEmail(request, user, user_team, password1=''):
 
 @login_required
 def edit_team_member(request):
-
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
 
         first_name = request.POST['user_fname']
         last_name = request.POST['user_lname']
         # user_email = request.POST['user_email']
-        
+
         user_language = request.POST['user_language']
         user_role = UserRole.objects.get(uniqueId=request.POST['user_role'])
 
@@ -3640,28 +3680,28 @@ def edit_team_member(request):
             user_profile = Profile.objects.get(uniqueId=user_uid)
             edit_user = User.objects.get(profile=user_profile)
 
-            edit_user.first_name=first_name
-            edit_user.last_name=last_name
+            edit_user.first_name = first_name
+            edit_user.last_name = last_name
             edit_user.save()
 
             user_set = UserSetting.objects.get(profile=user_profile)
-            user_set.lang=user_language
-            user_set.user_role=user_role
+            user_set.lang = user_language
+            user_set.user_role = user_role
             user_set.save()
 
-            resp = f"Member details updated successfully!"            
+            resp = f"Member details updated successfully!"
         except:
             resp = f'User could not be found!'
 
     return HttpResponse(resp)
 
+
 @login_required
 def add_team_member(request):
-
     u_profile = request.user.profile
 
     if request.method == 'POST':
-        
+
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         user_email = request.POST['user_email']
@@ -3680,10 +3720,13 @@ def add_team_member(request):
             return redirect('team-manager')
 
         if User.objects.filter(email=user_email).exists():
-            messages.error(request, "User email address {} already exists, please use a different email address!".format(user_email))
+            messages.error(request,
+                           "User email address {} already exists, please use a different email address!".format(
+                               user_email))
             return redirect('team-manager')
 
-        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name, last_name=last_name, password=password1, is_active=False)
+        new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name,
+                                              last_name=last_name, password=password1, is_active=False)
         new_member.save()
         time.sleep(2)
 
@@ -3692,17 +3735,18 @@ def add_team_member(request):
 
         nu_profile = Profile.objects.get(user=new_member)
         # New user inherites principal credentials
-        nu_profile.user_team=user_team.uniqueId
-        nu_profile.subscribed=u_profile.subscribed
-        nu_profile.subscription_type=u_profile.subscription_type
-        nu_profile.subscription_reference=u_profile.subscription_reference
+        nu_profile.user_team = user_team.uniqueId
+        nu_profile.subscribed = u_profile.subscribed
+        nu_profile.subscription_type = u_profile.subscription_type
+        nu_profile.subscription_reference = u_profile.subscription_reference
         nu_profile.save()
 
-        user_settings = UserSetting.objects.create(lang=user_language,email_verification='null',user_role=user_role,profile=nu_profile)
+        user_settings = UserSetting.objects.create(lang=user_language, email_verification='null', user_role=user_role,
+                                                   profile=nu_profile)
         user_settings.save()
 
         success = activateEmail(request, new_member, user_team, password1)
-        
+
         return HttpResponse(success)
 
 
@@ -3723,11 +3767,11 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
             messages.error(request, resp_msg)
 
         # resp_msg = '{}-{}'.format(member_p.user.email, user_team)
-            # print(resp_msg)
+        # print(resp_msg)
     else:
         resp_msg = "Action not allowed, you do not have permission to access this team!"
         messages.error(request, resp_msg)
-    
+
     print(resp_msg)
 
     return redirect('team-manager')
@@ -3746,22 +3790,22 @@ def delete_member(request, orgUniqueId, uniqueId):
                 # member.delete()
                 messages.error(request, "Action not allowed, you cannot remove yourself from this team!")
                 return redirect('team-manager')
-            
+
             elif not member.profile.user_team == orgUniqueId:
                 messages.error(request, "Action not allowed, this user does not belong to your team!")
                 return redirect('team-manager')
-            
+
             elif get_this_org.team_principal == member.profile.uniqueId:
                 messages.error(request, "Action not allowed, You cannot remove team principal from this team!")
                 return redirect('team-manager')
-                
+
             else:
                 member.is_active = False
                 member.save()
 
                 messages.success(request, "Team member removed successfully!")
                 return redirect('team-manager')
-            
+
         else:
             messages.error(request, "Action not allowed, looks like you do not belong to this team!")
             return redirect('dashboard')
@@ -3772,7 +3816,6 @@ def delete_member(request, orgUniqueId, uniqueId):
 
 @login_required
 def delete_invite(request, userUid, uniqueId):
-
     try:
         if request.user.profile.uniqueId == userUid:
             invite = MemberInvite.objects.get(uniqueId=uniqueId)
@@ -3780,7 +3823,7 @@ def delete_invite(request, userUid, uniqueId):
 
             messages.success(request, "Team member invite removed successfully!")
             return redirect('team-manager')
-            
+
         else:
             messages.error(request, "Action not allowed, looks like you did not invite this member")
             return redirect('dashboard')
@@ -3802,7 +3845,7 @@ def device_manager(request):
     if user_profile.subscription_type == 'free':
         user_sub_pack = SubscriptionPackage.objects.get(uniqueId=settings.FREE_SUBSCR_PACKAGE)
     else:
-    # find user package from package ref
+        # find user package from package ref
         user_package_ref = user_profile.subscription_reference
         user_subscrip_pakg = user_package_ref.split('-')[1]
 
@@ -3931,8 +3974,8 @@ def memory_blogs(request, status):
             # if limit is reached break loop
             if user_momery_limit == cnt_memry:
                 break
-            
-        cnt_memry+=1
+
+        cnt_memry += 1
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
@@ -3984,7 +4027,7 @@ def memory_social_post(request, socType='blog'):
     context['client_list'] = client_list
 
     if socType == 'blog':
-        
+
         current_page = 'Blog Social Media Posts'
 
         # Get total blogs
@@ -4077,7 +4120,7 @@ def memory_paragraph(request):
 
 @login_required
 def memory_sentence(request):
-    context ={}
+    context = {}
     saved_sentence = []
     today_date = datetime.datetime.now()
 
@@ -4132,7 +4175,7 @@ def memory_sentence(request):
 
 @login_required
 def memory_title(request):
-    context ={}
+    context = {}
     saved_title = []
     today_date = datetime.datetime.now()
 
@@ -4200,7 +4243,7 @@ def memory_summarizer(request):
     client_list = []
 
     user_profile = request.user.profile
-    user_team_id=user_profile.user_team
+    user_team_id = user_profile.user_team
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
@@ -4246,7 +4289,7 @@ def memory_summarizer(request):
 @login_required
 def memory_page_copy(request):
     context = {}
-    
+
     saved_page_copies = []
 
     today_date = datetime.datetime.now()
@@ -4304,7 +4347,7 @@ def memory_page_copy(request):
 @login_required
 def memory_meta_descr(request):
     context = {}
-    
+
     saved_meta_descriptions = []
 
     cate_list = []
@@ -4552,7 +4595,7 @@ def change_client_status(request, status, uniqueId):
     client = TeamClient.objects.get(uniqueId=uniqueId)
 
     if client.team == user_profile.user_team:
-        client.is_active=client_status
+        client.is_active = client_status
         client.save()
     else:
         messages.error(request, "Action denied on this client!")
@@ -4563,42 +4606,42 @@ def change_client_status(request, status, uniqueId):
 
 @login_required
 def edit_client(request):
-	context = {}
-	current_page = 'Edit Client'
-	parent_page = 'Clients'
-	
-	context['current_page'] = current_page
-	context['parent_page'] = parent_page
-	context['parent_page_url'] = 'clients'
-        
-	resp = "Error, something went wrong!"
-        
-	client_id = request.POST['client_code']
-        
-	try:
-		this_client = TeamClient.objects.get(uniqueId=client_id)
-		
-		if request.method == 'POST':
-			client_name = request.POST['client_name']
-			contact_name = request.POST['contact_name']
-			client_email = request.POST['contact_email']
-			client_industry = request.POST['industry']
-			client_address = request.POST['address']
-			client_descr = request.POST['client_descr']
+    context = {}
+    current_page = 'Edit Client'
+    parent_page = 'Clients'
 
-			if len(client_name) > 3:
-				this_client.client_name=client_name
-				this_client.contact_person=contact_name
-				this_client.industry=client_industry
-				this_client.client_email=client_email
-				this_client.business_address=client_address
-				this_client.description=client_descr
-				this_client.save()
-				resp = "Client updated successfully"
-	except:
-		resp = "Client updated successfully"
+    context['current_page'] = current_page
+    context['parent_page'] = parent_page
+    context['parent_page_url'] = 'clients'
 
-	return HttpResponse(resp)
+    resp = "Error, something went wrong!"
+
+    client_id = request.POST['client_code']
+
+    try:
+        this_client = TeamClient.objects.get(uniqueId=client_id)
+
+        if request.method == 'POST':
+            client_name = request.POST['client_name']
+            contact_name = request.POST['contact_name']
+            client_email = request.POST['contact_email']
+            client_industry = request.POST['industry']
+            client_address = request.POST['address']
+            client_descr = request.POST['client_descr']
+
+            if len(client_name) > 3:
+                this_client.client_name = client_name
+                this_client.contact_person = contact_name
+                this_client.industry = client_industry
+                this_client.client_email = client_email
+                this_client.business_address = client_address
+                this_client.description = client_descr
+                this_client.save()
+                resp = "Client updated successfully"
+    except:
+        resp = "Client updated successfully"
+
+    return HttpResponse(resp)
 
 
 @login_required
@@ -4651,9 +4694,9 @@ def edit_category(request, uniqueId):
         team_client = TeamClient.objects.get(uniqueId=client_id)
 
         if len(category_name) > 3:
-            this_cate.category_name=category_name
-            this_cate.description=cate_descr
-            this_cate.client=team_client
+            this_cate.category_name = category_name
+            this_cate.description = cate_descr
+            this_cate.client = team_client
             this_cate.save()
 
             return redirect('categories')
@@ -4688,11 +4731,11 @@ def change_category_status(request, status, uniqueId):
     category = ClientCategory.objects.get(uniqueId=uniqueId)
 
     if category.client.team == user_profile.user_team:
-        category.is_active=cate_status
+        category.is_active = cate_status
         category.save()
     else:
         messages.error(request, "Action denied on this category!")
-        
+
         return redirect('categories')
 
     return redirect('categories')
@@ -4727,7 +4770,7 @@ def user_roles(request):
 
     permission_levels = []
     user_profile = request.user.profile
-    this_user_team = Team.objects.get(uniqueId=user_profile.user_team) 
+    this_user_team = Team.objects.get(uniqueId=user_profile.user_team)
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -4742,7 +4785,7 @@ def user_roles(request):
         return redirect('billing')
 
     if user_profile.user_team is not None:
-        
+
         try:
             perm_levels = PermissionLevel.objects.filter(is_active=True).order_by('date_created')
             for p_level in perm_levels:
@@ -4755,7 +4798,7 @@ def user_roles(request):
 
         except:
             return redirect('profile')
-    
+
         context['current_page'] = current_page
         context['this_user_team'] = this_user_team
         context['user_roles'] = user_roles
@@ -4765,7 +4808,6 @@ def user_roles(request):
 
     else:
         return redirect('billing')
-    
 
     if request.method == 'POST':
         permission = PermissionLevel.objects.get(uniqueId=request.POST['permission'])
@@ -4794,7 +4836,6 @@ def user_roles(request):
         )
         new_role.save()
 
-
     return render(request, 'dashboard/user-roles.html', context)
 
 
@@ -4820,12 +4861,12 @@ def edit_user_roles(request, team_uid, uniqueId):
 
                 resp = "Role updated successfully"
             else:
-                resp = "Not allowed, Post method not found!" 
+                resp = "Not allowed, Post method not found!"
         else:
-           resp = "Not allowed, You have no permission to make this change!" 
+            resp = "Not allowed, You have no permission to make this change!"
     except:
         resp = "Something went wrong, please try again!"
-    
+
     return HttpResponse(resp)
 
 
@@ -4841,7 +4882,7 @@ def download_content_file(request, content_type, uniqueId):
         except:
             messages.error(request, "Something went wrong with your request, please try again!")
             return redirect('blog-topic')
-        
+
         if content_type == 'blog_writer':
             # fetch created blog sections
             blog_sects = BlogSection.objects.filter(blog=blog)
@@ -4857,9 +4898,9 @@ def download_content_file(request, content_type, uniqueId):
                 blog_sections.append(sect.body)
 
             blog_body = "\n".join(blog_sections)
-        
+
         cont_text = blog_body.replace('<br>', '\n')
-        
+
     elif 'social' in content_type:
         soc_type = content_type.split('_')
 
@@ -4904,11 +4945,10 @@ def download_content_file(request, content_type, uniqueId):
 
     response['Content-Disposition'] = 'attachment; filename="{}.txt"'.format(filen)
     return response
- 
+
 
 @login_required
 def delete_user_role(request, team_uid, uniqueId):
-
     try:
         user_role = UserRole.objects.get(uniqueId=uniqueId)
 
@@ -4919,7 +4959,7 @@ def delete_user_role(request, team_uid, uniqueId):
     except:
         messages.error(request, "Something went wrong, please try again!")
         return redirect('user-roles')
-    
+
     return redirect('user-roles')
 
 
@@ -4952,5 +4992,5 @@ def get_role_details(request):
             'message': 'User role could not be found!',
         }
 
-    return JsonResponse(json.dumps(resp_data), content_type="application/json",safe=False)
+    return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 #

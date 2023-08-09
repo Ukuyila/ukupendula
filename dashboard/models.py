@@ -162,7 +162,33 @@ class UserSetting(models.Model):
         super(UserSetting, self).save(*args, **kwargs)
 
 
-class SubscriptionTranasction(models.Model):
+class UserNotification(models.Model):
+    notice_type = models.CharField(null=True, blank=True, max_length=255)
+    notification = models.TextField(null=True,blank=True)
+    is_read = models.BooleanField(default=False)
+    # django related field
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.notice_type, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.notice_type, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(UserNotification, self).save(*args, **kwargs)
+
+
+class SubscriptionTransaction(models.Model):
     subscription_reference = models.CharField(null=True, blank=True, max_length=500)
     user_profile_uid = models.CharField(null=True, blank=True, max_length=100)
     payment_method = models.CharField(null=True, blank=True, max_length=100)
@@ -193,7 +219,7 @@ class SubscriptionTranasction(models.Model):
 
         self.slug = slugify('{} {}'.format(self.subscription_reference, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
-        super(SubscriptionTranasction, self).save(*args, **kwargs)
+        super(SubscriptionTransaction, self).save(*args, **kwargs)
 
 
 class RegisteredDevice(models.Model):

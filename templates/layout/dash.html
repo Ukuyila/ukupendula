@@ -231,13 +231,14 @@
 																<span class="block">Categories</span>
 															</a>
 														</li>
+														{% if user.profile.subscription_type != 'free' %}
 														<li>
 															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
 																<i class="icon icon-layers text-dark"></i>
 																<span class="block">Memories</span>
 															</a>
 														</li>
-
+														{% endif %}
 
 														{% if user.profile.subscription_type == 'teams' %}
 														<li>
@@ -501,10 +502,10 @@
 						{% for message in messages %}
 						<div class="alert alert-{{ message.tags }}" role="alert">
 							{% if 'You have maximum devices logged in on your profile' in message %}
-							<strong>You have maximum devices logged in on your profile, please delete one to be able to use current device or <a href="{% url 'billing' %}">upgrade</a>!</strong>
+							<p>You have maximum devices logged in on your profile, please delete one to be able to use current device or <a href="{% url 'billing' %}">upgrade</a>!</p>
 							
 							{% else %}
-							<strong>{{ message }}</strong>
+							<p>{{ message }}</p>
 							{% endif %}
 							
 						</div>
