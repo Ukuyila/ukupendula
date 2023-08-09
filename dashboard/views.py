@@ -94,8 +94,7 @@ def home(request):
 
     if device_reg == 'error: max device':
         # redirect user out and give solution to remove device
-        messages.error(request,
-                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        messages.error(request, "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
         return redirect('device-manager')
         # print(check_device_reg)
         # pass
@@ -3192,6 +3191,11 @@ def delete_page_copy(request, uniqueId):
     except:
         messages.error(request, "Item not found!")
         return redirect('page-copy-memory')
+
+
+@login_required
+def transactions(request):
+    pass
 
 
 @login_required
