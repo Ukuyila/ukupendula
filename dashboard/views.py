@@ -58,7 +58,7 @@ def home(request):
 
     empty_blogs = []
     complete_blogs = []
-    user_notices = user_notices(profile=profile)
+    # user_notices = user_notices(profile)
 
     today_date = datetime.datetime.now()
 
