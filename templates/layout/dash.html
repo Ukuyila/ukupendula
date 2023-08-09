@@ -231,13 +231,14 @@
 																<span class="block">Categories</span>
 															</a>
 														</li>
+														{% if user.profile.subscription_type != 'free' %}
 														<li>
 															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
 																<i class="icon icon-layers text-dark"></i>
 																<span class="block">Memories</span>
 															</a>
 														</li>
-
+														{% endif %}
 
 														{% if user.profile.subscription_type == 'teams' %}
 														<li>
@@ -277,7 +278,9 @@
 													<a class="dropdown-item" href="{% url 'profile' %}">
 														<i class="dropdown-icon icon icon-user"></i> My Profile
 													</a>
-													
+													<a class="dropdown-item" href="{% url 'transactions' %}">
+														<i class="dropdown-icon  icon icon-list"></i> Transactions
+													</a>
 													<a class="dropdown-item" href="{% url 'billing' %}">
 														<i class="dropdown-icon  icon icon-credit-card"></i> Billing
 													</a>
@@ -501,10 +504,10 @@
 						{% for message in messages %}
 						<div class="alert alert-{{ message.tags }}" role="alert">
 							{% if 'You have maximum devices logged in on your profile' in message %}
-							<strong>You have maximum devices logged in on your profile, please delete one to be able to use current device or <a href="{% url 'billing' %}">upgrade</a>!</strong>
+							<p>You have maximum devices logged in on your profile, please delete one to be able to use current device or <a href="{% url 'billing' %}">upgrade</a>!</p>
 							
 							{% else %}
-							<strong>{{ message }}</strong>
+							<p>{{ message }}</p>
 							{% endif %}
 							
 						</div>

@@ -22,6 +22,7 @@ urlpatterns = [
 
     # billing
     path('billing', views.billing, name='billing'),
+    path('transactions', views.transactions, name='transactions'),
     path('dea248f7-dcfa-4edb-b012-3ad3ca07ead6', views.webhook, name='webhook'),
     path('subscription-plan/<str:uniqueId>/<str:planId>/', views.get_single_plan, name='subscription-plan'),
 
