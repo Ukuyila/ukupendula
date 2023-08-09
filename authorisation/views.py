@@ -112,7 +112,7 @@ def emailVerification(request, user, password1, user_team):
 
 @anonymous_required
 def register(request):
-    # populate_defaults()
+    populate_defaults()
 
     if request.method == 'POST':
 
@@ -228,39 +228,6 @@ def logout(request):
     return redirect('login')
 
 
-# def activate(request, uuidToken, uniqueId):  
-
-#     # decode_token = force_str(urlsafe_base64_decode(token))
-#     print('token: '.format(uuidToken))
-#     # return HttpResponse('Verification link is invalid!')
-
-#     try:  
-#         # decode_email = force_str(urlsafe_base64_decode(encodedmail))
-#         profile = Profile.objects.get(uniqueId=uniqueId)
-#         p_settings = UserSetting.objects.get(profile=profile)
-#         user = User.objects.get(profile=profile)
-#     except(TypeError, ValueError, OverflowError, User.DoesNotExist, Profile.DoesNotExist):
-#         user = None
-#         profile = None
-#     if user is not None and profile is not None and p_settings.email_verification == uuidToken:
-
-#         user.is_active = True
-#         user.save()
-#         profile = Profile.objects.get(user=user)
-#         profile.is_active = True
-#         profile.is_verified = True
-#         profile.save()
-
-#         p_settings.email_verification = 'None'
-#         p_settings.save()
-        
-#         redirect('login')
-#         return HttpResponse('Thank you for verifying you email. Now you can login your account.')
-
-#     else:
-#         return HttpResponse('Verification link is invalid!')
-
-
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
@@ -278,12 +245,12 @@ def activate(request, uidb64, token):
         profile.is_verified = True
         profile.save()
 
-        # add_notice = UserNotification.objects.create(
-        #     notice_type='registration',
-        #     notification='Welcome to {}, let us start creating together!'.format(settings.APP_NAME),
-        #     profile=profile
-        # )
-        # add_notice.save()
+        add_notice = UserNotification.objects.create(
+            notice_type='registration',
+            notification='Welcome to {}, let us start creating together!'.format(settings.APP_NAME),
+            profile=profile
+        )
+        add_notice.save()
 
         date_activated = timezone.localtime(timezone.now())
 
@@ -294,8 +261,8 @@ def activate(request, uidb64, token):
 
         order_ref = '{}-{}-{}'.format(profile.uniqueId, free_plan_id, order_id)
 
-        # insert SubscriptionTranasction
-        sub_transact = SubscriptionTranasction.objects.create(
+        # insert SubscriptionTransaction
+        sub_transact = SubscriptionTransaction.objects.create(
             subscription_reference=order_ref,
             user_profile_uid=profile.uniqueId,
             has_team=False,
