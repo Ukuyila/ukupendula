@@ -216,7 +216,7 @@ def home(request):
 
     context['num_blogs'] = len(complete_blogs)
 
-    context['count_reset'] = lst_subscr_trans.date_expiry  # update later
+    # context['count_reset'] = lst_subscr_trans.date_expiry  # update later
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
