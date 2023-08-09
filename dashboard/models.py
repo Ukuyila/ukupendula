@@ -188,7 +188,7 @@ class UserNotification(models.Model):
         super(UserNotification, self).save(*args, **kwargs)
 
 
-class SubscriptionTransaction(models.Model):
+class SubscriptionTranasction(models.Model):
     subscription_reference = models.CharField(null=True, blank=True, max_length=500)
     user_profile_uid = models.CharField(null=True, blank=True, max_length=100)
     payment_method = models.CharField(null=True, blank=True, max_length=100)
@@ -219,7 +219,7 @@ class SubscriptionTransaction(models.Model):
 
         self.slug = slugify('{} {}'.format(self.subscription_reference, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
-        super(SubscriptionTransaction, self).save(*args, **kwargs)
+        super(SubscriptionTranasction, self).save(*args, **kwargs)
 
 
 class RegisteredDevice(models.Model):
