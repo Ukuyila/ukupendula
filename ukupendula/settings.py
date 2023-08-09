@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     # Local APPS
     'landing',
     'authorisation',
-    'dashboard',
+    # 'dashboard',
 ]
 
 MIDDLEWARE = [
