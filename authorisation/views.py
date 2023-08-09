@@ -294,8 +294,8 @@ def activate(request, uidb64, token):
 
         order_ref = '{}-{}-{}'.format(profile.uniqueId, free_plan_id, order_id)
 
-        # insert SubscriptionTransaction
-        sub_transact = SubscriptionTransaction.objects.create(
+        # insert SubscriptionTranasction
+        sub_transact = SubscriptionTranasction.objects.create(
             subscription_reference=order_ref,
             user_profile_uid=profile.uniqueId,
             has_team=False,
