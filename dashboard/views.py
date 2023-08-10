@@ -3193,7 +3193,36 @@ def delete_page_copy(request, uniqueId):
 
 @login_required
 def transactions(request):
-    pass
+    context = {}
+
+    packages = []
+
+    current_page = 'Billing'
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    # user_sub_type = request.user.profile.subscription_type.title()
+
+    # # get user current tier
+    # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
+
+    # get packages
+    packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
+
+    for pack in packs:
+        packages.append(pack)
+
+    context['current_page'] = current_page
+    return render(request, 'dashboard/transactions.html', context)
 
 
 @login_required
@@ -3426,6 +3455,7 @@ def payment_success(request, uniqueId, planId, orderId):
     try:
         package = SubscriptionPackage.objects.get(uniqueId=planId)
         package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
+        package_price = package.package_price
 
         try:
             profile = Profile.objects.get(uniqueId=uniqueId)
@@ -3441,6 +3471,7 @@ def payment_success(request, uniqueId, planId, orderId):
             date_expiry = date_activated + datetime.timedelta(days=30)
             if 'yearly' in package_name:
                 date_expiry = date_activated + datetime.timedelta(days=365)
+                package_price = int(package_price)*12
             print('date_expiry: {}'.format(date_expiry))
 
             has_team = False
@@ -3470,6 +3501,8 @@ def payment_success(request, uniqueId, planId, orderId):
             sub_transact = SubscriptionTransaction.objects.create(
                 subscription_reference=order_ref,
                 user_profile_uid=uniqueId,
+                package_name=package.package_name.title(),
+                package_price=package_price,
                 has_team=has_team,
                 user_team=user_team,
                 date_activated=timezone.localtime(timezone.now()),
