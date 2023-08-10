@@ -15,41 +15,38 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">My Devices</h3>&nbsp;&nbsp;<span class="badge bg-primary">{{total_devices}}/{{max_devices}} devices</span>
-          {% comment %} <div class="card-options">
-            <a href="{% url 'content-summarizer' %}" class="btn btn-primary btn-sm">Generate New</a>
-          </div> {% endcomment %}
+          <h3 class="card-title">My Transactions</h3>&nbsp;
         </div>
         <div class="card-body">
-          {% if reg_devices|length > 0 %}
+          {% if transactions|length > 0 %}
           <div class="table-responsive mb-0 ">
             <table class="table table-hover table-striped " style="width:100%">
               <thead>
                 <tr>
-                  <th >OS</th>
-                  <th>Browser</th>
-                  <th>Location</th>
-                  <th>Last Seen</th>
+                  <th >Package</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Date</th>
                   <th></th>
                   
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
-              {% for reg_device in reg_devices %}
+              {% for transact in transactions %}
                 <tr>
-                  <td>{{reg_device.agent_os}}</td>
-                  <td>{{reg_device.agent_browser}}</td>
-                  <td>{{reg_device.ip_address}}</td>
+                  <td>{{transact.package_name}}</td>
+                  <td>{{transact.package_price}}</td>
                   <td>
-                    {% if reg_device.uniqueId == user.profile.current_device %}
-                    This device
-                    {% else %}
-                    {{reg_device.last_updated|date:"Y-m-d"}} {{reg_device.last_updated|time}}
+                    {% if transact.is_active %}
+                    <span class="btn btn-xs btn-outline-primary">Active</span>
                     {% endif %}
                   </td>
                   <td>
+                    {{transact.date_activated|date:"Y-m-d"}} {{transact.date_activated|time}}
+                  </td>
+                  <td>
                     {% comment %} {% if not reg_device.uniqueId == user.profile.current_device %} {% endcomment %}
-                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'delete-device' reg_device.uniqueId %}'" class="text-center text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="icon icon-trash"></i></a>
+                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'view-transact' transact.uniqueId %}'" class="text-center text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="icon icon-eye"></i></a>
                     {% comment %} {% endif %} {% endcomment %}
                   </td>
                   

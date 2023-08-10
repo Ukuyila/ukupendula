@@ -265,6 +265,8 @@ def activate(request, uidb64, token):
         sub_transact = SubscriptionTransaction.objects.create(
             subscription_reference=order_ref,
             user_profile_uid=profile.uniqueId,
+            package_name='Free',
+            package_price='0',
             has_team=False,
             user_team=user_team,
             date_activated=date_activated,
