@@ -3195,9 +3195,9 @@ def delete_page_copy(request, uniqueId):
 def transactions(request):
     context = {}
 
-    packages = []
+    transactions = []
 
-    current_page = 'Billing'
+    current_page = 'Transactions'
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -3216,12 +3216,48 @@ def transactions(request):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True).order_by('date_created')
 
-    for pack in packs:
-        packages.append(pack)
+    for subscr_transact in subscr_transactions:
+        transactions.append(subscr_transact)
 
     context['current_page'] = current_page
+    context['transactions'] = transactions
+    return render(request, 'dashboard/transactions.html', context)
+
+
+@login_required
+def view_transaction(request, uniqueId):
+    context = {}
+
+    transactions = []
+
+    current_page = 'View Transaction'
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(request.user.profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    # user_sub_type = request.user.profile.subscription_type.title()
+
+    # # get user current tier
+    # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
+
+    # get packages
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True).order_by('date_created')
+
+    for subscr_transact in subscr_transactions:
+        transactions.append(subscr_transact)
+
+    context['current_page'] = current_page
+    context['transactions'] = transactions
     return render(request, 'dashboard/transactions.html', context)
 
 
