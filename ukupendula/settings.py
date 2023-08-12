@@ -199,11 +199,11 @@ AWS_DEFAULT_ACL = 'public-read'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 if DEVELOPMENT_MODE is True:
-    STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
-    STATIC_ROOT = 'static/'
-else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+else:
+    STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+    STATIC_ROOT = 'static/'
 # STATIC_URL = '/static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
