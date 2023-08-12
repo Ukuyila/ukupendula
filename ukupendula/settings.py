@@ -188,7 +188,8 @@ AWS_ACCESS_KEY_ID = 'DO00H2CVHFYX93WKX73R'
 AWS_SECRET_ACCESS_KEY = 'BwyF/bqMqEhjrY99JUerBy0vY9hiLQUKowfuY14V7/8'
 
 AWS_STORAGE_BUCKET_NAME = 'writesome'
-AWS_S3_ENDPOINT_URL = 'http://writesome.syd1.digitaloceanspaces.com'
+AWS_S3_ENDPOINT_URL = 'https://writesome.syd1.digitaloceanspaces.com'
+AWS_S3_CUSTOM_DOMAIN = 'https://assets.ukupendula.ai'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
@@ -197,7 +198,7 @@ AWS_DEFAULT_ACL = 'public-read'
 
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 STATIC_ROOT = 'static/'
 
 # STATIC_URL = '/static/'
