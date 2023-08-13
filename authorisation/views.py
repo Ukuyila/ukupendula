@@ -219,7 +219,7 @@ def register(request):
         # auth.login(request, user)
         # return redirect('dashboard')
     context['cf_private_key'] = settings.CF_PRIVATE_KEY
-    return render(request, 'authorisation/register.html', {})
+    return render(request, 'authorisation/register.html', context)
 
 
 @login_required
