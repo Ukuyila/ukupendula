@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['138.68.155.44', 'localhost', 'app.writesome.ai']
+    ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai']
     dotenv_file = find_dotenv(".env")
     load_dotenv(dotenv_file)
 else:
