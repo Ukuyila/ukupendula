@@ -32,8 +32,8 @@ from django.http import JsonResponse, HttpResponse
 from uuid import uuid4
 
 # local imports.
-from .forms import *
-from .models import *
+# from .forms import *
+# from .models import *
 from .functions import *
 from authorisation.tokens import account_activation_token
 from django.template.defaulttags import register
