@@ -1,7 +1,9 @@
 {% extends 'layout/auth-new.html' %}
 {% load static %}
 
-
+{% block style %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endblock%}
 
 {% block body %}
 <!-- /Logo -->

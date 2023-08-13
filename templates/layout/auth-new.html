@@ -17,7 +17,8 @@
 	<link rel="stylesheet" href="{% static 'auth/css/nice-select.css' %}">
 	<link rel="stylesheet" href="{% static 'auth/css/normalize.css' %}">
 	<link rel="stylesheet" href="{% static 'auth/style.css' %}">
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	{% block style %}
+	{% endblock %}
 </head>
 <body>
 	<main class="bforum-main">
