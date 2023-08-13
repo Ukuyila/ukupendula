@@ -218,6 +218,7 @@ def register(request):
         # DIRECT LOGIN IF EMAIL IS VERIFIED
         # auth.login(request, user)
         # return redirect('dashboard')
+    context['cf_site_key'] = settings.CF_SITE_KEY
     context['cf_private_key'] = settings.CF_PRIVATE_KEY
     return render(request, 'authorisation/register.html', context)
 
