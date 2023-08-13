@@ -1,7 +1,11 @@
 from pathlib import Path
 import os
 import sys
-import dj_database_url
+# import dj_database_url
+
+# for dev
+from os.path import join, dirname
+from dotenv import load_dotenv, find_dotenv
 
 from django.contrib import messages
 from django.core.management.utils import get_random_secret_key
