@@ -22,6 +22,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+dotenv_file = find_dotenv(".env")
+load_dotenv(dotenv_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -35,8 +37,6 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai']
-    dotenv_file = find_dotenv(".env")
-    load_dotenv(dotenv_file)
 else:
     ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
