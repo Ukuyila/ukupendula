@@ -1,54 +1,54 @@
-# import datetime
-# import hashlib
-# import time
-# import urllib.parse
+import datetime
+import hashlib
+import time
+import urllib.parse
 
-# # payfast imports
-# import requests
-# import urllib.parse
-# import socket
-# import json
+# payfast imports
+import requests
+import urllib.parse
+import socket
+import json
 
-# from werkzeug.urls import url_parse
+from werkzeug.urls import url_parse
 
-# from django_gravatar.helpers import get_gravatar_url, has_gravatar, get_gravatar_profile_url, calculate_gravatar_hash
-# # Django imports
-# from django.shortcuts import render, redirect
-# from django.contrib.auth.models import User
-# from django.contrib import messages
-# from django.conf import settings
+from django_gravatar.helpers import get_gravatar_url, has_gravatar, get_gravatar_profile_url, calculate_gravatar_hash
+# Django imports
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.conf import settings
 
-# # Other Auth imports
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.sites.shortcuts import get_current_site
-# from django.utils.encoding import force_bytes
-# from django.utils.http import urlsafe_base64_encode
-# from django.template.loader import render_to_string
-# from django.core.mail import EmailMessage
-# from django.views.decorators.http import require_POST
-# from django.views.decorators.csrf import csrf_exempt
-# from django.http import JsonResponse, HttpResponse
+# Other Auth imports
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
 
-# from uuid import uuid4
+from uuid import uuid4
 
-# # local imports.
-# from .forms import *
-# from .models import *
-# from .functions import *
-# from authorisation.tokens import account_activation_token
-# from django.template.defaulttags import register
-
-
-# @register.filter(name='split')
-# def split(value, key):
-#     value.split("key")
-#     return value.split(key)
+# local imports.
+from .forms import *
+from .models import *
+from .functions import *
+from authorisation.tokens import account_activation_token
+from django.template.defaulttags import register
 
 
-# @login_required
-# def home(request):
-#     context = {}
+@register.filter(name='split')
+def split(value, key):
+    value.split("key")
+    return value.split(key)
 
+
+@login_required
+def home(request):
+    context = {}
+    return render(request, 'dashboard/index.html', context)
 #     try:
 #         user_profile = request.user.profile
 #     except:
@@ -5064,4 +5064,4 @@
 #         }
 
 #     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
-# #
+#
