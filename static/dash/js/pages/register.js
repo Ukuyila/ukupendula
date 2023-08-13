@@ -49,5 +49,13 @@ $(document).ready(function(){
 
   });
 
-
 })
+// window.onloadTurnstileCallback = function () {
+//   turnstile.render('#example-container', {
+//       sitekey: '0x4AAAAAAAIHVqQZH0ravSu2',
+//       callback: function(token) {
+//           console.log(`Challenge Success ${token}`);
+//       },
+//   });
+// };
+

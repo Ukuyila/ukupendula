@@ -112,6 +112,7 @@ def emailVerification(request, user, password1, user_team):
 
 @anonymous_required
 def register(request):
+    context = {}
     # populate_defaults()
 
     if request.method == 'POST':
@@ -217,7 +218,7 @@ def register(request):
         # DIRECT LOGIN IF EMAIL IS VERIFIED
         # auth.login(request, user)
         # return redirect('dashboard')
-
+    context['cf_private_key'] = settings.CF_PRIVATE_KEY
     return render(request, 'authorisation/register.html', {})
 
 
