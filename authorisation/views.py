@@ -112,7 +112,7 @@ def emailVerification(request, user, password1, user_team):
 
 @anonymous_required
 def register(request):
-    # populate_defaults()
+    populate_defaults()
 
     if request.method == 'POST':
 
@@ -286,7 +286,5 @@ def forgot_password(request):
     if request.method == 'POST':
         user_email = request.POST['email']
         print(f'user email: {user_email}')
-        
-        
 
     return render(request, 'authorisation/forgot-password.html', {})
