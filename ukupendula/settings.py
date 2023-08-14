@@ -206,6 +206,7 @@ if DEVELOPMENT_MODE is True:
     MEDIA_URL = '/uploads/'
 
 else:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     AWS_ACCESS_KEY_ID = 'DO00H2CVHFYX93WKX73R'
     AWS_SECRET_ACCESS_KEY = 'BwyF/bqMqEhjrY99JUerBy0vY9hiLQUKowfuY14V7/8'
 
