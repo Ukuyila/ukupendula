@@ -5099,7 +5099,7 @@ def get_notifications(request):
         resp_data = {
             'result': 'success',
             'message': 'Notifications found',
-            'user_notifcs': user_notifcs,
+            'user_notifcs': user_notifics,
             'cnt_notif': cnt_notif,
         }
     else:
