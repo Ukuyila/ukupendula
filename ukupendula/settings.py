@@ -220,9 +220,15 @@ else:
     AWS_DEFAULT_ACL = 'public-read'
 
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
     STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-    STATIC_ROOT = 'static/'
+    STATIC_ROOT = 'staticfiles/'
+
+    MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
+    MEDIA_ROOT = '/uploads/'
+
+    TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
