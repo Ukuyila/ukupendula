@@ -170,7 +170,7 @@
 													<span class=" nav-unread badge badge-danger rounded-pill notifications-count">{{cnt_notif}}</span>
 												</a>
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
-													<a href="javascript:void(0);" class="dropdown-item text-center border-bottom py-3 font-weight-semibold">You have {{cnt_notif}} new notifications</a>
+													<a href="javascript:void(0);" class="dropdown-item text-center border-bottom py-3 font-weight-semibold">You have <span class="notifications-count" >{{cnt_notif}}</span> new notifications</a>
 
 													{% if cnt_notif > 0 %}
 													{% for user_notifi in user_notices %}
@@ -570,7 +570,7 @@
 						if ( resp.includes('success') ) {
 							let responses = JSON.parse(resp)
 							console.log(responses)
-
+							curr_notifcs_cnt.html(responses.cnt_notif)
 						}
 						else {
 							error_alert.html(resp).prop('hidden', false)
