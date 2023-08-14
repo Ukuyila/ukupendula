@@ -7,7 +7,34 @@ $(document).ready(function(){
 
   // To-do
   $('#btn-generate').prop('disabled', true)
+
+  // notifcations listener
+  setTimeout(() => {
+    notificationListener
+  }, 5000);
 })
+
+function notificationListener() {
+  let curr_notifcs_cnt = $('.notifications-count')
+  $.ajax({
+    type: 'POST',
+    url: 'get-notifications',
+    data: {
+      curr_notifcs_cnt: curr_notifcs_cnt.html(),
+      notic_type: 'general',
+    },
+    success: function (resp) {
+      if ( resp.includes('success') ) {
+        let responses = JSON.parse(resp)
+        console.log(responses)
+        
+      }
+      else {
+        error_alert.html(resp).prop('hidden', false)
+      }
+    }
+  })
+}
 
 /* Paulse effect */
 $(function blink() {

@@ -228,7 +228,8 @@ def home(request):
     user_notifics = user_notices(user_profile)
     for notif in user_notifics:
         user_notifcs.append(notif)
-        cnt_notif+=1
+        if notif.is_read is False:
+            cnt_notif+=1
 
     context['cnt_notif'] = cnt_notif
     context['user_notices'] = user_notifcs
@@ -240,6 +241,38 @@ def home(request):
 
     return render(request, 'dashboard/index.html', context)
 
+
+@login_required
+def get_notifications(request):
+    resp_data = {}
+    user_profile = request.user.profile
+
+    if request.method == 'POST':
+        curr_notifcs_cnt = request.POST['curr_notifcs_cnt']
+        notic_type = request.POST['notic_type']
+
+        user_notifcs = []
+        cnt_notif = 0
+
+        user_notifics = user_notices(user_profile)
+        for notif in user_notifics:
+            user_notifcs.append(notif)
+            if notif.is_read is False:
+                cnt_notif+=1
+
+        resp_data = {
+            'result': 'success',
+            'message': 'Notifications found',
+            'user_notifcs': user_notifcs,
+            'cnt_notif': cnt_notif,
+        }
+    else:
+        resp_data = {
+            'result': 'error',
+            'message': 'Notifications could not be found!',
+        }
+
+    return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 
 @login_required
 def edit_settings(request):
