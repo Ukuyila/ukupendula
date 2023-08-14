@@ -5,7 +5,7 @@
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>writesome - Email Confirmation</title>
+  <title>writesome - Premium Purchase Email</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css">
   /**
@@ -90,6 +90,8 @@
     border: 0;
     outline: none;
   }
+  .invoice-items{font-family:Arial,sans-serif;font-size:14px;width:100%;margin:0;}
+  .line-item{vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;}
   </style>
 
 </head>
@@ -97,7 +99,7 @@
 
   <!-- start preheader -->
   <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
-    Thank you for joining {{ domain }} artifical intelligent writing assistance, kindly verify your email below.
+    Congrats, you now have {{subscribed_period}} of Writesome {{sub_package}} – here’s to some amazing content!.
   </div>
   <!-- end preheader -->
 
@@ -141,7 +143,8 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Verify Your Email Address</h1>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Enjoy your Writesome  {{sub_package}}!
+              </h1>
             </td>
           </tr>
         </table>
@@ -166,8 +169,8 @@
 
           <!-- start copy -->
           <tr>
-            <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">Tap the button below to confirm your email address. If you didn't create an account with <a href=" {{ domain }}">writesome.ai</a>, you can safely delete this email.</p>
+            <td align="center" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+              <p style="margin: 0;">Congrats, you now have {{subscribed_period}} of Writesome {{sub_package}} – here’s to some amazing content!.</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -180,8 +183,14 @@
                   <td align="center" bgcolor="#ffffff" style="padding: 12px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                          <a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
+                        <td align="center" >
+                          <table class="invoice-items" cellpadding="0" cellspacing="0" style="font-family:Arial,sans-serif;font-size:14px;width:100%;margin:0;" width="100%"><tr style="vertical-align:middle;" valign="middle"><td class="content line-item" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Activation&nbsp;date:</p>
+                          </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">{{actvtn_date|date:'Y-m-d'}}</p>
+                          </td></tr><tr style="vertical-align:middle;" valign="middle"><td class="content line-item" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Cost&nbsp;of&nbsp;service:</p>
+                          </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">R&nbsp;{{sub_package_price}}</p>
+                          </td></tr><tr style="vertical-align:middle;" valign="middle"><td class="content line-item" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Next&nbsp;payment&nbsp;due:</p>
+                          </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">{{next_due_date|date:'Y-m-d'}}</p>
+                          </td></tr></table>
                         </td>
                       </tr>
                     </table>
@@ -194,16 +203,25 @@
 
           <!-- start copy -->
           <tr>
-            <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
-              <p style="margin: 0;"><a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}" target="_blank">{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}</a></p>
+            <td align="center" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+              <p style="margin: 0;"><strong>Recurring Billing.</strong> Your subscription will automatically renew and your payment method will be charged for the same period and price unless you cancel at least 24 hours before the end of the period.</p>
             </td>
           </tr>
           <!-- end copy -->
 
           <!-- start copy -->
           <tr>
-            <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
+            <td align="center" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+              <p style="margin: 10px;0;10px;">You can cancel your subscription to {{sub_package}} Package at any time from your profile on  your profile on Writesome Web on your desktop device, then go to Profile Settings, click on the “Unsubscribe” button and follow the instructions</p>
+              <p style="margin: 10px;0;10px;">Writesome.AI <a href="{{tos_url}}">Terms of Service</a></p>
+              <p style="margin: 10px;0;0px;">Manage your subscription at any time in your account settings or<a href="{{contact_url}}"> contact us for help</a></p>
+            </td>
+          </tr>
+          <!-- end copy -->
+
+          <!-- start copy -->
+          <tr>
+            <td align="center" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
               <p style="margin: 0;">Cheers,<br> writesome.ai</p>
             </td>
           </tr>
