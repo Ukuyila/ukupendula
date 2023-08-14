@@ -27,6 +27,7 @@
                   <th>Price</th>
                   <th>Status</th>
                   <th>Date</th>
+                  <th>Renew</th>
                   <th></th>
                   
                 </tr>
@@ -45,8 +46,11 @@
                     {{transact.date_activated|date:"Y-m-d"}} {{transact.date_activated|time}}
                   </td>
                   <td>
+                    {{transact.date_expiry|date:"Y-m-d"}} {{transact.date_expiry|time}}
+                  </td>
+                  <td>
                     {% comment %} {% if not reg_device.uniqueId == user.profile.current_device %} {% endcomment %}
-                    <a href="javascript:void(0);" onclick="window.location.href='{% url 'view-transact' transact.uniqueId %}'" class="text-center text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="icon icon-eye"></i></a>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#addNewClient" class="text-center text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="icon icon-eye"></i></a>
                     {% comment %} {% endif %} {% endcomment %}
                   </td>
                   
@@ -56,7 +60,7 @@
             </table>
           </div>
           {% else %}
-          <div><h5>You have no device to display here yet, <a href="{% url 'dashboard' %}">back to home</a></h5></div>
+          <div><h5>You have no transactions to display here yet, <a href="{% url 'billing' %}">back to home</a></h5></div>
           {% endif %}
         </div>
       </div>
@@ -64,8 +68,75 @@
 
   </div>
 
-
+    <!-- view receipt Modal -->
+    <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog"  aria-hidden="true">
+      <div class="modal-dialog" role="document">
+  
+        <div class="modal-content" id="client-modal-form">
+          <div class="modal-header">
+            <h5 class="modal-title" >Transaction</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="my-5 mx-5" style="font-size: 30px;">Thank for your purchase</p>
+            <div class="row">
+              <ul class="list-unstyled">
+                <li class="text-black">John Doe</li>
+                <li class="text-muted mt-1"><span class="text-black">Invoice</span> #12345</li>
+                <li class="text-black mt-1">April 17 2021</li>
+              </ul>
+              <hr>
+              <div class="col-xl-10">
+                <p>Pro Package</p>
+              </div>
+              <div class="col-xl-2">
+                <p class="float-end">$199.00
+                </p>
+              </div>
+              <hr>
+            </div>
+            <div class="row">
+              <div class="col-xl-10">
+                <p>Consulting</p>
+              </div>
+              <div class="col-xl-2">
+                <p class="float-end">$100.00
+                </p>
+              </div>
+              <hr>
+            </div>
+            <div class="row">
+              <div class="col-xl-10">
+                <p>Support</p>
+              </div>
+              <div class="col-xl-2">
+                <p class="float-end">$10.00
+                </p>
+              </div>
+              <hr style="border: 2px solid black;">
+            </div>
+            <div class="row text-black">
+      
+              <div class="col-xl-12">
+                <p class="float-end fw-bold">Total: $10.00
+                </p>
+              </div>
+              <hr style="border: 2px solid black;">
+            </div>
+            <div class="text-center" style="margin-top: 90px;">
+              <a><u class="text-info">View in browser</u></a>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
 {% endblock %}
+
+
 
 {% block js %}
 		<!-- Data tables -->

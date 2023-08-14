@@ -335,7 +335,6 @@ def profile(request):
             profile_form.save()
             return redirect('profile')
         else:
-            # messages.error(request, profile_form.is_valid())
             messages.error(request, "Error! Failed to update user profile details!")
             return redirect('profile')
 
@@ -3195,15 +3194,15 @@ def delete_page_copy(request, uniqueId):
 @login_required
 def transactions(request):
     context = {}
-
     transactions = []
+    user_profile = request.user.profile
 
     current_page = 'Transactions'
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
 
-    lang = check_user_lang(request.user.profile, lang)
+    lang = check_user_lang(user_profile, lang)
 
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
@@ -3211,13 +3210,13 @@ def transactions(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    # user_sub_type = request.user.profile.subscription_type.title()
+    # user_sub_type = user_profile.subscription_type.title()
 
     # # get user current tier
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile).order_by('date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
