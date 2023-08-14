@@ -9,9 +9,7 @@ $(document).ready(function(){
   $('#btn-generate').prop('disabled', true)
 
   // notifcations listener
-  setTimeout(() => {
-    notificationListener
-  }, 5000);
+  notificationListener
 })
 
 function notificationListener() {
@@ -27,7 +25,6 @@ function notificationListener() {
       if ( resp.includes('success') ) {
         let responses = JSON.parse(resp)
         console.log(responses)
-        
       }
       else {
         error_alert.html(resp).prop('hidden', false)
