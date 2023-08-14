@@ -553,7 +553,6 @@
 			notificationListener()
 			});
 			function notificationListener() {
-				$("#bg-spinner").fadeOut("slow");
 				let curr_notifcs_cnt = $('.notifications-count')
 				$.ajax({
 					type: 'GET',
@@ -562,6 +561,11 @@
 						curr_notifcs_cnt: curr_notifcs_cnt.html(),
 						notic_type: 'general',
 					},
+					beforesend: function () {
+						$("#bg-spinner").fadeOut("slow");
+
+					},
+					
 					success: function (resp) {
 						if ( resp.includes('success') ) {
 							let responses = JSON.parse(resp)
