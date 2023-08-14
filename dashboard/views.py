@@ -335,9 +335,9 @@ def profile(request):
             profile_form.save()
             return redirect('profile')
         else:
-            messages.error(request, profile_form.is_valid())
-        #     messages.error(request, "Error! Failed to update user profile details!")
-        #     return redirect('profile')
+            # messages.error(request, profile_form.is_valid())
+            messages.error(request, "Error! Failed to update user profile details!")
+            return redirect('profile')
 
         # if image_form.is_valid():
         #     image_form.save()
