@@ -181,6 +181,7 @@
 															<div class="small text-muted">{{user_notifi.notice_type|title}}</div>
 														</div>
 													</a>
+
 													<a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>
 													{% endfor %}
 													{% endif %}
@@ -556,6 +557,7 @@
 				let curr_notifcs_cnt = $('.notifications-count')
 				let curr_notifcs_title = $('.notifications-title')
 				let notifications_container = $('#notifications-container')
+				$("#bg-spinner").fadeOut("fast");
 				$.ajax({
 					type: 'GET',
 					url: 'get-notifications',
@@ -564,17 +566,19 @@
 						notic_type: 'general',
 					},
 					beforesend: function () {
-						$("#bg-spinner").fadeOut("slow");
+						$("#bg-spinner").fadeOut("fast");
 					},
-					
 					success: function (resp) {
-						$("#bg-spinner").fadeOut("slow");
+						$("#bg-spinner").fadeOut("fast");
 						if ( resp.includes('success') ) {
 							let responses = JSON.parse(resp)
 							/* console.log(responses) */
 							curr_notifcs_cnt.html(responses['cnt_notif'])
 							curr_notifcs_title.html('You have ' + responses['cnt_notif'] + ' new notifications')
-							notifications_container.html(responses['user_notifcs'])
+							notifications_container.html(`
+							<a href="javascript:void(0);" class="dropdown-item text-center border-bottom py-3 font-weight-semibold notifications-title">You have ` + responses['cnt_notif'] + ` new notifications</a>` 
+							+ responses['user_notifcs'] 
+							+ `<a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>`)
 						}
 						else {
 							error_alert.html(resp).prop('hidden', false)
