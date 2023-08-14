@@ -3216,7 +3216,7 @@ def transactions(request):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
@@ -3251,7 +3251,7 @@ def view_transaction(request, uniqueId):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
