@@ -5089,6 +5089,7 @@ def get_notifications(request):
 
         user_notifcs = []
         cnt_notif = 0
+        user_notifcs_html = ""
 
         user_notifics = user_notices(user_profile)
         for notif in user_notifics:
@@ -5096,10 +5097,19 @@ def get_notifications(request):
             if notif.is_read is False:
                 cnt_notif+=1
 
+            user_notifcs_html += f'''
+            <a href="javascript:void(0);" class="dropdown-item d-flex">
+                <div class="header-msg">
+                        {notif.notification[:40]}
+                    <div class="small text-muted">{notif.notice_type.title()}</div>
+                </div>
+            </a>
+            '''
+
         resp_data = {
             'result': 'success',
             'message': 'Notifications found',
-            'user_notifcs': user_notifics,
+            'user_notifcs': user_notifcs_html,
             'cnt_notif': cnt_notif,
         }
     else:
