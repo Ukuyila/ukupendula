@@ -36,7 +36,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai']
+    ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
 else:
     ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
