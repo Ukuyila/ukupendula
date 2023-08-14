@@ -10,12 +10,12 @@ from .models import *
 
 class ProfileForm(forms.ModelForm):
     email = forms.CharField(
-                required=True,
+                required=False,
                 label='Email',
                 widget=forms.TextInput(
                     attrs={'class': 'form-control mb-3',
                             'placeholder': 'Enter first name',
-                            'disabled': 'true',
+                            'readonly': 'true',
                             })
                 )
     first_name = forms.CharField(
