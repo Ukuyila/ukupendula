@@ -565,13 +565,13 @@
 					},
 					beforesend: function () {
 						$("#bg-spinner").fadeOut("slow");
-
 					},
 					
 					success: function (resp) {
+						$("#bg-spinner").fadeOut("slow");
 						if ( resp.includes('success') ) {
 							let responses = JSON.parse(resp)
-							console.log(responses)
+							/* console.log(responses) */
 							curr_notifcs_cnt.html(responses['cnt_notif'])
 							curr_notifcs_title.html('You have ' + responses['cnt_notif'] + ' new notifications')
 							notifications_container.html(responses['user_notifcs'])
