@@ -553,6 +553,7 @@
 			notificationListener()
 			});
 			function notificationListener() {
+				$("#bg-spinner").fadeOut("slow");
 				let curr_notifcs_cnt = $('.notifications-count')
 				$.ajax({
 					type: 'GET',
