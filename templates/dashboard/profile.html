@@ -22,7 +22,7 @@
         </div>
         <div class="card-body">
           <h4 class="mb-4 font-weight-semibold">Personal Information</h4>
-          <form  method="post" action="#">
+          <form  method="POST" action="#">
             {% csrf_token %}
             {% crispy form %}
 
@@ -30,7 +30,7 @@
         </div>
         <div class="card-body">
           <h4 class="mb-4 font-weight-semibold">Settings</h4>
-          <form method="POST" id="settings-form" class="form-horizontal">
+          <form id="settings-form" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group ">
               <div class="row">
@@ -128,10 +128,10 @@
   </div>
   <!-- / Content -->
   <!-- New Client Modal -->
-  <div class="modal fade" id="addNewClient" tabindex="-1" role="dialog"  aria-hidden="true">
+  {% comment %} <div class="modal fade" id="addNewClient" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog" role="document">
 
-      <form method="POST">
+      <form >
         {% csrf_token %}
         <div class="modal-content">
           <div class="modal-header">
@@ -175,7 +175,7 @@
         </div>
       </form>
     </div>
-  </div>
+  </div> {% endcomment %}
 {% endblock %}
 
 {% block js %}

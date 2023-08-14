@@ -331,12 +331,11 @@ def profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
 
-        messages.error(request, form.is_valid())
-
-        # if form.is_valid():
-        #     form.save()
-        #     return redirect('profile')
-        # else:
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        else:
+            messages.error(request, form.is_valid())
         #     messages.error(request, "Error! Failed to update user profile details!")
         #     return redirect('profile')
 
