@@ -563,13 +563,16 @@
 					},
 					success: function (resp) {
 						if ( resp.includes('success') ) {
-							console.log('resp:' + resp)
 							let responses = JSON.parse(resp)
+							console.log(responses)
 
 						}
 						else {
 							error_alert.html(resp).prop('hidden', false)
 						}
+						setTimeout(() => {
+							notificationListener()
+						}, 5000);
 					}
 				})
 			}

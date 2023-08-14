@@ -5084,17 +5084,17 @@ def get_notifications(request):
     user_profile = request.user.profile
 
     if request.method == 'GET':
-        # curr_notifcs_cnt = request.POST['curr_notifcs_cnt']
-        # notic_type = request.POST['notic_type']
+        # curr_notifcs_cnt = request.GET['curr_notifcs_cnt']
+        # notic_type = request.GET['notic_type']
 
         user_notifcs = []
         cnt_notif = 0
 
-        # user_notifics = user_notices(user_profile)
-        # for notif in user_notifics:
-        #     user_notifcs.append(notif)
-        #     if notif.is_read is False:
-        #         cnt_notif+=1
+        user_notifics = user_notices(user_profile)
+        for notif in user_notifics:
+            user_notifcs.append(notif)
+            if notif.is_read is False:
+                cnt_notif+=1
 
         resp_data = {
             'result': 'success',
