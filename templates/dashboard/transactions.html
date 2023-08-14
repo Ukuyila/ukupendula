@@ -26,35 +26,36 @@
                   <th >Package</th>
                   <th>Price</th>
                   <th>Status</th>
-                  <th>Date</th>
-                  <th>Renew</th>
-                  <th></th>
+                  <th>Subscribed</th>
+                  <th>Due</th>
                   
                 </tr>
               </thead>
               <tbody class="table-border-bottom-0">
               {% for transact in transactions %}
+                {% if 'Free' not in transact.package_name %}
                 <tr>
-                  <td>{{transact.package_name}}</td>
+                  <td>
+                    {% if 'Yearly' in transact.package_name %}
+                    {{transact.package_name}}
+                    {% else %}
+                    {{transact.package_name}} Monthly
+                    {% endif %}
+                    </td>
                   <td>R {{transact.package_price}}</td>
                   <td>
                     {% if transact.is_active %}
-                    <span class="btn btn-xs btn-outline-primary">Active</span>
+                    <span class="btn btn-xs btn-success">Active</span>
                     {% endif %}
                   </td>
                   <td>
-                    {{transact.date_activated|date:"Y-m-d"}} {{transact.date_activated|time}}
+                    {{transact.date_activated|date:"Y-m-d"}}
                   </td>
                   <td>
-                    {{transact.date_expiry|date:"Y-m-d"}} {{transact.date_expiry|time}}
+                    {{transact.date_expiry|date:"Y-m-d"}}
                   </td>
-                  <td>
-                    {% comment %} {% if not reg_device.uniqueId == user.profile.current_device %} {% endcomment %}
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#viewTransactionModal" class="text-center text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="icon icon-eye"></i></a>
-                    {% comment %} {% endif %} {% endcomment %}
-                  </td>
-                  
                 </tr>
+                {% endif %}
               {% endfor %}
               </tbody>
             </table>
@@ -69,7 +70,7 @@
   </div>
 
     <!-- view receipt Modal -->
-    <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog"  aria-hidden="true">
+    {% comment %} <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog"  aria-hidden="true">
       <div class="modal-dialog" role="document">
   
         <div class="modal-content" id="client-modal-form">
@@ -79,61 +80,78 @@
             </button>
           </div>
           <div class="modal-body">
-            <p class="my-5 mx-5" style="font-size: 30px;">Thank for your purchase</p>
-            <div class="row">
-              <ul class="list-unstyled">
-                <li class="text-black">John Doe</li>
-                <li class="text-muted mt-1"><span class="text-black">Invoice</span> #12345</li>
-                <li class="text-black mt-1">April 17 2021</li>
-              </ul>
-              <hr>
-              <div class="col-xl-10">
-                <p>Pro Package</p>
+            
+              <div class="clearfix row mb-4">
+                <div class="col">
+                  <div class="float-start">
+                    <h5 class="mb-0"><strong>Total Revenue</strong></h5>
+                    <small class="text-muted">weekly profit</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="float-end">
+                    <h4 class="font-weight-bold mb-0 mt-2 text-primary">$15300</h4>
+                  </div>
+                </div>
               </div>
-              <div class="col-xl-2">
-                <p class="float-end">$199.00
-                </p>
+              <div class="clearfix row mb-4">
+                <div class="col">
+                  <div class="float-start">
+                    <h5 class="mb-0"><strong>Total Tax</strong></h5>
+                    <small class="text-muted">weekly profit</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="float-end">
+                    <h4 class="font-weight-bold mt-2 mb-0 text-success">$1625</h4>
+                  </div>
+                </div>
               </div>
-              <hr>
-            </div>
-            <div class="row">
-              <div class="col-xl-10">
-                <p>Consulting</p>
+              <div class="clearfix row mb-4">
+                <div class="col">
+                  <div class="float-start">
+                    <h5 class="mb-0"><strong>Total Profits</strong></h5>
+                    <small class="text-muted">weekly profit</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="float-end">
+                    <h4 class="font-weight-bold mt-2 mb-0 text-warning">70%</h4>
+                  </div>
+                </div>
               </div>
-              <div class="col-xl-2">
-                <p class="float-end">$100.00
-                </p>
+              <div class="clearfix row mb-4">
+                <div class="col">
+                  <div class="float-start">
+                    <h5 class="mb-0"><strong>Total Income</strong></h5>
+                    <small class="text-muted">weekly profit</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="float-end">
+                    <h4 class="font-weight-bold mt-2 mb-0 text-danger">50%</h4>
+                  </div>
+                </div>
               </div>
-              <hr>
-            </div>
-            <div class="row">
-              <div class="col-xl-10">
-                <p>Support</p>
+              <div class="clearfix row mb-0">
+                <div class="col">
+                  <div class="float-start">
+                    <h5 class="mb-0"><strong>Total Loss</strong></h5>
+                    <small class="text-muted">weekly profit</small>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="float-end">
+                    <h4 class="font-weight-bold mt-2 mb-0 text-secondary">30%</h4>
+                  </div>
+                </div>
               </div>
-              <div class="col-xl-2">
-                <p class="float-end">$10.00
-                </p>
-              </div>
-              <hr style="border: 2px solid black;">
-            </div>
-            <div class="row text-black">
-      
-              <div class="col-xl-12">
-                <p class="float-end fw-bold">Total: $10.00
-                </p>
-              </div>
-              <hr style="border: 2px solid black;">
-            </div>
-            <div class="text-center" style="margin-top: 90px;">
-              <a><u class="text-info">View in browser</u></a>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-            </div>
             
           </div>
           
         </div>
       </div>
-    </div>
+    </div> {% endcomment %}
 {% endblock %}
 
 

@@ -167,52 +167,24 @@
 											<div class="dropdown d-sm-flex">
 												<a class="nav-link icon" data-bs-toggle="dropdown">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
-													<span hidden class=" nav-unread badge badge-danger  rounded-pill">4</span>
+													<span class=" nav-unread badge badge-danger  rounded-pill">{{cnt_notif}}</span>
 												</a>
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
-													<a href="emailservice.html" class="dropdown-item text-center border-bottom">You have 0 notification</a>
-													
-													<a href="emailservice.html" class="dropdown-item text-center border-top"></a>
+													<a href="javascript:void(0);" class="dropdown-item text-center border-bottom py-3 font-weight-semibold">You have {{cnt_notif}} new notifications</a>
+
+													{% if cnt_notif > 0 %}
+													{% for user_notifi in user_notices %}
+													<a href="javascript:void(0);" class="dropdown-item d-flex">
+														{% comment %} <img src="../assets/images/faces/male/41.jpg" alt="avatar-img" class="avatar brround me-3"> {% endcomment %}
+														<div class="header-msg">
+															<span class="font-weight-semibold">{{user_notifi.notice_type|title}}</span> {{user_notifi.notice_type|truncatechars:20}}
+															{% comment %} <div class="small text-muted">30 mins ago</div> {% endcomment %}
+														</div>
+													</a>
+													<a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>
+													{% endif %}
 												</div>
 											</div>
-											<!-- <div class="dropdown d-sm-flex">
-												<a class="nav-link icon" data-bs-toggle="dropdown">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z"/></svg>
-													<span class=" nav-unread badge badge-warning  rounded-pill">3</span>
-												</a>
-												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow py-0">
-													<a href="chats.html" class="dropdown-item text-center border-bottom py-3 font-weight-semibold">You have 4 new mesages</a>
-													<a href="chats.html" class="dropdown-item d-flex">
-														<img src="{% static 'dash/images/faces/male/41.jpg' %}" alt="avatar-img" class="avatar brround me-3">
-														<div class="header-msg">
-															<span class="font-weight-semibold">Blake</span> I've finished it! See you so.......
-															<div class="small text-muted">30 mins ago</div>
-														</div>
-													</a>
-													<a href="chats.html" class="dropdown-item d-flex">
-														<img src="{% static 'dash/images/faces/female/1.jpg' %}" alt="avatar-img" class="avatar brround me-3">
-														<div class="header-msg">
-															<span class="font-weight-semibold">Caroline</span> Just see the my Admin....
-															<div class="small text-muted">12 mins ago</div>
-														</div>
-													</a>
-													<a href="chats.html" class="dropdown-item d-flex">
-														<img src="{% static 'dash/images/faces/male/18.jpg' %}" alt="avatar-img" class="avatar brround me-3">
-														<div class="header-msg">
-															<span class="font-weight-semibold">Jonathan</span> Hi! I'am singer......
-															<div class="small text-muted">1 hour ago</div>
-														</div>
-													</a>
-													<a href="chats.html" class="dropdown-item d-flex">
-														<img src="{% static 'dash/images/faces/female/18.jpg' %}" alt="avatar-img" class="avatar brround me-3">
-														<div class="header-msg">
-															<span class="font-weight-semibold">Emily</span> Just a reminder that you have.....
-															<div class="small text-muted">45 mins ago</div>
-														</div>
-													</a>
-													<a href="chats.html" class="dropdown-item text-center border-top py-3">View all Messages</a>
-												</div>
-											</div> -->
 											<div class="dropdown d-sm-flex">
 												<a class="nav-link icon" data-bs-toggle="dropdown">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m21.706 5.291-2.999-2.998A.996.996 0 0 0 18 2H6a.996.996 0 0 0-.707.293L2.294 5.291A.994.994 0 0 0 2 5.999V19c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5.999a.994.994 0 0 0-.294-.708zM6.414 4h11.172l.999.999H5.415L6.414 4zM4 19V6.999h16L20.002 19H4z"/><path d="M15 12H9v-2H7v4h10v-4h-2z"/></svg>

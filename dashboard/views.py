@@ -58,7 +58,6 @@ def home(request):
 
     empty_blogs = []
     complete_blogs = []
-    # user_notices = user_notices(profile)
 
     today_date = datetime.datetime.now()
 
@@ -211,6 +210,8 @@ def home(request):
             context['clm_landing_copy_word_cnt'] = 100
         context['lpc_carret_set'] = ' fa-caret-down text-danger '
 
+
+    
     context['clm_para_word_cnt'] = para_word_cnt
     context['clm_sentence_word_cnt'] = sentence_word_cnt
 
@@ -220,7 +221,17 @@ def home(request):
 
     context['empty_blogs'] = empty_blogs
     context['complete_blogs'] = complete_blogs
-    context['user_notices'] = user_notices
+
+    user_notifcs = []
+    cnt_notif = 0
+
+    user_notifics = user_notices(user_profile)
+    for notif in user_notifics:
+        user_notifcs.append(notif)
+        cnt_notif+=1
+
+    context['cnt_notif'] = cnt_notif
+    context['user_notices'] = user_notifcs
 
     context['allowance'] = check_count_allowance(user_profile)
 
