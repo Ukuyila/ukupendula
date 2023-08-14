@@ -331,12 +331,14 @@ def profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
 
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-        else:
-            messages.error(request, "Something is a foot")
-            return redirect('profile')
+        messages.error(request, form.is_valid())
+
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect('profile')
+        # else:
+        #     messages.error(request, "Error! Failed to update user profile details!")
+        #     return redirect('profile')
 
         # if image_form.is_valid():
         #     image_form.save()
@@ -3229,8 +3231,8 @@ def transactions(request):
 @login_required
 def view_transaction(request, uniqueId):
     context = {}
-
     transactions = []
+    user_profile = request.user.profile
 
     current_page = 'View Transaction'
 
@@ -3251,7 +3253,7 @@ def view_transaction(request, uniqueId):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile).order_by('date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)

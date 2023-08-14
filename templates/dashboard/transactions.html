@@ -35,7 +35,7 @@
               {% for transact in transactions %}
                 <tr>
                   <td>{{transact.package_name}}</td>
-                  <td>{{transact.package_price}}</td>
+                  <td>R {{transact.package_price}}</td>
                   <td>
                     {% if transact.is_active %}
                     <span class="btn btn-xs btn-outline-primary">Active</span>
