@@ -322,20 +322,20 @@ def profile(request):
     context['flag_avatar'] = flag_avatar
 
     if request.method == 'GET':
-        form = ProfileForm(instance=request.user.profile, user=request.user)
+        profile_form = ProfileForm(instance=request.user.profile, user=request.user)
 
-        context['form'] = form
+        context['profile_form'] = profile_form
 
         return render(request, 'dashboard/profile.html', context)
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile, user=request.user)
 
-        if form.is_valid():
-            form.save()
+        if profile_form.is_valid():
+            profile_form.save()
             return redirect('profile')
         else:
-            messages.error(request, form.is_valid())
+            messages.error(request, profile_form.is_valid())
         #     messages.error(request, "Error! Failed to update user profile details!")
         #     return redirect('profile')
 

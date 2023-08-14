@@ -22,9 +22,9 @@
         </div>
         <div class="card-body">
           <h4 class="mb-4 font-weight-semibold">Personal Information</h4>
-          <form  method="POST" action="#">
+          <form  method="POST" >
             {% csrf_token %}
-            {% crispy form %}
+            {% crispy profile_form %}
 
           </form>
         </div>
