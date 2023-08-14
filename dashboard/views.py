@@ -5083,9 +5083,9 @@ def get_notifications(request):
     resp_data = {}
     user_profile = request.user.profile
 
-    if request.method == 'POST':
-        curr_notifcs_cnt = request.POST['curr_notifcs_cnt']
-        notic_type = request.POST['notic_type']
+    if request.method == 'GET':
+        # curr_notifcs_cnt = request.POST['curr_notifcs_cnt']
+        # notic_type = request.POST['notic_type']
 
         user_notifcs = []
         cnt_notif = 0
