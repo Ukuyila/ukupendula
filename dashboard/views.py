@@ -5092,7 +5092,7 @@ def get_notifications(request):
 
         user_notifics = user_notices(user_profile)
         for notif in user_notifics:
-            user_notifcs.append(notif)
+            # user_notifcs.append(notif)
             if notif.is_read is False:
                 cnt_notif+=1
 
