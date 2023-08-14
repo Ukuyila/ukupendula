@@ -5078,7 +5078,7 @@ def get_role_details(request):
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 
 
-# @login_required
+@login_required
 def get_notifications(request):
     resp_data = {}
     user_profile = request.user.profile

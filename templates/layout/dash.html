@@ -560,6 +560,7 @@
 					data: {
 						curr_notifcs_cnt: curr_notifcs_cnt.html(),
 						notic_type: 'general',
+						csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
 					},
 					success: function (resp) {
 						if ( resp.includes('success') ) {
