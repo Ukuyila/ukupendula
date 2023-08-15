@@ -3658,6 +3658,7 @@ def subscription_email(request, uniqueId, planId, orderId):
         resp_data = {
             'response': 'SUCCESS',
             'user': f'{user_profile.user.first_name} {user_profile.user.last_name}',
+            'user_mail':user_profile.user.email,
             'domain': get_current_site(request).domain,
             'sub_package': sub_transact.package_name,
             'sub_package_price': sub_transact.package_price,
