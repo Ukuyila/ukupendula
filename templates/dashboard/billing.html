@@ -40,6 +40,10 @@
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
                       </div>
+                      {% elif package.package_name|title == 'Free' %}
+                      <div class="text-center m-4">
+                        <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Default Package</a>
+                      </div>
                       {% else %}
                       <div class="text-center m-4">
                         <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Subscribe Now</a>
