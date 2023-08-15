@@ -3291,7 +3291,7 @@ def billing(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    user_sub_type = request.user.profile.subscription_type.title()
+    user_sub_type = request.user.profile.subscription_type.replace('-', ' ').title()
 
     # get user current tier
     user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
