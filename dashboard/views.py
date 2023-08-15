@@ -3600,22 +3600,22 @@ def payment_success(request, uniqueId, planId, orderId):
         #     pass
         # else:
         #     pass
-        resp_data = {
-            'response': 'SUCCESS',
-            'user': f'{request.user.first_name} {request.user.last_name}',
-            'domain': get_current_site(request).domain,
-            'sub_package': sub_transact.package_name,
-            'sub_package_price': sub_transact.package_price,
-            'actvtn_date': sub_transact.date_activated.strftime("%d-%m-%Y %H:%M:%S"),
-            'next_due_date': sub_transact.date_expiry.strftime("%d-%m-%Y %H:%M:%S"),
-            'subscribed_period': subscribed_period,
-            'protocol': 'https' if request.is_secure() else 'http',
-            'tos_url': str(settings.TOS_URL),
-            'contact_url': str(settings.CONTACT_URL),
-            'opt_out_url': str(settings.OPT_OUT_URL),
-            'reply_to': str(settings.EMAIL_REPLY_TO),
-            'type_of_action': 'premium purchase email',
-        }
+        # resp_data = {
+        #     'response': 'SUCCESS',
+        #     'user': f'{request.user.first_name} {request.user.last_name}',
+        #     'domain': get_current_site(request).domain,
+        #     'sub_package': sub_transact.package_name,
+        #     'sub_package_price': sub_transact.package_price,
+        #     'actvtn_date': sub_transact.date_activated.strftime("%d-%m-%Y %H:%M:%S"),
+        #     'next_due_date': sub_transact.date_expiry.strftime("%d-%m-%Y %H:%M:%S"),
+        #     'subscribed_period': subscribed_period,
+        #     'protocol': 'https' if request.is_secure() else 'http',
+        #     'tos_url': str(settings.TOS_URL),
+        #     'contact_url': str(settings.CONTACT_URL),
+        #     'opt_out_url': str(settings.OPT_OUT_URL),
+        #     'reply_to': str(settings.EMAIL_REPLY_TO),
+        #     'type_of_action': 'premium purchase email',
+        # }
         # except:
         #     pass
         # update the team
@@ -3635,44 +3635,72 @@ def payment_success(request, uniqueId, planId, orderId):
             pass
         except:
             pass
-        return JsonResponse(json.dumps({'response': 'SUCCESS'}), content_type="application/json", safe=False)
-            # return HttpResponse('SUCCESS')
+        # return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
+        return HttpResponse('SUCCESS')
         # except:
         #     return HttpResponse('FAIL: 001')
     else:
         return HttpResponse('FAIL: 002')
     
 
-def subscription_email(request, sub_transact):
-    subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
-    mail_subject = "Hooray, your Writesome Premium is activated!"
-    message = render_to_string("dashboard/sub-transact-email.html", {
-        'user': request.user,
-        'domain': get_current_site(request).domain,
-        'sub_package': sub_transact.package_name,
-        'sub_package_price': sub_transact.package_price,
-        'actvtn_date': sub_transact.date_activated,
-        'next_due_date': sub_transact.date_expiry,
-        'subscribed_period': subscribed_period,
-        'protocol': 'https' if request.is_secure() else 'http',
-        'tos_url': settings.TOS_URL,
-        'contact_url': settings.CONTACT_URL,
-        'opt_out_url': settings.OPT_OUT_URL,
-        'reply_to': settings.EMAIL_REPLY_TO,
-        'type_of_action': 'premium purchase email',
-    })
-    
-    headers = {"Message-ID": str(uuid4())}
-    
-    email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
-    email.content_subtype = 'html'
+def subscription_email(request, uniqueId, planId, orderId):
+    resp_data = {}
+    order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
 
-    if email.send():
-        msg = f'email sent successfully'
-    else:
-        msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
+    try:
+        user_profile = Profile.objects.get(uniqueId=uniqueId)
 
-    return message
+        sub_transact = SubscriptionTransaction.objects.get(subscription_reference=order_ref)
+
+        subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
+        mail_subject = "Hooray, your Writesome Premium is activated!"
+
+        resp_data = {
+            'response': 'SUCCESS',
+            'user': f'{user_profile.user.first_name} {user_profile.user.last_name}',
+            'domain': get_current_site(request).domain,
+            'sub_package': sub_transact.package_name,
+            'sub_package_price': sub_transact.package_price,
+            'actvtn_date': sub_transact.date_activated.strftime("%d-%m-%Y %H:%M:%S"),
+            'next_due_date': sub_transact.date_expiry.strftime("%d-%m-%Y %H:%M:%S"),
+            'subscribed_period': subscribed_period,
+            'protocol': 'https' if request.is_secure() else 'http',
+            'tos_url': str(settings.TOS_URL),
+            'contact_url': str(settings.CONTACT_URL),
+            'opt_out_url': str(settings.OPT_OUT_URL),
+            'reply_to': str(settings.EMAIL_REPLY_TO),
+            'type_of_action': 'premium purchase email',
+        }
+        # message = render_to_string("dashboard/sub-transact-email.html", {
+        #     'user': request.user,
+        #     'domain': get_current_site(request).domain,
+        #     'sub_package': sub_transact.package_name,
+        #     'sub_package_price': sub_transact.package_price,
+        #     'actvtn_date': sub_transact.date_activated,
+        #     'next_due_date': sub_transact.date_expiry,
+        #     'subscribed_period': subscribed_period,
+        #     'protocol': 'https' if request.is_secure() else 'http',
+        #     'tos_url': settings.TOS_URL,
+        #     'contact_url': settings.CONTACT_URL,
+        #     'opt_out_url': settings.OPT_OUT_URL,
+        #     'reply_to': settings.EMAIL_REPLY_TO,
+        #     'type_of_action': 'premium purchase email',
+        # })
+        
+        # headers = {"Message-ID": str(uuid4())}
+        
+        # email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
+        # email.content_subtype = 'html'
+
+        # if email.send():
+        #     msg = f'email sent successfully'
+        # else:
+        #     msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
+
+        return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
+    except:
+        resp_data = {'response': 'SUCCESS','message':'failed to find details'}
+        return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 
 
 @login_required
