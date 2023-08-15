@@ -115,7 +115,7 @@ urlpatterns = [
     # ajax URLs
     path('paypal-payment-success', views.paypal_payment_success, name='paypal-payment-success'),
     path('payment-success/<str:uniqueId>/<str:planId>/<str:orderId>/', views.payment_success, name='payment-success'),
-    path('subscription-email/<str:uniqueId>/<str:planId>/<str:orderId>/', views.subscription_email, 'subscription-email'),
+    path('subscription-email/<str:uniqueId>/<str:planId>/<str:orderId>/', views.subscription_email, name='subscription-email'),
     path('payment-cancel', views.payment_cancel, name='payment-cancel'),
     path('get-role-details', views.get_role_details, name='get-role-details'),
 
