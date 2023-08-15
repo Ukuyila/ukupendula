@@ -3500,127 +3500,136 @@ def payment_success(request, uniqueId, planId, orderId):
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     # print(order_ref)
 
+    # try:
+    package = SubscriptionPackage.objects.get(uniqueId=planId)
+    package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
+    package_price = package.package_price
+
+    date_activated = timezone.localtime(timezone.now())
+
+    date_expiry = date_activated + datetime.timedelta(days=30)
+    if 'yearly' in package_name:
+        date_expiry = date_activated + datetime.timedelta(days=365)
+        package_price = int(package_price)*12
+
+    return HttpResponse(f'package_price: {package_price}; date_expiry: {date_expiry}')
+
     try:
-        package = SubscriptionPackage.objects.get(uniqueId=planId)
-        package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
-        package_price = package.package_price
+        profile = Profile.objects.get(uniqueId=uniqueId)
+        profile.monthly_count = '0'
+        profile.monthly_memory_count = '0'
+        profile.subscribed = True
+        profile.subscription_type = package_name
+        profile.subscription_reference = order_ref
+        profile.save()
 
-        try:
-            profile = Profile.objects.get(uniqueId=uniqueId)
-            profile.monthly_count = '0'
-            profile.monthly_memory_count = '0'
-            profile.subscribed = True
-            profile.subscription_type = package_name
-            profile.subscription_reference = order_ref
-            profile.save()
+        date_activated = timezone.localtime(timezone.now())
 
-            date_activated = timezone.localtime(timezone.now())
+        date_expiry = date_activated + datetime.timedelta(days=30)
+        if 'yearly' in package_name:
+            date_expiry = date_activated + datetime.timedelta(days=365)
+            package_price = int(package_price)*12
 
-            date_expiry = date_activated + datetime.timedelta(days=30)
-            if 'yearly' in package_name:
-                date_expiry = date_activated + datetime.timedelta(days=365)
-                package_price = int(package_price)*12
-
-            has_team = False
-            user_team = ''
-            if 'team' in package.package_name.lower():
-                has_team = True
-                try:
-                    this_user_team = Team.objects.get(uniqueId=profile.user_team)
-                except:
-                    this_user_team = Team.objects.create(
-                        business_name='',
-                        business_size='5',
-                        industry='',
-                        business_email=profile.user.email,
-                        business_description='',
-                        business_address=profile.address_line1,
-                        business_status=True,
-                        team_principal=profile.uniqueId,
-                    )
-                    this_user_team.save()
-
-                    profile.user_team = this_user_team.uniqueId
-
-                user_team = this_user_team.uniqueId
-
-            # insert SubscriptionTransaction
-            sub_transact = SubscriptionTransaction.objects.create(
-                subscription_reference=order_ref,
-                user_profile_uid=uniqueId,
-                package_name=package.package_name.title(),
-                package_price=package_price,
-                has_team=has_team,
-                user_team=user_team,
-                date_activated=timezone.localtime(timezone.now()),
-                date_expiry=date_expiry,
-
-            )
-            sub_transact.save()
-
-            add_notice = UserNotification.objects.create(
-                notice_type='premium purchase',
-                notification='Hooray, your {} Premium Package is activated!'.format(settings.APP_NAME),
-                profile=profile
-            )
-            add_notice.save()
-
-            # try:
-            # send email
-            # email = subscription_email(request, sub_transact)
-            subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
-            mail_subject = "Hooray, your Writesome Premium is activated!"
-            message = render_to_string("dashboard/sub-transact-email.html", {
-                'user': request.user,
-                'domain': get_current_site(request).domain,
-                'sub_package': sub_transact.package_name,
-                'sub_package_price': sub_transact.package_price,
-                'actvtn_date': sub_transact.date_activated,
-                'next_due_date': sub_transact.date_expiry,
-                'subscribed_period': subscribed_period,
-                'protocol': 'https' if request.is_secure() else 'http',
-                'tos_url': settings.TOS_URL,
-                'contact_url': settings.CONTACT_URL,
-                'opt_out_url': settings.OPT_OUT_URL,
-                'reply_to': settings.EMAIL_REPLY_TO,
-                'type_of_action': 'premium purchase email',
-            })
-            
-            headers = {"Message-ID": str(uuid4())}
-            
-            email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
-            email.content_subtype = 'html'
-            time.sleep(2)
-
-            if email.send():
-                time.sleep(5)
-                pass
-            else:
-                pass
-
-            # except:
-            #     pass
-            # update the team
+        has_team = False
+        user_team = ''
+        if 'team' in package.package_name.lower():
+            has_team = True
             try:
                 this_user_team = Team.objects.get(uniqueId=profile.user_team)
-
-                find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
-
-                for team_member in find_team_members:
-                    if team_member.is_verified and team_member.is_active and team_member.user.is_active:
-                        team_member.subscribed = profile.subscribed
-                        team_member.subscription_type = profile.subscription_type
-                        team_member.subscription_reference = profile.subscription_reference
-                        team_member.save()
-
-                return HttpResponse('SUCCESS')
             except:
+                this_user_team = Team.objects.create(
+                    business_name='',
+                    business_size='5',
+                    industry='',
+                    business_email=profile.user.email,
+                    business_description='',
+                    business_address=profile.address_line1,
+                    business_status=True,
+                    team_principal=profile.uniqueId,
+                )
+                this_user_team.save()
 
-                return HttpResponse('SUCCESS')
+                profile.user_team = this_user_team.uniqueId
+
+            user_team = this_user_team.uniqueId
+
+        # insert SubscriptionTransaction
+        sub_transact = SubscriptionTransaction.objects.create(
+            subscription_reference=order_ref,
+            user_profile_uid=uniqueId,
+            package_name=package.package_name.title(),
+            package_price=package_price,
+            has_team=has_team,
+            user_team=user_team,
+            date_activated=timezone.localtime(timezone.now()),
+            date_expiry=date_expiry,
+
+        )
+        sub_transact.save()
+
+        add_notice = UserNotification.objects.create(
+            notice_type='premium purchase',
+            notification='Hooray, your {} Premium Package is activated!'.format(settings.APP_NAME),
+            profile=profile
+        )
+        add_notice.save()
+
+        # try:
+        # send email
+        # email = subscription_email(request, sub_transact)
+        subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
+        mail_subject = "Hooray, your Writesome Premium is activated!"
+        message = render_to_string("dashboard/sub-transact-email.html", {
+            'user': request.user,
+            'domain': get_current_site(request).domain,
+            'sub_package': sub_transact.package_name,
+            'sub_package_price': sub_transact.package_price,
+            'actvtn_date': sub_transact.date_activated,
+            'next_due_date': sub_transact.date_expiry,
+            'subscribed_period': subscribed_period,
+            'protocol': 'https' if request.is_secure() else 'http',
+            'tos_url': settings.TOS_URL,
+            'contact_url': settings.CONTACT_URL,
+            'opt_out_url': settings.OPT_OUT_URL,
+            'reply_to': settings.EMAIL_REPLY_TO,
+            'type_of_action': 'premium purchase email',
+        })
+        
+        headers = {"Message-ID": str(uuid4())}
+        
+        email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
+        email.content_subtype = 'html'
+        time.sleep(2)
+
+        if email.send():
+            time.sleep(5)
+            pass
+        else:
+            pass
+
+        # except:
+        #     pass
+        # update the team
+        try:
+            this_user_team = Team.objects.get(uniqueId=profile.user_team)
+
+            find_team_members = Profile.objects.filter(user_team=this_user_team.uniqueId)
+
+            for team_member in find_team_members:
+                if team_member.is_verified and team_member.is_active and team_member.user.is_active:
+                    team_member.subscribed = profile.subscribed
+                    team_member.subscription_type = profile.subscription_type
+                    team_member.subscription_reference = profile.subscription_reference
+                    team_member.save()
+
+            return HttpResponse('SUCCESS')
         except:
-            return HttpResponse('FAIL: 001')
+
+            return HttpResponse('SUCCESS')
     except:
-        return HttpResponse('FAIL: 002')
+        return HttpResponse('FAIL: 001')
+    # except:
+    #     return HttpResponse('FAIL: 002')
     
 
 def subscription_email(request, sub_transact):

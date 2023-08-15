@@ -187,7 +187,7 @@
 														</div>
 													</a>
 
-													<a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>
+													{% comment %} <a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a> {% endcomment %}
 													{% endfor %}
 													{% endif %}
 												</div>
@@ -583,7 +583,7 @@
 							notifications_container.html(`
 							<a href="javascript:void(0);" class="dropdown-item text-center border-bottom py-3 font-weight-semibold notifications-title">You have ` + responses['cnt_notif'] + ` new notifications</a>` 
 							+ responses['user_notifcs'] 
-							+ `<a href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>`)
+							+ `<a hidden href="javascript:void(0);" class="dropdown-item text-center border-top py-3">See all Notification</a>`)
 						}
 						else {
 							error_alert.html(resp).prop('hidden', false)
