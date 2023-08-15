@@ -92,6 +92,8 @@
   }
   .invoice-items{font-family:Arial,sans-serif;font-size:14px;width:100%;margin:0;}
   .line-item{vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;}
+  .total-border{vertical-align:top;text-align:right;
+    border-top-width:2px;border-top-color:#333;border-top-style:solid;border-bottom-color:#333;border-bottom-width:2px;border-bottom-style:solid;font-weight:700;margin:0;padding:5px 0;}
   </style>
 
 </head>
@@ -189,8 +191,8 @@
                           </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:bold;margin-top:0!important;margin-bottom:0!important;">{{actvtn_date|date:'Y-m-d'}}</p>
                           </td></tr><tr style="vertical-align:middle;" valign="middle"><td class="content line-item" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Cost&nbsp;of&nbsp;service:</p>
                           </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:bold;margin-top:0!important;margin-bottom:0!important;">R&nbsp;{{sub_package_price}}</p>
-                          </td></tr><tr style="vertical-align:middle;" valign="middle"><td class="content line-item" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Next&nbsp;payment&nbsp;due:</p>
-                          </td><td class="content line-item alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:bold;margin-top:0!important;margin-bottom:0!important;">{{next_due_date|date:'Y-m-d'}}</p>
+                          </td></tr><tr style="vertical-align:middle;" valign="middle"><td class="content total-border" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;margin-top:0!important;margin-bottom:0!important;">Next&nbsp;payment&nbsp;due:</p>
+                          </td><td class="content total-border alignright" align="right" valign="top" style="vertical-align:top;border-top-width:1px;border-top-color:#eee;border-top-style:solid;margin:0;padding:5px 0;"><p style="color:#000000;font-size:16px;mso-line-height-rule:exactly;line-height:24px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:bold;margin-top:0!important;margin-bottom:0!important;">{{next_due_date|date:'Y-m-d'}}</p>
                           </td></tr></table>
                         </td>
                       </tr>
