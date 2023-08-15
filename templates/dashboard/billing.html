@@ -36,6 +36,7 @@
                           {% endfor %}
                         {% endwith %}
                       </ul>
+                      {{user.profile.subscription_type}}
                       {% if user.profile.subscription_type|title == package.package_name %}
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
