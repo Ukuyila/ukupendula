@@ -3501,7 +3501,7 @@ def payment_success(request, uniqueId, planId, orderId):
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     # print(order_ref)
     resp_data = {}
-    try:
+    if order_ref is not None:
         package = SubscriptionPackage.objects.get(uniqueId=planId)
         package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
         package_price = package.package_price
@@ -3638,7 +3638,7 @@ def payment_success(request, uniqueId, planId, orderId):
             # return HttpResponse('SUCCESS')
         # except:
         #     return HttpResponse('FAIL: 001')
-    except:
+    else:
         return HttpResponse('FAIL: 002')
     
 
