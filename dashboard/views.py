@@ -3590,6 +3590,7 @@ def payment_success(request, uniqueId, planId, orderId):
             
             email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
             email.content_subtype = 'html'
+            time.sleep(2)
 
             if email.send():
                 time.sleep(5)
