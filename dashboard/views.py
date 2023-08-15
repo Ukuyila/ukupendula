@@ -3590,12 +3590,12 @@ def payment_success(request, uniqueId, planId, orderId):
         email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
         email.content_subtype = 'html'
 
-        # if email.send():
-        #     msg = f'email sent successfully'
-        # else:
-        #     msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
+        if email.send():
+            msg = f'email sent successfully'
+        else:
+            msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
 
-        return HttpResponse(message)
+        return HttpResponse(msg)
 
 
         # update the team
