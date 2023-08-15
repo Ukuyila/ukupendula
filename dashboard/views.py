@@ -3632,9 +3632,9 @@ def payment_success(request, uniqueId, planId, orderId):
                     team_member.save()
 
             # return HttpResponse('SUCCESS')
-            return JsonResponse(json.dumps(resp_data), content_type="application/json")
+            return JsonResponse(resp_data)
         except:
-            return JsonResponse(json.dumps(resp_data), content_type="application/json")
+            return JsonResponse(resp_data)
             # return HttpResponse('SUCCESS')
         # except:
         #     return HttpResponse('FAIL: 001')
