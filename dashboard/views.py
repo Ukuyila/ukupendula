@@ -3228,7 +3228,7 @@ def transactions(request):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('-date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
@@ -3263,7 +3263,7 @@ def view_transaction(request, uniqueId):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
     # get packages
-    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('date_created')
+    subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('-date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
@@ -3520,7 +3520,6 @@ def payment_success(request, uniqueId, planId, orderId):
             if 'yearly' in package_name:
                 date_expiry = date_activated + datetime.timedelta(days=365)
                 package_price = int(package_price)*12
-            print('date_expiry: {}'.format(date_expiry))
 
             has_team = False
             user_team = ''
@@ -5143,7 +5142,7 @@ def get_notifications(request):
             user_notifcs_html += f'''
             <a href="javascript:void(0);" class="dropdown-item d-flex">
                 <div class="header-msg">
-                        {notif.notification[:40]}
+                        {notif.notification}
                     <div class="small text-muted">{notif.notice_type.title()}</div>
                 </div>
             </a>

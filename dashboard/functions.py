@@ -766,7 +766,7 @@ def round_to_multiple(number, multiple, direction='nearest'):
 
 def user_notices(profile):
     notifications = []
-    user_notices = UserNotification.objects.filter(profile=profile).order_by('date_created')
+    user_notices = UserNotification.objects.filter(profile=profile).order_by('-date_created')
     for notice in user_notices:
         notifications.append(notice)
     return notifications
