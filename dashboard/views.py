@@ -3566,7 +3566,8 @@ def payment_success(request, uniqueId, planId, orderId):
             add_notice.save()
 
             # send email
-            subscription_email(request, sub_transact)
+            email = subscription_email(request, sub_transact)
+            return HttpResponse(email)
 
             # update the team
             try:
