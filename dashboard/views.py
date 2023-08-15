@@ -3602,7 +3602,7 @@ def payment_success(request, uniqueId, planId, orderId):
         #     pass
         resp_data = {
             'response': 'SUCCESS',
-            'user': request.user,
+            'user': f'{request.user.first_name} {request.user.last_name}',
             'domain': get_current_site(request).domain,
             'sub_package': sub_transact.package_name,
             'sub_package_price': sub_transact.package_price,
