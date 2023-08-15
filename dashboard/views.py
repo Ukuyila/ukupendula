@@ -17,7 +17,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
-from django.core.serializers.json import DjangoJSONEncoder
 
 # Other Auth imports
 from django.contrib.auth.decorators import login_required
@@ -3607,14 +3606,14 @@ def payment_success(request, uniqueId, planId, orderId):
             'domain': get_current_site(request).domain,
             'sub_package': sub_transact.package_name,
             'sub_package_price': sub_transact.package_price,
-            'actvtn_date': sub_transact.date_activated,
-            'next_due_date': sub_transact.date_expiry,
+            'actvtn_date': str(sub_transact.date_activated),
+            'next_due_date': str(sub_transact.date_expiry),
             'subscribed_period': subscribed_period,
             'protocol': 'https' if request.is_secure() else 'http',
-            'tos_url': settings.TOS_URL,
-            'contact_url': settings.CONTACT_URL,
-            'opt_out_url': settings.OPT_OUT_URL,
-            'reply_to': settings.EMAIL_REPLY_TO,
+            'tos_url': str(settings.TOS_URL),
+            'contact_url': str(settings.CONTACT_URL),
+            'opt_out_url': str(settings.OPT_OUT_URL),
+            'reply_to': str(settings.EMAIL_REPLY_TO),
             'type_of_action': 'premium purchase email',
         }
         # except:
@@ -3633,9 +3632,9 @@ def payment_success(request, uniqueId, planId, orderId):
                     team_member.save()
 
             # return HttpResponse('SUCCESS')
-            return JsonResponse(json.dumps(resp_data), cls=DjangoJSONEncoder, safe=False)
+            return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
         except:
-            return JsonResponse(json.dumps(resp_data), cls=DjangoJSONEncoder, safe=False)
+            return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
             # return HttpResponse('SUCCESS')
         # except:
         #     return HttpResponse('FAIL: 001')
