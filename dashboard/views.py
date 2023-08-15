@@ -3565,40 +3565,40 @@ def payment_success(request, uniqueId, planId, orderId):
             )
             add_notice.save()
 
-            try:
-                # send email
-                # email = subscription_email(request, sub_transact)
-                subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
-                mail_subject = "Hooray, your Writesome Premium is activated!"
-                message = render_to_string("dashboard/sub-transact-email.html", {
-                    'user': request.user,
-                    'domain': get_current_site(request).domain,
-                    'sub_package': sub_transact.package_name,
-                    'sub_package_price': sub_transact.package_price,
-                    'actvtn_date': sub_transact.date_activated,
-                    'next_due_date': sub_transact.date_expiry,
-                    'subscribed_period': subscribed_period,
-                    'protocol': 'https' if request.is_secure() else 'http',
-                    'tos_url': settings.TOS_URL,
-                    'contact_url': settings.CONTACT_URL,
-                    'opt_out_url': settings.OPT_OUT_URL,
-                    'reply_to': settings.EMAIL_REPLY_TO,
-                    'type_of_action': 'premium purchase email',
-                })
-                
-                headers = {"Message-ID": str(uuid4())}
-                
-                email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
-                email.content_subtype = 'html'
+            # try:
+            # send email
+            # email = subscription_email(request, sub_transact)
+            subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
+            mail_subject = "Hooray, your Writesome Premium is activated!"
+            message = render_to_string("dashboard/sub-transact-email.html", {
+                'user': request.user,
+                'domain': get_current_site(request).domain,
+                'sub_package': sub_transact.package_name,
+                'sub_package_price': sub_transact.package_price,
+                'actvtn_date': sub_transact.date_activated,
+                'next_due_date': sub_transact.date_expiry,
+                'subscribed_period': subscribed_period,
+                'protocol': 'https' if request.is_secure() else 'http',
+                'tos_url': settings.TOS_URL,
+                'contact_url': settings.CONTACT_URL,
+                'opt_out_url': settings.OPT_OUT_URL,
+                'reply_to': settings.EMAIL_REPLY_TO,
+                'type_of_action': 'premium purchase email',
+            })
+            
+            headers = {"Message-ID": str(uuid4())}
+            
+            email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
+            email.content_subtype = 'html'
 
-                if email.send():
-                    time.sleep(5)
-                    pass
-                else:
-                    pass
-
-            except:
+            if email.send():
+                time.sleep(5)
                 pass
+            else:
+                pass
+
+            # except:
+            #     pass
             # update the team
             try:
                 this_user_team = Team.objects.get(uniqueId=profile.user_team)
