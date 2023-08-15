@@ -3595,7 +3595,7 @@ def payment_success(request, uniqueId, planId, orderId):
         # else:
         #     msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
 
-        return message
+        return HttpResponse(message)
 
 
         # update the team
