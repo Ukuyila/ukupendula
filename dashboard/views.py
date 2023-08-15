@@ -3592,6 +3592,7 @@ def payment_success(request, uniqueId, planId, orderId):
                 email.content_subtype = 'html'
 
                 if email.send():
+                    time.sleep(5)
                     pass
                 else:
                     pass
