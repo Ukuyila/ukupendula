@@ -3521,7 +3521,7 @@ def payment_success(request, uniqueId, planId, orderId):
                 date_expiry = date_activated + datetime.timedelta(days=365)
                 package_price = int(package_price)*12
 
-            return HttpResponse(f'package_price: {package_price}; date_expiry: {date_expiry}')
+            # return HttpResponse(f'package_price: {package_price}; date_expiry: {date_expiry}')
 
             has_team = False
             user_team = ''
