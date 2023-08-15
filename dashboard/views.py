@@ -3596,9 +3596,9 @@ def subscription_email(request, sub_transact):
     subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
     mail_subject = "Hooray, your Writesome Premium is activated!"
     message = render_to_string("dashboard/sub-transact-email.html", {
-        'user': request.user.first_name,
+        'user': request.user,
         'domain': get_current_site(request).domain,
-        'sub_package': sub_transact.package_name.title(),
+        'sub_package': sub_transact.package_name,
         'sub_package_price': sub_transact.package_price,
         'actvtn_date': sub_transact.date_activated,
         'next_due_date': sub_transact.date_expiry,
@@ -3617,12 +3617,11 @@ def subscription_email(request, sub_transact):
     email.content_subtype = 'html'
 
     if email.send():
-        msg = f'Account successfully created, please go to your email {request.user.email} inbox and click on \
-                received activation link to confirm and complete the registration. Note: If not found check spam folder.'
+        msg = f'email sent successfully'
     else:
-        msg = f'Problem sending email to {request.user.email}, check if you typed it correctly.'
+        msg = f'Problem sending email to {request.user.email}, please contact us for assistance.'
 
-    return msg
+    return message
 
 
 @login_required
