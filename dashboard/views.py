@@ -17,6 +17,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Other Auth imports
 from django.contrib.auth.decorators import login_required
@@ -3632,9 +3633,9 @@ def payment_success(request, uniqueId, planId, orderId):
                     team_member.save()
 
             # return HttpResponse('SUCCESS')
-            return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
+            return JsonResponse(json.dumps(resp_data), content_type="application/json", cls=DjangoJSONEncoder, safe=False)
         except:
-            return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
+            return JsonResponse(json.dumps(resp_data), content_type="application/json", cls=DjangoJSONEncoder, safe=False)
             # return HttpResponse('SUCCESS')
         # except:
         #     return HttpResponse('FAIL: 001')
