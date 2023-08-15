@@ -75,7 +75,7 @@
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
                       </div>
-                      {% elif user.profile.subscription_type|title == 'Free' %}
+                      {% elif package.package_name|title == 'Free' %}
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Default Package</a>
                       </div>
