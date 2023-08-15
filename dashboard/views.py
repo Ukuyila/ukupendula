@@ -3501,7 +3501,7 @@ def payment_success(request, uniqueId, planId, orderId):
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     # print(order_ref)
     resp_data = {}
-    if order_ref is not None:
+    try:
         package = SubscriptionPackage.objects.get(uniqueId=planId)
         package_name = package.package_name.lower().replace(' ', '-') if ' ' in package.package_name else package.package_name.lower()
         package_price = package.package_price
@@ -3567,57 +3567,6 @@ def payment_success(request, uniqueId, planId, orderId):
             profile=profile
         )
         add_notice.save()
-
-        # try:
-        # send email
-        # email = subscription_email(request, sub_transact)
-        subscribed_period = '1 year' if 'Yearly' in sub_transact.package_name else '1 month'
-        mail_subject = "Hooray, your Writesome Premium is activated!"
-        # message = render_to_string("dashboard/sub-transact-email.html", {
-        #     'user': request.user,
-        #     'domain': get_current_site(request).domain,
-        #     'sub_package': sub_transact.package_name,
-        #     'sub_package_price': sub_transact.package_price,
-        #     'actvtn_date': sub_transact.date_activated,
-        #     'next_due_date': sub_transact.date_expiry,
-        #     'subscribed_period': subscribed_period,
-        #     'protocol': 'https' if request.is_secure() else 'http',
-        #     'tos_url': settings.TOS_URL,
-        #     'contact_url': settings.CONTACT_URL,
-        #     'opt_out_url': settings.OPT_OUT_URL,
-        #     'reply_to': settings.EMAIL_REPLY_TO,
-        #     'type_of_action': 'premium purchase email',
-        # })
-        
-        # headers = {"Message-ID": str(uuid4())}
-        
-        # email = EmailMessage(mail_subject, message, to=[request.user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
-        # email.content_subtype = 'html'
-        # time.sleep(2)
-
-        # if email.send():
-        #     time.sleep(5)
-        #     pass
-        # else:
-        #     pass
-        # resp_data = {
-        #     'response': 'SUCCESS',
-        #     'user': f'{request.user.first_name} {request.user.last_name}',
-        #     'domain': get_current_site(request).domain,
-        #     'sub_package': sub_transact.package_name,
-        #     'sub_package_price': sub_transact.package_price,
-        #     'actvtn_date': sub_transact.date_activated.strftime("%d-%m-%Y %H:%M:%S"),
-        #     'next_due_date': sub_transact.date_expiry.strftime("%d-%m-%Y %H:%M:%S"),
-        #     'subscribed_period': subscribed_period,
-        #     'protocol': 'https' if request.is_secure() else 'http',
-        #     'tos_url': str(settings.TOS_URL),
-        #     'contact_url': str(settings.CONTACT_URL),
-        #     'opt_out_url': str(settings.OPT_OUT_URL),
-        #     'reply_to': str(settings.EMAIL_REPLY_TO),
-        #     'type_of_action': 'premium purchase email',
-        # }
-        # except:
-        #     pass
         # update the team
         try:
             this_user_team = Team.objects.get(uniqueId=profile.user_team)
@@ -3631,15 +3580,11 @@ def payment_success(request, uniqueId, planId, orderId):
                     team_member.subscription_reference = profile.subscription_reference
                     team_member.save()
 
-            # return HttpResponse('SUCCESS')
             pass
         except:
             pass
-        # return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
         return HttpResponse('SUCCESS')
-        # except:
-        #     return HttpResponse('FAIL: 001')
-    else:
+    except:
         return HttpResponse('FAIL: 002')
     
 
@@ -3672,21 +3617,7 @@ def subscription_email(request, uniqueId, planId, orderId):
             'reply_to': str(settings.EMAIL_REPLY_TO),
             'type_of_action': 'premium purchase email',
         }
-        # message = render_to_string("dashboard/sub-transact-email.html", {
-        #     'user': request.user,
-        #     'domain': get_current_site(request).domain,
-        #     'sub_package': sub_transact.package_name,
-        #     'sub_package_price': sub_transact.package_price,
-        #     'actvtn_date': sub_transact.date_activated,
-        #     'next_due_date': sub_transact.date_expiry,
-        #     'subscribed_period': subscribed_period,
-        #     'protocol': 'https' if request.is_secure() else 'http',
-        #     'tos_url': settings.TOS_URL,
-        #     'contact_url': settings.CONTACT_URL,
-        #     'opt_out_url': settings.OPT_OUT_URL,
-        #     'reply_to': settings.EMAIL_REPLY_TO,
-        #     'type_of_action': 'premium purchase email',
-        # })
+        # message = render_to_string("dashboard/sub-transact-email.html", resp_data)
         
         # headers = {"Message-ID": str(uuid4())}
         
