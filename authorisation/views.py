@@ -1,6 +1,9 @@
 from base64 import urlsafe_b64encode
 import datetime
 import time
+import smtplib, ssl
+from email.message import EmailMessage
+from email.utils import make_msgid, formataddr
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
@@ -43,37 +46,6 @@ def anonymous_required(function=None, redirect_url=None):
 def login(request):
     context = {}
 
-    import smtplib, ssl
-    from email.message import EmailMessage
-    port = 587
-    smtp_server = "smtp.zeptomail.com"
-    username="emailapikey"
-    password = "wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u"
-    message = "Test email sent successfully."
-    msg = EmailMessage()
-    msg['Subject'] = "Test Email"
-    msg['From'] = "noreply@writesome.ai"
-    msg['To'] = "tino@ukuyila.com"
-    msg.set_content(message)
-    try:
-        if port == 465:
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-                server.login(username, password)
-                server.send_message(msg)
-        elif port == 587:
-            with smtplib.SMTP(smtp_server, port) as server:
-                server.starttls()
-                server.login("emailapikey", password)
-                server.send_message(msg)
-        else:
-            context['test_email'] = 'use 465 / 587 as port value'
-            exit()
-        # print ("successfully sent")
-    except Exception as e:
-        context['test_email'] = f'error: {e}'
-        # print (e)
-
     if request.method == 'POST':
         email = request.POST['email'].replace(' ', '').lower()
         password = request.POST['password']
@@ -112,6 +84,60 @@ def login(request):
             return redirect('login')
 
     return render(request, 'authorisation/login.html', context)
+
+
+def zohoEmailVerification(request, user, password1, user_team):
+    resp_msg = ''
+    mail_subject = "Activate your user account."
+    message = render_to_string("authorisation/email-verification.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http',
+        'password': password1,
+        'user_team': user_team.business_name,
+        'email': user.email,
+        'reply_to': settings.EMAIL_REPLY_TO,
+        'type_of_action': 'email verification',
+    })
+    
+    headers = {"Message-ID": str(uuid4())}
+    
+    # email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
+    # email.content_subtype = 'html'
+
+    port = 587
+    smtp_server = settings.EMAIL_HOST
+    username="emailapikey"
+    password = settings.EMAIL_HOST_PASSWORD
+    msg = EmailMessage()
+    msg['Subject'] = mail_subject
+    msg['From'] = formataddr(("writesome.ai", "noreply@writesome.ai"))
+    msg['Reply-To'] = settings.EMAIL_REPLY_TO
+    msg['To'] = user.email
+    msg.set_content(message, subtype='html')
+
+    try:
+        if port == 465:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+                server.login(username, password)
+                server.send_message(msg)
+        elif port == 587:
+            with smtplib.SMTP(smtp_server, port) as server:
+                server.starttls()
+                server.login("emailapikey", password)
+                server.send_message(msg)
+        else:
+            resp_msg = f'use 465 / 587 as port value.'
+            # exit()
+        resp_msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
+            received activation link to confirm and complete the registration. Note: If not found check spam folder.'
+    except Exception as e:
+        # context['test_email'] = f'error: {e}'
+        resp_msg = f'Problem sending email to {user.email}, check if you typed it correctly. error: {e}'
+    return resp_msg
 
 
 def emailVerification(request, user, password1, user_team):
@@ -243,7 +269,7 @@ def register(request):
         new_cate.save()
         
         # begin email verification
-        email = emailVerification(request, user, password1, new_user_team)
+        email = zohoEmailVerification(request, user, password1, new_user_team)
 
         messages.info(request, email)
         return redirect('login')
