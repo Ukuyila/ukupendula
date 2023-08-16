@@ -78,9 +78,10 @@
 {% block js %}
 <script src="{% static 'dash/js/pages/register.js' %}"></script>
 <script type="text/javascript">
+
   $('#password2').keyup( function() {
-    reg_btn_container.prop('hidden', false)
-    submit_btn.prop('disabled', false)
+
+    $('#register-btn').prop('disabled', false)
   })
 </script>
 {% endblock %}
