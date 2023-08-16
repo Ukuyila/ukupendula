@@ -57,11 +57,11 @@
                         <input type="password" id="password2" name="password2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
                       </div>
                       
-                      {% comment %} <div class="single-input">
+                      <div class="single-input">
                         <label for="spam_filter">Spam Filter *</label>
                         <p>What is greater, 9 or 4?</p>
                         <input type="text" class="form-control" id="spam_filter" name="spam_filter" autofocus required/>
-                      </div> {% endcomment %}
+                      </div>
                       <div class="cf-turnstile" data-sitekey="{{cf_site_key}}"></div>
                       <button type="submit" id="register-btn" class="button-1">Sign Up</button>
                     </form>
@@ -76,5 +76,11 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript">
+  $('#password2').keyup( function() {
+    reg_btn_container.prop('hidden', false)
+    submit_btn.prop('disabled', false)
+  })
+</script>
 <script src="{% static 'dash/js/pages/register.js' %}"></script>
 {% endblock %}

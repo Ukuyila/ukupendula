@@ -196,15 +196,15 @@ def register(request):
         email = request.POST['email'].replace(' ', '').lower()
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        spam_filter = request.POST['spam_filter']
+        # spam_filter = request.POST['spam_filter']
 
         if not validateEmail(email):
             messages.error(request, "Email address invalid!")
             return redirect('register')
 
-        if not spam_filter == '9' or spam_filter.upper() == 'NINE':
-            messages.error(request, "Our robot is not friendly to other robots, you failed the spam test!")
-            return redirect('register')
+        # if not spam_filter == '9' or spam_filter.upper() == 'NINE':
+        #     messages.error(request, "Our robot is not friendly to other robots, you failed the spam test!")
+        #     return redirect('register')
 
         if not password1 == password2:
             messages.error(request, "Passwords do not match!")
