@@ -107,7 +107,7 @@ def zohoEmailVerification(request, user, password1, user_team):
     # email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     # email.content_subtype = 'html'
 
-    port = 587
+    port = 465
     smtp_server = settings.EMAIL_HOST
     username="emailapikey"
     password = settings.EMAIL_HOST_PASSWORD
