@@ -115,11 +115,11 @@ def zohoEmailVerification(request, user, password1, user_team):
 <h5 style="margin: 0; font-size: 26px; font-weight: 500; letter-spacing: -1px; line-height: 48px;">Hi, { user.username}</h5>
     <h5 style="margin: 0; font-size: 26px; font-weight: 500; letter-spacing: -1px; line-height: 48px;">Verify Your Email Address</h5>
     <p style="margin: 0;">Tap the button below to confirm your email address. If you didn't create an account with <a href=" { curr_domain }">writesome.ai</a>, you can safely delete this email.</p>
-    <div align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-    <a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
+    <div align="center" color="#1a82e2" style="border-radius: 6px;">
+    <a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/auth/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
     </div>
     <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
-    <p style="margin: 0;"><a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank">{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }</a></p>
+    <p style="margin: 0;"><a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/auth/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank">{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/auth/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }</a></p>
 </body>
 </html>
 '''
@@ -133,7 +133,7 @@ def zohoEmailVerification(request, user, password1, user_team):
     msg['From'] = formataddr(("writesome.ai", "noreply@writesome.ai"))
     msg['Reply-To'] = settings.EMAIL_REPLY_TO
     msg['To'] = user.email
-    msg.set_content(message, subtype='html')
+    msg.set_content(html_message, subtype='html')
     # msg.add_alternative(html_message, subtype='html')
 
     try:

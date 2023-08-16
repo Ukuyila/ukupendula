@@ -52,6 +52,7 @@
 		<link href="{% static 'dash/switcher/css/switcher.css' %}" rel="stylesheet" />
 		<link href="{% static 'dash/switcher/demo.css' %}" rel="stylesheet" />
 		<link href="{% static 'dash/css/custom.css' %}" rel="stylesheet" />
+		{% verbatim %}
 		<style type="text/css">
 			#notifications-container {
 				max-height: 45vh;
@@ -71,6 +72,7 @@
 			s0.parentNode.insertBefore(s1,s0);
 			})();
 			</script>
+			{% endverbatim %}
 			<!--End of Tawk.to Script-->
 	</head>
 	<body class="app sidebar-mini">
@@ -504,7 +506,9 @@
 				<div class="container">
 					<div class="row align-items-center flex-row-reverse">
 						<div class="col-lg-12 col-sm-12 mt-3 mt-lg-0 text-center">
+							{% verbatim %}
 							A product by <a href="https://ukuyila.com">Ukuyila (Pty) Ltd</a> © <script> document.write(new Date().getFullYear()); </script> | <a href="https://writesome.ai">writesome.ai</a>. All rights reserved.
+							{% endverbatim %}
 						</div>
 					</div>
 				</div>
@@ -553,7 +557,7 @@
 
 		<!-- Custom-script Js-->
 		<script src="{% static 'dash/js/custom-script.js' %}"></script>
-
+		{% verbatim %}
 		<script type="text/javascript">
 			$(document).ready(function(){
 			notificationListener()
@@ -596,7 +600,8 @@
 			}
 			
 		</script>
-
+		{% endverbatim %}
+		
     {% block js %}
     {% endblock %}
 
