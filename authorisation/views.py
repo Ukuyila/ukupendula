@@ -89,7 +89,7 @@ def login(request):
 def zohoEmailVerification(request, user, password1, user_team):
     resp_msg = ''
     mail_subject = "Activate your user account."
-    message = render_to_string("authorisation/email-verification.html", {
+    html_message = render_to_string("authorisation/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -103,9 +103,18 @@ def zohoEmailVerification(request, user, password1, user_team):
     })
     
     headers = {"Message-ID": str(uuid4())}
+    # message_cid = make_msgid()
     
     # email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     # email.content_subtype = 'html'
+
+    message = f'''\
+Hi,\
+Welcome to writesome.ai\
+Please Your email address below\
+Click the button below to confirm your email address. If you didn't create an account with  you can safely delete this email.\
+{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }
+'''
 
     port = 465
     smtp_server = settings.EMAIL_HOST
@@ -117,6 +126,7 @@ def zohoEmailVerification(request, user, password1, user_team):
     msg['Reply-To'] = settings.EMAIL_REPLY_TO
     msg['To'] = user.email
     msg.set_content(message, subtype='html')
+    msg.add_alternative(html_message, subtype='html')
 
     try:
         if port == 465:
