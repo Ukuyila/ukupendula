@@ -41,6 +41,39 @@ def anonymous_required(function=None, redirect_url=None):
 
 @anonymous_required
 def login(request):
+    context = {}
+
+    import smtplib, ssl
+    from email.message import EmailMessage
+    port = 587
+    smtp_server = "smtp.zeptomail.com"
+    username="emailapikey"
+    password = "wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u"
+    message = "Test email sent successfully."
+    msg = EmailMessage()
+    msg['Subject'] = "Test Email"
+    msg['From'] = "noreply@writesome.ai"
+    msg['To'] = "tino@ukuyila.com"
+    msg.set_content(message)
+    try:
+        if port == 465:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+                server.login(username, password)
+                server.send_message(msg)
+        elif port == 587:
+            with smtplib.SMTP(smtp_server, port) as server:
+                server.starttls()
+                server.login("emailapikey", password)
+                server.send_message(msg)
+        else:
+            context['test_email'] = 'use 465 / 587 as port value'
+            exit()
+        # print ("successfully sent")
+    except Exception as e:
+        context['test_email'] = f'error: {e}'
+        # print (e)
+
     if request.method == 'POST':
         email = request.POST['email'].replace(' ', '').lower()
         password = request.POST['password']
@@ -78,7 +111,7 @@ def login(request):
             messages.error(request, "User email and password does not match any profile!")
             return redirect('login')
 
-    return render(request, 'authorisation/login.html', {})
+    return render(request, 'authorisation/login.html', context)
 
 
 def emailVerification(request, user, password1, user_team):
