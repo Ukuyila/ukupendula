@@ -88,7 +88,7 @@ def login(request):
 
 def zohoEmailVerification(request, user, password1, user_team):
     resp_msg = ''
-    mail_subject = "Activate your user account."
+    mail_subject = "Verify your email address."
     html_message = render_to_string("authorisation/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
@@ -130,7 +130,7 @@ def zohoEmailVerification(request, user, password1, user_team):
     password = settings.EMAIL_HOST_PASSWORD
     msg = EmailMessage()
     msg['Subject'] = mail_subject
-    msg['From'] = formataddr(("writesome.ai", "noreply@writesome.ai"))
+    msg['From'] = formataddr(("writesome", "noreply@writesome.ai"))
     msg['Reply-To'] = settings.EMAIL_REPLY_TO
     msg['To'] = user.email
     msg.set_content(html_message, subtype='html')
