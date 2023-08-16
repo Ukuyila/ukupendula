@@ -21,7 +21,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
-from django.core.mail import EmailMessage, send_mail
+from django.core.mail import EmailMessage as DjangoEmailMessage, send_mail
 
 from dashboard.models import *
 from dashboard.functions import get_device_mac, get_device_info, populate_defaults, validateEmail
@@ -157,7 +157,7 @@ def emailVerification(request, user, password1, user_team):
     
     headers = {"Message-ID": str(uuid4())}
     
-    email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
+    email = DjangoEmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     email.content_subtype = 'html'
 
     if email.send():
