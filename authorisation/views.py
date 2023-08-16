@@ -107,13 +107,20 @@ def zohoEmailVerification(request, user, password1, user_team):
     
     # email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
     # email.content_subtype = 'html'
-
+    curr_domain = get_current_site(request).domain
     message = f'''\
-Hi,\
-Welcome to writesome.ai\
-Please Your email address below\
-Click the button below to confirm your email address. If you didn't create an account with  you can safely delete this email.\
-{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }
+<html>
+<head></head>
+<body>
+    <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Verify Your Email Address</h1>
+    <p style="margin: 0;">Tap the button below to confirm your email address. If you didn't create an account with <a href=" { curr_domain }">writesome.ai</a>, you can safely delete this email.</p>
+    <div align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
+    <a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Verify Email</a>
+    </div>
+    <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
+    <p style="margin: 0;"><a href="{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }" target="_blank">{ 'https' if request.is_secure() else 'http' }://{ get_current_site(request).domain }/activate/{ urlsafe_base64_encode(force_bytes(user.pk)) }/{ account_activation_token.make_token(user) }</a></p>
+</body>
+</html>
 '''
 
     port = 465
@@ -126,7 +133,7 @@ Click the button below to confirm your email address. If you didn't create an ac
     msg['Reply-To'] = settings.EMAIL_REPLY_TO
     msg['To'] = user.email
     msg.set_content(message, subtype='html')
-    msg.add_alternative(html_message, subtype='html')
+    # msg.add_alternative(html_message, subtype='html')
 
     try:
         if port == 465:
