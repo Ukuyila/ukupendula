@@ -180,7 +180,7 @@ def zohoEmailVerification(request, user, password1, user_team):
                         <div><br></div>
                         <div class="align-center" style="text-align: center;"><br></div>
                         <div class="align-center" style="text-align: center;">
-                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;"><img src="portal/v1.0/mailagents/2d6f.b034a70cd9499d2.2cf853c932fd4979/files/2d6f.b034a70cd9499d2.h1.bfc16120-3c17-11ee-a5ac-525400d6cd4f.189fdb00832/download" orig_width="400" orig_height="101" width="160" height="40" size_option="small"></span><br>
+                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;"><img src="https://zeptomail.zoho.com/portal/v1.0/mailagents/2d6f.b034a70cd9499d2.2cf853c932fd4979/files/2d6f.b034a70cd9499d2.h1.bfc16120-3c17-11ee-a5ac-525400d6cd4f.189fdb00832/download" orig_width="400" orig_height="101" width="160" height="40" size_option="small"></span><br>
                         </div>
                         <div class="align-center" style="text-align: center;">
                             <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">A product by <a href="https://ukuyila.com" target="_blank">Ukuyila (Pty)Ltd</a></span><br>
