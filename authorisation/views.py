@@ -88,7 +88,7 @@ def login(request):
 
 def zohoEmailVerification(request, user, password1, user_team):
     resp_msg = ''
-    mail_subject = "Verify your email address."
+    mail_subject = "Verify your email address"
     html_message = render_to_string("authorisation/email-verification.html", {
         'user': user.username,
         'domain': get_current_site(request).domain,
@@ -175,12 +175,12 @@ def zohoEmailVerification(request, user, password1, user_team):
                             <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">Thank you,</span><br>
                         </p>
                         <p style="margin: 0px; line-height: 20px;">
-                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">Team { settings.APP_NAME }.</span><br>
+                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">Team.</span><br>
                         </p>
                         <div><br></div>
                         <div class="align-center" style="text-align: center;"><br></div>
                         <div class="align-center" style="text-align: center;">
-                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;"><img src="https://api.writesome.ai/dist/img/writesome-ai-logo.png" orig_width="400" orig_height="101" width="160" height="40" size_option="small"></span><br>
+                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">{ settings.APP_NAME }</span><br>
                         </div>
                         <div class="align-center" style="text-align: center;">
                             <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">A product by <a href="#" target="_blank">Ukuyila (Pty)Ltd</a></span><br>
