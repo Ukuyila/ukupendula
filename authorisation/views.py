@@ -112,7 +112,7 @@ def emailVerificationApi(request, user, password1, user_team):
 
     try:
         response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
-        return json.load(response.text.decode('utf-8'))
+        return json.load(response.text)
     except:
         return f'Problem sending email to {user.email}, check if you typed it correctly.'
 
