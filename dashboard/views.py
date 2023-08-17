@@ -5178,7 +5178,7 @@ def get_notifications(request):
 def read_notifications(request, uniqueId):
     resp_data = {}
     user_profile = request.user.profile
-    if request.method == 'GET':
+    if request.method == 'POST':
         user_notif = UserNotification.objects.get(uniqueId=uniqueId)
         user_notif.is_read = True
 
