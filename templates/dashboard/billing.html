@@ -96,10 +96,7 @@
                           {% endfor %}
                         {% endwith %}
                       </ul>
-                      {% if user_sub_type == package.package_name %}
-                      <div class="text-center m-4">
-                        <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Current Package</a>
-                      </div>
+                      
                       {% if user_sub_type == 'Teams' and package.package_name is not user_sub_type %}
                       <div class="text-center m-4">
                         <a disabled href="{% url 'pay-now' package.uniqueId %}" class="btn btn-dark btn-block">Downgrade</a>
