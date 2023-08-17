@@ -181,7 +181,7 @@
 
 													{% if cnt_notif > 0 %}
 													{% for user_notifi in user_notices %}
-													<a href="javascript:void(0);" class="dropdown-item d-flex">
+													<a href="javascript:void(0);" onclick="return readNitification('{{user_notifi.uniqueId}}')" class="dropdown-item d-flex">
 														{% comment %} <img src="../assets/images/faces/male/41.jpg" alt="avatar-img" class="avatar brround me-3"> {% endcomment %}
 														<div class="header-msg">
 															 {{user_notifi.notification}}
@@ -562,6 +562,34 @@
 			$(document).ready(function(){
 			notificationListener()
 			});
+			function readNitification(notifcs_id) {
+				$("#bg-spinner").fadeOut("fast");
+				$.ajax({
+					type: 'GET',
+					url: 'read-notifications',
+					data: {
+						notifcs_id: notifcs_id,
+					},
+					beforesend: function () {
+						$("#bg-spinner").fadeOut("fast");
+					},
+					success: function (resp) {
+						$("#bg-spinner").fadeOut("fast");
+						if ( resp.includes('success') ) {
+							let responses = JSON.parse(resp)
+							console.log(responses)
+							
+						}
+						else {
+							error_alert.html(resp).prop('hidden', false)
+						}
+						setTimeout(() => {
+							notificationListener()
+						}, 1000);
+					}
+				})
+			}
+
 			function notificationListener() {
 				let curr_notifcs_cnt = $('.notifications-count')
 				let curr_notifcs_title = $('.notifications-title')
