@@ -5181,6 +5181,7 @@ def read_notification(request, uniqueId):
     try:
         user_notif = UserNotification.objects.get(uniqueId=uniqueId)
         user_notif.is_read = True
+        user_notif.save()
 
         resp_data = {
             'result': 'success',
