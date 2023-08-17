@@ -5178,7 +5178,7 @@ def get_notifications(request):
 def read_notification(request, uniqueId):
     resp_data = {}
     user_profile = request.user.profile
-    if request.method == 'POST':
+    try:
         user_notif = UserNotification.objects.get(uniqueId=uniqueId)
         user_notif.is_read = True
 
@@ -5186,10 +5186,10 @@ def read_notification(request, uniqueId):
             'result': 'success',
             'message': 'Notification read!',
         }
-    else:
+    except Exception as e:
         resp_data = {
             'result': 'failed',
-            'message': 'Failed to read notification!',
+            'message': f'Failed to read notification with error: {e}',
         }
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 #
