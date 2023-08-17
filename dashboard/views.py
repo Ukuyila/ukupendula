@@ -5151,7 +5151,7 @@ def get_notifications(request):
                 cnt_notif+=1
 
             user_notifcs_html += f'''
-            <a href="javascript:void(0);" class="dropdown-item d-flex">
+            <a href="javascript:void(0);" onclick="return readNitification('{notif.uniqueId}')" class="dropdown-item d-flex">
                 <div class="header-msg">
                         {notif.notification}
                     <div class="small text-muted">{notif.notice_type.title()}</div>
