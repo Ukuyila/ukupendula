@@ -5150,14 +5150,14 @@ def get_notifications(request):
             if notif.is_read is False:
                 cnt_notif+=1
 
-            user_notifcs_html += f'''
-            <a href="javascript:void(0);" onclick="return readNitification('{notif.uniqueId}')" class="dropdown-item d-flex">
-                <div class="header-msg">
-                        {notif.notification}
-                    <div class="small text-muted">{notif.notice_type.title()}</div>
-                </div>
-            </a>
-            '''
+                user_notifcs_html += f'''
+                <a href="javascript:void(0);" onclick="return readNotification('{notif.uniqueId}')" class="dropdown-item d-flex">
+                    <div class="header-msg">
+                            {notif.notification}
+                        <div class="small text-muted">{notif.notice_type.title()}</div>
+                    </div>
+                </a>
+                '''
 
         resp_data = {
             'result': 'success',
@@ -5178,19 +5178,25 @@ def get_notifications(request):
 def read_notification(request, uniqueId):
     resp_data = {}
     user_profile = request.user.profile
-    try:
-        user_notif = UserNotification.objects.get(uniqueId=uniqueId)
-        user_notif.is_read = True
-        user_notif.save()
+    if request.method == 'GET':
+        try:
+            user_notif = UserNotification.objects.get(uniqueId=uniqueId)
+            user_notif.is_read = True
+            user_notif.save()
 
+            resp_data = {
+                'result': 'success',
+                'message': 'Notification read!',
+            }
+        except Exception as e:
+            resp_data = {
+                'result': 'failed',
+                'message': f'Failed to read notification with error: {e}',
+            }
+    else:
         resp_data = {
-            'result': 'success',
-            'message': 'Notification read!',
-        }
-    except Exception as e:
-        resp_data = {
-            'result': 'failed',
-            'message': f'Failed to read notification with error: {e}',
+            'result': 'error',
+            'message': 'Request not allowed',
         }
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 #
