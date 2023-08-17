@@ -18,7 +18,7 @@
             </ul>
           </div>
           <div class="col-12">
-            Your current plan: {% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}
+            <p class="text-primary">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></p>
           </div>
         </div>
         <div class="tab-content">
