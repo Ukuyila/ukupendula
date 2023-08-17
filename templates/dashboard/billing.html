@@ -29,6 +29,8 @@
                     <div class="text-center pricing pricing1">
                       {% if user_sub_type == package.package_name %}
                       <div class="card-category bg-dark">{{ package.package_name }}</div>
+                      {% elif package.package_name|title == 'Free' %}
+                      <div class="card-category bg-secondary">{{ package.package_name }}</div>
                       {% else %}
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       {% endif %}
@@ -48,7 +50,7 @@
                       </div>
                       {% elif package.package_name|title == 'Free' %}
                       <div class="text-center m-4">
-                        <a disabled href="javascript:void(0)" class="btn btn-default btn-block">Default Package</a>
+                        <a disabled href="javascript:void(0)" class="btn btn-secondary btn-block">Default Package</a>
                       </div>
                       {% else %}
                       <div class="text-center m-4">
