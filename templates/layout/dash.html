@@ -577,12 +577,12 @@
 						$("#bg-spinner").fadeOut("fast");
 						if ( resp.includes('success') ) {
 							let responses = JSON.parse(resp)
-							console.log(responses)
+							/* console.log(responses) */
 							
 						}
-						else {
+						/* else {
 							error_alert.html(resp).prop('hidden', false)
-						}
+						} */
 						setTimeout(() => {
 							notificationListener()
 						}, 1000);

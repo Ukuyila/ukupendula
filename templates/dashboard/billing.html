@@ -17,6 +17,9 @@
               <li><a href="#tab-2" data-bs-toggle="tab" class="">Monthly</a></li>
             </ul>
           </div>
+          <div class="col-12">
+            Your current plan: {% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}
+          </div>
         </div>
         <div class="tab-content">
           <div class="tab-pane active" id="tab-1">

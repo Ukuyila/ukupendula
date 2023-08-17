@@ -3306,6 +3306,7 @@ def billing(request):
     context['month_word_count'] = request.user.profile.monthly_count
     context['user_curr_tier'] = user_curr_tier
     context['user_sub_type'] = user_sub_type
+    context['curr_user_sub_type'] = user_sub_type.replace(' ', ' - ') if 'Yearly' in user_sub_type else f'{user_sub_type} - Monthly'
     context['sub_packages'] = packages
 
     return render(request, 'dashboard/billing.html', context)
