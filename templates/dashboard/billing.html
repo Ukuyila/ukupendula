@@ -27,7 +27,9 @@
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
-                      {% if user_sub_type == package.package_name %}
+                      {% if user_sub_type == 'Teams Yearly' and package.package_name is not user_sub_type %}
+                      <div class="card-category bg-gray">{{ package.package_name }}</div>
+                      {% elif user_sub_type == package.package_name %}
                       <div class="card-category bg-dark">{{ package.package_name }}</div>
                       {% elif package.package_name|title == 'Free' %}
                       <div class="card-category bg-gray">{{ package.package_name }}</div>
@@ -43,7 +45,10 @@
                           {% endfor %}
                         {% endwith %}
                       </ul>
-                      
+                      {% if user_sub_type == 'Teams Yearly' and package.package_name is not user_sub_type %}
+                      <div class="text-center m-4">
+                        <a disabled href="{% url 'pay-now' package.uniqueId %}" class="btn btn-dark btn-block">Downgrade</a>
+                      </div>
                       {% if user_sub_type == package.package_name %}
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-dark btn-block">Current Package</a>
