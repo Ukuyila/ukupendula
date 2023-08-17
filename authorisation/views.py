@@ -112,7 +112,8 @@ def emailVerificationApi(request, user, password1, user_team):
 
     # try:
     response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
-    return json.load(response.text)
+    # return json.load(response.text)
+    return response.text
     # except:
     #     pass
 
