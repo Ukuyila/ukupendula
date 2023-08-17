@@ -10,6 +10,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
+import requests
+
 # Other imports
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
@@ -102,7 +104,31 @@ def zohoEmailVerification(request, user, password1, user_team):
         'type_of_action': 'email verification',
     })
     
-    headers = {"Message-ID": str(uuid4())}
+    # headers = {"Message-ID": str(uuid4())}
+
+    url = "https://api.writesome.ai/mailer-api/welcome-email.php"
+
+    payload = {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http',
+        'password': password1,
+        'user_team': user_team.business_name,
+        'email': user.email,
+        'reply_to': settings.EMAIL_REPLY_TO,
+        'type_of_action': 'email verification',
+    }
+    headers = {
+    'accept': "application/json",
+    'content-type': "application/json",
+    'authorization': "Zoho-enczapikey wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u",
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+    return response
+    # print(response.text)
     # message_cid = make_msgid()
     
     # email = EmailMessage(mail_subject, message, to=[user.email], reply_to=[settings.EMAIL_REPLY_TO], headers=headers)
@@ -183,7 +209,7 @@ def zohoEmailVerification(request, user, password1, user_team):
                             <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">{ settings.APP_NAME }</span><br>
                         </div>
                         <div class="align-center" style="text-align: center;">
-                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">A product by <a href="#" target="_blank">Ukuyila (Pty)Ltd</a></span><br>
+                            <span class="size" style="font-size: 14px; margin: 0px; line-height: 20px;">A product by <a  target="_blank">Ukuyila (Pty)Ltd</a></span><br>
                         </div>
                     </div>
                 </div>
@@ -196,38 +222,38 @@ def zohoEmailVerification(request, user, password1, user_team):
 </html>
     '''
 
-    port = 465
-    smtp_server = settings.EMAIL_HOST
-    username="emailapikey"
-    password = settings.EMAIL_HOST_PASSWORD
-    msg = EmailMessage()
-    msg['Subject'] = mail_subject
-    msg['From'] = formataddr(("writesome", "noreply@writesome.ai"))
-    msg['Reply-To'] = settings.EMAIL_REPLY_TO
-    msg['To'] = user.email
-    msg.set_content(message, subtype='html')
-    # msg.add_alternative(html_message, subtype='html')
+    # port = 465
+    # smtp_server = settings.EMAIL_HOST
+    # username="emailapikey"
+    # password = settings.EMAIL_HOST_PASSWORD
+    # msg = EmailMessage()
+    # msg['Subject'] = mail_subject
+    # msg['From'] = formataddr(("writesome", "noreply@writesome.ai"))
+    # msg['Reply-To'] = settings.EMAIL_REPLY_TO
+    # msg['To'] = user.email
+    # msg.set_content(message, subtype='html')
+    # # msg.add_alternative(html_message, subtype='html')
 
-    try:
-        if port == 465:
-            context = ssl.create_default_context()
-            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-                server.login(username, password)
-                server.send_message(msg)
-        elif port == 587:
-            with smtplib.SMTP(smtp_server, port) as server:
-                server.starttls()
-                server.login("emailapikey", password)
-                server.send_message(msg)
-        else:
-            resp_msg = f'use 465 / 587 as port value.'
-            # exit()
-        resp_msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
-            received activation link to confirm and complete the registration. Note: If not found check spam folder.'
-    except Exception as e:
-        # context['test_email'] = f'error: {e}'
-        resp_msg = f'Problem sending email to {user.email}, check if you typed it correctly. error: {e}'
-    return resp_msg
+    # try:
+    #     if port == 465:
+    #         context = ssl.create_default_context()
+    #         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+    #             server.login(username, password)
+    #             server.send_message(msg)
+    #     elif port == 587:
+    #         with smtplib.SMTP(smtp_server, port) as server:
+    #             server.starttls()
+    #             server.login("emailapikey", password)
+    #             server.send_message(msg)
+    #     else:
+    #         resp_msg = f'use 465 / 587 as port value.'
+    #         # exit()
+    #     resp_msg = f'Account successfully created, please go to your email {user.email} inbox and click on \
+    #         received activation link to confirm and complete the registration. Note: If not found check spam folder.'
+    # except Exception as e:
+    #     # context['test_email'] = f'error: {e}'
+    #     resp_msg = f'Problem sending email to {user.email}, check if you typed it correctly. error: {e}'
+    # return resp_msg
 
 
 def emailVerification(request, user, password1, user_team):
