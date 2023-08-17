@@ -110,11 +110,11 @@ def emailVerificationApi(request, user, password1, user_team):
     'authorization': "Zoho-enczapikey wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u",
     }
 
-    try:
-        response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
-        return json.load(response.text)
-    except:
-        return f'Problem sending email to {user.email}, check if you typed it correctly.'
+    # try:
+    response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
+    return json.load(response.text)
+    # except:
+    #     pass
 
 
 def zohoEmailVerification(request, user, password1, user_team):
