@@ -5175,7 +5175,7 @@ def get_notifications(request):
 
 
 @login_required
-def read_notifications(request, uniqueId):
+def read_notification(request, uniqueId):
     resp_data = {}
     user_profile = request.user.profile
     if request.method == 'POST':
