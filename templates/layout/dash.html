@@ -565,7 +565,7 @@
 				/* console.log(notifcs_id) */
 				$("#bg-spinner").fadeOut("fast");
 				$.ajax({
-					type: 'POST',
+					type: 'GET',
 					url: 'read-notification/' + notifcs_id + '/',
 					data: {
 						notifcs_id: notifcs_id,
