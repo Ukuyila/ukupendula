@@ -16,7 +16,7 @@
               <li class=""><a href="#tab-1" class="active show" data-bs-toggle="tab">Annually</a></li>
               <li><a href="#tab-2" data-bs-toggle="tab" class="">Monthly</a></li>
             </ul>
-            <p class="text-primary mb-0 ">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></p>
+            <span class="text-primary mb-0 ">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></span>
           </div>
         </div>
         <div class="tab-content mt-0">
