@@ -5178,12 +5178,18 @@ def get_notifications(request):
 def read_notifications(request, uniqueId):
     resp_data = {}
     user_profile = request.user.profile
-    user_notif = UserNotification.objects.get(uniqueId=uniqueId)
-    user_notif.is_read = True
+    if request.method == 'GET':
+        user_notif = UserNotification.objects.get(uniqueId=uniqueId)
+        user_notif.is_read = True
 
-    resp_data = {
-        'result': 'success',
-        'message': 'Notification read!',
-    }
+        resp_data = {
+            'result': 'success',
+            'message': 'Notification read!',
+        }
+    else:
+        resp_data = {
+            'result': 'failed',
+            'message': 'Failed to read notification!',
+        }
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 #
