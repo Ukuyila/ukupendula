@@ -10,7 +10,7 @@
     <div class="card-body items-gallery">
       <div class="items-blog-tab text-center">
         <h2 class="">Availabe Subscription Plans</h2>
-            <p class="text-primary mb-0 ">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></p>
+        <p class="text-primary mb-3 ">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></p>
         <div class="items-blog-tab-heading row" style"margin-bottom: 15px;!important">
           <div class="col-12">
             <ul class="nav items-blog-tab-menu">
@@ -27,7 +27,11 @@
                 <div class="col-sm-12 col-lg-4">
                   <div class="card overflow-hidden">
                     <div class="text-center pricing pricing1">
+                      {% if user_sub_type == package.package_name %}
+                      <div class="card-category bg-default">{{ package.package_name }}</div>
+                      {% else %}
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
+                      {% endif %}
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
                       <div><small class="text-muted">Billed Annually</small></div>
                       <ul class="list-unstyled leading-loose">
