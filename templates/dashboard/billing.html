@@ -49,7 +49,7 @@
                       <div class="text-center m-4">
                         <a disabled href="{% url 'pay-now' package.uniqueId %}" class="btn btn-dark btn-block">Downgrade</a>
                       </div>
-                      {% if user_sub_type == package.package_name %}
+                      {% elif user_sub_type == package.package_name %}
                       <div class="text-center m-4">
                         <a disabled href="javascript:void(0)" class="btn btn-dark btn-block">Current Package</a>
                       </div>
