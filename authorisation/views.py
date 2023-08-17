@@ -2,6 +2,8 @@ from base64 import urlsafe_b64encode
 import datetime
 import time
 import smtplib, ssl
+import requests
+import json
 from email.message import EmailMessage
 from email.utils import make_msgid, formataddr
 from django.conf import settings
@@ -9,8 +11,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-
-import requests
 
 # Other imports
 from django.contrib.auth.decorators import login_required
@@ -125,8 +125,8 @@ def zohoEmailVerification(request, user, password1, user_team):
     'content-type': "application/json",
     'authorization': "Zoho-enczapikey wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u",
     }
-
-    response = requests.request("POST", url, data=payload, headers=headers)
+    
+    response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
     return response.text
     # print(response.text)
     # message_cid = make_msgid()
