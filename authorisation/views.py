@@ -127,7 +127,7 @@ def zohoEmailVerification(request, user, password1, user_team):
     }
 
     response = requests.request("POST", url, data=payload, headers=headers)
-    return response
+    return response.text
     # print(response.text)
     # message_cid = make_msgid()
     
