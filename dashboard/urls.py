@@ -9,6 +9,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
 
     path('edit-settings', views.edit_settings, name='edit-settings'),
+    path('unsubscribe-account', views.unsubscribe_account, name='unsubscribe-account'),
     path('get-notifications', views.get_notifications, name='get-notifications'),
     path('read-notification', views.read_notification, name='read-notification'),
 

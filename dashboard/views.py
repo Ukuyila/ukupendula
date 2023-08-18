@@ -345,6 +345,7 @@ def profile(request):
 
         if profile_form.is_valid():
             profile_form.save()
+            messages.success(request, "Great! Profile updated successfully.")
             return redirect('profile')
         else:
             messages.error(request, "Error! Failed to update user profile details!")
@@ -353,8 +354,27 @@ def profile(request):
         # if image_form.is_valid():
         #     image_form.save()
         #     return redirect('profile')
-
     return render(request, 'dashboard/profile.html', context)
+
+
+@login_required
+def unsubscribe_account(request):
+    user_profile = request.user.profile
+
+    profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+    profile.subscription_type = 'Free'
+    profile.subscribed = False
+    profile.save()
+
+    add_notice = UserNotification.objects.create(
+        notice_type='premium cancelled',
+        notification='Ouch, you have unsubscribed from your {} Premium Package!'.format(settings.APP_NAME),
+        profile=profile
+    )
+    add_notice.save()
+    # remove subscription on payfast
+    messages.success(request, add_notice.notification)
+    return redirect('profile')
 
 
 @login_required
@@ -3863,7 +3883,7 @@ def add_team_member(request):
             return redirect('team-manager')
 
         new_member = User.objects.create_user(email=user_email, username=user_email, first_name=first_name,
-                                              last_name=last_name, password=password1, is_active=False)
+        last_name=last_name, password=password1, is_active=False)
         new_member.save()
         time.sleep(2)
 
@@ -3879,7 +3899,7 @@ def add_team_member(request):
         nu_profile.save()
 
         user_settings = UserSetting.objects.create(lang=user_language, email_verification='null', user_role=user_role,
-                                                   profile=nu_profile)
+        profile=nu_profile)
         user_settings.save()
 
         success = activateEmail(request, new_member, user_team, password1)
