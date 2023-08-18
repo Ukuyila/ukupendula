@@ -5201,4 +5201,13 @@ def read_notification(request):
             'message': 'Request not allowed',
         }
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
+
+
+def error_404(request, exception):
+        data = {}
+        return render(request,'dashboard/404.html', data)
+
+def error_500(request,  exception):
+        data = {}
+        return render(request,'dashboard/500.html', data)
 #

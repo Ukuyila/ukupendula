@@ -1,0 +1,107 @@
+{% load static %}
+
+{{ '<' }}{{ '!DOCTYPE html>' }}
+<html lang="en" dir="ltr">
+	<head>
+		<!-- Meta data -->
+		<meta charset="UTF-8">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="" name="description">
+		<meta content="drycko[at]ukuyila" name="author">
+		<meta name="keywords" content=""/>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" />
+
+		<!-- Title -->
+    <title>Error 404 - writesome.ai</title>
+		<link rel="stylesheet" href="{% static 'dash/fonts/fonts/font-awesome.min.css' %}">
+
+		<!-- Bootstrap Css -->
+		<link id="style" href="{% static 'dash/plugins/bootstrap-5/css/bootstrap.min.css' %}" rel="stylesheet" />
+
+		<!-- Sidemenu Css -->
+		<link href="{% static 'dash/css/sidemenu.css' %}" rel="stylesheet" />
+
+		<!-- Dashboard Css -->
+		<link href="{% static 'dash/css/style.css' %}" rel="stylesheet" />
+		<link href="{% static 'dash/css/admin-custom.css' %}" rel="stylesheet" />
+
+		<!-- c3.js Charts Plugin -->
+		<link href="{% static 'dash/plugins/charts-c3/c3-chart.css' %}" rel="stylesheet" />
+
+		<!-- p-scroll bar css-->
+		<link href="{% static 'dash/plugins/pscrollbar/pscrollbar.css' %}" rel="stylesheet" />
+
+		<!---Font icons-->
+		<link href="{% static 'dash/css/icons.css' %}" rel="stylesheet"/>
+		
+		<!--Start of Tawk.to Script-->
+		<script type="text/javascript">
+			var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+			(function(){
+			var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+			s1.async=true;
+			s1.src='https://embed.tawk.to/64ac0a7e94cf5d49dc62a8b0/1h500i03f';
+			s1.charset='UTF-8';
+			s1.setAttribute('crossorigin','*');
+			s0.parentNode.insertBefore(s1,s0);
+			})();
+			</script>
+			<!--End of Tawk.to Script-->
+
+	</head>
+	<body class="overflow-hidden construction-image h-100">
+
+		<!--Loader-->
+		<div id="global-loader">
+			<img src="{% static 'dash/images/loader.svg' %}" class="loader-img" alt="">
+		</div>
+
+		<!--Page-->
+		<div class="page  h-100">
+			<div class="page-content z-index-10">
+				<div class="container text-center">
+					<div class="display-1 text-white mb-5">404</div>
+					<h1 class="h2 text-white mb-3">Page Not Found</h1>
+					<p class="h4 text-white font-weight-normal mb-7 leading-normal ">Oops!!!! you tried to access a page which is not available. go back to Home</p>
+					<a class="btn btn-secondary mb-5" href="{% url 'home' %}">
+						Back To Home
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Dashboard js -->
+		<script src="{% static 'dash/js/vendors/jquery-3.6.0.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/bootstrap-5/popper.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/bootstrap-5/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/jquery.sparkline.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/selectize.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/jquery.tablesorter.min.js' %}"></script>
+		<script src="{% static 'dash/js/vendors/circle-progress.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/rating/jquery.rating-stars.js' %}"></script>
+
+		<!-- Fullside-menu Js-->
+		<script src="{% static 'dash/plugins/toggle-sidebar/sidemenu.js' %}"></script>
+
+		<!-- p-scroll bar Js-->
+		<script src="{% static 'dash/plugins/pscrollbar/pscrollbar.js' %}"></script>
+
+		<!--Counters -->
+		<script src="{% static 'dash/plugins/counters/counterup.min.js' %}"></script>
+		<script src="{% static 'dash/plugins/counters/waypoints.min.js' %}"></script>
+
+		<!-- ThemeColors js-->
+		<script src="{% static 'dash/js/themeColors.js' %}"></script>
+
+		<!-- Custom Js-->
+		<script src="{% static 'dash/js/admin-custom.js' %}"></script>
+
+		<!-- Custom-switcher Js-->
+		<script src="{% static 'dash/js/custom-switcher.js' %}"></script>
+
+	</body>
+</html>
