@@ -3315,7 +3315,7 @@ def subscription_plans(request):
     context = {}
     packages = []
 
-    current_page = 'subscription-plans'
+    current_page = 'Subscriptions'
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
