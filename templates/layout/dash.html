@@ -51,6 +51,7 @@
 		<!-- SWITCHER-SKINS -->
 		<link href="{% static 'dash/switcher/css/switcher.css' %}" rel="stylesheet" />
 		<link href="{% static 'dash/switcher/demo.css' %}" rel="stylesheet" />
+		<!-- Custom style -->
 		<link href="{% static 'dash/css/custom.css' %}" rel="stylesheet" />
 		{% verbatim %}
 		<style type="text/css">
@@ -62,6 +63,12 @@
 			#notifications-container {
 				max-height: 45vh;
 				overflow-y: scroll;
+			}
+			.drop-icon-item > .badge {
+				position: absolute;
+				top: -3px;
+				right: -10px;
+				font-weight: 400;
 			}
 		</style>
 
@@ -216,16 +223,23 @@
 																<span class="block">Categories</span>
 															</a>
 														</li>
-														{% if user.profile.subscription_type != 'free' %}
+														{% if user.profile.subscription_type|title != 'Free' %}
 														<li>
 															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
 																<i class="icon icon-layers text-dark"></i>
 																<span class="block">Memories</span>
 															</a>
 														</li>
+														{% else %}
+														<li>
+															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
+																<span class="badge rounded-pill bg-success">PRO</span>
+																<i class=" text-dark text-muted icon icon-layers"></i> Memories
+															</a>
+														</li>
 														{% endif %}
 
-														{% if user.profile.subscription_type == 'teams' %}
+														{% if user.profile.subscription_type|title == 'Teams' %}
 														<li>
 															<a href="{% url 'team-manager' %}" class="drop-icon-item">
 																<i class="icon icon-people"></i>
