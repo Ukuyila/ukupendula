@@ -19,7 +19,7 @@
           <div class="items-blog-tab text-center">
             <h2 class=""> Subscription Transactions</h2>
             <h5 class="text-primary mb-3 ">Your current plan: <strong>{% if user_sub_type == 'Free' %} {{ 'Free' }} {% else %} {{ curr_user_sub_type }} {% endif %}</strong></h5>
-            <div class="items-blog-tab-heading row" style"margin-bottom: 15px;!important">
+            <div class="row" >
               <div class="col-12 text-center">
                 <button onclick="return window.location.href='{% url 'subscription-plans' %}'" class="btn btn-primary">Availabe Packages</button>
               </div>

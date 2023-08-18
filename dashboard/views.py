@@ -3339,9 +3339,12 @@ def subscription_plans(request):
     for pack in packs:
         packages.append(pack)
 
+    user_curr_tier_price = int(user_curr_tier.package_price) * 12 if 'Yearly' in user_sub_type else int(user_curr_tier.package_price)
+
     context['current_page'] = current_page
     context['month_word_count'] = request.user.profile.monthly_count
     context['user_curr_tier'] = user_curr_tier
+    context['user_curr_tier_price'] = user_curr_tier_price
     context['user_sub_type'] = user_sub_type
     context['curr_user_sub_type'] = user_sub_type.replace(' ', ' - ') if 'Yearly' in user_sub_type else f'{user_sub_type} - Monthly'
     context['sub_packages'] = packages
