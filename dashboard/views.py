@@ -5176,12 +5176,13 @@ def get_notifications(request):
 
 
 # @login_required
-def read_notification(request, uniqueId):
+def read_notification(request):
     resp_data = {}
     user_profile = request.user.profile
     if request.method == 'GET':
+        notifcs_id = request.GET['notifcs_id']
         try:
-            user_notif = UserNotification.objects.get(uniqueId=uniqueId)
+            user_notif = UserNotification.objects.get(uniqueId=notifcs_id)
             user_notif.is_read = True
             user_notif.save()
 

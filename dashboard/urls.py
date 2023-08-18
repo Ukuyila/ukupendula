@@ -10,7 +10,7 @@ urlpatterns = [
 
     path('edit-settings', views.edit_settings, name='edit-settings'),
     path('get-notifications', views.get_notifications, name='get-notifications'),
-    path('read-notification/<str:uniqueId>/', views.read_notification, name='read-notification'),
+    path('read-notification', views.read_notification, name='read-notification'),
 
     path('device-manager', views.device_manager, name='device-manager'),
     path('delete-device/<str:uniqueId>/', views.delete_device, name='delete-device'),
