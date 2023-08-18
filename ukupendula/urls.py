@@ -14,7 +14,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'dashboard.views.error_404'
-handler500 = 'dashboard.views.error_500'
-handler403 = 'dashboard.views.error_403'
-handler400 = 'dashboard.views.error_400'
+handler404 = 'dashboard.views.custom_page_not_found_view'
+handler500 = 'dashboard.views.custom_error_view'
+handler403 = 'dashboard.views.custom_permission_denied_view'
+handler400 = 'dashboard.views.custom_bad_request_view'

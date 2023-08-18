@@ -5203,11 +5203,15 @@ def read_notification(request):
     return JsonResponse(json.dumps(resp_data), content_type="application/json", safe=False)
 
 
-def error_404(request, exception):
-        data = {}
-        return render(request,'dashboard/404.html', data)
+def custom_page_not_found_view(request, exception):
+    return render(request, "errors/404.html", {})
 
-def error_500(request,  exception):
-        data = {}
-        return render(request,'dashboard/500.html', data)
+def custom_error_view(request, exception=None):
+    return render(request, "errors/500.html", {})
+
+def custom_permission_denied_view(request, exception=None):
+    return render(request, "errors/403.html", {})
+
+def custom_bad_request_view(request, exception=None):
+    return render(request, "errors/400.html", {})
 #
