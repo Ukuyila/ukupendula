@@ -566,7 +566,7 @@
 				$("#bg-spinner").fadeOut("fast");
 				$.ajax({
 					type: 'GET',
-					url: 'read-notification/' + notifcs_id + '/',
+					url: "{% url 'read-notification' notifcs_id %}",
 					data: {
 						notifcs_id: notifcs_id,
 					},
@@ -597,7 +597,7 @@
 				$("#bg-spinner").fadeOut("fast");
 				$.ajax({
 					type: 'GET',
-					url: 'get-notifications',
+					url: "{% url 'get-notifications' %}",
 					data: {
 						curr_notifcs_cnt: curr_notifcs_cnt.html(),
 						notic_type: 'general',
