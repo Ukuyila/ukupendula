@@ -227,14 +227,15 @@
 														<li>
 															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
 																<i class="icon icon-layers text-dark"></i>
-																<span class="block">Memories</span>
+																<span class="block">Memories</span> {{user.profile.subscription_type}}
 															</a>
 														</li>
 														{% else %}
 														<li>
 															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
 																<span class="badge rounded-pill bg-success">PRO</span>
-																<i class=" text-dark text-muted icon icon-layers"></i> Memories
+																<i class=" text-dark text-muted icon icon-layers"></i>
+																<span class="block">Memories</span>
 															</a>
 														</li>
 														{% endif %}
