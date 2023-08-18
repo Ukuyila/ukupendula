@@ -3502,14 +3502,16 @@ def payfast_payment(request, planId):
 @require_POST
 @csrf_exempt
 def webhook(request):
-    # verify that the request is from PayPal
-
-    # check the type of webhook event
-    # 1. subscription created
-    # 2. subscription got cancelled
-
+    # subscription renewal notification
     # process the event
-    return redirect('billing')
+    return
+
+
+@require_POST
+@csrf_exempt
+def webhook_sub_expiring(request):
+    # subscription expiring nofitfy client send bill
+    return
 
 
 @login_required

@@ -28,6 +28,7 @@ urlpatterns = [
     path('transactions', views.transactions, name='transactions'),
     path('view-transact/<str:uniqueId>/', views.view_transaction, name='view-transact'),
     path('dea248f7-dcfa-4edb-b012-3ad3ca07ead6', views.webhook, name='webhook'),
+    path('555d68f-ec62-d3a3-6131-fb2472e50f3j9', views.webhook_sub_expiring, name='notify-sub-expiring'),
     path('subscription-plan/<str:uniqueId>/<str:planId>/', views.get_single_plan, name='subscription-plan'),
 
     path('payment-plans', views.payment_plans, name='payment-plans'),
