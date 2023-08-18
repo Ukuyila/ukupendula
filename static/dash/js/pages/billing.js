@@ -27,13 +27,13 @@ paypal.Buttons({
         if (res.result == 'SUCCESS') {
           alert('You have successfully subscribed to the Starter package.')
           setTimeout(() => {
-            window.location.href='billing'
+            window.location.href='subscription-plans'
           }, 2000)
           
         } else {
           alert('Something went wrong, please try again later!')
           setTimeout(() => {
-            window.location.href='billing'
+            window.location.href='subscription-plans'
           }, 2000)
         }
       }
@@ -74,13 +74,13 @@ paypal.Buttons({
         if (res.result == 'SUCCESS') {
           alert('You have successfully subscribed to the Professional package.')
           setTimeout(() => {
-            window.location.href='billing'
+            window.location.href='subscription-plans'
           }, 2000)
           
         } else {
           alert('Something went wrong, please try again later!')
           setTimeout(() => {
-            window.location.href='billing'
+            window.location.href='subscription-plans'
           }, 2000)
         }
         

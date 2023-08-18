@@ -3294,11 +3294,11 @@ def view_transaction(request, uniqueId):
 
 
 @login_required
-def billing(request):
+def subscription_plans(request):
     context = {}
     packages = []
 
-    current_page = 'Billing'
+    current_page = 'subscription-plans'
 
     lang = settings.LANGUAGE_CODE
     flag_avatar = 'dash/images/gb_flag.jpg'
@@ -3329,7 +3329,7 @@ def billing(request):
     context['curr_user_sub_type'] = user_sub_type.replace(' ', ' - ') if 'Yearly' in user_sub_type else f'{user_sub_type} - Monthly'
     context['sub_packages'] = packages
 
-    return render(request, 'dashboard/billing.html', context)
+    return render(request, 'dashboard/subscription-plans.html', context)
 
 
 def get_single_plan(request, uniqueId, planId):
@@ -3516,7 +3516,7 @@ def webhook_sub_expiring(request):
 
 @login_required
 def payment_cancel(request):
-    return redirect('billing')
+    return redirect('subscription-plans')
 
 
 def payment_success(request, uniqueId, planId, orderId):
@@ -3721,7 +3721,7 @@ def team_manager(request):
 
     if not 'teams' in user_profile.subscription_type:
         messages.error(request, "You subscription packages does not have access to this feature!")
-        return redirect('billing')
+        return redirect('subscription-plans')
 
     if user_profile.user_team is not None:
 
@@ -4941,7 +4941,7 @@ def user_roles(request):
 
     if not 'teams' in user_profile.subscription_type:
         messages.error(request, "You subscription packages does not have access to this feature!")
-        return redirect('billing')
+        return redirect('subscription-plans')
 
     if user_profile.user_team is not None:
 
@@ -4966,7 +4966,7 @@ def user_roles(request):
         context['flag_avatar'] = flag_avatar
 
     else:
-        return redirect('billing')
+        return redirect('subscription-plans')
 
     if request.method == 'POST':
         permission = PermissionLevel.objects.get(uniqueId=request.POST['permission'])
