@@ -3227,6 +3227,7 @@ def delete_page_copy(request, uniqueId):
 def transactions(request):
     context = {}
     transactions = []
+    packages = []
     user_profile = request.user.profile
 
     current_page = 'Transactions'
@@ -3247,13 +3248,29 @@ def transactions(request):
     # # get user current tier
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
 
-    # get packages
+    # get transactions
     subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('-date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
 
+    user_sub_type = request.user.profile.subscription_type.replace('-', ' ').title()
+
+    # get user current tier
+    user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
+
+    # get packages
+    packs = SubscriptionPackage.objects.filter(is_active=True).order_by('date_created')
+
+    for pack in packs:
+        packages.append(pack)
+
     context['current_page'] = current_page
+    context['month_word_count'] = request.user.profile.monthly_count
+    context['user_curr_tier'] = user_curr_tier
+    context['user_sub_type'] = user_sub_type
+    context['curr_user_sub_type'] = user_sub_type.replace(' ', ' - ') if 'Yearly' in user_sub_type else f'{user_sub_type} - Monthly'
+    context['sub_packages'] = packages
     context['transactions'] = transactions
     return render(request, 'dashboard/transactions.html', context)
 

@@ -296,12 +296,12 @@
 														<i class="dropdown-icon icon icon-user"></i> My Profile
 													</a>
 													<a class="dropdown-item" href="{% url 'transactions' %}">
-														<i class="dropdown-icon  icon icon-list"></i> Transactions
+														<i class="dropdown-icon  icon icon-credit-card"></i> Transactions
 													</a>
 
-													<a class="dropdown-item" href="{% url 'subscription-plans' %}">
+													{% comment %} <a class="dropdown-item" href="{% url 'subscription-plans' %}">
 														<i class="dropdown-icon  icon icon-credit-card"></i> Subscriptions
-													</a>
+													</a> {% endcomment %}
 													<a class="dropdown-item" href="{% url 'logout' %}">
 														<i class="dropdown-icon icon icon-power"></i> Log out
 													</a>
