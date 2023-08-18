@@ -123,7 +123,7 @@
           </form>
         </div>
       </div>
-      {% comment %} {% if user.profile.subscribed %} {% endcomment %}
+      {% if user.profile.subscribed %}
       <div class="card">
         <h5 class="card-header">Cancel Subscription</h5>
         <div class="card-body">
@@ -149,7 +149,7 @@
           </form>
         </div>
       </div>
-      {% comment %} {% endif %} {% endcomment %}
+      {% endif %}
     </div>
 
   </div>
