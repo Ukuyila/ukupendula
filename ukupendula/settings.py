@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'django_user_agents',
     'django_gravatar',
+    'mathfilters',
 
     # Local APPS
     'landing',
