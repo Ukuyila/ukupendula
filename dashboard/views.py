@@ -3644,7 +3644,7 @@ def subscription_email(request, uniqueId, planId, orderId):
         mail_subject = "Hooray, your Writesome Premium is activated!"
 
         resp_data = {
-            'api_key': settings.MAIN_API_KEY,
+            'api_key': f"Writesome-subscr-email apikey {settings.MAIN_API_KEY}",
             'response': 'SUCCESS',
             'user': f'{user_profile.user.first_name} {user_profile.user.last_name}',
             'user_mail':user_profile.user.email,
@@ -5153,7 +5153,7 @@ def get_role_details(request):
         user_role = UserRole.objects.get(uniqueId=role_id)
 
         resp_data = {
-            'api_key': settings.MAIN_API_KEY,
+            'api_key': f"Writesome-get-roles apikey {settings.MAIN_API_KEY}",
             'result': 'success',
             'message': 'Role found successfully',
             'role_name': user_role.role_name,

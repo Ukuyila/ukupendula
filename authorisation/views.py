@@ -107,7 +107,7 @@ def emailVerificationApi(request, user, password1, user_team):
     headers = {
     'accept': "application/json",
     'content-type': "application/json",
-    'Authorization': f"WS-welcome-email apikey {settings.MAIN_API_KEY}",
+    'Authorization': f"Writesome-welcome-email apikey {settings.MAIN_API_KEY}",
     }
 
     # try:
