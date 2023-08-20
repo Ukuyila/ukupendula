@@ -90,7 +90,7 @@ def login(request):
 
 def emailVerificationApi(request, user, password1, user_team):
 
-    url = "https://api.writesome.ai/mailer-api/welcome-email.php"
+    url = "{settings.BASE_API_URL}/mailer/welcome-email.php"
 
     payload = {
         'user': user.username,
@@ -107,7 +107,7 @@ def emailVerificationApi(request, user, password1, user_team):
     headers = {
     'accept': "application/json",
     'content-type': "application/json",
-    'authorization': "Zoho-enczapikey wSsVR60nqxHzC6Yozj2udLo8nglQU1vwFRl+2geguiP5T/zK9sc/k0HIVw/zGqAcGDQ6RjJGpO4oyx4F1jpb3Ikqy1lVASiF9mqRe1U4J3x17qnvhDzIXGlckxSKLIwLww1tmGVpE89u",
+    'Authorization': f"WS-welcome-email apikey {settings.MAIN_API_KEY}",
     }
 
     # try:

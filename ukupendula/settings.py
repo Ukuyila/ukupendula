@@ -185,6 +185,7 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 
 BASE_API_URL = 'https://api.writesome.ai'
+MAIN_API_KEY = os.getenv("MAIN_API_KEY")
 
 OPENAI_API_KEYS = os.getenv("OPENAI_API_KEY")
 
