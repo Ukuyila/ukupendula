@@ -20,12 +20,13 @@ $(function blink() {
 //   $("#bg-spinner").fadeOut("slow");
 // })
 
-/* Ajax calls backend spinner */
 jQuery(function ($) {
+/* Ajax calls backend spinner */
   // $(document).ajaxSend(function () {
   //   $('#bg-spinner').fadeIn(500);
   // });
 
+/* button click backend spinner */
   $('.btn-generate').click(function() {
     $.ajax({
       type: 'GET',
