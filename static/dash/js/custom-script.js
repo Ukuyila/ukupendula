@@ -22,9 +22,9 @@ $(function blink() {
 
 /* Ajax calls backend spinner */
 jQuery(function ($) {
-  $(document).ajaxSend(function () {
-    $('#bg-spinner').fadeIn(500);
-  });
+  // $(document).ajaxSend(function () {
+  //   $('#bg-spinner').fadeIn(500);
+  // });
 
   $('.btn-generate').click(function() {
     $.ajax({
