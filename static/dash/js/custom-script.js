@@ -26,7 +26,7 @@ jQuery(function ($) {
   //   $('#bg-spinner').fadeIn(500);
   // });
 
-/* button click backend spinner */
+  /* button click backend spinner */
   $('.btn-generate').click(function() {
     $.ajax({
       type: 'GET',
