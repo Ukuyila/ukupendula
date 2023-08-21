@@ -29,7 +29,8 @@
                                         <div class="card-body">
                                             <form class="mb-3" action="#" method="post">
                                                 {% csrf_token %}
-                                                <div class="form-group">
+                                                
+                                                <div {% if user.profile.subscription_type|title == 'Free' %} hidden style="display:none;" {% endif %} class="form-group">
                                                     <label for="category" class=" ">Category</label>
                                                     <div class="row gutters-xs">
 														<div class="col">

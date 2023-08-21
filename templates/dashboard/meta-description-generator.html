@@ -39,24 +39,24 @@
                                                     {% comment %} <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" value="{{article_title|safe}}" maxlength="200" required/> {% endcomment %}
                                                     <textarea type="text" rows="6" class="form-control" id="article_title" name="article_title" placeholder="Input your title here" maxlength="200" required>{{article_title|safe}}</textarea>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div {% if user.profile.subscription_type|title == 'Free' %} hidden style="display:none;" {% endif %}  class="mb-3">
                                                     <label for="category" class=" ">Category</label>
                                                     <div class="row gutters-xs">
 														<div class="col">
                                                             <select type="text" class="form-control select2" id="category" name="category">
-																														{% for client in client_list %}
-                                                                    <optgroup label="{{client.client_name}}">
-                                                                    {% for category in cate_list %}
-                                                                        {% if category.client == client %}
-                                                                        <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                                        {% if category.uniqueId == this_blog_cate %}
-                                                                        selected
-                                                                        {% endif %}
-                                                                        >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
-                                                                        {% endif %}
-                                                                    {% endfor %}
-                                                                    </optgroup>
+                                                            {% for client in client_list %}
+                                                                <optgroup label="{{client.client_name}}">
+                                                                {% for category in cate_list %}
+                                                                    {% if category.client == client %}
+                                                                    <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
+                                                                    {% if category.uniqueId == this_blog_cate %}
+                                                                    selected
+                                                                    {% endif %}
+                                                                    >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
+                                                                    {% endif %}
                                                                 {% endfor %}
+                                                                </optgroup>
+                                                            {% endfor %}
                                                             </select>
                                                         </div>
                                                         <span class="col-auto">

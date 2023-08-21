@@ -36,10 +36,11 @@
                                           <div class="alert alert-success" id="success-alert" hidden role="alert"></div>
                                             <form class="mb-3" action="#" id="content-impr-form" method="POST">
                                                 {% csrf_token %}
-                                                <div class="mb-3">
+                                                
+                                                <div {% if user.profile.subscription_type|title == 'Free' %} hidden style="display:none;" {% endif %} class="mb-3">
                                                     <label for="category" class=" ">Category</label>
                                                     <div class="row gutters-xs">
-																											<div class="col">
+														<div class="col">
                                                             <select type="text" class="form-control prompt-input select2" id="category" name="category">
                                                                 {% for client in client_list %}
                                                                 <optgroup label="{{client.client_name}}">
