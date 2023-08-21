@@ -31,11 +31,7 @@
             {% if user.profile.subscription_type|title != 'Free' %}
             <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a>
             {% else %}
-            {% comment %} <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a> {% endcomment %}
-            <a href="javascript:void(0);" disabled class="text-muted btn btn-sm btn-primary">
-              <span class="btn btn-xs rounded-pill bg-success pro-noti">PRO</span>
-              <span class="block">View</span>
-            </a>
+            <a disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-primary" href="#">View</a>
             {% endif %}
           </div>
         </div>
@@ -55,7 +51,13 @@
       <div class="card overflow-hidden">
         <div class="card-header">
           <h3 class="card-title">Page Copy Words</h3>
-          <div class="card-options"> <a class="btn btn-sm btn-dark-black" href="{% url 'page-copy-memory' %}">View</a> </div>
+          <div class="card-options">
+            {% if user.profile.subscription_type|title != 'Free' %}
+            <a class="btn btn-sm btn-dark-black" href="{% url 'page-copy-memory' %}">View</a>
+            {% else %}
+            <a disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-dark-black" href="#">View</a>
+            {% endif %}
+          </div>
         </div>
         <div class="card-body ">
           <h3 class="text-dark mt-0 font-weight-semibold">{{landing_copy_word_cnt}}</h3>
