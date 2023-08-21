@@ -234,8 +234,8 @@
         <div class="card-body">
           <div class="dash5">
             <div>
-          {% for blog in empty_blogs|slice:":5"  %}
           {% if user.profile.subscription_type|title != 'Free' %}
+          {% for blog in empty_blogs|slice:":5"  %}
           <div class="list d-flex align-items-center  mb-4">
             <div class="w-4 h-4 bg-primary me-4 "></div>
             <div class="wrapper w-90 ms-3">
