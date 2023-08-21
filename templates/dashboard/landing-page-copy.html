@@ -78,7 +78,7 @@
                                                 
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="company_purpose" class=" ">Company Purpose</label><span class="purpose_counter text-muted">0/200</span></div>
-                                                    <textarea type="text" rows="5" class="form-control prompt-command" id="company_purpose" name="company_purpose" placeholder="Company purpose" maxlength="200" required>{{copy_content.company_purpose|safe}}</textarea>
+                                                    <textarea type="text" rows="5" class="form-control prompt-command" id="company_purpose" name="company_purpose" placeholder="Company purpose, not less than 11 characters"minlength="11" maxlength="200" required>{{copy_content.company_purpose|safe}}</textarea>
                                                 </div>
                                                 
                                                 <div class="mb-3">
