@@ -967,11 +967,11 @@ def view_gen_blog(request, slug):
                             del request.session['uniqueId']
                             del request.session['blog-sections']
                             del request.session['selectd_sections']
-                            del request.session['blog_idea']
-                            del request.session['keywords']
-                            del request.session['audience']
 
                             try:
+                                del request.session['keywords']
+                                del request.session['audience']
+                                del request.session['blog_idea']
                                 del request.session['saved-sect-head']
                             except:
                                 request.session.modified = True

@@ -59,7 +59,7 @@ def generate_blog_section_headings(profile, topic, audience, keywords):
 
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt="Generate not more than 6 unnumbered Blog Sections in {} for the following blog topic, target audience, and keywords:\nTopic: {}\nAudience: {}\nKeywords: {}\n*".format(lang, topic, audience, keywords),
+        prompt="Generate not more than 7 unnumbered Blog Sections in {} for the following blog topic, target audience, and keywords:\nTopic: {}\nAudience: {}\nKeywords: {}\n*".format(lang, topic, audience, keywords),
         temperature=0.7,
         max_tokens=250,
         top_p=1,
