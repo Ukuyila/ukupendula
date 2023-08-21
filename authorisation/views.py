@@ -89,8 +89,9 @@ def login(request):
 
 
 def emailVerificationApi(request, user, password1, user_team):
+    api_url = settings.BASE_API_URL
 
-    url = "{settings.BASE_API_URL}/mailer/welcome-email.php"
+    url = "https://{api_url}/mailer/welcome-email.php"
 
     payload = {
         'user': user.username,
