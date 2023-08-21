@@ -9,7 +9,13 @@
       <div class="card overflow-hidden">
         <div class="card-header">
           <h3 class="card-title">Blog Words</h3>
-          <div class="card-options"> <a class="btn btn-sm btn-danger" href="{% url 'blog-memory' 'complete' %}">View</a> </div>
+          <div class="card-options">
+            {% if user.profile.subscription_type|title != 'Free' %}
+            <a class="btn btn-sm btn-danger" href="{% url 'blog-memory' 'complete' %}">View</a>
+            {% else %}
+            <a type="button" disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-danger" href="#">View</a>
+            {% endif %}
+          </div>
         </div>
         <div class="card-body ">
           <h3 class="mt-0 font-weight-semibold">{{blog_word_cnt}}</h3>
@@ -31,7 +37,7 @@
             {% if user.profile.subscription_type|title != 'Free' %}
             <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a>
             {% else %}
-            <a disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-primary" href="#">View</a>
+            <a type="button" disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-primary" href="#">View</a>
             {% endif %}
           </div>
         </div>
@@ -55,7 +61,7 @@
             {% if user.profile.subscription_type|title != 'Free' %}
             <a class="btn btn-sm btn-dark-black" href="{% url 'page-copy-memory' %}">View</a>
             {% else %}
-            <a disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-dark-black" href="#">View</a>
+            <a type="button" disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-dark-black" href="#">View</a>
             {% endif %}
           </div>
         </div>
@@ -74,7 +80,13 @@
       <div class="card overflow-hidden">
         <div class="card-header">
           <h3 class="card-title">Meta Words</h3>
-          <div class="card-options"> <a class="btn btn-sm btn-info" href="{% url 'meta-descr-memory' %}">View</a> </div>
+          <div class="card-options">
+            {% if user.profile.subscription_type|title != 'Free' %}
+            <a class="btn btn-sm btn-info" href="{% url 'meta-descr-memory' %}">View</a>
+            {% else %}
+            <a type="button" disabled data-bs-toggle="tooltip" title="" data-bs-original-title="PRO Feature"class="btn btn-sm btn-info" href="#">View</a>
+            {% endif %}
+          </div>
         </div>
         <div class="card-body ">
           <h3 class="text-dark mt-0 font-weight-semibold">{{meta_word_cnt}}</h3>
@@ -170,7 +182,7 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Completed Blogs</h3>
+          <h3 class="card-title">Completed Blogs <span class="badge bg-success">PRO</span></h3>
         </div>
         <div class="card-body">
           {% if complete_blogs|length > 0 %}
@@ -183,11 +195,23 @@
                   
                 </tr>
               </thead>
-              <tbody class="table-border-bottom-0">
+              <tbody
+              {% if user.profile.subscription_type|title != 'Free' %}
+              class="table-border-bottom-0"
+              {% else %}
+              class="table-border-bottom-0 text-muted"
+              {% endif %}
+              >
               {% for blog in complete_blogs|slice:":5" %}
                 <tr>
                   <td >
-                    <h6 class="mb-0"><a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a></h6>
+                    <h6 class="mb-0">
+                      {% if user.profile.subscription_type|title != 'Free' %}
+                      <a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a>
+                      {% else %}
+                      <a class="text-muted" data-bs-container="body" data-bs-toggle="popover" data-bs-popover-color="popsecondary" data-bs-placement="right" title="Pro Feature" data-bs-content="Please subscribe to access the memories." href="#">{{blog.title}}</a>
+                      {% endif %}
+                    </h6>
                     <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
                   </td>
                   <td><small class="text-primary me-1">{{blog.keywords}}</small></td>
@@ -205,12 +229,13 @@
       {% if empty_blogs|length > 0 %}
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Saved For Later</h3>
+          <h3 class="card-title">Saved For Later <span class="badge bg-success">PRO</span></h3>
         </div>
         <div class="card-body">
           <div class="dash5">
             <div>
-          {% for blog in empty_blogs|slice:":5" %}
+          {% for blog in empty_blogs|slice:":5"  %}
+          {% if user.profile.subscription_type|title != 'Free' %}
           <div class="list d-flex align-items-center  mb-4">
             <div class="w-4 h-4 bg-primary me-4 "></div>
             <div class="wrapper w-90 ms-3">
@@ -230,6 +255,7 @@
             </div>
           </div>
           {% endfor %}
+          {% endif %}
             </div>
           </div>
         </div>
