@@ -27,7 +27,17 @@
       <div class="card overflow-hidden">
         <div class="card-header">
           <h3 class="card-title">Summary Words</h3>
-          <div class="card-options"> <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a> </div>
+          <div class="card-options">
+            {% if user.profile.subscription_type|title != 'Free' %}
+            <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a>
+            {% else %}
+            {% comment %} <a class="btn btn-sm btn-primary" href="{% url 'summarizer-memory' %}">View</a> {% endcomment %}
+            <a href="javascript:void(0);" disabled class="text-muted btn btn-sm btn-primary">
+              <span class="btn btn-xs rounded-pill bg-success pro-noti">PRO</span>
+              <span class="block">View</span>
+            </a>
+            {% endif %}
+          </div>
         </div>
         <div class="card-body ">
 
