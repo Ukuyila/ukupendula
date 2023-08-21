@@ -557,7 +557,6 @@ def package_memory_limit(profile):
         user_package = SubscriptionPackage.objects.get(uniqueId=profile_package)
         # divide by the number of content generators
         max_memory = round(int(user_package.package_max_memory)/num_of_gen)
-    
     return max_memory
 
 

@@ -3736,6 +3736,9 @@ def team_manager(request):
     if lang == 'en-us':
         flag_avatar = 'dash/images/us_flag.jpg'
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
     context['user_settings'] = user_settings
@@ -3845,6 +3848,10 @@ def activateEmail(request, user, user_team, password1=''):
 
 @login_required
 def edit_team_member(request):
+
+    if not request.user.profile.subscribed:
+        return redirect('home')
+    
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
 
@@ -3880,6 +3887,10 @@ def edit_team_member(request):
 def add_team_member(request):
     u_profile = request.user.profile
 
+
+    if not u_profile.subscribed:
+        return redirect('home')
+    
     if request.method == 'POST':
 
         first_name = request.POST['first_name']
@@ -4105,6 +4116,9 @@ def memory_blogs(request, status):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4200,6 +4214,9 @@ def memory_social_post(request, socType='blog'):
 
     team_categories = ClientCategory.objects.filter(team=user_team_id)
 
+    if not user_profile.subscribed:
+        return redirect('home')
+
     for category in team_categories:
         cate_list.append(category)
 
@@ -4268,6 +4285,9 @@ def memory_paragraph(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4322,6 +4342,9 @@ def memory_sentence(request):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    if not user_profile.subscribed:
+        return redirect('home')
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4379,6 +4402,9 @@ def memory_title(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4435,6 +4461,9 @@ def memory_summarizer(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4493,6 +4522,9 @@ def memory_page_copy(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4546,6 +4578,9 @@ def memory_meta_descr(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not user_profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4597,6 +4632,9 @@ def memory_content_improver(request):
 
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
+
+    if not user_profile.subscribed:
+        return redirect('home')
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
