@@ -118,8 +118,8 @@
                                                     
                                                     <div class="alert alert-primary" role="alert">
                                                         <span id="{{sentence_uniqueId}}-{{forloop.counter}}">{{sentence}}</span>
-                                                        <i class="text-primary bx bx-copy-alt " onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" ></i>
-                                                        {% comment %} <input type="text" placeholder="place copied" /> {% endcomment %}
+                                                        <i class="fa fa-clone pull-right " onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" ></i>
+                                                        
                                                     </div>
                                                     
                                                     {% endfor %}
