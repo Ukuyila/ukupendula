@@ -24,7 +24,7 @@ urlpatterns = [
     path('delete-invite/<str:userUid>/<str:uniqueId>/', views.delete_invite, name='delete-invite'),
 
     # billing
-    path('subscription-plans', views.subscription_plans, name='billing'),
+    path('billing', views.subscription_plans, name='billing'),
     path('subscription-plans', views.subscription_plans, name='subscription-plans'),
     path('transactions', views.transactions, name='transactions'),
     path('view-transact/<str:uniqueId>/', views.view_transaction, name='view-transact'),
