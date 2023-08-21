@@ -51,7 +51,7 @@ $(document).ready(function(){
 
     $('#btn-generate').prop('disabled', true)
 
-    if ( $('#company_name').val().length > 10 && $('#company_purpose').val().length > 10 ) {
+    if ( $('#company_name').val().length > 1 && $('#company_purpose').val().length > 10 ) {
       $('#btn-generate').prop('disabled', false)
     }
 

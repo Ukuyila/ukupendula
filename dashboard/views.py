@@ -813,7 +813,7 @@ def create_blog_from_topic(request, uniqueId):
             time.sleep(5)
             if api_call_process(api_call_code, add_to_list):
                 blog_section_heads = generate_blog_section_headings(user_profile, blog.title, blog.audience,
-                                                                    blog.keywords)
+                blog.keywords)
 
                 add_to_list.is_done = True
                 add_to_list.save()
