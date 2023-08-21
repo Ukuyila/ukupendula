@@ -124,9 +124,9 @@
                                                     
                                                     {% for title_opt in title_opts %}
                                                     
-                                                    <div class="alert alert-primary" role="alert">
+                                                    <div class="alert alert-primary row" role="alert">
                                                         <span id="{{title_uniqueId}}-{{forloop.counter}}">{{title_opt}}</span>
-                                                        <i class="fa fa-clone " onclick="copyToClipboard('#{{title_uniqueId}}-{{forloop.counter}}')" ></i>
+                                                        <i class="fa fa-clone pull-right" onclick="copyToClipboard('#{{title_uniqueId}}-{{forloop.counter}}')" ></i>
                                                     </div>
                                                     
                                                     {% endfor %}
