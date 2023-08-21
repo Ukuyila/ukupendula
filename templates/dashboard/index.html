@@ -209,7 +209,7 @@
                       {% if user.profile.subscription_type|title != 'Free' %}
                       <a href="{% url 'view-generated-blog' blog.slug %}">{{blog.title}}</a>
                       {% else %}
-                      <a class="text-muted" data-bs-container="body" data-bs-toggle="popover" data-bs-popover-color="popsecondary" data-bs-placement="right" title="Pro Feature" data-bs-content="Please subscribe to access the memories." href="#">{{blog.title}}</a>
+                      <a class="text-muted" data-bs-container="body" data-bs-toggle="popover" data-bs-popover-color="popsecondary" data-bs-placement="right" title="Pro Feature" data-bs-content="Please subscribe to access the memories." href="javascript:void(0);">{{blog.title}}</a>
                       {% endif %}
                     </h6>
                     <small class="text-muted d-block mb-1">{{blog.blog_idea}}</small>
