@@ -31,9 +31,9 @@ load_dotenv(dotenv_file)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-DEBUG = os.getenv("DEBUG", "False")
+# DEBUG = os.getenv("DEBUG", "False")
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
@@ -184,7 +184,7 @@ BASE_CURR_SIGN = 'R'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 
-BASE_API_URL = 'api.writesome.ai'
+BASE_API_URL = 'https://api.writesome.ai'
 MAIN_API_KEY = os.getenv("MAIN_API_KEY")
 
 OPENAI_API_KEYS = os.getenv("OPENAI_API_KEY")
