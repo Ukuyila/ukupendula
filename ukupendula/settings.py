@@ -225,7 +225,7 @@ else:
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
     STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
-    STATIC_ROOT = 'static/'
+    STATIC_ROOT = 'staticfiles/'
 
     MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'uploads')
     MEDIA_ROOT = '/uploads/'
