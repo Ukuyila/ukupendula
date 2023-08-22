@@ -210,7 +210,7 @@ if USE_SPACES:
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_LOCATION = 'writesome/static'
+    AWS_LOCATION = 'writesome/writesome/static'
     AWS_DEFAULT_ACL = 'public-read'
 
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
