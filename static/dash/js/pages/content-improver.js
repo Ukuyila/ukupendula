@@ -115,7 +115,7 @@ $(document).ready(function(){
 
         }
         let url = $("#contImprvrUrl").attr("data-url")
-        // console.log(form_data)contImprvrUrl
+        console.log(url)
         // debugger;
         // ajax
         $.ajax({
@@ -133,7 +133,7 @@ $(document).ready(function(){
           success: function (data) {
             $("#bg-spinner").fadeOut("slow")
             generate_button.html('Generate content')
-
+            console.log(data)
             if ( data['result'] === 'success' ) {
               success_alert.html(data['message'])
               success_alert.prop('hidden', false)

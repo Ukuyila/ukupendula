@@ -93,10 +93,10 @@
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="content_body_old" class=" ">Your Text</label><span class="ocb_counter text-muted">0/14000</span></div>
                                                   <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="14000" required>{{content_body_old|safe}}</textarea>
+                                                    <input type="hidden" id="contImprvrUrl" data-url="{% url 'improve-content' %}" />
                                               </div>
                                               
                                                 <div class="mb-3">
-                                                    <input hidden type="hidden" id="contImprvrUrl" data-url="{% url 'improve-content' %}" />
                                                     <button class="btn btn-primary d-grid w-100 btn-improver" id="btn-improver" type="submit">Generate content</button>
                                                 </div>
 
