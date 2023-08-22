@@ -69,6 +69,7 @@ $(document).ready(function(){
 
 // submited
   $("#content-impr-form").on('submit', function (event) {
+    $('#bg-spinner').fadeIn(500);
     
     if (event.isDefaultPrevented()) {
       
@@ -142,8 +143,8 @@ $(document).ready(function(){
                 
                 generated_text.html(data['contentBody'])
 
-                $('.download-btn-container').html(`<button class="btn btn-primary"
-                  onclick="return window.location.href='{% url 'download-content' 'content_improver' `+data['contentId']+` %}'">Download</button>`)
+                $('.download-btn-container').html(`<a type="button" class="btn btn-primary"
+                  href="{% url 'download-content' 'content_improver' `+data['contentId']+` %}">Download</a>`)
               }, 1500)
             }
             else {
