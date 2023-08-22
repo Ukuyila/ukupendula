@@ -1924,7 +1924,137 @@ def content_improver(request, uniqueId=''):
         content = ContentImprover.objects.get(uniqueId=uniqueId)
 
         context['content'] = content
+        context['content_title'] = content.content_title
+        context['content_keywords'] = content.content_keywords
+        context['tone_of_voice'] = content.tone_of_voice
+        context['category'] = content.category
+        context['content_body_old'] = content.content_body_old
         context['content_body_new'] = content.content_body_new.replace('<br>', '\n')
+    else:
+        pass
+
+    return render(request, 'dashboard/content-improver.html', context)
+
+
+@login_required
+def blog_content_improver(request, uniqueId=''):
+    context = {}
+    user_profile = request.user.profile
+    tone_of_voices = []
+    current_page = 'Content Improver'
+    context['current_page'] = current_page
+    context['allowance'] = check_count_allowance(user_profile)
+
+    lang = settings.LANGUAGE_CODE
+    flag_avatar = 'dash/images/gb_flag.jpg'
+
+    lang = check_user_lang(user_profile, lang)
+
+    if lang == 'en-us':
+        flag_avatar = 'dash/images/us_flag.jpg'
+
+    context['lang'] = lang
+    context['flag_avatar'] = flag_avatar
+
+    remote_addr = get_client_ip(request)
+    max_devices_allow = max_devices(user_profile)
+    # REGISTER DEVICE
+    device_reg = device_registration(request, max_devices_allow)
+
+    if device_reg == 'error: max device':
+        # redirect user out and give solution to remove device
+        messages.error(request,
+                       "You have maximum devices logged in on your profile, please delete one to be able to use current device or upgrade!")
+        return redirect('device-manager')
+        # print(check_device_reg)
+        # pass
+    else:
+        profile = Profile.objects.get(uniqueId=user_profile.uniqueId)
+        profile.current_device = device_reg
+        profile.current_ip = remote_addr
+        profile.save()
+
+    cate_list = []
+    client_list = []
+
+    team_clients = TeamClient.objects.filter(is_active=True)
+    for client in team_clients:
+        if client.team == user_profile.user_team:
+            client_list.append(client)
+
+    team_categories = ClientCategory.objects.filter(team=user_profile.user_team)
+    for category in team_categories:
+        cate_list.append(category)
+
+    context['cate_list'] = cate_list
+    context['client_list'] = client_list
+
+    tones = ToneOfVoice.objects.filter(tone_status=True)
+    for tone in tones:
+        tone_of_voices.append(tone)
+
+    context['tone_of_voices'] = tone_of_voices
+
+    if len(uniqueId) > 0:
+        # search database blog
+        try:
+            blog = Blog.objects.get(uniqueId=uniqueId)
+        except:
+            messages.error(request, "Something went wrong with your request, please try again!")
+            return redirect('blog-topic')
+
+        blog_sections = []
+        # got_b_body = False
+        s_blog_body = ''
+        s_blog_title = ''
+
+        try:
+            saved_blog_sect = SavedBlogEdit.objects.get(blog=blog)
+            if saved_blog_sect is not None:
+                #     for blog_sect in saved_blog_sects:
+                blog_sections.append(saved_blog_sect.body)
+                blog_title = saved_blog_sect.title
+
+            else:
+                saved_blog = SavedBlogEdit.objects.create(
+                    title=blog.title,
+                    body=blog_body_sect,
+                    blog=blog,
+                )
+                saved_blog.save()
+                blog_sections.append(saved_blog.body)
+
+                blog_title = saved_blog.title
+
+        except:
+            gen_sections = BlogSection.objects.filter(blog=blog)
+            for blog_sect in gen_sections:
+                this_blog_body = blog_sect.body
+                blog_sections.append(this_blog_body)
+
+            blog_body_sect = "\n".join(blog_sections).replace('<br>', '\n')
+
+            saved_blog = SavedBlogEdit.objects.create(
+                title=blog.title,
+                body=blog_body_sect,
+                blog=blog,
+            )
+            saved_blog.save()
+            blog_title = saved_blog.title
+            blog_sections.append(saved_blog.body)
+
+        s_blog_body = "\n".join(blog_sections).replace('\n', '<br>')
+        # s_blog_body = "\n".join(blog_sections)
+
+        # s_blog_title = blog_title
+
+        context['content_title'] = blog_title
+        context['content_keywords'] = blog.keywords
+        context['tone_of_voice'] = blog.tone_of_voice
+        context['category'] = blog.category
+
+        context['client'] = blog.client
+        context['content_body_old'] = s_blog_body
     else:
         pass
 

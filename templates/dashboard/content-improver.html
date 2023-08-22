@@ -47,7 +47,7 @@
                                                                 {% for category in cate_list %}
                                                                 {% if category.client == client %}
                                                                     <option value="{{category.uniqueId}}" id="{{category.uniqueId}}"
-                                                                    {% if category.uniqueId == content.category %}
+                                                                    {% if category.uniqueId == category %}
                                                                     selected
                                                                     {% endif %}
                                                                     >{{client.client_name}}{{' - '}}{{category.category_name}}</option>
@@ -64,11 +64,11 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="content_title" class=" ">Title</label><span class="title_counter text-muted">0/300</span></div>
-                                                    <input type="text" rows="4" class="form-control prompt-input" id="content_title" name="content_title" placeholder="Input your title here" maxlength="300" required value="{{content.content_title|safe}}" />
+                                                    <input type="text" rows="4" class="form-control prompt-input" id="content_title" name="content_title" placeholder="Input your title here" maxlength="300" required value="{{content_title|safe}}" />
                                                 </div>
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="keywords" class=" ">Keywords</label> <span class="keywords_counter text-muted">0/250</span></div>
-                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" maxlength="250" />
+                                                  <input type="text" class="form-control" id="keywords" name="keywords" placeholder="finance, money, investments, trust funds" value="{{content_keywords|safe}}" maxlength="250" />
                                               </div>
                                               <div class="mb-3">
                                                 <div class="d-flex align-items-center justify-content-between"><label for="max_words" class=" ">Max Words</label> <small class="text-muted">Min: 300 - Max: 2000 Words</small></div>
@@ -81,7 +81,7 @@
 
                                                     {% for tone in tone_of_voices %}
                                                       <option
-                                                      {% if content.tone_of_voice == tone.tone_of_voice %}
+                                                      {% if tone_of_voice == tone.tone_of_voice %}
                                                       selected 
                                                       {% endif %}
                                                       value="{{tone.tone_of_voice}}" id="{{tone.uniqueId}}" >{{tone.tone_of_voice}}</option>
@@ -92,7 +92,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                   <div class="d-flex align-items-center justify-content-between"><label for="content_body_old" class=" ">Your Text</label><span class="ocb_counter text-muted">0/14000</span></div>
-                                                  <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="14000" required>{{content.content_body_old|safe}}</textarea>
+                                                  <textarea type="text" rows="6" class="form-control prompt-input" id="content_body_old" name="content_body_old" placeholder="Input your text here" maxlength="14000" required>{{content_body_old|safe}}</textarea>
                                               </div>
                                                 
                                                 <div class="mb-3">

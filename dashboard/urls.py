@@ -110,7 +110,7 @@ urlpatterns = [
     path('content-improver/<str:uniqueId>/', views.content_improver, name='content-improver-response'),
     path('delete-impr-content/<str:uniqueId>/', views.delete_impr_content, name='delete-impr-content'),
     path('improve-content', views.improve_content, name='improve-content'),
-    path('content-improver/<str:uniqueId>/', views.content_improver, name='blog-content-improver'),
+    path('blog-content-improver/<str:uniqueId>/', views.blog_content_improver, name='blog-content-improver'),
 
     # content landing page copy urls
     path('landing-page-copy', views.landing_page_copy, name='landing-page-copy'),
