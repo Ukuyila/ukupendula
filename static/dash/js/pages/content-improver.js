@@ -12,10 +12,10 @@ $(document).ready(function(){
   $('#content_title').keyup(function() {
     var curr_textlen = $(this).val().length;
 
-    $('#btn-generate').prop('disabled', true)
+    $('#btn-improver').prop('disabled', true)
 
     if ( curr_textlen > 10 ) {
-      $('#btn-generate').prop('disabled', false)
+      $('#btn-improver').prop('disabled', false)
     }
 
     var textlen = maxLength - curr_textlen;
@@ -26,10 +26,10 @@ $(document).ready(function(){
   $('#content_body_old').keyup(function() {
     var curr_textlen = $(this).val().length;
 
-    $('#btn-generate').prop('disabled', true)
+    $('#btn-improver').prop('disabled', true)
 
     if ( curr_textlen > 10 ) {
-      $('#btn-generate').prop('disabled', false)
+      $('#btn-improver').prop('disabled', false)
     }
 
     var textlen = maxOcpLength - curr_textlen;
@@ -48,11 +48,11 @@ $(document).ready(function(){
 
   $('.prompt-input').keyup( function () {
 
-    $('#btn-generate').prop('disabled', true)
+    $('#btn-improver').prop('disabled', true)
 
     if ( $('#content_title').val().length > 2 && $('#content_body_old').val().length > 100 ) {
       
-      $('#btn-generate').prop('disabled', false)
+      $('#btn-improver').prop('disabled', false)
     }
 
   })
@@ -64,7 +64,7 @@ $(document).ready(function(){
   var content_title = $('#content_title')
   var content_body_old = $('#content_body_old')
   var keywords = $('#keywords')
-  var generate_button = $('#btn-generate')
+  var generate_button = $('#btn-improver')
   var generated_text = $('#ai-response-text')
 
 // submited
@@ -140,8 +140,7 @@ $(document).ready(function(){
               setTimeout(() => {
                 
                 generated_text.html(data['contentBody'])
-                $('.download-btn-container').html(
-                `
+                $('.download-btn-container').html(`
                 <button class="btn btn-primary"
                   onclick="return window.location.href='{% url 'download-content' 'content_improver' `=+data['contentId']+` %}'">Download</button>
                 `)
@@ -152,7 +151,11 @@ $(document).ready(function(){
               
             }
           }
-        })
+        }).done(function () {
+          setTimeout(function () {
+            $("#bg-spinner").fadeOut("slow");
+          }, 700);
+        });
       }
     }
   })
