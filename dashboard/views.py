@@ -2052,8 +2052,6 @@ def blog_content_improver(request, uniqueId=''):
         context['content_keywords'] = blog.keywords
         context['tone_of_voice'] = blog.tone_of_voice
         context['category'] = blog.category
-
-        context['client'] = blog.client
         context['content_body_old'] = s_blog_body
     else:
         pass

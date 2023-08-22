@@ -13,9 +13,11 @@
                                 <div class="btn-group ">
 																	<button onclick="return window.location.href='{% url 'download-content' 'blog_writer' blog.uniqueId %}'" class="btn btn-primary" >Download</button>
 																</div>
+																{% if user.profile.subscription_type|title != 'Free' %}
 																<div class="btn-group">
 																	<button  onclick="return window.location.href='{% url 'edit-gen-blog' blog.uniqueId %}'" class="btn btn-primary">Edit Blog</button>
                                 </div>
+																{% endif %}
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
                                     Tools
