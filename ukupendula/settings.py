@@ -130,10 +130,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'defaultdb',
-            'USER': 'doadmin',
-            'PASSWORD': 'AVNS_F_0ThxnubY0bcT1UsH2',
-            'HOST': 'db-postgresql-lon1-34335-do-user-13948467-0.b.db.ondigitalocean.com',
+            'NAME': os.getenv("DATABASE_NAME"),
+            'USER': os.getenv("DATABASE_USER"),
+            'PASSWORD': os.getenv("DATABASE_PASS"),
+            'HOST': os.getenv("DATABASE_HOST"),
             'PORT': '25060',
         }
     }
