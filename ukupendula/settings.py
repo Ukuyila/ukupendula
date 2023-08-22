@@ -224,10 +224,10 @@ else:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
-    STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
     STATIC_ROOT = 'staticfiles/'
 
-    MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
+    MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'uploads')
     MEDIA_ROOT = '/uploads/'
 
     TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
