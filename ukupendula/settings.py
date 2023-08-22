@@ -206,7 +206,7 @@ if USE_SPACES:
 
     AWS_STORAGE_BUCKET_NAME = 'writesome'
     AWS_S3_ENDPOINT_URL = 'https://writesome.syd1.digitaloceanspaces.com'
-    AWS_S3_CUSTOM_DOMAIN = 'writesome.syd1.cdn.digitaloceanspaces.com'
+    # AWS_S3_CUSTOM_DOMAIN = 'writesome.syd1.cdn.digitaloceanspaces.com'
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
