@@ -140,8 +140,8 @@ $(document).ready(function(){
               setTimeout(() => {
                 
                 generated_text.html(data['contentBody'])
-                $('.download-btn-container').html(`
-                <button class="btn btn-primary"
+                
+                $('.download-btn-container').html(`<button class="btn btn-primary"
                   onclick="return window.location.href='{% url 'download-content' 'content_improver' `=+data['contentId']+` %}'">Download</button>
                 `)
               }, 1500)

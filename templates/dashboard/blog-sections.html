@@ -23,7 +23,9 @@
                                             <tr>
                                                 <td>{{topic}}</td>
                                                 <td>
+                                                    {% if user.profile.subscription_type|title != 'Free' %}
                                                     <a href="{% url 'save-blog-topic' topic %}" class="btn btn-xs btn-outline-primary">Save</a>
+                                                    {% endif %}
                                                     <a href="{% url 'use-blog-topic' topic|urlencode %}" class="btn btn-xs btn-primary btn-generate">Use</a>
                                                 </td>
                                             </tr>
