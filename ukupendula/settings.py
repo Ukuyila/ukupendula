@@ -199,16 +199,8 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-if DEVELOPMENT_MODE is True:
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-    MEDIA_URL = '/uploads/'
-
-else:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+USE_SPACES = True
+if USE_SPACES:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
@@ -229,8 +221,15 @@ else:
 
     MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'uploads')
     MEDIA_ROOT = '/uploads/'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-    TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+    MEDIA_URL = '/uploads/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
