@@ -39,7 +39,7 @@
                       {% endif %}
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
                       <div>
-                        {% elif package.package_name|title == 'Free' %}
+                        {% if package.package_name|title == 'Free' %}
                         <small class="text-muted">Billed Annually</small> <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span>
                         {% endif %}
                       </div>
@@ -94,7 +94,7 @@
                       {% endif %}
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
                       <div class="">
-                        {% elif package.package_name|title == 'Free' %}
+                        {% if package.package_name|title == 'Free' %}
                         <small class="text-muted">Billed Monthly</small> <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span>
                         {% endif %}
                       </div>
