@@ -200,7 +200,7 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 if DEVELOPMENT_MODE is True:
-    STATIC_URL = '/static/'
+    STATIC_URL = 'static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
