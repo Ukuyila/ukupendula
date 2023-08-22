@@ -245,7 +245,7 @@ def generate_paragraph(paragraph_topic, tone_of_voice, profile):
         if len(response['choices']) > 0:
             res = response['choices'][0]['text']
             if not res == '':
-                cleaned_res = res.replace('\n', '<br>')
+                cleaned_res = res.replace('\n', '')
                 if profile.monthly_count:
                     prof_count = int(profile.monthly_count)
                 else:
