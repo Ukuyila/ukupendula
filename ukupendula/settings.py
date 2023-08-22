@@ -206,7 +206,7 @@ if USE_SPACES:
 
     AWS_STORAGE_BUCKET_NAME = 'writesome'
     AWS_S3_ENDPOINT_URL = 'https://writesome.syd1.digitaloceanspaces.com'
-    # AWS_S3_CUSTOM_DOMAIN = 'writesome.syd1.cdn.digitaloceanspaces.com'
+    AWS_S3_CUSTOM_DOMAIN = 'writesome.syd1.cdn.digitaloceanspaces.com'
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
@@ -216,10 +216,10 @@ if USE_SPACES:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
-    STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+    STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
     STATIC_ROOT = 'static/'
 
-    MEDIA_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, 'uploads')
+    MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
     MEDIA_ROOT = '/uploads/'
 else:
     STATIC_URL = '/static/'
