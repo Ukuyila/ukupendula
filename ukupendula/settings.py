@@ -200,7 +200,7 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 if DEVELOPMENT_MODE is True:
-    STATIC_URL = 'static/'
+    STATIC_URL = '/static/'
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -218,7 +218,7 @@ else:
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_LOCATION = '/static'
+    AWS_LOCATION = 'static'
     AWS_DEFAULT_ACL = 'public-read'
 
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
