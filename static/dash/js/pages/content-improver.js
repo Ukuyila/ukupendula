@@ -127,6 +127,7 @@ $(document).ready(function(){
             // $('.prompt-input').prop(disabled)
             error_alert.prop('hidden', true).html('')
             success_alert.prop('hidden', true).html('')
+            
           },
           success: function (data) {
             $("#bg-spinner").fadeOut("slow")
@@ -139,6 +140,11 @@ $(document).ready(function(){
               setTimeout(() => {
                 
                 generated_text.html(data['contentBody'])
+                $('.download-btn-container').html(
+                `
+                <button class="btn btn-primary"
+                  onclick="return window.location.href='{% url 'download-content' 'content_improver' `=+data['contentId']+` %}'">Download</button>
+                `)
               }, 1500)
             }
             else {
