@@ -125,7 +125,11 @@
                       </div>
                       {% else %}
                       <div class="text-center m-4">
+                        {% if 'Yearly' in user_sub_type %}
+                        <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Downgrade</a>
+                        {% else %}
                         <a href="{% url 'pay-now' package.uniqueId %}" class="btn btn-primary btn-block">Upgrade</a>
+                        {% endif %}
                       </div>
                       {% endif %}
                     </div>
