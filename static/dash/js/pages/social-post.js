@@ -42,7 +42,7 @@ $(document).ready(function(){
     $('.keywords_counter').text(curr_textlen+'/'+maxLength);
   });
 
-  if ( $('#audience').val().length > 5 && $('#keywords').val().length > 2 ) {
+  if ( $('#audience').val().length > 1 && $('#keywords').val().length > 2 ) {
     $('#btn-generate').prop('disabled', false)
   }
 
@@ -50,7 +50,7 @@ $(document).ready(function(){
 
     $('#btn-generate').prop('disabled', true)
 
-    if ( $('#audience').val().length > 5 && $('#keywords').val().length > 2 ) {
+    if ( $('#audience').val().length > 1 && $('#keywords').val().length > 2 ) {
       $('#btn-generate').prop('disabled', false)
     }
 

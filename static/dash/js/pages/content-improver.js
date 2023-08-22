@@ -50,7 +50,7 @@ $(document).ready(function(){
 
     $('#btn-generate').prop('disabled', true)
 
-    if ( $('#content_title').val().length > 5 && $('#content_body_old').val().length > 100 ) {
+    if ( $('#content_title').val().length > 2 && $('#content_body_old').val().length > 100 ) {
       
       $('#btn-generate').prop('disabled', false)
     }
@@ -84,9 +84,9 @@ $(document).ready(function(){
       error_alert.prop('hidden', true).html('')
       success_alert.prop('hidden', true).html('')
 
-      if ( content_title.val().length < 5 || content_title.val().length > 300 ) {
+      if ( content_title.val().length < 2 || content_title.val().length > 300 ) {
 
-        error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Content title is supposed to be between 5 and 300 chars long!')
+        error_alert.html('<button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-hidden="true"></button><i class="fa fa-frown-o me-2" aria-hidden="true"></i> Content title is supposed to be between 2 and 300 chars long!')
         error_alert.prop('hidden', false)
         $("#bg-spinner").fadeOut("slow");
       }

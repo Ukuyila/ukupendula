@@ -36,7 +36,7 @@
                                                 {% csrf_token %}
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="copy_title" class=" ">Copy Title</label><span class="title_counter text-muted">0/200</span></div>
-                                                  <input type="text" class="form-control" id="copy_title" name="copy_title" placeholder="Enter saving title" value="{{copy_content.copy_title|safe}}" maxlength="200" />
+                                                  <input type="text" class="form-control" id="copy_title" name="copy_title" placeholder="Enter copy title" value="{{copy_content.copy_title|safe}}" maxlength="200" />
                                                 </div>
 
                                                 <div {% if user.profile.subscription_type|title == 'Free' %} hidden style="display:none;" {% endif %}  class="mb-3">
