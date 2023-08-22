@@ -114,12 +114,13 @@ $(document).ready(function(){
           csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
 
         }
-        // console.log(form_data)
+        let url = $("#contImprvrUrl").attr("data-url")
+        // console.log(form_data)contImprvrUrl
         // debugger;
         // ajax
         $.ajax({
           type: 'POST',
-          url: 'improve-content',
+          url: url,
           data: form_data,
           beforeSend: function () {
             generate_button.html('Generating&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
@@ -140,10 +141,9 @@ $(document).ready(function(){
               setTimeout(() => {
                 
                 generated_text.html(data['contentBody'])
-                
+
                 $('.download-btn-container').html(`<button class="btn btn-primary"
-                  onclick="return window.location.href='{% url 'download-content' 'content_improver' `=+data['contentId']+` %}'">Download</button>
-                `)
+                  onclick="return window.location.href='{% url 'download-content' 'content_improver' `+data['contentId']+` %}'">Download</button>`)
               }, 1500)
             }
             else {
