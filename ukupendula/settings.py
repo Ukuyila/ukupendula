@@ -199,38 +199,38 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-if DEVELOPMENT_MODE is True:
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# if DEVELOPMENT_MODE is True:
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-    MEDIA_URL = '/uploads/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/uploads/'
 
-else:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# else:
+#     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+#     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+#     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
-    AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
-    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_CUSTOM_DOMAIN")
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-    AWS_LOCATION = 'static'
-    AWS_DEFAULT_ACL = 'public-read'
+#     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+#     AWS_S3_ENDPOINT_URL = os.getenv("AWS_ENDPOINT_URL")
+#     AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_CUSTOM_DOMAIN")
+#     AWS_S3_OBJECT_PARAMETERS = {
+#         'CacheControl': 'max-age=86400',
+#     }
+#     AWS_LOCATION = 'static'
+#     AWS_DEFAULT_ACL = 'public-read'
 
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+#     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
-    STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-    STATIC_ROOT = 'staticfiles/'
+#     STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+#     STATIC_ROOT = 'staticfiles/'
 
-    MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
-    MEDIA_ROOT = '/uploads/'
+#     MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
+#     MEDIA_ROOT = '/uploads/'
 
-    TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
+TEMP = "{}/{}".format(MEDIA_ROOT, 'temp')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
