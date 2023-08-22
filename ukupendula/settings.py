@@ -211,14 +211,14 @@ if USE_SPACES:
         'CacheControl': 'max-age=86400',
     }
     # only collect static without the writesome def
-    AWS_LOCATION = 'static'
-    # AWS_LOCATION = 'writesome/static'
+    # AWS_LOCATION = 'static'
+    AWS_LOCATION = 'writesome/static'
     AWS_DEFAULT_ACL = 'public-read'
 
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
-    STATIC_URL = '{}/writesome/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATIC_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
     STATIC_ROOT = 'static/'
 
     MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, 'uploads')
