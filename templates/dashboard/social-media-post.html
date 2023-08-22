@@ -39,11 +39,44 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'gen-blog-social-media' 'thread' post_blog.uniqueId %}">Create Thread Post</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">Create LinkedIn Post</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Create Twitter Post</a></li>
-                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Create Instagram Post</a></li>
                                                         <li><a href="{% url 'gen-blog-social-media' 'facebook' post_blog.uniqueId %}">Create Facebook Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'twitter' post_blog.uniqueId %}">Create Twitter Post</a></li>
+
+                                                        {% if user.profile.subscription_type|title != 'Free' %}
+                                                        <li><a href="{% url 'gen-blog-social-media' 'instagram' post_blog.uniqueId %}">Create Instagram Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'linkedin' post_blog.uniqueId %}">Create LinkedIn Post</a></li>
+                                                        <li><a href="{% url 'gen-blog-social-media' 'thread' post_blog.uniqueId %}">Create Thread Post</a></li>
+                                                        
+                                                        {% else %}
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Instagram Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create LinkedIn Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Thread Post</a></li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {% elif this_soc_post %}
+                                            <div class="float-end">
+                                                
+                                                <div class="btn-group">
+                                                    <a data-bs-toggle="dropdown" href="javascript:void(0);" class="btn btn-primary mini all" aria-expanded="false">
+                                                        Social Media
+                                                        <i class="fa fa-angle-down "></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="{% url 'social-media-post' 'facebook' this_soc_post.uniqueId %}">Create Facebook Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'twitter' this_soc_post.uniqueId %}">Create Twitter Post</a></li>
+
+                                                        {% if user.profile.subscription_type|title != 'Free' %}
+                                                        <li><a href="{% url 'social-media-post' 'instagram' this_soc_post.uniqueId %}">Create Instagram Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'linkedin' this_soc_post.uniqueId %}">Create LinkedIn Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'thread' this_soc_post.uniqueId %}">Create Thread Post</a></li>
+
+                                                        {% else %}
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Instagram Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create LinkedIn Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Thread Post</a></li>
+                                                        {% endif %}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -56,11 +89,19 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'social-media-post' 'thread' %}">Create Thread Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'twitter' %}">Create Twitter Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram Post</a></li>
                                                         <li><a href="{% url 'social-media-post' 'facebook' %}">Create Facebook Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'twitter' %}">Create Twitter Post</a></li>
+                                                        
+                                                        {% if user.profile.subscription_type|title != 'Free' %}
+                                                        <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn Post</a></li>
+                                                        <li><a href="{% url 'social-media-post' 'thread' %}">Create Thread Post</a></li>
+                                                        
+                                                        {% else %}
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Instagram Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create LinkedIn Post</a></li>
+                                                        <li><a class="text-muted" href="javascript:void(0);">Create Thread Post</a></li>
+                                                        {% endif %}
                                                     </ul>
                                                 </div>
                                             </div>

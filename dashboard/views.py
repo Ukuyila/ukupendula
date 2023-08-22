@@ -558,6 +558,12 @@ def blog_sections(request):
 
 @login_required
 def delete_blog_topic(request, uniqueId):
+
+    user_profile = request.user.profile
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
+    
     try:
         blog = Blog.objects.get(uniqueId=uniqueId)
         if blog.profile == request.user.profile:
@@ -1174,6 +1180,8 @@ def view_blog_social_post(request, postType, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+
+
     remote_addr = get_client_ip(request)
     max_devices_allow = max_devices(user_profile)
     # REGISTER DEVICE
@@ -1269,9 +1277,9 @@ def generate_social_media(request):
 
     if request.method == "POST":
 
-        post_title = request.POST['post_title']
+        post_title = request.POST['post_title'] if request.POST['post_title'] is not None else 'unknown'
         post_keywords = request.POST['keywords']
-        post_audience = request.POST['audience']
+        post_audience = request.POST['audience'] if request.POST['audience'] is not None else 'any'
         post_category = request.POST['category']
         post_type = request.POST['soc_post_type']
         max_char = request.POST['max_char']
@@ -1433,7 +1441,8 @@ def gen_social_post(request, postType, uniqueId=''):
     if request.method == "POST":
 
         post_title = request.POST['post_title']
-        soc_post_type = request.POST['soc_post_type']
+        # soc_post_type = request.POST['soc_post_type']
+        soc_post_type = sel_p_typ.post_name.title()
         prompt_text = request.POST['prompt_text']
         post_keywords = request.POST['keywords']
         post_audience = request.POST['audience']
@@ -1441,6 +1450,11 @@ def gen_social_post(request, postType, uniqueId=''):
 
         tone_of_voice = request.POST['tone_of_voice']
         api_call_code = str(uuid4()).split('-')[4]
+
+        if not user_profile.subscribed:
+            if soc_post_type != 'Facebook' or soc_post_type != 'Twitter':
+                messages.error(request, "You have to upgrade your subscription to access this!")
+                return redirect('subscription-plans')
 
         add_to_list = add_to_api_requests('generate_social_post', api_call_code, user_profile)
 
@@ -3737,7 +3751,8 @@ def team_manager(request):
         flag_avatar = 'dash/images/us_flag.jpg'
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
@@ -3880,8 +3895,9 @@ def emailVerificationApi(request, user,user_team,  password1=''):
 @login_required
 def edit_team_member(request):
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     if request.method == 'POST':
         user_uid = request.POST['user_uid']
@@ -4148,7 +4164,8 @@ def memory_blogs(request, status):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4246,7 +4263,8 @@ def memory_social_post(request, socType='blog'):
     team_categories = ClientCategory.objects.filter(team=user_team_id)
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     for category in team_categories:
         cate_list.append(category)
@@ -4317,7 +4335,8 @@ def memory_paragraph(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4375,7 +4394,8 @@ def memory_sentence(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4434,7 +4454,8 @@ def memory_title(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4493,7 +4514,8 @@ def memory_summarizer(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4554,7 +4576,8 @@ def memory_page_copy(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4610,7 +4633,8 @@ def memory_meta_descr(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4665,7 +4689,8 @@ def memory_content_improver(request):
     context['flag_avatar'] = flag_avatar
 
     if not user_profile.subscribed:
-        return redirect('home')
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4720,8 +4745,9 @@ def categories(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -4779,8 +4805,9 @@ def clients(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(team=user_profile.user_team)
 
@@ -4817,8 +4844,9 @@ def clients(request):
 def delete_client(request, uniqueId):
     context = {}
     
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     current_page = 'Delete Client'
     context['current_page'] = current_page
@@ -4868,8 +4896,9 @@ def edit_client(request):
     current_page = 'Edit Client'
     parent_page = 'Clients'
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
 
     context['current_page'] = current_page
     context['parent_page'] = parent_page
@@ -4929,8 +4958,9 @@ def edit_category(request, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     team_clients = TeamClient.objects.filter(is_active=True)
 
@@ -5009,8 +5039,9 @@ def change_category_status(request, status, uniqueId):
 def delete_category(request, uniqueId):
     context = {}
 
-    if not request.user.profile.subscribed:
-        return redirect('home')
+    if not user_profile.subscribed:
+        messages.error(request, "You have to upgrade your subscription to access this!")
+        return redirect('subscription-plans')
     
     current_page = 'Delete Category'
     context['current_page'] = current_page
