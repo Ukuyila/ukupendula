@@ -210,6 +210,8 @@ if USE_SPACES:
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
+    # only collect static without the writesome def
+    # AWS_LOCATION = 'static'
     AWS_LOCATION = 'writesome/static'
     AWS_DEFAULT_ACL = 'public-read'
 

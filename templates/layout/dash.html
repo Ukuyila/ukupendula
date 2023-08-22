@@ -220,6 +220,7 @@
 												</a>
 												<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow  app-selector py-0">
 													<ul class="drop-icon-wrap p-2">
+														{% if user.profile.subscription_type|title != 'Free' %}
 														<li>
 															<a href="{% url 'clients' %}" class="drop-icon-item">
 																<i class="icon icon-user-follow text-dark"></i>
@@ -232,7 +233,6 @@
 																<span class="block">Categories</span>
 															</a>
 														</li>
-														{% if user.profile.subscription_type|title != 'Free' %}
 														<li>
 															<a href="{% url 'blog-memory' 'complete' %}" class="drop-icon-item">
 																<i class="icon icon-layers text-dark"></i>
@@ -242,7 +242,21 @@
 														{% else %}
 														<li>
 															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
-																<span class="btn btn-xs rounded-pill bg-success pro-noti">PRO</span>
+																<span class="btn btn-xs rounded-pill bg-success pro-noti text-light">PRO</span>
+																<i class="text-dark text-muted icon icon-user-follow"></i>
+																<span class="block">Clients</span>
+															</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
+																<span class="btn btn-xs rounded-pill bg-success pro-noti text-light">PRO</span>
+																<i class="text-dark text-muted icon icon-folder-alt"></i>
+																<span class="block">Categories</span>
+															</a>
+														</li>
+														<li>
+															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
+																<span class="btn btn-xs rounded-pill bg-success pro-noti text-light">PRO</span>
 																<i class="text-dark text-muted icon icon-layers"></i>
 																<span class="block">Memories</span>
 															</a>
@@ -259,13 +273,13 @@
 														<li>
 															<a href="{% url 'user-roles' %}" class="drop-icon-item">
 																<i class="icon icon-settings text-dark"></i>
-																<span class="block">Settings</span>
+																<span class="block">Team Settings</span>
 															</a>
 														</li>
 														{% else %}
 														<li>
 															<a href="javascript:void(0);" disabled class="text-muted drop-icon-item">
-																<span class="btn btn-xs rounded-pill bg-success pro-noti">PRO</span>
+																<span class="btn btn-xs rounded-pill bg-success pro-noti text-light">PRO</span>
 																<i class="icon icon-people"></i>
 																<span class="block">Team</span>
 															</a>

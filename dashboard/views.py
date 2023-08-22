@@ -4720,6 +4720,9 @@ def categories(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not request.user.profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4776,6 +4779,9 @@ def clients(request):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not request.user.profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(team=user_profile.user_team)
 
     for client in team_clients:
@@ -4810,6 +4816,9 @@ def clients(request):
 @login_required
 def delete_client(request, uniqueId):
     context = {}
+    
+    if not request.user.profile.subscribed:
+        return redirect('home')
 
     current_page = 'Delete Client'
     context['current_page'] = current_page
@@ -4858,6 +4867,9 @@ def edit_client(request):
     context = {}
     current_page = 'Edit Client'
     parent_page = 'Clients'
+
+    if not request.user.profile.subscribed:
+        return redirect('home')
 
     context['current_page'] = current_page
     context['parent_page'] = parent_page
@@ -4917,6 +4929,9 @@ def edit_category(request, uniqueId):
     context['lang'] = lang
     context['flag_avatar'] = flag_avatar
 
+    if not request.user.profile.subscribed:
+        return redirect('home')
+    
     team_clients = TeamClient.objects.filter(is_active=True)
 
     for client in team_clients:
@@ -4994,6 +5009,9 @@ def change_category_status(request, status, uniqueId):
 def delete_category(request, uniqueId):
     context = {}
 
+    if not request.user.profile.subscribed:
+        return redirect('home')
+    
     current_page = 'Delete Category'
     context['current_page'] = current_page
 
