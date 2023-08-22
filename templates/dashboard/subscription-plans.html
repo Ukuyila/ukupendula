@@ -37,11 +37,14 @@
                       {% else %}
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       {% endif %}
-                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
+
+                      {% if package.package_name|title != 'Free' %}
+                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span></p>
+                      {% else %}
+                      <p class="lead"> <span class="btn btn-xs rounded-pill bg-warning text-light">FREE</span></p>
+                      {% endif %}
                       <div>
-                        {% if package.package_name|title == 'Free' %}
-                        <small class="text-muted">Billed Annually</small> <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span>
-                        {% endif %}
+                        <small class="text-muted">Billed Annually</small>
                       </div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
@@ -92,11 +95,13 @@
                       {% else %}
                       <div class="card-category bg-primary">{{ package.package_name }}</div>
                       {% endif %}
-                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
+                      {% if package.package_name|title != 'Free' %}
+                      <p class="lead"><strong>R{{ package.package_price }} /</strong> month <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span></p>
+                      {% else %}
+                      <p class="lead"> <span class="btn btn-xs rounded-pill bg-warning text-light">FREE</span></p>
+                      {% endif %}
                       <div class="">
-                        {% if package.package_name|title == 'Free' %}
-                        <small class="text-muted">Billed Monthly</small> <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span>
-                        {% endif %}
+                        <small class="text-muted">Billed Monthly</small>
                       </div>
                       <ul class="list-unstyled leading-loose">
                         {% with package.package_description|split:"</br>" as package_descr %}
