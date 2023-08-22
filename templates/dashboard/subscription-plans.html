@@ -35,7 +35,7 @@
                       {% elif package.package_name|title == 'Free' %}
                       <div class="card-category bg-gray">{{ package.package_name }}</div>
                       {% else %}
-                      <div class="card-category bg-primary">{{ package.package_name }}</div>
+                      <div class="card-category bg-primary">{{ package.package_name }} <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span></div>
                       {% endif %}
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
                       <div><small class="text-muted">Billed Annually</small></div>
@@ -86,7 +86,7 @@
                       {% elif package.package_name|title == 'Free' %}
                       <div class="card-category bg-gray">{{ package.package_name }}</div>
                       {% else %}
-                      <div class="card-category bg-primary">{{ package.package_name }}</div>
+                      <div class="card-category bg-primary">{{ package.package_name }} <span class="btn btn-xs rounded-pill bg-success text-light">PRO</span></div>
                       {% endif %}
                       <p class="lead"><strong>R{{ package.package_price }} /</strong> month</p>
                       <div class=""><small class="text-muted">Billed Monthly</small></div>
