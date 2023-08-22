@@ -140,22 +140,23 @@ $(document).ready(function(){
               success_alert.prop('hidden', false)
 
               setTimeout(() => {
-                
                 generated_text.html(data['contentBody'])
 
                 $('.download-btn-container').html(`<a type="button" class="btn btn-primary"
-                  href="{% url 'download-content' 'content_improver' `+data['contentId']+` %}">Download</a>`)
+                  href="https://tools.writesome.ai/dash/download-content/content_improver/`+data['contentId']+`/">Download</a>`)
               }, 1500)
+
             }
             else {
               error_alert.html(data['message']).prop('hidden', false)
               
             }
+            
+            setTimeout(function () {
+              $("#bg-spinner").fadeOut("slow");
+            }, 1700);
+            
           }
-        }).done(function () {
-          setTimeout(function () {
-            $("#bg-spinner").fadeOut("slow");
-          }, 700);
         });
       }
     }
