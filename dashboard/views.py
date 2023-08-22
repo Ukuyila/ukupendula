@@ -3846,6 +3846,37 @@ def activateEmail(request, user, user_team, password1=''):
     return msg
 
 
+def emailVerificationApi(request, user,user_team,  password1=''):
+    api_url = settings.BASE_API_URL
+
+    url = "https://api.writesome.ai/mailer/welcome-email.php"
+
+    payload = {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http',
+        'password': password1,
+        'user_team': user_team.business_name,
+        'email': user.email,
+        'reply_to': settings.EMAIL_REPLY_TO,
+        'type_of_action': 'email verification',
+    }
+    headers = {
+    'accept': "application/json",
+    'content-type': "application/json",
+    'Authorization': f"Writesome-welcome-email apikey {settings.MAIN_API_KEY}",
+    }
+
+    # try:
+    response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
+    # return json.load(response.text)
+    return response.text
+    # except:
+    #     pass
+
+
 @login_required
 def edit_team_member(request):
 
@@ -3936,7 +3967,7 @@ def add_team_member(request):
         profile=nu_profile)
         user_settings.save()
 
-        success = activateEmail(request, new_member, user_team, password1)
+        success = emailVerificationApi(request, new_member, user_team, password1)
 
         return HttpResponse(success)
 
@@ -3950,7 +3981,7 @@ def resend_team_invite(request, orgUniqueId, uniqueId):
             user_team = Team.objects.get(uniqueId=user_profile)
 
             member_p = Profile.objects.get(uniqueId=uniqueId)
-            success = activateEmail(request, member_p.user, user_team)
+            success = emailVerificationApi(request, member_p.user, user_team)
 
             messages.success(request, success)
         except:
