@@ -2043,8 +2043,8 @@ def blog_content_improver(request, uniqueId=''):
             blog_title = saved_blog.title
             blog_sections.append(saved_blog.body)
 
-        s_blog_body = "\n".join(blog_sections).replace('\n', '<br>')
-        # s_blog_body = "\n".join(blog_sections)
+        # s_blog_body = "\n".join(blog_sections).replace('\n', '<br>')
+        s_blog_body = "\n".join(blog_sections)
 
         # s_blog_title = blog_title
 
