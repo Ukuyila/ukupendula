@@ -55,7 +55,9 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            {% elif this_soc_post %}
+                                            {% comment %} {% elif this_soc_post %}
+                                            
+                                            <!-- / regenarate content: function not complete -->
                                             <div class="float-end">
                                                 
                                                 <div class="btn-group">
@@ -64,13 +66,13 @@
                                                         <i class="fa fa-angle-down "></i>
                                                     </a>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="{% url 'social-media-post' 'facebook' this_soc_post.uniqueId %}">Create Facebook Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'twitter' this_soc_post.uniqueId %}">Create Twitter Post</a></li>
+                                                        <li><a onclick="return regeneratePostSocial('facebook', '{{this_soc_post.uniqueId}}', '{% url 'social-media-post' 'facebook' %}')">Create Facebook Post</a></li>
+                                                        <li><a onclick="return regeneratePostSocial('twitter', '{{this_soc_post.uniqueId}}', '{% url 'social-media-post' 'twitter' %}')">Create Twitter Post</a></li>
 
                                                         {% if user.profile.subscription_type|title != 'Free' %}
-                                                        <li><a href="{% url 'social-media-post' 'instagram' this_soc_post.uniqueId %}">Create Instagram Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'linkedin' this_soc_post.uniqueId %}">Create LinkedIn Post</a></li>
-                                                        <li><a href="{% url 'social-media-post' 'thread' this_soc_post.uniqueId %}">Create Thread Post</a></li>
+                                                        <li><a onclick="return regeneratePostSocial('instagram', '{{this_soc_post.uniqueId}}', '{% url 'social-media-post' 'instagram' %}')">Create Instagram Post</a></li>
+                                                        <li><a onclick="return regeneratePostSocial('linkedin', '{{this_soc_post.uniqueId}}', '{% url 'social-media-post' 'linkedin' %}')">Create LinkedIn Post</a></li>
+                                                        <li><a onclick="return regeneratePostSocial('thread', '{{this_soc_post.uniqueId}}', '{% url 'social-media-post' 'thread' %}')">Create Thread Post</a></li>
 
                                                         {% else %}
                                                         <li><a class="text-muted" href="javascript:void(0);">Create Instagram Post</a></li>
@@ -79,7 +81,7 @@
                                                         {% endif %}
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div> {% endcomment %}
                                             {% else %}
                                             <div class="float-end">
                                                 
@@ -96,7 +98,7 @@
                                                         <li><a href="{% url 'social-media-post' 'instagram' %}">Create Instagram Post</a></li>
                                                         <li><a href="{% url 'social-media-post' 'linkedin' %}">Create LinkedIn Post</a></li>
                                                         <li><a href="{% url 'social-media-post' 'thread' %}">Create Thread Post</a></li>
-                                                        
+
                                                         {% else %}
                                                         <li><a class="text-muted" href="javascript:void(0);">Create Instagram Post</a></li>
                                                         <li><a class="text-muted" href="javascript:void(0);">Create LinkedIn Post</a></li>
@@ -108,6 +110,8 @@
                                             {% endif %}
                                         </div>
                                         <div class="card-body">
+                                            <div class="alert alert-danger" id="error-alert" hidden role="alert"></div>
+                                            <div class="alert alert-success" id="success-alert" hidden role="alert"></div>
                                             <form class="mb-3" action="#" method="POST">
                                                 {% csrf_token %}
                                                 <div {% if user.profile.subscription_type|title == 'Free' %} hidden style="display:none;" {% endif %}  class="mb-3">

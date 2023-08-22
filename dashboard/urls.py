@@ -58,6 +58,7 @@ urlpatterns = [
 
     path('social-media/<str:postType>/', views.gen_social_post, name='social-media-post'),
     path('social-media/<str:postType>/<str:uniqueId>/', views.gen_social_post, name='view-social-media'),
+    # path('social-media/<str:postType>/<str:uniqueId>/', views.regen_social_post, name='view-social-media'),
 
     path('blog-social-media/<str:postType>/<str:uniqueId>/', views.gen_social_from_blog, name='gen-blog-social-media'),
     path('view-blog-social/<str:postType>/<str:uniqueId>/', views.view_blog_social_post, name='view-blog-social'),

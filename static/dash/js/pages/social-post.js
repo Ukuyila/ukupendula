@@ -58,6 +58,48 @@ $(document).ready(function(){
 
   $('#blog_post').change( function(){
     console.log('Selected Blog: ' + $(this).val())
-  })
+  });
+
 
 });
+
+let error_alert = $('#error-alert')
+error_alert.prop('hidden', true)
+
+function regeneratePostSocial(postType, postId, url) {
+  console.log(postId)
+
+  var post_submit_btn = $("#btn-generate")
+
+  post_submit_btn.prop("disabled", true)
+
+  error_alert.prop('hidden', true)
+  success_alert.prop('hidden', true)
+
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data: {
+      post_title: $('#post_title').val(),
+      soc_post_type: postType,
+      prompt_text: $('#prompt_text').val(),
+      keywords: $('#keywords').val(),
+      audience: $('#audience').val(),
+      category: $('#category').val(),
+      tone_of_voice: $('#tone_of_voice').val(),
+      csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+    },
+    beforeSend: function () {
+      post_submit_btn.html('Generating&nbsp;&nbsp;<i class="fa fa-spinner fa-pulse"></i>')
+    },
+    success: function (resp) {
+      console.log(resp)
+      // if ( resp.includes('success') ) {
+      //   window.location.href=''
+      // }
+      // else {
+      //   error_alert.html(resp).prop('hidden', false)
+      // }
+    }
+  })
+}

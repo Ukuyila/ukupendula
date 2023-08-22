@@ -1498,51 +1498,6 @@ def gen_social_post(request, postType, uniqueId=''):
     return render(request, 'dashboard/social-media-post.html', context)
 
 
-# @login_required
-# def view_social_post(request, postType, uniqueId):
-#     context = {}
-#     user_profile = request.user.profile
-#     current_page = 'View Blog Social Post'
-#     context['current_page'] = current_page
-#     context['allowance'] = check_count_allowance(user_profile)
-
-#     lang = settings.LANGUAGE_CODE
-#     flag_avatar = 'dash/images/gb_flag.jpg'
-
-#     lang = check_user_lang(user_profile, lang)
-
-#     if lang == 'en-us':
-#         flag_avatar = 'dash/images/us_flag.jpg'
-
-#     context['lang'] = lang
-#     context['flag_avatar'] = flag_avatar
-
-#     blog_posts = []
-#     tone_of_voices = []
-
-#     tones = ToneOfVoice.objects.filter(tone_status=True)
-
-#     for tone in tones:
-#         tone_of_voices.append(tone)
-
-#     context['tone_of_voices'] = tone_of_voices
-
-
-#     post_type = postType.replace('_', ' ').title()
-
-#     context['post_type_title'] = post_type
-#     context['post_type'] = postType
-#     context['social_post'] = post
-#     context['post_blog'] = post.blog
-#     context['post_title'] = post.title
-#     context['post_body'] = post.post
-#     context['post_audience'] = post.audience
-#     context['post_keywords'] = post.keywords
-#     context['post_tone'] = post.tone_of_voice
-
-#     return render(request, 'dashboard/social-media-post.html', context)
-
-
 @login_required
 def gen_social_from_blog(request, postType, uniqueId):
     context = {}
