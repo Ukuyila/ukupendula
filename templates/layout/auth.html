@@ -7,12 +7,20 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta content="writesome.ai is a content generating assistant powered by the highly advanced GPT-4 system. Start creating content with our free version today." name="description">
+
 	<meta content="drycko[at]ukuyila.com" name="author">
+	<meta content="writesome.ai is a content generating assistant powered by the highly advanced GPT-4 system. Start creating content with our free version today." name="description">
+
 	<title>Writesome - Ai Content Generating Assistant | Authentication</title>
+	<link rel="canonical" href="{{request.path}}" />
+	<link rel="home" href="{% url 'dashboard:home' %}" />
+
 	<link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/gif" sizes="16x16">
-	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/gif" sizes="18x18">
-	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/gif" sizes="20x20">
+	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/png" sizes="18x18">
+	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/png" sizes="20x20">
+
+	<!--Create schema mark-up -->
+	{% include 'dashboard/partials/structured_data.html' %}
 	<!-- CSS only -->
 	<link rel="stylesheet" href="{% static 'auth/css/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'auth/css/bootstrap-icons.css' %}">
