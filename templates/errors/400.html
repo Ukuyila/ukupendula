@@ -7,16 +7,23 @@
 		<meta charset="UTF-8">
 		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta content="" name="description">
-		<meta content="drycko[at]ukuyila" name="author">
-		<meta name="keywords" content=""/>
 
-    <!-- Favicon -->
-    <link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" />
-
+		<meta content="drycko[at]ukuyila.com" name="author">
+		<meta content="writesome.ai is an Ai Content Generating Assistant, powered by the highly advanced OpenAi system. Start creating content with our free version today." name="description">
+		<meta property="og:image" content="https://writesome.ai/wp-content/uploads/2023/05/writesome-teams.jpg"/>
+		
 		<!-- Title -->
     <title>Error 400 | Writesome - Ai Content Generating Assistant</title>
+		<link rel="canonical" href="{{request.path}}" />
+		<link rel="home" href="{% url 'home' %}" />
+	
+		<link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/gif" sizes="16x16">
+		<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/png" sizes="18x18">
+		<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/png" sizes="20x20">
+	
+		<!--Create schema mark-up -->
+		{% include 'dashboard/partials/structured_data.html' %}
+
 		<link rel="stylesheet" href="{% static 'dash/fonts/fonts/font-awesome.min.css' %}">
 
 		<!-- Bootstrap Css -->
