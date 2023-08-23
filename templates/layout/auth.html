@@ -2,128 +2,65 @@
 
 {{ '<' }}{{ '!DOCTYPE html>' }}
 
-<html lang="en" dir="ltr">
-  <head>
-    <!-- Meta data -->
+<html lang="en" >
+<head>
 	<meta charset="UTF-8">
-	<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta content="writesome.ai is a content generating assistant powered by the highly advanced GPT-4 system. Start creating content with our free version today." name="description">
 	<meta content="drycko[at]ukuyila.com" name="author">
-	<!-- Favicon -->
-	<link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/x-icon"/>
-	<link rel="shortcut icon" type="image/x-icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" />
-
-    <!-- Title -->
 	<title>Writesome - Ai Content Generating Assistant | Authentication</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'dash/fonts/fonts/font-awesome.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'dash/fonts/boxicons/boxicons.css' %}" />
-
-	<!-- Bootstrap Css -->
-	<link id="style" href="{% static 'dash/plugins/bootstrap-5/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
-
-	<!-- Sidemenu Css -->
-	<link href="{% static 'dash/css/sidemenu.css' %}" rel="stylesheet" type="text/css" />
-
-	<!-- Dashboard css -->
-	<link href="{% static 'dash/css/style.css' %}" rel="stylesheet" type="text/css" />
-	<link href="{% static 'dash/css/admin-custom.css' %}" rel="stylesheet" type="text/css" />
-
-	<!-- c3.js Charts Plugin -->
-	<link href="{% static 'dash/plugins/charts-c3/c3-chart.css' %}" rel="stylesheet" type="text/css" />
-
-	<!-- p-scroll bar css-->
-	<link href="{% static 'dash/plugins/pscrollbar/pscrollbar.css' %}" rel="stylesheet" type="text/css" />
-
-	<!---Font icons-->
-	<link href="{% static 'dash/css/icons.css' %}" rel="stylesheet" type="text/css"/>
-
-
+	<link rel="icon" href="{% static 'dash/img/favicon/favicon.ico' %}" type="image/gif" sizes="16x16">
+	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/gif" sizes="18x18">
+	<link rel="icon" href="{% static 'dash/img/favicon/apple-touch-icon.png' %}" type="image/gif" sizes="20x20">
+	<!-- CSS only -->
+	<link rel="stylesheet" href="{% static 'auth/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'auth/css/bootstrap-icons.css' %}">
+	<link rel="stylesheet" href="{% static 'auth/css/nice-select.css' %}">
+	<link rel="stylesheet" href="{% static 'auth/css/normalize.css' %}">
+	<link rel="stylesheet" href="{% static 'auth/style.css' %}">
+	{% block style %}
+	{% endblock %}
+	<style type="text/css">
+		.login-register-section h2 {
+			font-family: 'Roboto', arial!important;
+		}
+		
+	</style>
 	<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-	var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-	(function(){
-	var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-	s1.async=true;
-	s1.src='https://embed.tawk.to/64ac0a7e94cf5d49dc62a8b0/1h500i03f';
-	s1.charset='UTF-8';
-	s1.setAttribute('crossorigin','*');
-	s0.parentNode.insertBefore(s1,s0);
-	})();
+	<script type="text/javascript">
+		var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+		(function(){
+		var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+		s1.async=true;
+		s1.src='https://embed.tawk.to/64e34e20cc26a871b03077f2/1h8buicsr';
+		s1.charset='UTF-8';
+		s1.setAttribute('crossorigin','*');
+		s0.parentNode.insertBefore(s1,s0);
+		})();
 	</script>
 	<!--End of Tawk.to Script-->
 </head>
-<body class="construction-image h-100">
+<body>
+	<main class="bforum-main">
+		<div class="container-fluid g-0">
+			<div class="row min-vh-100 g-0">
+        {% block body %}
+        {% endblock %}
 
-	<!--Loader-->
-	<div id="global-loader">
-		<img src="{% static 'dash/images/loader.svg' %}" class="loader-img" alt="">
-	</div>
-
-	<!--Page-->
-	<div class="page h-200 ">
-		<div class="page-content z-index-10">
-			<div class="container">
-				<div class="row">
-					<div class="col-xl-4 col-md-6 col-sm-12 d-block mx-auto">
-						<div class="card mb-0 bg-light">
-
-
-							<div class="card-header">
-								<a href="https://writesome.ai" class="app-brand-link gap-2">
-                  <span class="app-brand-logo demo">
-                    <img class="img-fluid" style="height:60px;" src="{% static 'dash/img/logo/writesome-ai-logo.png' %}">
-                  </span>
-                  
-                </a>
-							</div>
-
-              {% for message in messages %}
-              <div class="alert alert-{{ message.tags }}" role="alert">
-                <strong>{{ message }}</strong>
-              </div>
-              {% endfor %}
-
-              {% block body %}
-
-              {% endblock %}
-
-
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
-	</div>
+	</main>
 
-	<!-- Dashboard js -->
-	<script src="{% static 'dash/js/vendors/jquery-3.6.0.min.js' %}"></script>
-	<script src="{% static 'dash/plugins/bootstrap-5/popper.min.js' %}"></script>
-	<script src="{% static 'dash/plugins/bootstrap-5/js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'dash/js/vendors/jquery.sparkline.min.js' %}"></script>
-	<script src="{% static 'dash/js/vendors/selectize.min.js' %}"></script>
-	<script src="{% static 'dash/js/vendors/jquery.tablesorter.min.js' %}"></script>
-	<script src="{% static 'dash/js/vendors/circle-progress.min.js' %}"></script>
-	<script src="{% static 'dash/plugins/rating/jquery.rating-stars.js' %}"></script>
-	<!-- p-scroll bar Js-->
-	<script src="{% static 'dash/plugins/pscrollbar/pscrollbar.js' %}"></script>
+	<!-- JS -->
+	<script src="{% static 'auth/js/jquery-3.6.1.min.js' %}"></script>
+	<script src="{% static 'auth/js/popper.min.js' %}"></script>
+	<script src="{% static 'auth/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'auth/js/nice-select.js' %}"></script>
+	<script src="{% static 'auth/js/jquery.validate.min.js' %}"></script>
+	<script src="{% static 'auth/js/main.js' %}"></script>
 
-	<!-- Fullside-menu Js-->
-	<script src="{% static 'dash/plugins/toggle-sidebar/sidemenu.js' %}"></script>
-
-	<!--Counters -->
-	<script src="{% static 'dash/plugins/counters/counterup.min.js' %}"></script>
-	<script src="{% static 'dash/plugins/counters/waypoints.min.js' %}"></script>
-
-	<!-- ThemeColors js-->
-	<script src="{% static 'dash/js/themeColors.js' %}"></script>
-
-	<!-- Custom Js-->
-	<script src="{% static 'dash/js/admin-custom.js' %}"></script>
-
-	<!-- Custom-switcher Js-->
-	<script src="{% static 'dash/js/custom-switcher.js' %}"></script>
-	{% block js %}
+  {% block js %}
 	{% endblock %}
 </body>
 </html>
