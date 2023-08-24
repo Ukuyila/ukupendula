@@ -1452,7 +1452,7 @@ def gen_social_post(request, postType, uniqueId=''):
         api_call_code = str(uuid4()).split('-')[4]
 
         if not user_profile.subscribed:
-            if soc_post_type != 'Facebook' or soc_post_type != 'Twitter':
+            if soc_post_type != 'facebook' or soc_post_type != 'twitter':
                 messages.error(request, "You have to upgrade your subscription to access this!")
                 return redirect('subscription-plans')
 
@@ -1612,6 +1612,11 @@ def gen_social_from_blog(request, postType, uniqueId):
 
         tone_of_voice = request.POST['tone_of_voice']
         api_call_code = str(uuid4()).split('-')[4]
+
+        if not user_profile.subscribed:
+            if post_type != 'facebook' or post_type != 'twitter':
+                messages.error(request, "You have to upgrade your subscription to access this!")
+                return redirect('subscription-plans')
 
         add_to_list = add_to_api_requests('generate_social_post', api_call_code, request.user.profile)
 
