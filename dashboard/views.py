@@ -1452,7 +1452,7 @@ def gen_social_post(request, postType, uniqueId=''):
         api_call_code = str(uuid4()).split('-')[4]
 
         if not user_profile.subscribed:
-            if soc_post_type != 'facebook' or soc_post_type != 'twitter':
+            if sel_p_typ.post_name != 'facebook' or sel_p_typ.post_name != 'twitter':
                 messages.error(request, "You have to upgrade your subscription to access this!")
                 return redirect('subscription-plans')
 
@@ -1488,7 +1488,7 @@ def gen_social_post(request, postType, uniqueId=''):
 
                 context['new_post'] = new_post
 
-                return redirect('view-social-media', soc_post_type, new_post.uniqueId)
+                return redirect('view-social-media', sel_p_typ.post_name, new_post.uniqueId)
 
             else:
                 # we might need to delete all abandoned calls
@@ -1614,7 +1614,7 @@ def gen_social_from_blog(request, postType, uniqueId):
         api_call_code = str(uuid4()).split('-')[4]
 
         if not user_profile.subscribed:
-            if post_type != 'facebook' or post_type != 'twitter':
+            if postType != 'facebook' or postType != 'twitter':
                 messages.error(request, "You have to upgrade your subscription to access this!")
                 return redirect('subscription-plans')
 
