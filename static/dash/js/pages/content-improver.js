@@ -134,10 +134,10 @@ $(document).ready(function(){
           success: function (data) {
             $("#bg-spinner").fadeOut("slow")
             generate_button.html('Generate content')
-            console.log(data)
+            // console.log(data)
             if ( data['result'] === 'success' ) {
               success_alert.html(data['message'])
-              success_alert.prop('hidden', false)
+              success_alert.prop('hidden', true)
 
               setTimeout(() => {
                 generated_text.html(data['contentBody'])
