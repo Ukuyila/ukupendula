@@ -464,7 +464,7 @@ def blog_topic(request):
         elif int(request.POST['max_words']) > 1500:
             max_words = 1500
         else:
-            max_words = int(request.POST['max_words'])
+            max_words = int(request.POST['max_words']) if request.POST['max_words'] is not None else 1000
 
         request.session['max_words'] = max_words
 
