@@ -430,6 +430,7 @@ def activate(request, uidb64, token):
 
         # insert SubscriptionTransaction
         sub_transact = SubscriptionTransaction.objects.create(
+            subscription='{} Free'.format(profile.user.email),
             subscription_reference=order_ref,
             user_profile_uid=profile.uniqueId,
             package_name='Free',

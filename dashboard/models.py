@@ -189,6 +189,7 @@ class UserNotification(models.Model):
 
 
 class SubscriptionTransaction(models.Model):
+    subscription = models.CharField(null=True, blank=True, max_length=255)
     subscription_reference = models.CharField(null=True, blank=True, max_length=255)
     user_profile_uid = models.CharField(null=True, blank=True, max_length=100)
     payment_method = models.CharField(null=True, blank=True, max_length=100)

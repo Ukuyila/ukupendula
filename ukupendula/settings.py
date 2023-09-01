@@ -31,9 +31,9 @@ load_dotenv(dotenv_file)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# DEBUG = os.getenv("DEBUG", "False")
+DEBUG = os.getenv("DEBUG", "False")
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
@@ -259,8 +259,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #payfast.io
-PAYFAST_SANDBOX_MODE = os.getenv("PAYFAST_SANDBOX_MODE", True) == False
-# PAYFAST_SANDBOX_MODE = True
+# PAYFAST_SANDBOX_MODE = os.getenv("PAYFAST_SANDBOX_MODE", True) == False
+PAYFAST_SANDBOX_MODE = True
 if PAYFAST_SANDBOX_MODE is True:
     PAYFAST_MERCHANT_ID = "10024789"
     PAYFAST_MERCHANT_KEY = "dtz5khr0cbz74"

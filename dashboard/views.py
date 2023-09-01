@@ -3354,6 +3354,8 @@ def transactions(request):
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
+        subscr_transact.subscription='{} {}'.format(request.profile.user.email, subscr_transact.package_name)
+        subscr_transact.save()
 
     user_sub_type = request.user.profile.subscription_type.replace('-', ' ').title()
 
@@ -3519,10 +3521,12 @@ def payfast_payment(request, planId):
 
     package = SubscriptionPackage.objects.get(uniqueId=planId)
 
+    package_name = package.package_name if 'Yearly' in package.package_name else "{} Monthly".format(package.package_name)
+
     recurring_amount = package.package_price
     amount = "%.2f" % int(recurring_amount)
-    item_name = "{} {}".format(settings.APP_NAME, package.package_name)
-    item_descr = "{} Package".format(package.package_name)
+    item_name = "WS {}".format(package_name)
+    item_descr = "{} Package".format(package_name)
 
     m_payment_id = '{}-{}-{}'.format(user_profile.uniqueId, planId, order_id)
 
@@ -3659,6 +3663,8 @@ def payment_success(request, uniqueId, planId, orderId):
         profile.subscription_reference = order_ref
         profile.save()
 
+        user = profile.user
+
         date_activated = timezone.localtime(timezone.now())
 
         date_expiry = date_activated + datetime.timedelta(days=30)
@@ -3693,6 +3699,7 @@ def payment_success(request, uniqueId, planId, orderId):
 
         # insert SubscriptionTransaction
         sub_transact = SubscriptionTransaction.objects.create(
+            subscription='{} {}'.format(user.email, package_name),
             subscription_reference=order_ref,
             user_profile_uid=uniqueId,
             package_name=package.package_name.title(),
