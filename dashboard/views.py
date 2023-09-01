@@ -3354,7 +3354,7 @@ def transactions(request):
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
-        subscr_transact.subscription='{} {}'.format(request.profile.user.email, subscr_transact.package_name)
+        subscr_transact.subscription='{} {}'.format(request.user.email, subscr_transact.package_name)
         subscr_transact.save()
 
     user_sub_type = request.user.profile.subscription_type.replace('-', ' ').title()
