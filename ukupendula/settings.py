@@ -31,9 +31,9 @@ load_dotenv(dotenv_file)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = os.getenv("DEBUG", "True") == True
 
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = True
 
 if DEBUG is True:
     ALLOWED_HOSTS = ['64.227.46.124', '138.68.155.44', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
@@ -42,8 +42,9 @@ else:
 
 # ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
-# DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", True)
+# DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == True
+# DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", True)
+DEVELOPMENT_MODE = True
 
 # Application definition
 
