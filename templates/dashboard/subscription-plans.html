@@ -3,6 +3,15 @@
 {% load crispy_forms_tags %}
 {% load mathfilters %}
 
+{% block css %}
+<style type="css/text">
+  @media screen and (min-width: 640px) {
+    .need-more-img {
+      max-width: 700px!important;
+    }
+}
+</style>
+{% endblock%}
 
 {% block body %}
 
@@ -150,7 +159,7 @@
   <div class="card">
     <div class="card-body text-center">
       {% comment %} <h5><a href="https://writesome.ai/contact-us/">NEED MORE!</a></h5> {% endcomment %}
-      <a href="https://writesome.ai/contact-us/"><img src="{% static 'dash/images/banners/need-more-connect.png' %}" style="max-width:700px!important;"  alt="NEED MORE!"></a>
+      <a href="https://writesome.ai/contact-us/"><img class="need-more-img" src="{% static 'dash/images/banners/need-more-connect.png' %}" style=""  alt="NEED MORE!"></a>
     </div>
   </div>
 </div>
