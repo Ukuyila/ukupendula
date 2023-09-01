@@ -229,6 +229,7 @@ class CouponCode(models.Model):
     DISCOUNT_TYPE = [
         ('percent', 'percent'),
         ('amount', 'amount'),
+        ('override', 'override'),
     ]
     coupon_name = models.CharField(max_length=255)
     coupon_code = models.CharField(max_length=100)
