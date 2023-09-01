@@ -212,7 +212,7 @@ class SubscriptionTransaction(models.Model):
     last_updated = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return '{} {}'.format(self.subscription_reference, self.uniqueId)
+        return '{} {}'.format(self.subscription, self.uniqueId)
 
     def save(self, *args, **kwargs):
         if self.date_activated is None:
@@ -222,7 +222,7 @@ class SubscriptionTransaction(models.Model):
         if self.uniqueId is None:
             self.uniqueId = str(uuid4()).split('-')[4]
 
-        self.slug = slugify('{} {}'.format(self.subscription_reference, self.uniqueId))
+        self.slug = slugify('{} {}'.format(self.subscription, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
         super(SubscriptionTransaction, self).save(*args, **kwargs)
 

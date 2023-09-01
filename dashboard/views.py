@@ -3348,14 +3348,16 @@ def transactions(request):
 
     # # get user current tier
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
+    all_transactions = SubscriptionTransaction.objects.all().order_by('-date_created')
+    for usr_tran in all_transactions:
+        usr_tran.subscription='{} {}'.format(request.user.email, usr_tran.package_name)
+        usr_tran.save()
 
     # get transactions
     subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('-date_created')
 
     for subscr_transact in subscr_transactions:
         transactions.append(subscr_transact)
-        subscr_transact.subscription='{} {}'.format(request.user.email, subscr_transact.package_name)
-        subscr_transact.save()
 
     user_sub_type = request.user.profile.subscription_type.replace('-', ' ').title()
 
