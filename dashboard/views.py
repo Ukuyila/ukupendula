@@ -3351,15 +3351,15 @@ def transactions(request):
 
     # # get user current tier
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
-    all_transactions = SubscriptionTransaction.objects.all()
-    for usr_tran in all_transactions:
-        try:
-            trans_uid = usr_tran.user_profile_uid
-            trans_profile = Profile.objects.get(uniqueId=trans_uid)
-            usr_tran.subscription='{} {}'.format(trans_profile.user.email, usr_tran.package_name)
-            usr_tran.save()
-        except:
-            usr_tran.delete()
+    # all_transactions = SubscriptionTransaction.objects.all()
+    # for usr_tran in all_transactions:
+    #     try:
+    #         trans_uid = usr_tran.user_profile_uid
+    #         trans_profile = Profile.objects.get(uniqueId=trans_uid)
+    #         usr_tran.subscription='{} {}'.format(trans_profile.user.email, usr_tran.package_name)
+    #         usr_tran.save()
+    #     except:
+    #         usr_tran.delete()
 
     # get transactions
     subscr_transactions = SubscriptionTransaction.objects.filter(is_active=True, user_profile_uid=user_profile.uniqueId).order_by('-date_created')
