@@ -31,18 +31,19 @@ load_dotenv(dotenv_file)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+# DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# DEBUG = os.getenv("DEBUG", "False")
+DEBUG = os.getenv("DEBUG", "False")
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['64.227.46.124', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
+    ALLOWED_HOSTS = ['64.227.46.124', '138.68.155.44', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
 else:
     ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
 # ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+# DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False")
 
 # Application definition
 
@@ -199,7 +200,7 @@ DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-USE_SPACES = True
+USE_SPACES = False
 if USE_SPACES:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -259,8 +260,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #payfast.io
-PAYFAST_SANDBOX_MODE = os.getenv("PAYFAST_SANDBOX_MODE", True) == False
-# PAYFAST_SANDBOX_MODE = True
+# PAYFAST_SANDBOX_MODE = os.getenv("PAYFAST_SANDBOX_MODE", True) == False
+PAYFAST_SANDBOX_MODE = True
 if PAYFAST_SANDBOX_MODE is True:
     PAYFAST_MERCHANT_ID = "10024789"
     PAYFAST_MERCHANT_KEY = "dtz5khr0cbz74"
