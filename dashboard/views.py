@@ -3350,7 +3350,9 @@ def transactions(request):
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
     all_transactions = SubscriptionTransaction.objects.all()
     for usr_tran in all_transactions:
-        usr_tran.subscription='{} {}'.format(request.user.email, usr_tran.package_name)
+        trans_uid = usr_tran.subscription_reference.split('-')[0]
+        trans_profile = Profile.objects.get(uniqueId=trans_uid).user
+        usr_tran.subscription='{} {}'.format(trans_profile.user.email, usr_tran.package_name)
         usr_tran.save()
 
     # get transactions
@@ -4991,6 +4993,7 @@ def edit_client(request):
     context = {}
     current_page = 'Edit Client'
     parent_page = 'Clients'
+    user_profile = request.profile
 
     if not user_profile.subscribed:
         messages.error(request, "You have to upgrade your subscription to access this!")
