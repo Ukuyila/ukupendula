@@ -197,6 +197,8 @@ class SubscriptionTransaction(models.Model):
 
     has_team = models.BooleanField(default=False)
     user_team = models.CharField(null=True, blank=True, max_length=100)
+    coupon_code = models.CharField(null=True, blank=True, max_length=100)
+    discount = models.CharField(null=True, blank=True, max_length=100)
 
     is_active = models.BooleanField(default=True)
     date_activated = models.DateTimeField(blank=True, null=True)
@@ -223,6 +225,40 @@ class SubscriptionTransaction(models.Model):
         self.last_updated = timezone.localtime(timezone.now())
         super(SubscriptionTransaction, self).save(*args, **kwargs)
 
+class CouponCode(models.Model):
+    DISCOUNT_TYPE = [
+        ('percent', 'percent'),
+        ('amount', 'amount'),
+    ]
+    coupon_name = models.CharField(max_length=255)
+    coupon_code = models.CharField(max_length=100)
+    discount_type = models.CharField(choices=DISCOUNT_TYPE, default='percent', max_length=100)
+    discount = models.CharField(blank=True, null=True, max_length=100)
+
+    is_active = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    date_expiry = models.DateTimeField(blank=True, null=True)
+
+    # Utility Variable
+    uniqueId = models.CharField(null=True, blank=True, max_length=100)
+    slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    date_created = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.coupon_name, self.uniqueId)
+
+    def save(self, *args, **kwargs):
+        if self.date_activated is None:
+            self.date_activated = timezone.localtime(timezone.now())
+        if self.date_created is None:
+            self.date_created = timezone.localtime(timezone.now())
+        if self.uniqueId is None:
+            self.uniqueId = str(uuid4()).split('-')[4]
+
+        self.slug = slugify('{} {}'.format(self.coupon_name, self.uniqueId))
+        self.last_updated = timezone.localtime(timezone.now())
+        super(CouponCode, self).save(*args, **kwargs)
 
 class RegisteredDevice(models.Model):
     device_name = models.CharField(max_length=255)
