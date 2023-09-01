@@ -3351,7 +3351,7 @@ def transactions(request):
     all_transactions = SubscriptionTransaction.objects.all()
     for usr_tran in all_transactions:
         trans_uid = usr_tran.subscription_reference.split('-')[0]
-        trans_profile = Profile.objects.get(uniqueId=trans_uid).user
+        trans_profile = Profile.objects.get(uniqueId=trans_uid)
         usr_tran.subscription='{} {}'.format(trans_profile.user.email, usr_tran.package_name)
         usr_tran.save()
 
