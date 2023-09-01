@@ -3348,7 +3348,7 @@ def transactions(request):
 
     # # get user current tier
     # user_curr_tier = SubscriptionPackage.objects.get(package_name=user_sub_type)
-    all_transactions = SubscriptionTransaction.objects.all().order_by('-date_created')
+    all_transactions = SubscriptionTransaction.objects.all()
     for usr_tran in all_transactions:
         usr_tran.subscription='{} {}'.format(request.user.email, usr_tran.package_name)
         usr_tran.save()
