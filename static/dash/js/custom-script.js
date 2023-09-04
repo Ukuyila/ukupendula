@@ -13,6 +13,8 @@ $(document).ready(function(){
     $('#btn-generate').prop('disabled', false)
   }
 
+  $('.alert-primary .btn-icon').addClass('text-primary')
+
 })
 
 /* Paulse effect */

@@ -3191,7 +3191,7 @@ def landing_page_copy(request, uniqueId=""):
     user_profile = request.user.profile
     current_page = 'Landing Page Copy Generator'
     context['current_page'] = current_page
-    page_sections = "Header, Subheader, About Us, Call to Action, FAQ, Testimonials"
+    page_sections = "Header, Sub-header, About Us, Call to Action, FAQ, Testimonials"
     context['allowance'] = check_count_allowance(user_profile)
 
     lang = settings.LANGUAGE_CODE
