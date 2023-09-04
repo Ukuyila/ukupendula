@@ -69,7 +69,7 @@
                                                 {% csrf_token %}
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between"><label for="post_title" class=" ">Title</label> <span class="title_counter text-muted">0/250</span></div>
-                                                    <input type="text" class="form-control" id="post_title" name="post_title" placeholder="Post saving title" value="{{ social_post.title }}" maxlength="250" required/>
+                                                    <input type="text" class="form-control" id="post_title" name="post_title" placeholder="Post title" value="{{ post_title }}" maxlength="250" />
                                                 </div>
                                                 <div hidden class="mb-3">
                                                     <label for="soc_post_type" class=" ">Platform</label>
@@ -136,9 +136,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="mb-3">
-                                                    {% if post_body|length == 0 %}
                                                     <button class="btn btn-primary d-grid w-100 btn-generate" id="btn-generate" type="submit">Generate Post</button>
-                                                    {% endif %}
+                                                    
                                                 </div>
                                             </form>
                                         </div>
@@ -162,7 +161,7 @@
                                                       <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                           <div class="card-body text-dark">
                                                             {% if social_post.uniqueId %}
-                                                            <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
                                                             {% endif %}
                                                               <div id="ai-response-text" class="ideas">
                                                                 {{post_body}}

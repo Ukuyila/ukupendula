@@ -1441,7 +1441,8 @@ def gen_social_post(request, postType, uniqueId=''):
 
     if request.method == "POST":
 
-        post_title = request.POST['post_title']
+        # post_title = request.POST['post_title']
+        post_title = request.POST['post_title'] if request.POST['post_title'] is not None else 'unknown'
         # soc_post_type = request.POST['soc_post_type']
         soc_post_type = sel_p_typ.post_name.title()
         prompt_text = request.POST['prompt_text']
