@@ -108,7 +108,7 @@
                                         <div class="float-end">
                                             
                                             {% if meta_descr.uniqueId %}
-                                            <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{meta_descr.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                            
                                             <div class="btn-group ">
                                                 <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'meta_writer' meta_descr.uniqueId %}'" >Download</button>
                                             </div>
@@ -126,12 +126,13 @@
 
 												<div class="form-group">
 													<label for="meta_descr" class=" ">Use the generated content as you please</label>
-                                                    {% if meta_descr.uniqueId %}
-                                                    <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#{{meta_descr.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
-                                                    {% endif %}
+                                                    
 													<div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
 										
 														<div class="card-body text-dark">
+                                                            {% if meta_descr.uniqueId %}
+                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#{{meta_descr.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                            {% endif %}
 															<div style="height: 35vh;" class="ideas">
 																{{meta_description|safe}}
 															</div>

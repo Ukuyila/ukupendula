@@ -113,12 +113,11 @@
                                             <h5 class="mb-0">AI Generated Response</h5>
                                             <div class="float-end">
                                                 <div class="btn-group download-btn-container">
-                                                    <button class="btn btn-primary" 
                                                     {% if content.uniqueId %}
-                                                     onclick="return window.location.href='{% url 'download-content' 'content_improver' content.uniqueId %}'"
-                                                    {% else %}
-                                                    disabled
-                                                    {% endif %}>Download</button>
+                                                    <div class="btn-group ">
+                                                        <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'content_improver' content.uniqueId %}'" >Download</button>
+                                                    </div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -131,6 +130,9 @@
 
                                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                             <div class="card-body text-dark">
+                                                                {% if content.uniqueId %}
+                                                                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{content.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                                {% endif %}
                                                                 <div class="ideas" id="ai-response-text">
                                                                     {{content_body_new}}
                                                                 </div>

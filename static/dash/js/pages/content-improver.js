@@ -140,10 +140,19 @@ $(document).ready(function(){
               success_alert.prop('hidden', true)
 
               setTimeout(() => {
+                $('.ai-answer-card .card-body').html(`
+                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#`+data['contentId']+`')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                <div class="ideas" id="ai-response-text">
+                    `+ data['contentBody'] +`
+                </div>`)
+
                 generated_text.html(data['contentBody'])
 
                 $('.download-btn-container').html(`<a type="button" class="btn btn-primary"
                   href="https://tools.writesome.ai/dash/download-content/content_improver/`+data['contentId']+`/">Download</a>`)
+
+                $('#btn-generate').html('Re-Generate Content')
+                $('#btn-generate').prop('disabled', false)
               }, 1500)
 
             }

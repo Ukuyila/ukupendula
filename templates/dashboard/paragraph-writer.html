@@ -96,7 +96,7 @@
                                             <h5 class="mb-0">AI Generated Response</h5>
                                             <div class="float-end">
                                                 {% if paragraph.uniqueId %}
-                                                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{paragraph.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                
                                                 <div class="btn-group ">
                                                     <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'" >Download</button>
                                                 </div>
@@ -112,6 +112,9 @@
 
                                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                             <div class="card-body text-dark">
+                                                                {% if paragraph.uniqueId %}
+                                                                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{paragraph.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                                {% endif %}
                                                                 <div id="{{paragraph.uniqueId}}" class="ideas">
                                                                     {{paragraph.paragraph}}
                                                                 </div>

@@ -121,7 +121,7 @@
                                         <div class="float-end">
 											
                                         {% if content_summary.uniqueId %}
-                                            <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{content_summary.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                            
                                             <div class="btn-group ">
                                                 <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'content_summeriser' content_summary.uniqueId %}'" >Download</button>
                                             </div>
@@ -140,6 +140,9 @@
                                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                             
                                                             <div class="card-body text-dark">
+                                                                {% if content_summary.uniqueId %}
+                                                                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{content_summary.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                                {% endif %}
                                                                 <div id="{{content_summary.uniqueId}}" class="ideas">
                                                                     {{summarized_content|safe}}
                                                                 </div>

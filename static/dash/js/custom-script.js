@@ -9,7 +9,7 @@ $(document).ready(function(){
   $('#btn-generate').prop('disabled', true)
   
   if ( $('.ideas').html().length > 0 ) {
-    $('#btn-generate').html('Re-Generate Paragraph')
+    $('#btn-generate').html('Re-Generate Content')
     $('#btn-generate').prop('disabled', false)
   }
 
