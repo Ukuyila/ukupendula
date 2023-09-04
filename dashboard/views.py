@@ -5344,10 +5344,15 @@ def download_content_file(request, content_type, uniqueId):
     # print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
-    folder = 'content-{}/'.format(request.user.profile.uniqueId)
+    try:
+        folder = './downloads/content-{}/'.format(request.user.profile.uniqueId)
+    except:
+        folder = './downloads/content-{}/'.format(request.user.profile.uniqueId)
+        os.mkdir(folder)
+        
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("./downloads/{}{}.txt".format(folder, filen), "w+")
+    file_name = open("{}{}.txt".format(folder, filen), "w+")
     # file_name = default_storage.save(file.name, file)
     file_name.write(cont_text)
     file_name.close()
