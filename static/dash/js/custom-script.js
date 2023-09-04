@@ -8,8 +8,8 @@ $(document).ready(function(){
   // To-do
   $('#btn-generate').prop('disabled', true)
   
-  if ( $('.ideas').html().length > 0 ) {
-    $('#btn-generate').html('Re-Generate Content')
+  if ( $('.ideas').html().trim().length > 0 ) {
+    $('#btn-generate').html('Re-Generate')
     $('#btn-generate').prop('disabled', false)
   }
 
