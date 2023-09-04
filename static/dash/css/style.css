@@ -11,7 +11,7 @@
   --primary-bg-color: #bc508f;
   --primary-bg-hover: #c23888;
   --primary-bg-border: #bc508f;
-  --primary-bg-transparentcolor:rgba(74, 61, 184, 0.16);
+  --primary-bg-transparentcolor:rgba(184, 61, 114, 0.16);
   --primary-bg-background:#f7f7fb;
   --secondary-color: #9c31df;
   --secondary-hover: #b24af3;
@@ -764,7 +764,7 @@ hr.message-inner-separator {
 
 .alert-warning {
   color: #fcfdff;
-  background-color: #ffa22b;
+  background-color: rgba(255, 163, 43, 0.16);
   border-color: #ffa22b;
 }
 .alert-warning hr {
@@ -18476,7 +18476,7 @@ button.bg-secondary:hover, button.bg-secondary:focus {
 
 .alert-primary {
   color: #fcfdff;
-  background-color: var(--primary-bg-color);
+  background-color: var(--primary-bg-transparentcolor);
   border-color: var(--primary-bg-color);
 }
 .alert-primary hr {
