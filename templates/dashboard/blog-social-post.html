@@ -71,7 +71,20 @@
                                                     <div class="d-flex align-items-center justify-content-between"><label for="post_title" class=" ">Title</label> <span class="title_counter text-muted">0/250</span></div>
                                                     <input type="text" class="form-control" id="post_title" name="post_title" placeholder="Post saving title" value="{{ post_title }}" maxlength="250" required/>
                                                 </div>
-                                                <div class="mb-3">
+                                                <div hidden class="mb-3">
+                                                    <label for="soc_post_type" class=" ">Platform</label>
+                                                    <select type="text" class="form-control " id="soc_post_type" name="soc_post_type">
+
+                                                    {% for soc_post_type in soc_types_list %}
+                                                      <option
+                                                      {% if soc_post_type.post_name == this_soc_post.post_type %}
+                                                      selected 
+                                                      {% endif %}
+                                                      value="{{soc_post_type.post_name}}" >{{ soc_post_type.platform|title }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                                                {% comment %} <div class="mb-3">
                                                     <label for="soc_post_type" class=" ">Post Type</label>
                                                     <select type="text" class="form-control " id="soc_post_type" name="soc_post_type">
 
@@ -83,7 +96,7 @@
                                                       value="{{soc_post_type.post_name}}"  >{{ soc_post_type.platform|title }}</option>
                                                     {% endfor %}
                                                     </select>
-                                                </div>
+                                                </div> {% endcomment %}
                                                 {% if post_blog %}
                                                 <div class="mb-3">
                                                   <label for="blog_post" class=" ">Blog</label>
