@@ -5345,21 +5345,21 @@ def download_content_file(request, content_type, uniqueId):
 
     uuid_str = str(uuid4()).split('-')[3]
     try:
-        folder = './downloads/content-{}/'.format(request.user.profile.uniqueId)
+        folder = './downloads/content-{}'.format(request.user.profile.uniqueId)
     except:
-        folder = './downloads/content-{}/'.format(request.user.profile.uniqueId)
+        folder = './downloads/content-{}'.format(request.user.profile.uniqueId)
         # os.mkdir(folder)
         os.makedirs(folder)
 
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("{}{}.txt".format(folder, filen), "w+")
+    file_name = open("{}/{}.txt".format(folder, filen), "w+")
     # file_name = default_storage.save(file.name, file)
     file_name.write(cont_text)
     file_name.close()
 
     # to read the content of it
-    read_file = open("{}{}.txt".format(folder, filen), "r")
+    read_file = open("{}/{}.txt".format(folder, filen), "r")
     response = HttpResponse(read_file.read(), content_type="text/plain,charset=utf8")
     read_file.close()
 
