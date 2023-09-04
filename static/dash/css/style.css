@@ -11,7 +11,7 @@
   --primary-bg-color: #bc508f;
   --primary-bg-hover: #c23888;
   --primary-bg-border: #bc508f;
-  --primary-bg-transparentcolor:rgba(184, 61, 114, 0.16);
+  --primary-bg-transparentcolor:rgba(184, 61, 114, 0.33);
   --primary-bg-background:#f7f7fb;
   --secondary-color: #9c31df;
   --secondary-hover: #b24af3;
@@ -728,7 +728,7 @@ hr.message-inner-separator {
 
 .alert-secondary {
   color: #fff;
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-transparent);
   border-color: var(--secondary-color);
 }
 .alert-secondary hr {
@@ -740,7 +740,7 @@ hr.message-inner-separator {
 
 .alert-success {
   color: #fcfdff;
-  background-color: #27c781;
+  background-color: rgb(39, 199, 129, 0.33);
   border-color: #27c781;
 }
 .alert-success hr {
@@ -752,7 +752,7 @@ hr.message-inner-separator {
 
 .alert-info {
   color: #fcfdff;
-  background-color: #0dabb7;
+  background-color: rgb(13, 171, 183, 0.33);
   border-color: #0dabb7;
 }
 .alert-info hr {
@@ -764,7 +764,7 @@ hr.message-inner-separator {
 
 .alert-warning {
   color: #fcfdff;
-  background-color: rgba(255, 163, 43, 0.16);
+  background-color: rgba(255, 163, 43, 0.33);
   border-color: #ffa22b;
 }
 .alert-warning hr {
@@ -776,7 +776,7 @@ hr.message-inner-separator {
 
 .alert-danger {
   color: #fcfdff;
-  background-color: #ff6362;
+  background-color: rgba(255, 98, 98, 0.33);
   border-color: #ff6362;
 }
 .alert-danger hr {

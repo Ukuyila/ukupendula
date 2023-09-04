@@ -131,7 +131,7 @@
 										
 														<div class="card-body text-dark">
                                                             {% if meta_descr.uniqueId %}
-                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#{{meta_descr.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#{{meta_descr.uniqueId}}')" aria-hidden="true"><i class=fa fa-clone'  data-bs-toggle='tooltip' data-bs-placement='top' title='Copy'></i></button>
                                                             {% endif %}
 															<div style="height: 35vh;" class="ideas">
 																{{meta_description|safe}}

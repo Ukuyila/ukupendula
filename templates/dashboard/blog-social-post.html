@@ -161,7 +161,7 @@
                                                       <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                           <div class="card-body">
                                                             {% if social_post.uniqueId %}
-                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                            <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class=fa fa-clone'  data-bs-toggle='tooltip' data-bs-placement='top' title='Copy'></i></button>
                                                             {% endif %}
                                                               <div id="ai-response-text" class="ideas">
                                                                 {{post_body}}

@@ -117,7 +117,7 @@
                                                     
                                                     <div class="alert alert-primary " role="alert">
                                                         
-                                                        <button type="button" class="btn btn-icon fa fa-clone pull-right" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" aria-hidden="true"></button>  
+                                                        <button type="button" class="btn btn-icon fa fa-clone pull-right"  data-bs-toggle="tooltip" data-bs-placement="top" title="Copy" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" aria-hidden="true"></button>  
                                                         <span id="{{sentence_uniqueId}}-{{forloop.counter}}" >{{sentence}}</span>
                                                         {% comment %} <i class="fa fa-clone pull-right col-2" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" ></i> {% endcomment %}
                                                         

@@ -141,7 +141,7 @@ $(document).ready(function(){
 
               setTimeout(() => {
                 $('.ai-answer-card .card-body').html(`
-                <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class=fa fa-clone'  data-bs-toggle='tooltip' data-bs-placement='top' title='Copy'></i></button>
                 <div class="ideas" id="ai-response-text">
                     `+ data['contentBody'] +`
                 </div>`)
