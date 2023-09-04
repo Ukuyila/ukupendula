@@ -141,7 +141,7 @@ $(document).ready(function(){
 
               setTimeout(() => {
                 $('.ai-answer-card .card-body').html(`
-                <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                <button type="button" class="btn btn-outline-primary pull-right" onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
                 <div class="ideas" id="ai-response-text">
                     `+ data['contentBody'] +`
                 </div>`)
@@ -151,8 +151,8 @@ $(document).ready(function(){
                 $('.download-btn-container').html(`<a type="button" class="btn btn-primary"
                   href="https://tools.writesome.ai/dash/download-content/content_improver/`+data['contentId']+`/">Download</a>`)
 
-                $('#btn-generate').html('Re-Generate Content')
-                $('#btn-generate').prop('disabled', false)
+                $('#btn-improver').html('Re-Generate Content')
+                $('#btn-improver').prop('disabled', false)
               }, 1500)
 
             }
