@@ -125,8 +125,9 @@
                                                     {% for title_opt in title_opts %}
                                                     
                                                     <div class="alert alert-primary " role="alert">
+                                                        <button type="button" class="btn btn-icon fa fa-clone pull-right" onclick="copyToClipboard('#{{title_uniqueId}}-{{forloop.counter}}')" aria-hidden="true"></button>
                                                         <span id="{{title_uniqueId}}-{{forloop.counter}}">{{title_opt}}</span>
-                                                        <i class="fa fa-clone pull-right" onclick="copyToClipboard('#{{title_uniqueId}}-{{forloop.counter}}')" ></i>
+                                                        {% comment %} <i class="fa fa-clone pull-right" onclick="copyToClipboard('#{{title_uniqueId}}-{{forloop.counter}}')" ></i> {% endcomment %}
                                                     </div>
                                                     
                                                     {% endfor %}
