@@ -5347,7 +5347,7 @@ def download_content_file(request, content_type, uniqueId):
     # folder = 'content-{}/'.format(request.user.profile.uniqueId)
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("./dashboard/downloads/content/{}.txt".format(filen), "w+")
+    file_name = open("./downloads/content/{}.txt".format(filen), "w+")
     # file_name = default_storage.save(file.name, file)
     file_name.write(cont_text)
     file_name.close()
