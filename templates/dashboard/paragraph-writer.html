@@ -95,6 +95,7 @@
                                         <div class="card-header d-flex justify-content-between align-items-left">
                                             <h5 class="mb-0">AI Generated Response</h5>
                                             <div class="float-end">
+                                                <button type="button" class="btn btn-icon fa fa-clone pull-right" onclick="copyToClipboard('#{{paragraph.uniqueId}}-1')" aria-hidden="true"></button>
                                                 <div class="btn-group ">
                                                     <button class="btn btn-primary" 
                                                     {% if paragraph.uniqueId %}
@@ -114,7 +115,7 @@
 
                                                         <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                             <div class="card-body text-dark">
-                                                                <div class="ideas">
+                                                                <div id="{{paragraph.uniqueId}}" class="ideas">
                                                                     {{paragraph.paragraph}}
                                                                 </div>
                                                             </div>
