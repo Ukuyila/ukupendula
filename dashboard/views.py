@@ -1250,7 +1250,7 @@ def view_blog_social_post(request, postType, uniqueId):
     context['post_keywords'] = post.keywords
     context['post_tone'] = post.tone_of_voice
 
-    return render(request, 'dashboard/social-media-post.html', context)
+    return render(request, 'dashboard/blog-social-post.html', context)
 
 
 @login_required
