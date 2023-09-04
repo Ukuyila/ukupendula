@@ -28,6 +28,7 @@ from django.core.mail import EmailMessage
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
+from django.core.files.storage import default_storage
 
 from uuid import uuid4
 
@@ -5278,6 +5279,7 @@ def edit_user_roles(request, team_uid, uniqueId):
     return HttpResponse(resp)
 
 
+@login_required
 def download_content_file(request, content_type, uniqueId):
     cont_text = ''
 
@@ -5342,10 +5344,11 @@ def download_content_file(request, content_type, uniqueId):
     # print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
-
+    # folder = 'content-{}/'.format(request.user.profile.uniqueId)
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("downloads/content/{}.txt".format(filen), "w+")
+    file_name = open("./dashboard/downloads/content/{}.txt".format(filen), "w+")
+    # file_name = default_storage.save(file.name, file)
     file_name.write(cont_text)
     file_name.close()
 
