@@ -1597,6 +1597,14 @@ def gen_social_from_blog(request, postType, uniqueId):
         )
         saved_blog.save()
 
+    soc_types_list = []
+
+    soc_types = SocialPlatform.objects.filter(is_active=True)
+    for soc_typ in soc_types:
+        soc_types_list.append(soc_typ)
+
+    context['soc_types_list'] = soc_types_list
+
     context['post_type_title'] = post_type
     context['post_type'] = postType
     context['post_blog'] = this_blog

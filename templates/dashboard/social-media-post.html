@@ -198,12 +198,10 @@
                                           <h5 class="mb-0">AI Generated Response</h5>
                                           <div class="float-end">
                                             <div class="btn-group ">
-                                                <button class="btn btn-primary" 
                                                 {% if this_soc_post.uniqueId %}
-                                                 onclick="return window.location.href='{% url 'download-content' content_type this_soc_post.uniqueId %}'"
-                                                {% else %}
-                                                disabled
-                                                {% endif %}>Download</button>
+                                                <button class="btn btn-primary" 
+                                                 onclick="return window.location.href='{% url 'download-content' content_type this_soc_post.uniqueId %}'">Download</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                       </div>
@@ -218,7 +216,10 @@
 
                                                       <div class="card shadow-none bg-light-gray border border-secondary mb-3 ai-answer-card">
                                                           <div class="card-body text-dark">
-                                                              <div class="ideas">
+                                                            {% if this_soc_post.uniqueId %}
+                                                            <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#ai-response-text')" aria-hidden="true"><i class='fa fa-clone '></i></button>
+                                                            {% endif %}
+                                                              <div id="ai-response-text" class="ideas">
                                                                 {{this_soc_post.post|safe}}
                                                               </div>
                                                           </div>
