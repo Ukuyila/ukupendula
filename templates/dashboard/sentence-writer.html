@@ -115,9 +115,11 @@
                                                     
                                                     {% for sentence in sentences %}
                                                     
-                                                    <div class="alert alert-primary row" role="alert">
-                                                        <span class="col-10" id="{{sentence_uniqueId}}-{{forloop.counter}}" >{{sentence}}</span>
-                                                        <i class="fa fa-clone pull-right col-2" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" ></i>
+                                                    <div class="alert alert-primary " role="alert">
+                                                        
+                                                        <button type="button" class="btn btn-icon fa fa-clone pull-right" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" aria-hidden="true"></button>  
+                                                        <span id="{{sentence_uniqueId}}-{{forloop.counter}}" >{{sentence}}</span>
+                                                        {% comment %} <i class="fa fa-clone pull-right col-2" onclick="copyToClipboard('#{{sentence_uniqueId}}-{{forloop.counter}}')" ></i> {% endcomment %}
                                                         
                                                     </div>
                                                     
