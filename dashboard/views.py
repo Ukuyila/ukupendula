@@ -2307,7 +2307,7 @@ def sentence_writer(request, uniqueId=''):
         tone_of_voice = request.POST['tone_of_voice']
         sentnc_cate = request.POST['category']
 
-        if len(old_sentence) > 160:
+        if len(old_sentence) > 200:
             messages.error(request, "The engine could not generate content from the given prompt, please try again!")
             return redirect('sentence-writer')
         else:
@@ -3706,6 +3706,11 @@ def payment_success(request, uniqueId, planId, orderId):
                 profile.user_team = this_user_team.uniqueId
 
             user_team = this_user_team.uniqueId
+
+        # deactivate all previous active transactions
+        curr_subs = SubscriptionTransaction.objects.filter(user_profile_uid=uniqueId, is_active=True)
+        for user_curr_sub in curr_subs:
+            user_curr_sub.is_active=False
 
         # insert SubscriptionTransaction
         sub_transact = SubscriptionTransaction.objects.create(
