@@ -98,7 +98,7 @@
                                                 {% if paragraph.uniqueId %}
                                                 <button type="button" class="btn btn-outline-primary " onclick="copyToClipboard('#{{paragraph.uniqueId}}')" aria-hidden="true"><i class='fa fa-clone '></i></button>
                                                 <div class="btn-group ">
-                                                    <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'" disabled>Download</button>
+                                                    <button class="btn btn-primary" onclick="return window.location.href='{% url 'download-content' 'paragraph_writer' paragraph.uniqueId %}'" >Download</button>
                                                 </div>
                                                 {% endif %}
                                             </div>

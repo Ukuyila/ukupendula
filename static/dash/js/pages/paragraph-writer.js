@@ -19,9 +19,5 @@ $(document).ready(function(){
     $('.title_counter').text(curr_textlen+'/'+maxLength);
   });
 
-  if ( $('.ideas').html().length > 0 ) {
-    $('#btn-generate').html('Re-Generate Paragraph')
-    $('#btn-generate').prop('disabled', false)
-  }
 
 });

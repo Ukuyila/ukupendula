@@ -7,6 +7,11 @@ $(document).ready(function(){
 
   // To-do
   $('#btn-generate').prop('disabled', true)
+  
+  if ( $('.ideas').html().length > 0 ) {
+    $('#btn-generate').html('Re-Generate Paragraph')
+    $('#btn-generate').prop('disabled', false)
+  }
 
 })
 
