@@ -26,7 +26,7 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage as DjangoEmailMessage, send_mail
 
 from dashboard.models import *
-from dashboard.functions import get_device_mac, get_device_info, populate_defaults, validateEmail
+from dashboard.functions import validateEmail
 
 
 def anonymous_required(function=None, redirect_url=None):

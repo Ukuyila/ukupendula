@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # third-party middlewares
     'django_user_agents.middleware.UserAgentMiddleware',
+    'django_auto_logout.middleware.auto_logout',
 ]
 
 ROOT_URLCONF = 'ukupendula.urls'
@@ -180,9 +181,11 @@ USE_TZ = True
 BASE_CURRENCY = 'ZAR'
 BASE_CURR_SIGN = 'R'
 
-
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
+
+# AUTO_LOGOUT = {'IDLE_TIME': 7200}  # logout after 120 minutes of downtime(min * 60 sec)
+AUTO_LOGOUT = {'IDLE_TIME': 600}
 
 BASE_API_URL = 'https://api.writesome.ai'
 MAIN_API_KEY = os.getenv("MAIN_API_KEY")
