@@ -5344,16 +5344,16 @@ def download_content_file(request, content_type, uniqueId):
     # print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
-    # folder = 'content-{}/'.format(request.user.profile.uniqueId)
+    folder = 'content-{}/'.format(request.user.profile.uniqueId)
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("./downloads/content/{}.txt".format(filen), "w+")
+    file_name = open("./downloads/{}{}.txt".format(folder, filen), "w+")
     # file_name = default_storage.save(file.name, file)
     file_name.write(cont_text)
     file_name.close()
 
     # to read the content of it
-    read_file = open("{}.txt".format(filen), "r")
+    read_file = open("./downloads/{}{}.txt".format(filen), "r")
     response = HttpResponse(read_file.read(), content_type="text/plain,charset=utf8")
     read_file.close()
 
