@@ -5336,13 +5336,16 @@ def download_content_file(request, content_type, uniqueId):
         impr_cont = ContentImprover.objects.get(uniqueId=uniqueId)
         cont_text = impr_cont.content_body_new.replace('<br>', '\n')
 
+    elif content_type == 'content_summeriser':
+        impr_cont = ContentSummary.objects.get(uniqueId=uniqueId)
+        cont_text = impr_cont.summarized.replace('<br>', '\n')
     # print(str(uuid4()))
 
     uuid_str = str(uuid4()).split('-')[3]
 
     filen = "writesome_{}_{}".format(content_type, uuid_str)
     # to write to your file
-    file_name = open("{}.txt".format(filen), "w+")
+    file_name = open("downloads/content/{}.txt".format(filen), "w+")
     file_name.write(cont_text)
     file_name.close()
 
