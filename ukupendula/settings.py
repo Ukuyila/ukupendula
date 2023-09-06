@@ -39,7 +39,7 @@ if DEBUG is True:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
-    ALLOWED_HOSTS = ['64.227.46.124', '138.68.155.44', 'localhost', 'app.writesome.ai', 'tools.writesome.ai']
+    ALLOWED_HOSTS = ['138.68.155.44', 'localhost', 'tools.writesome.ai']
 else:
     ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,64.227.46.124,localhost").split(",")
 
