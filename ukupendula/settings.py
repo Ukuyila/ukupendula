@@ -184,6 +184,7 @@ USE_TZ = True
 
 BASE_CURRENCY = 'ZAR'
 BASE_CURR_SIGN = 'R'
+SITE_COUNTRY = 'South Africa'
 
 
 LOGIN_REDIRECT_URL = 'dashboard'
