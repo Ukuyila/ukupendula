@@ -15,8 +15,6 @@ $(document).ready(function(){
 
   $('.alert-primary .btn-icon').addClass('text-primary')
 
-
-
 })
 
 /* Paulse effect */

@@ -374,6 +374,7 @@ def unsubscribe_account(request):
     )
     add_notice.save()
     # remove subscription on payfast
+    
     messages.success(request, add_notice.notification)
     return redirect('profile')
 
