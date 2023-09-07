@@ -192,7 +192,7 @@ class SubscriptionTransaction(models.Model):
     subscription = models.CharField(null=True, blank=True, max_length=255)
     subscription_reference = models.CharField(null=True, blank=True, max_length=255)
     user_profile_uid = models.CharField(null=True, blank=True, max_length=100)
-    payment_method = models.CharField(null=True, blank=True, max_length=100)
+    payfast_token = models.CharField(null=True, blank=True, max_length=100)
     package_name = models.CharField(null=True, blank=True, max_length=200)
     package_price = models.CharField(blank=True, null=True, max_length=100)
 

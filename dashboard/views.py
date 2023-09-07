@@ -367,6 +367,13 @@ def unsubscribe_account(request):
     profile.subscribed = False
     profile.save()
 
+    subscr_ref = profile.subscription_reference
+
+    subscription = SubscriptionTransaction.objects.get(subscription_reference=subscr_ref)
+
+    subscription.is_active=False
+    subscription.save()
+
     add_notice = UserNotification.objects.create(
         notice_type='premium cancelled',
         notification='Ouch, you have unsubscribed from your {} Premium Package!'.format(settings.APP_NAME),
@@ -3530,11 +3537,12 @@ def payfast_payment(request, planId):
     context = {}
 
     protocol = 'https' if request.is_secure() else 'http'
+    notify = 'notify-beta' if settings.PAYFAST_SANDBOX_MODE else 'notify'
 
     merchant_id = settings.PAYFAST_MERCHANT_ID
     merchant_key = settings.PAYFAST_MERCHANT_KEY
     return_url = '{}/success'.format(settings.PAYFAST_URL_BASE)
-    notify_url = '{}/notify'.format(settings.PAYFAST_URL_BASE)
+    notify_url = '{}/{}'.format(settings.PAYFAST_URL_BASE, notify)
     # cancel_url = '{}/cancel'.format(settings.PAYFAST_URL_BASE)
     cancel_url = '{}://{}/dash/subscription-plans'.format(protocol, get_current_site(request).domain)
 
@@ -3665,7 +3673,7 @@ def payment_cancel(request):
     return redirect('subscription-plans')
 
 
-def payment_success(request, uniqueId, planId, orderId):
+def payment_success(request, token, uniqueId, planId, orderId):
     context = {}
     order_ref = '{}-{}-{}'.format(uniqueId, planId, orderId)
     # print(order_ref)
@@ -3730,11 +3738,11 @@ def payment_success(request, uniqueId, planId, orderId):
             user_profile_uid=uniqueId,
             package_name=package.package_name.title(),
             package_price=package_price,
+            payfast_token=token,
             has_team=has_team,
             user_team=user_team,
             date_activated=timezone.localtime(timezone.now()),
             date_expiry=date_expiry,
-
         )
         sub_transact.save()
 
